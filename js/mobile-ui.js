@@ -25,6 +25,7 @@
     });
   }
   function navObserver(){
+    if(document.querySelector('.bottom .app-nav-btn')) return;
     const links=[...document.querySelectorAll('.bottom a[href^="#"]')];
     const byId=new Map(links.map(a=>[a.getAttribute('href').slice(1),a]));
     const sections=[...byId.keys()].map(id=>document.getElementById(id)).filter(Boolean);

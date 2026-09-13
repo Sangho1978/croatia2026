@@ -506,3 +506,31 @@ body.spa-mode .card,body.spa-mode .history-card,body.spa-mode .city-card{scroll-
   body.spa-mode .bottom{width:min(860px,calc(100% - 24px));left:50%;right:auto;transform:translateX(-50%);bottom:10px;border-radius:22px;padding-bottom:7px;border:1px solid rgba(17,50,70,.1)}
   body.spa-mode{padding-bottom:100px}
 }
+
+/* ===== SPA bottom navigation verification hotfix r3 ===== */
+body.spa-mode:not(.login-ready) > nav.bottom{
+  display:none!important;
+  visibility:hidden!important;
+}
+body.spa-mode.login-ready > nav.bottom{
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  grid-template-rows:1fr!important;
+  grid-auto-flow:column!important;
+  grid-auto-columns:minmax(0,1fr)!important;
+  justify-content:stretch!important;
+  align-items:stretch!important;
+  align-content:stretch!important;
+  visibility:visible!important;
+  opacity:1!important;
+  overflow:visible!important;
+}
+body.spa-mode.login-ready > nav.bottom > .app-nav-btn{
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+  margin:0!important;
+  justify-self:stretch!important;
+  align-self:stretch!important;
+  box-sizing:border-box!important;
+}

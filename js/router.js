@@ -1,5 +1,6 @@
 
 (function(){
+  document.body.classList.add('spa-mode');
   const primary=new Set(['today','schedule','location','attendance']);
   const allSections=()=>[...document.querySelectorAll('main > section[id].app-view')];
   const backdrop=()=>document.getElementById('appMoreBackdrop');
