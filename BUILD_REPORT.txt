@@ -1,0 +1,14 @@
+build=20260913-r2
+sections=14
+extracted_images=14
+index_bytes=114489
+css_bytes=79250
+js/config.js=593
+data/roster.js=13899
+data/itinerary.js=17256
+data/checklist.js=5154
+js/app-core.js=47072
+js/videos.js=623
+js/mobile-ui.js=3557
+js/ops.js=16108
+js/router.js=5044
