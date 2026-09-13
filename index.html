@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- CRO_APP_BUILD:20260913.1751 -->
+<!-- CRO_APP_BUILD:20260913.fold-login -->
 <html lang="ko"><head><meta charset="utf-8"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0b456b">
 <title>아드리아의 길 · CROATIA 2026 여행동행</title>
 <style>
@@ -308,33 +308,155 @@ body.mobile-redesign{
 .update-toast.show{display:flex}.update-toast b{flex:1}.update-toast button{border:0;background:#8d6500;color:#fff;border-radius:10px;padding:8px 10px;font-weight:900;white-space:nowrap}
 @media(min-width:640px){.login-screen{align-items:center!important}.login-panel{margin:auto!important}}
 </style>
-<style id="loginFirstPaint">body:not(.login-ready)> .live,body:not(.login-ready)> .hero,body:not(.login-ready)> main,body:not(.login-ready)> .bottom{visibility:hidden}</style></head><body class="mobile-redesign">
+<style id="loginFirstPaint">body:not(.login-ready)> .live,body:not(.login-ready)> .hero,body:not(.login-ready)> main,body:not(.login-ready)> .bottom{visibility:hidden}</style>
+<style id="foldResponsive20260913">
+/* ===== Minimal login + Galaxy Z Fold / foldable responsive layer ===== */
+html,body{min-width:0;max-width:100%;overflow-x:hidden}
+body.mobile-redesign{padding-bottom:calc(84px + env(safe-area-inset-bottom));}
+
+/* Login: photo first, only the fields and login action remain. */
+.login-screen{
+  position:fixed!important;inset:0!important;z-index:10000!important;
+  width:100%!important;height:100vh!important;min-height:100vh!important;
+  display:flex!important;align-items:flex-end!important;justify-content:center!important;
+  overflow-y:auto!important;overflow-x:hidden!important;
+  padding:max(14px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(14px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))!important;
+  background-position:center 43%!important;background-size:cover!important;background-repeat:no-repeat!important;
+  overscroll-behavior:none;
+}
+@supports(height:100dvh){.login-screen{height:100dvh!important;min-height:100dvh!important}}
+.login-screen.hidden{display:none!important}
+.login-screen:before{background:linear-gradient(180deg,rgba(0,18,32,.04) 0%,rgba(0,18,32,.12) 38%,rgba(0,19,34,.66) 76%,rgba(0,19,34,.82) 100%)!important}
+.login-panel-simple{
+  position:relative!important;z-index:2!important;
+  width:min(100%,410px)!important;margin:0 auto!important;
+  padding:22px 20px 20px!important;border-radius:24px!important;
+  background:rgba(255,255,255,.965)!important;
+  border:1px solid rgba(255,255,255,.72)!important;
+  box-shadow:0 18px 58px rgba(0,0,0,.30)!important;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+.login-panel-simple .login-brand{font-size:.62em!important;letter-spacing:.12em!important;color:#487081!important;margin:0 0 6px!important;font-weight:900!important}
+.login-panel-simple h1{margin:0 0 4px!important;color:#0b456b!important;font-size:clamp(1.72rem,7vw,2.15rem)!important;line-height:1.02!important;letter-spacing:-.03em!important}
+.login-panel-simple h1 span{font-size:.68em!important;font-weight:750!important;letter-spacing:.05em!important}
+.login-panel-simple .login-course{margin:0 0 15px!important;font-size:.72em!important;color:#607681!important;line-height:1.45!important}
+.login-panel-simple .login-field{margin:9px 0!important;gap:5px!important}
+.login-panel-simple .login-field label{font-size:.72em!important;color:#36586a!important;font-weight:900!important}
+.login-panel-simple .login-field input{width:100%!important;min-height:52px!important;padding:11px 13px!important;border:1px solid #cbdbe3!important;border-radius:14px!important;background:#fff!important;font-size:16px!important;line-height:1.2!important;outline:none!important;box-shadow:none!important}
+.login-panel-simple .login-field input:focus{border-color:#2680a8!important;box-shadow:0 0 0 3px rgba(36,117,163,.13)!important}
+.login-panel-simple .login-btn{width:100%!important;min-height:54px!important;margin-top:11px!important;border:0!important;border-radius:15px!important;background:#0b456b!important;color:#fff!important;font-size:1em!important;font-weight:950!important;box-shadow:0 7px 18px rgba(11,69,107,.20)!important}
+.login-panel-simple .login-btn:active{transform:translateY(1px)}
+.login-panel-simple .login-error{min-height:0!important;margin:8px 2px 0!important;font-size:.72em!important;line-height:1.45!important}
+.login-panel-simple .login-error:empty{display:none!important}
+.browser-hint,.login-photo-caption,.login-foot,.version-box,.update-chip,.account-version,.account-pop .update-btn,.update-toast{display:none!important}
+
+/* Universal mobile tap/readability guardrails. */
+.mobile-redesign button,.mobile-redesign select,.mobile-redesign input{max-width:100%}
+.mobile-redesign .btn,.mobile-redesign button,.mobile-redesign .bottom a{touch-action:manipulation}
+.mobile-redesign main{width:100%;max-width:1180px;margin-inline:auto}
+.mobile-redesign .card,.mobile-redesign .person,.mobile-redesign .team-member,.mobile-redesign .video-card{min-width:0}
+.mobile-redesign .hero{flex-direction:column!important;align-items:stretch!important;justify-content:flex-end!important;min-width:0}
+.mobile-redesign .hero>div:first-child{width:100%!important;max-width:900px!important;margin:0!important}
+.mobile-redesign .hero-actions{width:100%;max-width:560px!important;grid-template-columns:repeat(4,minmax(0,1fr))!important}
+.mobile-redesign .hero-actions a{min-width:0;text-align:center}
+.mobile-redesign .mapbox{height:min(56dvh,540px)!important;min-height:330px}
+
+/* Folded/narrow cover display: 320-430 CSS px. */
+@media(max-width:430px){
+  :root{--fold-gap:10px}
+  body.mobile-redesign{font-size:clamp(17px,var(--fs,19px),21px)}
+  .login-screen{padding:12px 11px max(12px,env(safe-area-inset-bottom))!important;background-position:center center!important}
+  .login-panel-simple{padding:19px 16px 17px!important;border-radius:21px!important}
+  .login-panel-simple .login-course{font-size:.68em!important;margin-bottom:12px!important}
+  .login-panel-simple .login-field input{min-height:50px!important}
+  .login-panel-simple .login-btn{min-height:52px!important}
+  .mobile-redesign main{padding-left:11px!important;padding-right:11px!important}
+  .mobile-redesign section{margin-bottom:21px!important}
+  .mobile-redesign .card{padding:13px!important;border-radius:17px!important}
+  .mobile-redesign .hero{min-height:272px!important;padding:34px 14px 17px!important;border-radius:0 0 24px 24px!important}
+  .mobile-redesign .hero h1{font-size:clamp(1.88rem,10vw,2.35rem)!important}
+  .mobile-redesign .hero-actions{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important}
+  .mobile-redesign .hero-actions a{min-height:54px!important;font-size:.74em!important}
+  .mobile-redesign .bottom a{flex-basis:70px!important;min-width:70px!important;min-height:60px!important}
+  .mobile-redesign .bottom a b{font-size:21px!important}
+  .mobile-redesign .live-row{padding-left:7px;padding-right:7px}
+  .mobile-redesign .chip{min-height:42px;display:inline-flex;align-items:center}
+  .mobile-redesign .loc-summary,.mobile-redesign .team-summary{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .mobile-redesign .check-tools{grid-template-columns:1fr!important}
+  .mobile-redesign .check-tools .primary{grid-column:auto!important}
+  .mobile-redesign .mapbox{height:52dvh!important;min-height:300px!important}
+}
+
+/* Very short viewport / keyboard / Fold landscape: keep login button reachable. */
+@media(max-height:610px){
+  .login-screen{align-items:flex-start!important;padding-top:max(10px,env(safe-area-inset-top))!important}
+  .login-panel-simple{margin:auto!important;padding:15px 17px 14px!important}
+  .login-panel-simple .login-brand{font-size:.55em!important;margin-bottom:3px!important}
+  .login-panel-simple h1{font-size:1.55rem!important;margin-bottom:2px!important}
+  .login-panel-simple .login-course{margin-bottom:8px!important;font-size:.64em!important}
+  .login-panel-simple .login-field{margin:6px 0!important}
+  .login-panel-simple .login-field input{min-height:45px!important;padding:9px 11px!important}
+  .login-panel-simple .login-btn{min-height:47px!important;margin-top:7px!important}
+}
+
+/* Galaxy Z Fold / foldable opened state and small tablets: use the extra width. */
+@media(min-width:600px) and (max-width:920px){
+  body.mobile-redesign{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
+  .login-screen{align-items:center!important;padding:24px max(24px,env(safe-area-inset-left))!important;background-position:center 45%!important}
+  .login-panel-simple{width:420px!important;padding:26px 24px 23px!important}
+  .mobile-redesign main{padding-left:18px!important;padding-right:18px!important;max-width:880px!important}
+  .mobile-redesign .hero{min-height:330px!important;padding:48px 24px 24px!important}
+  .mobile-redesign .hero h1{font-size:2.65rem!important}
+  .mobile-redesign .hero-actions{grid-template-columns:repeat(4,minmax(0,1fr))!important;max-width:600px!important}
+  .mobile-redesign .day-main-grid{grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr)!important}
+  .mobile-redesign .day-attraction-grid,.mobile-redesign .attraction-list,.mobile-redesign .video-grid,.mobile-redesign .team-grid,#hotels .grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .mobile-redesign .loc-cols{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important}
+  .mobile-redesign .roster{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .mobile-redesign .loc-summary,.mobile-redesign .team-summary{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+  .mobile-redesign .team-group-head{flex-direction:row!important;align-items:center!important}
+  .mobile-redesign .team-grid{gap:10px!important}
+  .mobile-redesign .bottom{justify-content:center!important;padding-left:6px!important;padding-right:6px!important}
+  .mobile-redesign .bottom a{flex:0 1 76px!important;min-width:68px!important;max-width:84px!important}
+  .mobile-redesign .mapbox{height:min(58dvh,560px)!important;min-height:390px!important}
+}
+
+/* Wide fold/tablet/desktop: retain readable line lengths rather than stretching cards. */
+@media(min-width:921px){
+  .login-screen{align-items:center!important}
+  .login-panel-simple{width:430px!important}
+  .mobile-redesign main{max-width:1120px!important;padding-left:22px!important;padding-right:22px!important}
+  .mobile-redesign .hero>div:first-child{max-width:900px!important;margin-inline:auto!important}
+  .mobile-redesign .hero-actions{margin-left:auto!important;margin-right:auto!important}
+  .mobile-redesign .bottom{justify-content:center!important}
+}
+
+/* Fold rotation: prevent controls from being clipped by a hinge-like narrow height. */
+@media(orientation:landscape) and (max-height:520px){
+  .login-screen{background-position:center 40%!important}
+  .login-panel-simple{width:min(440px,72vw)!important}
+  .mobile-redesign .hero{min-height:250px!important}
+  .mobile-redesign .bottom a{min-height:54px!important}
+}
+</style>
+</head><body class="mobile-redesign">
 
 <div id="loginScreen" class="login-screen">
-  <div class="login-panel">
+  <div class="login-panel login-panel-simple" role="dialog" aria-labelledby="loginTitle" aria-modal="true">
     <div class="login-brand">ADRIATIC LEADERSHIP JOURNEY</div>
-    <h1>아드리아의 길<br>CROATIA 2026</h1>
-    <p>서울대학교 행정대학원 공공리더십과정 17기</p>
-    <div class="login-photo-caption"><b>📍 Dubrovnik · Adriatic Sea</b><span>로그인 후 여행 가이드가 열립니다</span></div>
-    <div id="browserHint" class="browser-hint hidden">
-      <strong>카카오톡 내부 브라우저로 열렸습니다.</strong><br>GPS·Google Maps 안정성을 위해 Chrome/Safari 같은 외부 브라우저 사용을 권장합니다.
-      <div class="browser-actions"><button class="primary" id="externalBrowserBtn" onclick="openExternalBrowser()">🌐 외부 브라우저로 열기</button><button onclick="copyPageUrl()">🔗 주소 복사</button></div>
-      <div id="browserHintDetail" style="margin-top:6px"></div>
-    </div>
-    <div class="login-field"><label>아이디 · 이름</label><input id="loginName" autocomplete="username" autocapitalize="off" spellcheck="false" placeholder="본인 이름을 입력하세요"></div>
-    <div class="login-field"><label>패스워드 · 휴대전화 끝 4자리</label><input id="loginPass" inputmode="numeric" maxlength="4" autocomplete="current-password" placeholder="예: 0435"></div>
+    <h1 id="loginTitle">아드리아의 길<br><span>CROATIA 2026</span></h1>
+    <p class="login-course">서울대학교 행정대학원 공공리더십과정 17기</p>
+    <div class="login-field"><label for="loginName">이름</label><input id="loginName" autocomplete="username" autocapitalize="off" spellcheck="false" enterkeyhint="next" placeholder="본인 이름"></div>
+    <div class="login-field"><label for="loginPass">휴대전화 끝 4자리</label><input id="loginPass" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="current-password" enterkeyhint="go" placeholder="숫자 4자리"></div>
     <button class="login-btn" onclick="appLogin()">로그인</button>
-    <div id="loginError" class="login-error"></div>
-    <div class="login-foot">본인 이름과 휴대전화번호 끝 4자리로 로그인합니다. 이름에 띄어쓰기가 들어가도 자동으로 제거됩니다.</div>
-    <div class="version-box"><span>앱 버전 <b id="loginVersion">20260913.1751</b></span><button onclick="checkForAppUpdate(true)">↻ 최신버전 확인</button><div id="loginUpdateStatus" class="update-state">GitHub Pages에서 최신 배포본을 확인할 수 있습니다.</div></div>
+    <div id="loginError" class="login-error" role="alert" aria-live="polite"></div>
   </div>
 </div>
-<div id="accountPop" class="account-pop"><b id="accountName">-</b><div id="accountMeta" class="small muted"></div><div class="account-version">앱 버전 <span id="accountVersion">20260913.1751</span><br><span id="accountUpdateStatus">최신판 확인 가능</span></div><button class="update-btn" onclick="checkForAppUpdate(true)">↻ 최신버전 확인</button><button onclick="appLogout()">로그아웃</button></div>
+<div id="accountPop" class="account-pop"><b id="accountName">-</b><div id="accountMeta" class="small muted"></div><button onclick="appLogout()">로그아웃</button></div>
 
 <div class="live"><div class="live-row">
 <a class="chip weather top-link" id="liveWeather" href="#weatherDetail"><span id="liveWeatherMain">🌤️ 날씨 준비 중</span><small id="weatherUpdated">상세 날씨 보기</small></a>
 <span class="chip fx" id="liveFx"><span id="liveFxMain">💶 환율 준비 중</span><small id="fxUpdated">갱신시각 확인 중</small></span>
-<span class="chip" id="liveData">🌐 자동데이터 0 KB</span><button class="chip update-chip" id="liveUpdate" onclick="checkForAppUpdate(true)">↻ 최신판</button>
+<span class="chip" id="liveData">🌐 자동데이터 0 KB</span>
 <a class="chip loc-chip top-link" id="liveLoc" href="#location">📍 내 위치 OFF</a>
 <button class="chip user-chip" id="loginUserChip" onclick="toggleAccountPop()">👤 로그인</button>
 <div class="font-tools" aria-label="글자 크기 조정"><button onclick="fontStep(-1)" title="글자 작게">A−</button><button onclick="fontReset()" title="기본 크기">A</button><button onclick="fontStep(1)" title="글자 크게">A+</button></div>
@@ -696,58 +818,7 @@ body.mobile-redesign{
 
 <section id="check"><h2>여행 체크리스트</h2><div class="check-weather-note"><b>10월 날씨를 고려한 준비</b><br>두브로브니크·스플리트 해안은 비교적 온화하지만 바람이 강할 수 있고, 플리트비체·자그레브는 아침·저녁이 훨씬 쌀쌀합니다. <b>얇은 옷 여러 겹 + 방풍 겉옷 + 접이식 우산 + 미끄럼 적은 신발</b> 조합을 기본으로 준비하세요.</div><div class="card"><div class="progress"><span id="prog"></span></div><div id="progText" class="small muted"></div><div class="check-tools"><button onclick="checkAll(false)">전체 해제</button><button onclick="checkEssential()">필수만 표시</button><button class="primary" onclick="checkAll(true)">전체 체크</button></div></div><div id="checks"></div></section>
 </main>
-<div id="updateToast" class="update-toast"><b id="updateToastText">새 버전이 있습니다.</b><button onclick="forceFreshReload()">지금 적용</button></div><nav class="bottom"><a href="#today"><b>⌂</b>오늘</a><a href="#schedule"><b>◷</b>일정</a><a href="#guide"><b>▤</b>관광</a><a href="#team"><b>♟</b>팀</a><a href="#videos"><b>▶</b>영상</a><a href="#hotels"><b>▣</b>호텔</a><a href="#location"><b>◎</b>위치</a><a href="#attendance" class="att-nav"><b>✓</b>출석</a><a href="#check"><b>☑</b>체크</a></nav>
-<script>
-const CRO_APP_BUILD='20260913.1751';
-let croLastUpdateCheck=0;
-function croBaseUrl(){try{let u=new URL(location.href);u.hash='';u.search='';return u.toString()}catch(e){return location.href.split('#')[0].split('?')[0]}}
-function croSetUpdateStatus(text,kind=''){
-  ['loginUpdateStatus','accountUpdateStatus'].forEach(id=>{let e=document.getElementById(id);if(e){e.textContent=text;e.className=id==='loginUpdateStatus'?'update-state '+kind:''}});
-  let chip=document.getElementById('liveUpdate');if(chip){chip.textContent=kind==='new'?'🆕 새 버전':'↻ 최신판';chip.classList.toggle('new',kind==='new')}
-}
-function croVersionCompare(a,b){return String(a).localeCompare(String(b),undefined,{numeric:true,sensitivity:'base'})}
-async function checkForAppUpdate(manual=false){
-  croLastUpdateCheck=Date.now();
-  if(location.protocol==='file:'){croSetUpdateStatus('로컬 파일에서는 서버 최신판 확인이 불가능합니다. GitHub Pages 주소에서 확인해 주세요.','err');return}
-  croSetUpdateStatus('최신 배포본 확인 중…');
-  try{
-    const base=croBaseUrl(),sep=base.includes('?')?'&':'?',url=base+sep+'_crocheck='+Date.now();
-    const r=await fetch(url,{cache:'no-store',headers:{'Cache-Control':'no-cache, no-store, must-revalidate','Pragma':'no-cache'}});
-    if(!r.ok)throw new Error('HTTP '+r.status);
-    const text=await r.text();
-    const m=text.match(/CRO_APP_BUILD:([0-9A-Za-z._:-]+)/);const remote=m?m[1]:'';
-    if(!remote){croSetUpdateStatus('서버 버전 정보를 찾지 못했습니다.','err');return}
-    const c=croVersionCompare(remote,CRO_APP_BUILD);
-    if(c>0){
-      croSetUpdateStatus(`새 버전 ${remote} 있음 · 현재 ${CRO_APP_BUILD}`,'new');
-      let t=document.getElementById('updateToast'),tx=document.getElementById('updateToastText');if(tx)tx.textContent=`새 가이드 버전 ${remote}이 배포되었습니다.`;t?.classList.add('show');
-    }else if(c===0){croSetUpdateStatus(`최신 버전입니다 · ${CRO_APP_BUILD}`,'ok');document.getElementById('updateToast')?.classList.remove('show')}
-    else{croSetUpdateStatus(`현재 파일 ${CRO_APP_BUILD} · 서버는 아직 ${remote} (배포 반영 중일 수 있음)`,'');}
-  }catch(e){croSetUpdateStatus('최신판 확인 실패 · 네트워크 또는 GitHub Pages 배포 상태를 확인해 주세요.','err')}
-}
-function forceFreshReload(){
-  try{let u=new URL(croBaseUrl());u.searchParams.set('_v',Date.now());location.replace(u.toString())}catch(e){location.reload()}
-}
-function isKakaoBrowser(){return /KAKAOTALK/i.test(navigator.userAgent||'')}
-function setupInAppBrowserHint(){
-  if(!isKakaoBrowser())return;
-  const box=document.getElementById('browserHint'),detail=document.getElementById('browserHintDetail'),btn=document.getElementById('externalBrowserBtn');box?.classList.remove('hidden');
-  if(/Android/i.test(navigator.userAgent)){if(detail)detail.textContent='Android: 버튼을 누르면 Chrome으로 전환을 시도합니다. 안 되면 카카오톡 메뉴의 ‘다른 브라우저로 열기’를 이용하세요.';if(btn)btn.textContent='🌐 Chrome으로 열기'}
-  else if(/iPhone|iPad|iPod/i.test(navigator.userAgent)){if(detail)detail.textContent='iPhone/iPad: 자동으로 Safari를 강제 실행할 수 없어, 주소 복사 후 Safari에서 열거나 카카오톡의 ‘Safari로 열기’를 이용하세요.';if(btn)btn.textContent='🌐 Chrome으로 열기 시도'}
-}
-function openExternalBrowser(){
-  const url=croBaseUrl();const ua=navigator.userAgent||'';
-  if(/Android/i.test(ua)){const clean=url.replace(/^https?:\/\//,'');location.href=`intent://${clean}#Intent;scheme=https;package=com.android.chrome;end`;return}
-  if(/iPhone|iPad|iPod/i.test(ua)){const chrome=url.replace(/^https:\/\//,'googlechromes://').replace(/^http:\/\//,'googlechrome://');location.href=chrome;setTimeout(()=>copyPageUrl(true),900);return}
-  window.open(url,'_blank','noopener,noreferrer');
-}
-async function copyPageUrl(silent=false){
-  const url=croBaseUrl();try{await navigator.clipboard.writeText(url);if(!silent)alert('페이지 주소를 복사했습니다. 외부 브라우저 주소창에 붙여넣어 주세요.')}catch(e){prompt('아래 주소를 복사해 외부 브라우저에서 열어 주세요.',url)}
-}
-window.addEventListener('DOMContentLoaded',()=>{setupInAppBrowserHint();setTimeout(()=>checkForAppUpdate(false),2200)});
-window.addEventListener('focus',()=>{if(Date.now()-croLastUpdateCheck>5*60*1000)checkForAppUpdate(false)});
-document.addEventListener('visibilitychange',()=>{if(!document.hidden&&Date.now()-croLastUpdateCheck>5*60*1000)checkForAppUpdate(false)});
-</script>
+<nav class="bottom"><a href="#today"><b>⌂</b>오늘</a><a href="#schedule"><b>◷</b>일정</a><a href="#guide"><b>▤</b>관광</a><a href="#team"><b>♟</b>팀</a><a href="#videos"><b>▶</b>영상</a><a href="#hotels"><b>▣</b>호텔</a><a href="#location"><b>◎</b>위치</a><a href="#attendance" class="att-nav"><b>✓</b>출석</a><a href="#check"><b>☑</b>체크</a></nav>
 <script>
 const firebaseConfig={apiKey:'AIzaSyD1RuZGXx60HPsoonNB72eJbWpht61OrcQ',authDomain:'croatia-2026-gspa.firebaseapp.com',projectId:'croatia-2026-gspa',storageBucket:'croatia-2026-gspa.firebasestorage.app',messagingSenderId:'769093319223',appId:'1:769093319223:web:bd9a91db16cc087dccddb2',measurementId:'G-J4FQ94MYZC',databaseURL:'https://croatia-2026-gspa-default-rtdb.asia-southeast1.firebasedatabase.app'};
 // Google Maps JavaScript API key (client-side web key)
