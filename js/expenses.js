@@ -1,6 +1,6 @@
 /* Shared expense log, participation snapshot and per-browser private drafts. */
 (function(){
-  let owner='',approved=false,records={},selected=new Set(),mode='all',editId=null,editEtag=null,original=null,saveBusy=false,fetchEpoch=0,pendingId=null;
+  let owner='',storageReady=false,records={},selected=new Set(),mode='all',editId=null,editEtag=null,original=null,saveBusy=false,fetchEpoch=0,pendingId=null;
   let receiptItems=[],receiptChanged=false,receiptBusy=false,receiptBatch=null,receiptEpoch=0;
   const all=()=>TEAM_MEMBERS.slice().sort((a,b)=>(a.group||5)-(b.group||5)||a.groupOrder-b.groupOrder);
   const keyOf=u=>u.memberId;
@@ -9,8 +9,8 @@
   const status=(text,kind='')=>Integration.feedback(document.getElementById('expenseFeedback'),text,kind);
   function money(minor,currency){return currency==='EUR'?'€'+(minor/100).toLocaleString('ko-KR',{minimumFractionDigits:2,maximumFractionDigits:2}):'₩'+minor.toLocaleString('ko-KR')}
   function nowLocalDate(){return new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Zagreb',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date())}
-  function requireStaff(){if(!Integration.isStaff())throw Error('팀장·부팀장·총무 전용 기능입니다.')}
-  function formMarkup(){return `<div id="expenseAccess" class="finance-access"><b>운영진 권한 확인 중</b><p>Firebase 기기 ID 승인 여부를 확인합니다.</p></div>
+  function requireStaff(){if(!Integration.canManageFinance())throw Error('공동경비는 이상미·한상호만 사용합니다.')}
+  function formMarkup(){return `<div id="expenseAccess" class="finance-access"><b>공유 기록 불러오는 중</b></div>
     <div class="finance-grid"><div class="finance-panel"><h3 id="expenseFormTitle">공동경비 기록</h3><form id="expenseForm" class="finance-form">
     <div class="finance-row"><label class="field">사용일<input id="exDate" type="date" required /></label><label class="field">분류<select id="exCategory"><option>식사</option><option>교통</option><option>입장·체험</option><option>간식·음료</option><option>공용물품</option><option>기타</option></select></label></div>
     <label class="field">사용 내용<input id="exTitle" maxlength="120" placeholder="예: 두브로브니크 점심 식사" required /></label>
@@ -48,7 +48,7 @@
   }
   function snapshot(){return {date:document.getElementById('exDate').value,title:document.getElementById('exTitle').value,category:document.getElementById('exCategory').value,currency:document.getElementById('exCurrency').value,amount:document.getElementById('exAmount').value,payer:document.getElementById('exPayer').value,memo:document.getElementById('exMemo').value,mode,selected:[...selected],pendingId,editId,editEtag,original,receiptChanged,receiptBatch}}
   function saveDraft(explicit=false){
-    if(!Integration.isStaff()||!document.getElementById('expenseForm'))return;
+    if(!Integration.canManageFinance()||!document.getElementById('expenseForm'))return;
     try{localStorage.setItem(draftKey(),JSON.stringify(snapshot()));ReceiptStore.saveDraft(currentUser.name,{items:receiptItems,batchId:receiptBatch,changed:receiptChanged,pendingId}).catch(()=>status('\uc601\uc218\uc99d \uc784\uc2dc\uc800\uc7a5\uc5d0 \uc2e4\ud328\ud588\uc2b5\ub2c8\ub2e4. \uc0ac\uc9c4\uc744 \uc6d0\ubcf8\uc73c\ub85c \ubcf4\uad00\ud574 \uc8fc\uc138\uc694.','error'));if(explicit)status('이 기기에 초안만 저장했습니다. 다른 운영진에게는 아직 공유되지 않았습니다.','success')}catch(_){status('기기 저장 공간이 부족하거나 저장이 차단되었습니다.','error')}
   }
   function restoreDraft(){
@@ -67,28 +67,29 @@
     const box=document.getElementById('exParticipantBox');box.hidden=mode==='all';
     if(mode==='selected')box.innerHTML=[1,2,3,4,0].map(g=>`<div class="part-group-title"><span>${g?g+'조':'인솔 교수'}</span><button type="button" data-expense-group="${g}">이 그룹 선택/해제</button></div><div class="participants-grid">${all().filter(u=>u.group===g).map(u=>`<label class="participant-option"><input type="checkbox" data-participant="${u.memberId}" ${selected.has(u.memberId)?'checked':''}/><span>${escape(u.name)}<small>${u.leader?'조장':u.presenter?'발표':u.group?'조원':'교수님'}${u.tripRole?' · '+escape(u.tripRole):''}</small></span></label>`).join('')}</div>`).join('');
   }
-  function accessMessage(message,ok=false,uid=''){
-    const el=document.getElementById('expenseAccess');if(!el)return;el.className='finance-access'+(ok?' approved':'');
-    const path='financeManagers/'+TRIP_CODE+'/'+uid;
-    el.innerHTML=`<b>${ok?'\uacf5\uc720 \uc800\uc7a5 \uc0ac\uc6a9 \uac00\ub2a5':'\uacf5\uc720 \uc800\uc7a5 \uc124\uc815 \ud655\uc778'}</b><p>${escape(message)}</p>${!ok&&uid?`<details class="approval-help" open><summary>\uc774 \uae30\uae30\ub97c \uc2b9\uc778\ud558\ub294 \ubc29\ubc95</summary><p>Firebase Console \u2192 Realtime Database \u2192 <b>Data</b>\uc5d0\uc11c \uc544\ub798 \uacbd\ub85c\uc5d0 \ub4f1\ub85d\ud569\ub2c8\ub2e4. Rules \ud654\uba74\uc5d0 \uc774\ub984\uc744 \ub123\ub294 \uac83\uc774 \uc544\ub2d9\ub2c8\ub2e4.</p><small>\uacbd\ub85c</small><code class="uid-box">${escape(path)}</code><small>\uac12 (\ubb38\uc790\uc5f4)</small><code class="uid-box">"${escape(currentUser?.name)}"</code><div class="approval-buttons"><button type="button" data-copy-approval="path">\uacbd\ub85c \ubcf5\uc0ac</button><button type="button" data-copy-approval="value">\uac12 \ubcf5\uc0ac</button></div><p class="quiet">true\uac00 \uc544\ub2cc \uc815\ud655\ud55c \uc774\ub984 \ubb38\uc790\uc5f4\uc774\uc5b4\uc57c \ud569\ub2c8\ub2e4. \uc774\ub984\uc740 \uc6b4\uc601\uc9c4 \ub124 \uc0ac\ub78c\uc73c\ub85c \uc81c\ud55c\ub429\ub2c8\ub2e4. \ube0c\ub77c\uc6b0\uc800\uac00 \ub2ec\ub77c\uc9c0\uba74 UID\ub3c4 \ub2ec\ub77c\uc9c8 \uc218 \uc788\uc2b5\ub2c8\ub2e4.</p><a target="_blank" rel="noopener" href="https://console.firebase.google.com/project/${firebaseConfig.projectId}/database/${firebaseConfig.projectId}-default-rtdb/data">Firebase Console \uc5f4\uae30</a></details>`:''}<button type="button" class="edit-expense" id="expenseRecheck">\uad8c\ud55c \ub2e4\uc2dc \ud655\uc778</button>`;
-    el.querySelectorAll('[data-copy-approval]').forEach(b=>b.onclick=async()=>{const v=b.dataset.copyApproval==='path'?path:JSON.stringify(currentUser.name);try{await navigator.clipboard.writeText(v);status('\ubcf5\uc0ac\ud588\uc2b5\ub2c8\ub2e4.')}catch(_){prompt('\uc544\ub798 \ub0b4\uc6a9\uc744 \ubcf5\uc0ac\ud558\uc138\uc694.',v)}});
-    document.getElementById('expenseRecheck').onclick=()=>load();
-    document.getElementById('expenseSave').disabled=!ok||saveBusy||receiptBusy;
+  function accessMessage(message,ok=false){
+    const el=document.getElementById('expenseAccess');if(!el)return;
+    el.className='finance-access'+(ok?' approved':'');
+    el.innerHTML=`<b>${ok?escape(currentUser?.name)+' \u00b7 \uacf5\ub3d9\uacbd\ube44':'\uacf5\uc720 \uc800\uc7a5 \uc5f0\uacb0 \ud655\uc778'}</b><p>${escape(message)}</p>${!ok?'<button type="button" class="edit-expense" id="expenseRecheck">\ub2e4\uc2dc \uc5f0\uacb0</button>':''}`;
+    document.getElementById('expenseRecheck')?.addEventListener('click',()=>load());
+    const save=document.getElementById('expenseSave');if(save)save.disabled=!ok||saveBusy||receiptBusy;
   }
   async function load(){
-    if(!Integration.isStaff())return;
-    const epoch=++fetchEpoch,name=currentUser.name;let step='auth';
-    approved=false;document.getElementById('expenseSave').disabled=true;
+    if(!Integration.canManageFinance()||!document.getElementById('expenseSave'))return;
+    const epoch=++fetchEpoch,name=currentUser.name;
+    storageReady=false;document.getElementById('expenseSave').disabled=true;
     try{
-      await token();const uid=localStorage.getItem('fb_uid');
-      step='approval';const role=await Integration.api('financeManagers/'+TRIP_CODE+'/'+uid);
+      // Anonymous Firebase auth remains. No device approval lookup is made.
+      const r=await Integration.api('expenses/'+TRIP_CODE,{headers:{'X-Firebase-ETag':'true'}});
+      if(epoch!==fetchEpoch||currentUser?.name!==name||!Integration.canManageFinance())return;
+      records=r.data||{};storageReady=true;renderRecords();
+      accessMessage('\uc774\uc0c1\ubbf8\u00b7\ud55c\uc0c1\ud638 \uacf5\ub3d9\uacbd\ube44 \uad00\ub9ac',true);
+    }catch(e){
       if(epoch!==fetchEpoch||currentUser?.name!==name)return;
-      if(role.data!==name){const reason=role.data===null?'\uc774 UID\uc758 \uc2b9\uc778 \ub370\uc774\ud130\uac00 \uc5c6\uc2b5\ub2c8\ub2e4.':typeof role.data!=='string'?'\uc2b9\uc778 \uac12\uc774 true/\uac1d\uccb4\ub85c \ub4f1\ub85d\ub418\uc5b4 \uc788\uc2b5\ub2c8\ub2e4. \uc774\ub984 \ubb38\uc790\uc5f4\ub85c \ubc14\uafb8\uc138\uc694.':'\uc2b9\uc778\ub41c \uc774\ub984\uacfc \ud604\uc7ac \ub85c\uadf8\uc778 \uc774\ub984\uc774 \ub2e4\ub985\ub2c8\ub2e4.';accessMessage(reason,false,uid);records={};renderRecords();return;}
-      approved=true;accessMessage(name+' · '+STAFF_ROLES[name]+' / 승인된 운영진 4명만 조회·수정할 수 있습니다.',true);
-      step='expenses';const r=await Integration.api('expenses/'+TRIP_CODE,{headers:{'X-Firebase-ETag':'true'}});
-      if(epoch!==fetchEpoch||currentUser?.name!==name)return;
-      records=r.data||{};renderRecords();
-    }catch(e){if(epoch!==fetchEpoch)return;approved=false;records={};renderRecords();accessMessage(step==='approval'&&(e.status===401||e.status===403)?'\uc2b9\uc778 \uc815\ubcf4\ub97c \uc77d\uc744 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4. financeManagers\uc758 \ubcf8\uc778 UID \uc77d\uae30 Rules\uac00 \ube60\uc838 \uc788\ub294\uc9c0 \ud655\uc778\ud558\uc138\uc694.':step==='expenses'?'\uae30\uae30 \uc2b9\uc778\uc740 \ud1b5\uacfc\ud588\uc9c0\ub9cc expenses \uc870\ud68c\uac00 \uac70\ubd80\ub418\uc5c8\uc2b5\ub2c8\ub2e4. MIX03 Rules \ubcd1\ud569 \uc5ec\ubd80\ub97c \ud655\uc778\ud558\uc138\uc694.':e.message,false,localStorage.getItem('fb_uid')||'');}
+      storageReady=false;records={};renderRecords();
+      const msg=(e.status===401||e.status===403)?'\uae30\uae30 \uc2b9\uc778\uc774 \uc544\ub2cc Rules \ubcc0\uacbd\uc774 \ud544\uc694\ud569\ub2c8\ub2e4. MIX04 \uacbd\ube44 \uaddc\uce59\uc744 \ud55c \ubc88\ub9cc \uc801\uc6a9\ud574 \uc8fc\uc138\uc694.':e.message;
+      accessMessage(msg,false);
+    }
   }
   function visibleItems(){
     const from=document.getElementById('ledgerFrom')?.value||'',to=document.getElementById('ledgerTo')?.value||'',q=(document.getElementById('ledgerSearch')?.value||'').trim().toLowerCase();
@@ -100,7 +101,7 @@
     items.forEach(([,r])=>{if(r.currency in sums&&Number.isFinite(r.amountMinor)){sums[r.currency]+=r.amountMinor;(daily[r.date]??={EUR:0,KRW:0,n:0})[r.currency]+=r.amountMinor;daily[r.date].n++;}});
     document.getElementById('expenseTotals').innerHTML=['EUR','KRW'].map(c=>`<div class="expense-total"><small>${c} \uc870\ud68c \ud569\uacc4</small><b>${money(sums[c],c)}</b></div>`).join('');
     document.getElementById('ledgerDaily').innerHTML=Object.entries(daily).sort(([a],[b])=>b.localeCompare(a)).map(([d,v])=>`<div class="ledger-day"><b>${escape(d)}</b><span>${v.n}\uac74 \u00b7 ${v.EUR?money(v.EUR,'EUR'):''}${v.EUR&&v.KRW?' / ':''}${v.KRW?money(v.KRW,'KRW'):''}</span></div>`).join('');
-    document.getElementById('expenseListInfo').textContent=(approved?'\uacf5\uc720\uae30\ub85d '+Object.keys(records).length+'\uac74 \uc911 '+items.length+'\uac74 \ud45c\uc2dc':'\uc2b9\uc778 \ud6c4 \uacf5\uc720 \uae30\ub85d\uc744 \ubd88\ub7ec\uc635\ub2c8\ub2e4.')+' \u00b7 EUR/KRW\ub294 \ubcc4\ub3c4 \ud569\uc0b0';
+    document.getElementById('expenseListInfo').textContent=(storageReady?'\uacf5\uc720\uae30\ub85d '+Object.keys(records).length+'\uac74 \uc911 '+items.length+'\uac74 \ud45c\uc2dc':'\uc5f0\uacb0 \ud6c4 \uacf5\uc720 \uae30\ub85d\uc744 \ubd88\ub7ec\uc635\ub2c8\ub2e4.')+' \u00b7 EUR/KRW\ub294 \ubcc4\ub3c4 \ud569\uc0b0';
     document.getElementById('expenseRecords').innerHTML=items.length?items.map(([id,r])=>{
       const names=Object.values(r.participants||{}).map(u=>u.name),stamp=typeof r.updatedAt==='number'?new Intl.DateTimeFormat('ko-KR',{timeZone:'Europe/Zagreb',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}).format(r.updatedAt):'-';
       const photos=r.receiptSummary?.count||0;
@@ -108,15 +109,15 @@
     }).join(''):'<div class="empty-card">\uc870\ud68c\ub41c \uae30\ub85d\uc774 \uc5c6\uc2b5\ub2c8\ub2e4.</div>';
   }
   function exportLedger(){
-    if(!Integration.isStaff()||!approved)return;const rows=[['\uc0ac\uc6a9\uc77c','\ub0b4\uc6a9','\ubd84\ub958','\ud1b5\ud654','\uae08\uc561','\ucc38\uc5ec\uc778\uc6d0','\ucc38\uc5ec\uc790','\uacb0\uc81c\uc790','\uba54\ubaa8','\uc601\uc218\uc99d \uc7a5\uc218'],...visibleItems().map(([,r])=>[r.date,r.title,r.category,r.currency,r.currency==='EUR'?(r.amountMinor/100).toFixed(2):r.amountMinor,r.participantCount,Object.values(r.participants||{}).map(u=>u.name).join(' / '),r.payerName||'',r.memo||'',r.receiptSummary?.count||0])];
+    if(!Integration.canManageFinance()||!storageReady)return;const rows=[['\uc0ac\uc6a9\uc77c','\ub0b4\uc6a9','\ubd84\ub958','\ud1b5\ud654','\uae08\uc561','\ucc38\uc5ec\uc778\uc6d0','\ucc38\uc5ec\uc790','\uacb0\uc81c\uc790','\uba54\ubaa8','\uc601\uc218\uc99d \uc7a5\uc218'],...visibleItems().map(([,r])=>[r.date,r.title,r.category,r.currency,r.currency==='EUR'?(r.amountMinor/100).toFixed(2):r.amountMinor,r.participantCount,Object.values(r.participants||{}).map(u=>u.name).join(' / '),r.payerName||'',r.memo||'',r.receiptSummary?.count||0])];
     const cell=v=>'"'+String(v??'').replace(/^[=+@\-\t\r]/,m=>"'"+m).replace(/"/g,'""')+'"';
     const url=URL.createObjectURL(new Blob(['\uFEFF'+rows.map(r=>r.map(cell).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='croatia-expenses-'+nowLocalDate()+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
   }
   async function edit(id){
-    try{requireStaff();if(!approved)throw Error('운영진 기기 승인 후 수정할 수 있습니다.');
+    try{requireStaff();if(!storageReady)throw Error('공유 저장 연결을 확인해 주세요.');
       if(formHasValues()&&!confirm('작성 중인 입력 대신 이 공유 기록을 불러올까요?'))return;
       const r=await Integration.api('expenses/'+TRIP_CODE+'/'+id,{headers:{'X-Firebase-ETag':'true'}});
-      if(!Integration.isStaff()||!r.data)return;
+      if(!Integration.canManageFinance()||!r.data)return;
       const d=r.data;editId=id;editEtag=r.etag;original=d;pendingId=id;receiptItems=[];receiptChanged=false;receiptBatch=null;receiptEpoch++;renderReceiptEditor();
       for(const [el,k] of [['exDate','date'],['exTitle','title'],['exCategory','category'],['exCurrency','currency'],['exPayer','payerName'],['exMemo','memo']])document.getElementById(el).value=d[k]||'';
       document.getElementById('exAmount').value=d.currency==='EUR'?(d.amountMinor/100).toFixed(2):String(d.amountMinor);
@@ -138,7 +139,7 @@
   }
   async function save(){
     if(saveBusy||receiptBusy)return;
-    try{requireStaff();const data=validate();if(!approved)throw Error('기기 승인 전입니다. ‘기기에 초안 저장’을 사용하고 Firebase 설정을 확인해 주세요.');
+    try{requireStaff();const data=validate();if(!storageReady)throw Error('공유 저장 연결을 먼저 확인해 주세요. 입력은 기기 초안으로 보관합니다.');
       saveBusy=true;document.getElementById('expenseSave').disabled=true;saveDraft(false);status('Firebase 공유 저장 중…');
       const name=currentUser.name,uid=localStorage.getItem('fb_uid'),id=editId||pendingId||newId();
       let receiptSummary=original?.receiptSummary||null;
@@ -151,7 +152,7 @@
       if(currentUser?.name!==name)return;
       localStorage.removeItem(draftKey());await ReceiptStore.removeDraft(name).catch(()=>{});newForm();records[id]=res.data||r;renderRecords();status('공동경비 저장 완료 · '+r.participantCount+'명 참여 명단을 함께 저장했습니다.','success');
     }catch(e){saveDraft(false);status(e.message+' 입력은 초안에 남아 있습니다.','error')}
-    finally{saveBusy=false;const b=document.getElementById('expenseSave');if(b)b.disabled=!approved;}
+    finally{saveBusy=false;const b=document.getElementById('expenseSave');if(b)b.disabled=!storageReady;}
   }
   function renderReceiptEditor(){
     const box=document.getElementById('receiptEditor');if(!box)return;
@@ -165,17 +166,17 @@
     if(receiptItems.length+files.length>3){status('\uacbd\ube44 \ud55c \uac74\ub2f9 \uc0ac\uc9c4\ub294 3\uc7a5\uae4c\uc9c0\uc785\ub2c8\ub2e4.','error');return;}
     receiptBusy=true;document.getElementById('expenseSave').disabled=true;
     try{const processed=[];for(const f of files){status('\uc0ac\uc9c4 \uc555\ucd95 \uc911...');processed.push(await ReceiptStore.compress(f));if(seq!==receiptEpoch)return;}receiptItems.push(...processed);receiptChanged=true;receiptBatch=ReceiptStore.newBatch();renderReceiptEditor();saveDraft(false);status('\uc0ac\uc9c4 \ubbf8\ub9ac\ubcf4\uae30\uc5d0\uc11c \uae00\uc528\ub97c \ud655\uc778\ud574 \uc8fc\uc138\uc694. \uacf5\ub3d9\uacbd\ube44\uc5d0 \uc800\uc7a5\uc744 \ub204\ub974\uba74 \uacf5\uc720\ub429\ub2c8\ub2e4.');}
-    catch(err){status(err.message,'error')}finally{receiptBusy=false;const b=document.getElementById('expenseSave');if(b)b.disabled=!approved;}
+    catch(err){status(err.message,'error')}finally{receiptBusy=false;const b=document.getElementById('expenseSave');if(b)b.disabled=!storageReady;}
   }
   async function showReceipts(id,button){
     const box=[...document.querySelectorAll('[data-receipt-gallery]')].find(e=>e.dataset.receiptGallery===id);if(!box)return;
     if(!box.hidden){box.hidden=true;return;}box.hidden=false;box.textContent='\uc601\uc218\uc99d \ubd88\ub7ec\uc624\ub294 \uc911...';const name=currentUser?.name;
-    try{requireStaff();const items=await ReceiptStore.read(id,records[id]?.receiptSummary);if(currentUser?.name!==name||!Integration.isStaff())return;box.innerHTML=ReceiptStore.gallery(items)||'<p>\uc0ac\uc9c4\ub97c \ucc3e\uc9c0 \ubabb\ud588\uc2b5\ub2c8\ub2e4.</p>'}catch(e){box.textContent=e.message;}
+    try{requireStaff();const items=await ReceiptStore.read(id,records[id]?.receiptSummary);if(currentUser?.name!==name||!Integration.canManageFinance())return;box.innerHTML=ReceiptStore.gallery(items)||'<p>\uc0ac\uc9c4\ub97c \ucc3e\uc9c0 \ubabb\ud588\uc2b5\ub2c8\ub2e4.</p>'}catch(e){box.textContent=e.message;}
   }
-  function onAuth(){fetchEpoch++;receiptEpoch++;receiptItems=[];receiptChanged=false;receiptBatch=null;receiptBusy=false;approved=false;owner='';records={};selected.clear();editId=null;editEtag=null;original=null;const box=document.getElementById('expensesApp');if(box)box.replaceChildren();}
+  function onAuth(){fetchEpoch++;receiptEpoch++;receiptItems=[];receiptChanged=false;receiptBatch=null;receiptBusy=false;storageReady=false;owner='';records={};selected.clear();editId=null;editEtag=null;original=null;const box=document.getElementById('expensesApp');if(box)box.replaceChildren();}
   function onRoute(){
     if(AppRouter.current!=='expenses')return;
-    if(!Integration.isStaff()){AppRouter.go('today');return;}
+    if(!Integration.canManageFinance()){AppRouter.go('today');return;}
     if(owner!==currentUser.name){owner=currentUser.name;renderBase();renderRecords();}
     load();
   }

@@ -1,0 +1,297 @@
+[
+  {
+    "path": "FLIGHT_SOURCES_MIX03.md",
+    "identical": true,
+    "sha256_mix04": "ee2dd9b5a5573a839e13cdcba56ef285ce8d5315227351e91d2a513a65fbe596"
+  },
+  {
+    "path": "README.md",
+    "identical": false,
+    "sha256_mix04": "726e349392727e8064d6b2e9aca0cf3ee6b56e17b1826f9e71157cb8654abd62"
+  },
+  {
+    "path": "assets/images/css_14_b800704dc5.jpg",
+    "identical": true,
+    "sha256_mix04": "4780fbb087a6a31bc083d6ef554f3fcd9a066a476a8532d100e5550bb7f7168b"
+  },
+  {
+    "path": "assets/images/embedded_01_74401fc172.jpg",
+    "identical": true,
+    "sha256_mix04": "9c970ab83b0032f7e508f94ca4dd39076db2a91e8c46c6688f7d5d64a85cdea2"
+  },
+  {
+    "path": "assets/images/embedded_02_095c5ae8ea.jpg",
+    "identical": true,
+    "sha256_mix04": "e6170511c5370385de28876b3026b10b77549c89de948db00c4bd4deb3fc278b"
+  },
+  {
+    "path": "assets/images/embedded_03_15d3ba61ec.jpg",
+    "identical": true,
+    "sha256_mix04": "767074e47632774a490c1819f70e028fd4e060d0cb8f368e135874a210d7f3c5"
+  },
+  {
+    "path": "assets/images/embedded_04_04e59957ea.jpg",
+    "identical": true,
+    "sha256_mix04": "2795173b42b9e420c940c93816f0f776e9632fdaf8eea28b961870878256680c"
+  },
+  {
+    "path": "assets/images/embedded_05_931c47baf8.jpg",
+    "identical": true,
+    "sha256_mix04": "edd7f052c0c02a754a313b9890a6d81d3e8a2e6bc82eaa83ed185f5e13fe3102"
+  },
+  {
+    "path": "assets/images/embedded_06_4c10f14f07.jpg",
+    "identical": true,
+    "sha256_mix04": "aa8bc1cdf74f6d2b2fba012f3a673346efc1ab25166f9152433852de4df6c70d"
+  },
+  {
+    "path": "assets/images/embedded_07_7f488a7a9d.jpg",
+    "identical": true,
+    "sha256_mix04": "e2f26c3ba8793aac97f38c94ea233aea738a1342b29bebbc26b337b7890c9647"
+  },
+  {
+    "path": "assets/images/embedded_08_c24458c789.jpg",
+    "identical": true,
+    "sha256_mix04": "ef1408e5c0bb9e19956bab89711ca013dc1d8cf62d61a218beaad33aee530bc4"
+  },
+  {
+    "path": "assets/images/embedded_09_873f225fb3.jpg",
+    "identical": true,
+    "sha256_mix04": "b68c06d853d039d8771125a5ff04e49606eaef0ba80b26a1d9f2e6b3977c3d1c"
+  },
+  {
+    "path": "assets/images/embedded_10_8c5fab0784.jpg",
+    "identical": true,
+    "sha256_mix04": "42c1ede1a7c8fb40d5e5f3bf76243b6d0c89686fc6e8710952dd05a9191ea77d"
+  },
+  {
+    "path": "assets/images/embedded_11_6f2cbf0e85.jpg",
+    "identical": true,
+    "sha256_mix04": "231d21f3c2a38669ee1821c39e0a87bbe5ca64d565df2f7f003311d46e67ec98"
+  },
+  {
+    "path": "assets/images/embedded_12_e859dad0c2.jpg",
+    "identical": true,
+    "sha256_mix04": "b853c30c34efab4189988c928e1c627c8cb9ec273cb701b6755aa2cc3c73c21c"
+  },
+  {
+    "path": "assets/images/embedded_13_2cee542ac6.jpg",
+    "identical": true,
+    "sha256_mix04": "0fb67956d4f424462546dd7e1101f67e65c3bc101c95b512263451f052b19ca0"
+  },
+  {
+    "path": "css/app.css",
+    "identical": true,
+    "sha256_mix04": "7478554072d96b0000dae1e0278e567e46ac0c9dd17cf44f015a8d4fbabb3538"
+  },
+  {
+    "path": "css/attendance-prep.css",
+    "identical": true,
+    "sha256_mix04": "bcee679b7209915bbb01fa0eb9eaf460dfd09972f767c1f5b1136ac291142c94"
+  },
+  {
+    "path": "css/field-tools.css",
+    "identical": true,
+    "sha256_mix04": "b21aa3b5a56ee52cb12a8026bc39edc3b0738e4fad6056b62e23af8f04175a3d"
+  },
+  {
+    "path": "css/integration.css",
+    "identical": true,
+    "sha256_mix04": "db97b6d90956744f1a7444e6155ced22641bef907a6f8d54b51cbef0341dc03d"
+  },
+  {
+    "path": "css/mix03.css",
+    "identical": true,
+    "sha256_mix04": "b2c2ecd03fd12e1a46e216fbccd4c2c11c3e42e3a6135448078260a7b233448f"
+  },
+  {
+    "path": "data/checklist.js",
+    "identical": true,
+    "sha256_mix04": "66bd1086cfd22f96ecad5ae684c6604d26d85e45751aa2e5aa7132102635f5e4"
+  },
+  {
+    "path": "data/flight-plan.js",
+    "identical": true,
+    "sha256_mix04": "586f15560a837d391b760319e65d9909d60fddf2e3cca71149b0b1d99c0add7c"
+  },
+  {
+    "path": "data/itinerary.js",
+    "identical": true,
+    "sha256_mix04": "177dc6c4cee4b7e6a8f560487af37cef493f163521b9f46a003aa4ff67748c68"
+  },
+  {
+    "path": "data/roster.js",
+    "identical": true,
+    "sha256_mix04": "17eed3fadf4b4e1276677c4c86035ea1268e9848fd60b5b797b368c7c75841b7"
+  },
+  {
+    "path": "index.html",
+    "identical": false,
+    "sha256_mix04": "1995e5137b7d879e145e66ceb59757333d5496736be7029e2c1eee30c64e3fdd"
+  },
+  {
+    "path": "js/app-core.js",
+    "identical": true,
+    "sha256_mix04": "05ad635c5f4fceba23fb4223972accc8584be5faa2561eddb27c89cc5d48800b"
+  },
+  {
+    "path": "js/attendance.js",
+    "identical": true,
+    "sha256_mix04": "5cfbe9fa4dd34b21f905c6d7bb5e2fb773693ea3b38ea5ef218c06723055d437"
+  },
+  {
+    "path": "js/config.js",
+    "identical": true,
+    "sha256_mix04": "de731dcb17755aca8828a6e31a74f03c868ac770e60df4d0958c9624f0d6a631"
+  },
+  {
+    "path": "js/expenses.js",
+    "identical": false,
+    "sha256_mix04": "25ad808bc5f99e49365e747804128c823b16eb1f45e7f1a35ade8776f02c4530"
+  },
+  {
+    "path": "js/field-tools.js",
+    "identical": true,
+    "sha256_mix04": "ea15f3b2f0cb98b777b3ec338542900a099b8c0c01ec8a9aeab7d28725b556dd"
+  },
+  {
+    "path": "js/flight-details.js",
+    "identical": true,
+    "sha256_mix04": "29aff4af9a41735f01504e788605c1cb9dd67ad328e0e2a2bd14994fe42b1b2c"
+  },
+  {
+    "path": "js/integration.js",
+    "identical": false,
+    "sha256_mix04": "6fe677346a0b0325fe85d65d7ee98fd6937ad1af4fdfddc1ac6e18a9985b3e32"
+  },
+  {
+    "path": "js/location-session.js",
+    "identical": true,
+    "sha256_mix04": "0ea5838aec0906cf5de9610c4c77e756848df04c0660b3de384f2f639974b2dd"
+  },
+  {
+    "path": "js/mobile-ui.js",
+    "identical": true,
+    "sha256_mix04": "04ffa56f1578215cf5e141c72586406b8695e57d8eb2e9efd9f030363cfe0b9f"
+  },
+  {
+    "path": "js/net-meter.js",
+    "identical": true,
+    "sha256_mix04": "b452749eb968651c0682bd0870298a4d0faf7a0583884c4acaeadc7bf915dd76"
+  },
+  {
+    "path": "js/ops.js",
+    "identical": true,
+    "sha256_mix04": "cb4ace9858977570265e13c464da5533bcf79c8f758bbe551714160a55d1c751"
+  },
+  {
+    "path": "js/photos.js",
+    "identical": true,
+    "sha256_mix04": "9f037ccf26e20b56e4ab15d06c6be0a91cbc14a9d13842a517c76970d0a1d74b"
+  },
+  {
+    "path": "js/preparation.js",
+    "identical": true,
+    "sha256_mix04": "850cf6879bc43eb0064643962a62d8f283f718e27ecfa1090826795a7ad3b137"
+  },
+  {
+    "path": "js/receipt-store.js",
+    "identical": false,
+    "sha256_mix04": "0b0c46ffa1ab9a692eac7aac75d396d698b89ebca282d1bbfd29cc9395cb38b2"
+  },
+  {
+    "path": "js/router.js",
+    "identical": false,
+    "sha256_mix04": "01061052d697c434aca8d25dc6bc1c0b86265995e23b7ac38bf1ba580f2c28e7"
+  },
+  {
+    "path": "js/videos.js",
+    "identical": true,
+    "sha256_mix04": "f783f6c142a51abb0b57e294bf964de2727d379d1c763951d24d0b25d396e23c"
+  },
+  {
+    "path": "preview_expenses_390.png",
+    "identical": true,
+    "sha256_mix04": "979d02e8a83d1919e5d08d1000bce329f931b212699c468d0dd67bde09ec0187"
+  },
+  {
+    "path": "preview_location_390.png",
+    "identical": true,
+    "sha256_mix04": "9332218f3e85f33f93088d2aaa8c21e1c71e29af2038338d379580fe9020aea4"
+  },
+  {
+    "path": "preview_location_884.png",
+    "identical": true,
+    "sha256_mix04": "7a58659db10213fcba75efa95c26e6932c1e88011f5543f793858ecfd07c0eba"
+  },
+  {
+    "path": "reference_mix02/CHANGES_MIX02.md",
+    "identical": true,
+    "sha256_mix04": "cc47b70232051bf4af987801fd7989e97531327e2026d14fc7a156365b08e396"
+  },
+  {
+    "path": "reference_mix02/OVERWRITE_MIX02.txt",
+    "identical": true,
+    "sha256_mix04": "b310757f55d44b9065c22eff8f4ee7a5dacc8ebee2143e36948691ca9bbce8b0"
+  },
+  {
+    "path": "reference_mix02/PRESERVATION.json",
+    "identical": true,
+    "sha256_mix04": "a52ac9658675147fe579feb6c99292ef014078916a4f9fb9eac2effde360813d"
+  },
+  {
+    "path": "reference_mix02/ROSTER_CHANGES.json",
+    "identical": true,
+    "sha256_mix04": "d4ebcc5089d8a83a45dcc12a5c8fea20b457e7b8968a1772a6372ddc1e713eac"
+  },
+  {
+    "path": "reference_mix02/RULES_STATIC_TEST.json",
+    "identical": true,
+    "sha256_mix04": "a9b3297190c76ab2bc625394c4c90cfbe44ae385987f98c7426e846d7c77f5ff"
+  },
+  {
+    "path": "reference_mix02/UI_TEST_REPORT.json",
+    "identical": true,
+    "sha256_mix04": "026078972e52bbea4193cd3d82097a07790cd1fff18e4e6a517e45030c2d5cfe"
+  },
+  {
+    "path": "reference_mix02/VERIFY_MIX02.json",
+    "identical": true,
+    "sha256_mix04": "66894653e5dfd59052d9c6f88db905a5ab1d53389a95b4c15e0981c719945d5e"
+  },
+  {
+    "path": "reference_mix02/VERIFY_MIX02.md",
+    "identical": true,
+    "sha256_mix04": "913db271f50abd80af56be09ac3f2e280ce8b37060f590856f569e8e165b36ec"
+  },
+  {
+    "path": "reference_mix02/VERIFY_REPORT.md",
+    "identical": true,
+    "sha256_mix04": "de39b5c4fbf5556f2dcb37e561967f396c027a647ba64a1606c17a0c94828458"
+  },
+  {
+    "path": "reference_mix02/preview_attendance_390.png",
+    "identical": true,
+    "sha256_mix04": "a709b9ba0a8510a4d5a598b5dab1579cc4938b1d156dfbd0d646a07dc6adfed5"
+  },
+  {
+    "path": "reference_mix02/preview_attendance_884.png",
+    "identical": true,
+    "sha256_mix04": "67e2c06eb80be4cbe0628f3192d1a81d7a988129c87da0d986c0a3da441188fc"
+  },
+  {
+    "path": "reference_mix02/preview_preparation_390.png",
+    "identical": true,
+    "sha256_mix04": "347cdc513f7ed93f2f17db90a052d24f804cd1089f7cf926e6b9e49680f81830"
+  },
+  {
+    "path": "tools/merge-rules.html",
+    "identical": false,
+    "sha256_mix04": "84d55b9c4f818bfe28009d2af70aaff592bcc6836f36bf690cdaccc3fc3090ea"
+  },
+  {
+    "path": "tools/merge-rules.mjs",
+    "identical": false,
+    "sha256_mix04": "f5d423f6ac31e06e75b344d85d39ca775b263267ce554222004e9b9841eb8553"
+  }
+]

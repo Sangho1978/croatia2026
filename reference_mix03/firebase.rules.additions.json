@@ -1,53 +1,52 @@
-<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MIX04 Firebase Rules</title>
-<style>*{box-sizing:border-box}body{font:18px/1.65 system-ui,sans-serif;color:#17374b;background:#f2f6f8;max-width:880px;margin:32px auto;padding:18px}h1{font-size:26px}textarea{width:100%;min-height:260px;font:14px/1.5 monospace;padding:14px;border-radius:12px;border:1px solid #9cb6c6;background:white}button{font:inherit;font-weight:700;min-height:48px;padding:10px 18px;margin:8px 8px 8px 0;border:0;border-radius:10px;background:#164f71;color:white;cursor:pointer}.warn{padding:15px;border-radius:13px;background:#fff3d9}.ok{color:#136340}.err{color:#a62424}#output{min-height:320px}small{font-size:15px}</style>
-<h1>공동경비 간편 권한 적용</h1>
-<p>사람별 UID 등록 없이 쓰도록 경비 규칙만 한 번 바꿉니다.</p>
-<p>Firebase Console → Realtime Database → <b>Rules</b>의 현재 전체 내용을 복사하여 아래에 붙여넣으세요.</p>
-<div class="warn"><b>간편 방식 안내</b><br>앱 화면에서는 이상미·한상호만 경비를 보이게 합니다. 이 이름을 Firebase가 실명 검증하는 방식은 아닙니다. 익명 인증을 받은 사용자가 앱 화면을 우회하면 경비·영수증을 조회하거나 이름을 가장해 작성할 수 있습니다.</div>
-<label for="currentRules"><h2>1. 현재 Rules</h2></label><textarea id="currentRules" spellcheck="false" placeholder="{ &quot;rules&quot;: { ... } }"></textarea>
-<button id="merge">2. 경비 규칙만 변경</button><div id="result" role="status"></div>
-<section id="outbox" hidden><h2>3. 결과를 복사해 Rules에 게시</h2><p>기존 Rules를 먼저 백업하고, 아래 전체 내용을 Rules에 붙여넣고 Publish를 누르세요.</p><textarea id="output" readonly></textarea><button id="copy">결과 복사</button><button id="download">JSON 저장</button><p><small>변경 범위: expenses / expenseReceipts의 본 연수 규칙만. 위치·출석·사진앨범·다른 연수 규칙은 유지합니다. Data에는 아무것도 등록하거나 삭제하지 않습니다.</small></p></section>
-<script id="patch" type="application/json">{
+{
   "rules": {
+    "financeManagers": {
+      "SNU17-CRO-2026-A7K9P4": {
+        "$uid": {
+          ".read": "auth != null && auth.uid === $uid",
+          ".write": false
+        }
+      }
+    },
     "expenses": {
       "SNU17-CRO-2026-A7K9P4": {
-        ".read": "auth != null",
+        ".read": "auth != null && (root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '위재복' || root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '한상호' || root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '장현웅' || root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '이상미')",
         ".indexOn": [
           "date",
           "updatedAt"
         ],
         "$entry": {
-          ".write": "auth != null && newData.exists() && newData.child('updatedBy').val() === auth.uid && (newData.child('updatedByName').val() === '한상호' || newData.child('updatedByName').val() === '이상미') && ((!data.exists() && newData.child('createdBy').val() === auth.uid && newData.child('createdByName').val() === newData.child('updatedByName').val() && newData.child('revision').val() === 1) || (data.exists() && newData.child('createdBy').val() === data.child('createdBy').val() && newData.child('createdByName').val() === data.child('createdByName').val() && newData.child('createdAt').val() === data.child('createdAt').val() && newData.child('revision').val() === data.child('revision').val() + 1))",
+          ".write": "auth != null && (root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '위재복' || root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '한상호' || root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '장현웅' || root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '이상미') && newData.exists() && newData.child('updatedBy').val() === auth.uid && newData.child('updatedByName').val() === root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() && ((!data.exists() && newData.child('createdBy').val() === auth.uid && newData.child('createdByName').val() === root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() && newData.child('revision').val() === 1) || (data.exists() && newData.child('createdBy').val() === data.child('createdBy').val() && newData.child('createdByName').val() === data.child('createdByName').val() && newData.child('createdAt').val() === data.child('createdAt').val() && newData.child('revision').val() === data.child('revision').val() + 1))",
           ".validate": "(newData.hasChildren(['id', 'date', 'title', 'category', 'currency', 'amountMinor', 'selectionMode', 'participants', 'participantCount', 'createdBy', 'createdByName', 'createdAt', 'updatedBy', 'updatedByName', 'updatedAt', 'revision'])) && (newData.child('id').val() === $entry) && (newData.child('participantCount').val() === ((newData.child('participants').hasChild('m1') ? 1 : 0) + (newData.child('participants').hasChild('m2') ? 1 : 0) + (newData.child('participants').hasChild('m3') ? 1 : 0) + (newData.child('participants').hasChild('m4') ? 1 : 0) + (newData.child('participants').hasChild('m5') ? 1 : 0) + (newData.child('participants').hasChild('m6') ? 1 : 0) + (newData.child('participants').hasChild('m7') ? 1 : 0) + (newData.child('participants').hasChild('m8') ? 1 : 0) + (newData.child('participants').hasChild('m9') ? 1 : 0) + (newData.child('participants').hasChild('m10') ? 1 : 0) + (newData.child('participants').hasChild('m11') ? 1 : 0) + (newData.child('participants').hasChild('m12') ? 1 : 0) + (newData.child('participants').hasChild('m13') ? 1 : 0) + (newData.child('participants').hasChild('m14') ? 1 : 0) + (newData.child('participants').hasChild('m15') ? 1 : 0) + (newData.child('participants').hasChild('m16') ? 1 : 0) + (newData.child('participants').hasChild('m17') ? 1 : 0) + (newData.child('participants').hasChild('m18') ? 1 : 0) + (newData.child('participants').hasChild('m19') ? 1 : 0) + (newData.child('participants').hasChild('m20') ? 1 : 0) + (newData.child('participants').hasChild('m21') ? 1 : 0) + (newData.child('participants').hasChild('m22') ? 1 : 0) + (newData.child('participants').hasChild('m23') ? 1 : 0) + (newData.child('participants').hasChild('m24') ? 1 : 0) + (newData.child('participants').hasChild('m25') ? 1 : 0) + (newData.child('participants').hasChild('m26') ? 1 : 0) + (newData.child('participants').hasChild('m27') ? 1 : 0) + (newData.child('participants').hasChild('m28') ? 1 : 0))) && (newData.child('selectionMode').val() !== 'all' || newData.child('participantCount').val() === 28)",
           "id": {
-            ".validate": "newData.isString() && newData.val().length \u003c= 120"
+            ".validate": "newData.isString() && newData.val().length <= 120"
           },
           "date": {
-            ".validate": "newData.isString() && newData.val().length \u003c= 10 && newData.val().length === 10"
+            ".validate": "newData.isString() && newData.val().length <= 10 && newData.val().length === 10"
           },
           "title": {
-            ".validate": "newData.isString() && newData.val().length \u003c= 120 && newData.val().length > 0"
+            ".validate": "newData.isString() && newData.val().length <= 120 && newData.val().length > 0"
           },
           "category": {
-            ".validate": "newData.isString() && newData.val().length \u003c= 40"
+            ".validate": "newData.isString() && newData.val().length <= 40"
           },
           "payerName": {
-            ".validate": "newData.isString() && newData.val().length \u003c= 60"
+            ".validate": "newData.isString() && newData.val().length <= 60"
           },
           "memo": {
-            ".validate": "newData.isString() && newData.val().length \u003c= 1000"
+            ".validate": "newData.isString() && newData.val().length <= 1000"
           },
           "createdBy": {
-            ".validate": "newData.isString() && newData.val().length \u003c= 128"
+            ".validate": "newData.isString() && newData.val().length <= 128"
           },
           "createdByName": {
-            ".validate": "newData.isString() && newData.val().length \u003c= 40"
+            ".validate": "newData.isString() && newData.val().length <= 40"
           },
           "updatedBy": {
-            ".validate": "newData.isString() && newData.val().length \u003c= 128"
+            ".validate": "newData.isString() && newData.val().length <= 128"
           },
           "updatedByName": {
-            ".validate": "newData.isString() && newData.val().length \u003c= 40"
+            ".validate": "newData.isString() && newData.val().length <= 40"
           },
           "currency": {
             ".validate": "newData.val() === 'EUR' || newData.val() === 'KRW'"
@@ -56,16 +55,16 @@
             ".validate": "newData.val() === 'all' || newData.val() === 'selected'"
           },
           "amountMinor": {
-            ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() \u003c= 1000000000000 && newData.val() % 1 === 0"
+            ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= 1000000000000 && newData.val() % 1 === 0"
           },
           "participantCount": {
-            ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() \u003c= 28 && newData.val() % 1 === 0"
+            ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 28 && newData.val() % 1 === 0"
           },
           "createdAt": {
-            ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() \u003c= now + 60000"
+            ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= now + 60000"
           },
           "updatedAt": {
-            ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() \u003c= now + 60000"
+            ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= now + 60000"
           },
           "revision": {
             ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() % 1 === 0"
@@ -77,7 +76,7 @@
                 ".validate": "newData.val() === '김남구'"
               },
               "group": {
-                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() \u003c= 4"
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
               },
               "$other": {
                 ".validate": false
@@ -89,7 +88,7 @@
                 ".validate": "newData.val() === '김동욱'"
               },
               "group": {
-                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() \u003c= 4"
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
               },
               "$other": {
                 ".validate": false
@@ -101,7 +100,7 @@
                 ".validate": "newData.val() === '김준용'"
               },
               "group": {
-                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() \u003c= 4"
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
               },
               "$other": {
                 ".validate": false
@@ -113,7 +112,7 @@
                 ".validate": "newData.val() === '류준호'"
               },
               "group": {
-                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() \u003c= 4"
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
               },
               "$other": {
                 ".validate": false
@@ -125,7 +124,7 @@
                 ".validate": "newData.val() === '문미영'"
               },
               "group": {
-                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() \u003c= 4"
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
               },
               "$other": {
                 ".validate": false
@@ -137,7 +136,7 @@
                 ".validate": "newData.val() === '문철웅'"
               },
               "group": {
-                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() \u003c= 4"
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
               },
               "$other": {
                 ".validate": false
@@ -149,7 +148,7 @@
                 ".validate": "newData.val() === '박현종'"
               },
               "group": {
-                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() \u003c= 4"
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
               },
               "$other": {
                 ".validate": false
@@ -161,7 +160,7 @@
                 ".validate": "newData.val() === '박형수'"
               },
               "group": {
-                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() \u003c= 4"
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
               },
               "$other": {
                 ".validate": false
@@ -173,7 +172,7 @@
                 ".validate": "newData.val() === '변영웅'"
               },
               "group": {
-                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() \u003c= 4"
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
               },
               "$other": {
                 ".validate": false
@@ -185,7 +184,7 @@
                 ".validate": "newData.val() === '변태윤'"
               },
               "group": {
-                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() \u003c= 4"
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
               },
               "$other": {
                 ".validate": false
@@ -197,7 +196,7 @@
                 ".validate": "newData.val() === '양대원'"
               },
               "group": {
-                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() \u003c= 4"
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
               },
               "$other": {
                 ".validate": false
@@ -209,7 +208,7 @@
                 ".validate": "newData.val() === '오시창'"
               },
               "group": {
-                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() \u003c= 4"
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
               },
               "$other": {
                 ".validate": false
@@ -221,7 +220,7 @@
                 ".validate": "newData.val() === '위재복'"
               },
               "group": {
-                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() \u003c= 4"
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
               },
               "$other": {
                 ".validate": false
@@ -233,7 +232,7 @@
                 ".validate": "newData.val() === '윤선아'"
               },
               "group": {
-                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() \u003c= 4"
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
               },
               "$other": {
                 ".validate": false
@@ -245,7 +244,7 @@
                 ".validate": "newData.val() === '이상미'"
               },
               "group": {
-                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() \u003c= 4"
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
               },
               "$other": {
                 ".validate": false
@@ -257,7 +256,7 @@
                 ".validate": "newData.val() === '이재학'"
               },
               "group": {
-                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() \u003c= 4"
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
               },
               "$other": {
                 ".validate": false
@@ -269,7 +268,7 @@
                 ".validate": "newData.val() === '이주훈'"
               },
               "group": {
-                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() \u003c= 4"
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
               },
               "$other": {
                 ".validate": false
@@ -281,7 +280,7 @@
                 ".validate": "newData.val() === '이태영'"
               },
               "group": {
-                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() \u003c= 4"
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
               },
               "$other": {
                 ".validate": false
@@ -293,7 +292,7 @@
                 ".validate": "newData.val() === '이호형'"
               },
               "group": {
-                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() \u003c= 4"
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
               },
               "$other": {
                 ".validate": false
@@ -305,7 +304,7 @@
                 ".validate": "newData.val() === '장현웅'"
               },
               "group": {
-                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() \u003c= 4"
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
               },
               "$other": {
                 ".validate": false
@@ -317,7 +316,7 @@
                 ".validate": "newData.val() === '정창석'"
               },
               "group": {
-                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() \u003c= 4"
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
               },
               "$other": {
                 ".validate": false
@@ -329,7 +328,7 @@
                 ".validate": "newData.val() === '주상화'"
               },
               "group": {
-                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() \u003c= 4"
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
               },
               "$other": {
                 ".validate": false
@@ -341,7 +340,7 @@
                 ".validate": "newData.val() === '차두표'"
               },
               "group": {
-                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() \u003c= 4"
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
               },
               "$other": {
                 ".validate": false
@@ -353,7 +352,7 @@
                 ".validate": "newData.val() === '최미숙'"
               },
               "group": {
-                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() \u003c= 4"
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
               },
               "$other": {
                 ".validate": false
@@ -365,7 +364,7 @@
                 ".validate": "newData.val() === '한상호'"
               },
               "group": {
-                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() \u003c= 4"
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
               },
               "$other": {
                 ".validate": false
@@ -377,7 +376,7 @@
                 ".validate": "newData.val() === '한성룡'"
               },
               "group": {
-                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() \u003c= 4"
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
               },
               "$other": {
                 ".validate": false
@@ -389,7 +388,7 @@
                 ".validate": "newData.val() === '홍준희'"
               },
               "group": {
-                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() \u003c= 4"
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
               },
               "$other": {
                 ".validate": false
@@ -401,7 +400,7 @@
                 ".validate": "newData.val() === '나종민'"
               },
               "group": {
-                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() \u003c= 4"
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
               },
               "$other": {
                 ".validate": false
@@ -420,10 +419,10 @@
               ".validate": "newData.isString() && newData.val().matches(/^rb_[a-zA-Z0-9_-]{1,80}$/)"
             },
             "count": {
-              ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() \u003c= 3 && newData.val() % 1 === 0"
+              ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 3 && newData.val() % 1 === 0"
             },
             "bytes": {
-              ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() \u003c= 921600"
+              ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 921600"
             },
             "$other": {
               ".validate": false
@@ -432,41 +431,68 @@
         }
       }
     },
+    "photoAlbums": {
+      "SNU17-CRO-2026-A7K9P4": {
+        "shared": {
+          ".read": "auth != null",
+          ".write": "auth != null && (root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '위재복' || root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '한상호' || root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '장현웅' || root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '이상미') && newData.exists() && newData.child('updatedBy').val() === auth.uid && newData.child('updatedByName').val() === root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val()",
+          ".validate": "newData.hasChildren(['title','url','updatedBy','updatedByName','updatedAt'])",
+          "title": {
+            ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 100"
+          },
+          "url": {
+            ".validate": "newData.isString() && newData.val().length <= 2048 && (newData.val().beginsWith('https://photos.app.goo.gl/') || newData.val().beginsWith('https://photos.google.com/') || newData.val().beginsWith('https://drive.google.com/'))"
+          },
+          "updatedBy": {
+            ".validate": "newData.isString()"
+          },
+          "updatedByName": {
+            ".validate": "newData.isString()"
+          },
+          "updatedAt": {
+            ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= now + 60000"
+          },
+          "$other": {
+            ".validate": false
+          }
+        }
+      }
+    },
     "expenseReceipts": {
       "SNU17-CRO-2026-A7K9P4": {
         "$entry": {
-          ".read": "auth != null",
+          ".read": "auth != null && (root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '위재복' || root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '한상호' || root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '장현웅' || root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '이상미')",
           "$batch": {
             ".validate": "$batch.matches(/^rb_[a-zA-Z0-9_-]{1,80}$/)",
             "$photo": {
-              ".write": "auth != null && $photo.matches(/^r[123]$/) && newData.exists() && newData.child('uid').val() === auth.uid && (newData.child('uploadedBy').val() === '한상호' || newData.child('uploadedBy').val() === '이상미') && (!data.exists() || data.child('uid').val() === auth.uid)",
+              ".write": "auth != null && (root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '위재복' || root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '한상호' || root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '장현웅' || root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '이상미') && $photo.matches(/^r[123]$/) && (!newData.exists() || (newData.child('uid').val() === auth.uid && (!data.exists() || data.child('uid').val() === auth.uid)))",
               ".validate": "newData.hasChildren([\"uid\", \"uploadedBy\", \"uploadedAt\", \"fileName\", \"mime\", \"bytes\", \"width\", \"height\", \"dataUrl\"])",
               "uid": {
                 ".validate": "newData.isString() && newData.val() === auth.uid"
               },
               "uploadedBy": {
-                ".validate": "newData.isString() && (newData.val() === '한상호' || newData.val() === '이상미')"
+                ".validate": "newData.isString() && newData.val() === root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val()"
               },
               "uploadedAt": {
-                ".validate": "newData.isNumber() && newData.val() \u003c= now+60000"
+                ".validate": "newData.isNumber() && newData.val() <= now+60000"
               },
               "fileName": {
-                ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length \u003c= 100"
+                ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 100"
               },
               "mime": {
                 ".validate": "newData.val() === 'image/jpeg'"
               },
               "bytes": {
-                ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() \u003c= 307200"
+                ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 307200"
               },
               "width": {
-                ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() \u003c= 2400"
+                ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 2400"
               },
               "height": {
-                ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() \u003c= 2400"
+                ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 2400"
               },
               "dataUrl": {
-                ".validate": "newData.isString() && newData.val().length \u003c= 409623 && newData.val().beginsWith('data:image/jpeg;base64,')"
+                ".validate": "newData.isString() && newData.val().length <= 409623 && newData.val().beginsWith('data:image/jpeg;base64,')"
               },
               "$other": {
                 ".validate": false
@@ -478,31 +504,3 @@
     }
   }
 }
-</script><script>/* Offline merge. Replaces finance policy at this trip only; never publishes. */
-(function(root){
-  'use strict';
-  const TRIP='SNU17-CRO-2026-A7K9P4',NODES=['expenses','expenseReceipts'];
-  function mergeFinanceRules(current,patch){
-    if(!current||!current.rules||Array.isArray(current.rules)||typeof current.rules!=='object')throw Error('\ud604\uc7ac Rules \uc804\uccb4 JSON\uc744 \ubd99\uc5ec\ub123\uc5b4 \uc8fc\uc138\uc694.');
-    if(['.read','.write'].some(k=>current.rules[k]!==undefined&&current.rules[k]!==false))throw Error('\ucd5c\uc0c1\uc704 \uc804\uccb4 \uacf5\uac1c Rules\uac00 \uc788\uc2b5\ub2c8\ub2e4. \uc804\uccb4 \uaddc\uce59\uc744 \uba3c\uc800 \ud655\uc778\ud574 \uc8fc\uc138\uc694.');
-    if(Object.keys(current.rules).some(k=>k.startsWith('$')))throw Error('\ucd5c\uc0c1\uc704 \uc640\uc77c\ub4dc\uce74\ub4dc Rules\uac00 \uc788\uc5b4 \uc790\ub3d9 \ubcc0\uacbd\uc744 \uc911\uc9c0\ud588\uc2b5\ub2c8\ub2e4.');
-    const result=JSON.parse(JSON.stringify(current));
-    for(const key of NODES){
-      const parent=result.rules[key]||{};
-      if(typeof parent!=='object'||Array.isArray(parent))throw Error(key+' Rules must be an object.');
-      if(Object.keys(parent).some(k=>k.startsWith('$'))||['.read','.write'].some(k=>parent[k]!==undefined&&parent[k]!==false))throw Error(key+' \uc0c1\uc704 \ub610\ub294 \uc640\uc77c\ub4dc\uce74\ub4dc \uaddc\uce59\uc744 \uba3c\uc800 \ud655\uc778\ud574 \uc8fc\uc138\uc694.');
-      if(!patch?.rules?.[key]?.[TRIP])throw Error('Missing patch: '+key);
-      result.rules[key]={...parent,[TRIP]:JSON.parse(JSON.stringify(patch.rules[key][TRIP]))};
-    }
-    return result;
-  }
-  root.mergeFinanceRules=mergeFinanceRules;
-  if(typeof module!=='undefined'&&module.exports)module.exports={mergeFinanceRules};
-})(typeof window!=='undefined'?window:globalThis);
-</script>
-<script>
-const status=document.getElementById('result'),out=document.getElementById('output');
-document.getElementById('merge').onclick=()=>{try{const obj=JSON.parse(document.getElementById('currentRules').value),p=JSON.parse(document.getElementById('patch').textContent);out.value=JSON.stringify(mergeFinanceRules(obj,p),null,2);document.getElementById('outbox').hidden=false;status.className='ok';status.textContent='변경 결과를 만들었습니다. 서버에는 아직 게시하지 않았습니다.';}catch(e){out.value='';document.getElementById('outbox').hidden=true;status.className='err';status.textContent=e.message;}};
-document.getElementById('copy').onclick=async()=>{try{await navigator.clipboard.writeText(out.value);status.textContent='복사했습니다.';}catch(e){out.focus();out.select();status.textContent='결과가 선택되었습니다. 복사해 주세요.';}};
-document.getElementById('download').onclick=()=>{const u=URL.createObjectURL(new Blob([out.value],{type:'application/json'})),a=document.createElement('a');a.href=u;a.download='firebase.rules.mix04.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);};
-</script></html>

@@ -4,6 +4,9 @@
   const byName=new Map(TEAM_MEMBERS.map(u=>[u.name,u]));
   const staff=new Set(Object.keys(STAFF_ROLES));
   const isStaff=()=>!!currentUser&&staff.has(currentUser.name);
+  // Finance UI gate, not server-verified identity. Staff titles are unchanged.
+  const financeNames=new Set(['\ud55c\uc0c1\ud638','\uc774\uc0c1\ubbf8']);
+  const canManageFinance=()=>!!currentUser&&financeNames.has(currentUser.name);
   const idOf=u=>u.memberId;
   function escape(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
   function uidFromToken(t){try{return JSON.parse(atob(t.split('.')[1].replace(/-/g,'+').replace(/_/g,'/'))).sub||''}catch(_){return ''}}
@@ -34,13 +37,15 @@
     try{return await authInFlight}finally{authInFlight=null}
   };
   async function api(path,options={}){
+    const financePath=/^(expenses|expenseReceipts)\//.test(path);
+    if(financePath&&!canManageFinance())throw Error("\uacf5\ub3d9\uacbd\ube44\ub294 \uc774\uc0c1\ubbf8\u00b7\ud55c\uc0c1\ud638\ub9cc \uc0ac\uc6a9\ud569\ub2c8\ub2e4.");
     const tk=await token();
     const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),16000);
     try{
       const url=firebaseConfig.databaseURL.replace(/\/$/,'')+'/'+path+'.json?auth='+encodeURIComponent(tk);
       const res=await fetch(url,{...options,headers:{...(options.body?{'Content-Type':'application/json'}:{}),...(options.headers||{})},cache:'no-store',signal:controller.signal});
       const text=await res.text();let data=null;try{data=text?JSON.parse(text):null}catch(_){}
-      if(!res.ok){const e=Error(res.status===412?'다른 운영진이 수정했습니다. 최신 기록을 다시 불러와 주세요.':[401,403].includes(res.status)?'접근 권한이 없습니다. Firebase 운영진 기기 ID 등록을 확인해 주세요.':'서버 저장·조회에 실패했습니다. ('+res.status+')');e.status=res.status;e.path=path;e.method=options.method||'GET';throw e}
+      if(!res.ok){const e=Error(res.status===412?'다른 운영진이 수정했습니다. 최신 기록을 다시 불러와 주세요.':[401,403].includes(res.status)?(financePath?'\uacf5\ub3d9\uacbd\ube44 Rules\ub97c MIX04\ub85c \ud55c \ubc88\ub9cc \ubcc0\uacbd\ud574 \uc8fc\uc138\uc694. \uae30\uae30 \uc2b9\uc778\uc740 \ud544\uc694 \uc5c6\uc2b5\ub2c8\ub2e4.':'접근 권한이 없습니다. Firebase 운영진 기기 ID 등록을 확인해 주세요.'):'서버 저장·조회에 실패했습니다. ('+res.status+')');e.status=res.status;e.path=path;e.method=options.method||'GET';throw e}
       return {data,etag:res.headers.get('ETag')};
     }catch(e){if(e.name==='AbortError')throw Error('연결 시간이 초과되었습니다. 입력 내용은 초안으로 보관됩니다.');throw e}finally{clearTimeout(timer)}
   }
@@ -66,9 +71,10 @@
   }
   function applyIdentity(){
     document.querySelectorAll('[data-staff-only]').forEach(el=>el.hidden=!isStaff());
+    document.querySelectorAll('[data-finance-only]').forEach(el=>el.hidden=!canManageFinance());
     const e=document.getElementById('tripRoleText');if(e)e.textContent=currentUser?[(currentUser.group?currentUser.group+'조':'인솔 교수'),currentUser.leader?'조장':'',currentUser.presenter&&!currentUser.leader?'발표':'',currentUser.tripRole?'연수 '+currentUser.tripRole:''].filter(Boolean).join(' · '):'';
     const box=document.getElementById('myFirebaseUid');if(box){box.hidden=true;box.textContent=''}
-    if(!isStaff()&&window.AppRouter?.current==='expenses')AppRouter.go('today');
+    if(!canManageFinance()&&window.AppRouter?.current==='expenses')AppRouter.go('today');
     window.dispatchEvent(new CustomEvent('cro-role-ready'));
   }
   async function showIdentity(){
@@ -76,7 +82,7 @@
     try{await token();e.textContent=localStorage.getItem('fb_uid')||'기기 ID 확인 실패'}catch(err){e.textContent=err.message}
   }
   function feedback(el,text,kind=''){if(el){el.className='form-feedback '+kind;el.textContent=text}}
-  window.Integration={isStaff,idOf,escape,api,showIdentity,renderPeople,feedback,byName,get build(){return '20260918-MIX01'}};
+  window.Integration={isStaff,canManageFinance,idOf,escape,api,showIdentity,renderPeople,feedback,byName,get build(){return '20260918-MIX01'}};
   window.addEventListener('cro-auth-change',applyIdentity);
   document.addEventListener('input',e=>{if(e.target.id==='peopleSearch')renderPeople()});
   document.addEventListener('click',e=>{

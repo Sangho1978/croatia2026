@@ -1,6 +1,6 @@
 /* MIX03. Receipt images only: re-encode on-device, strip EXIF, max 3 x 300 KiB.
  * Images live under expenseReceipts, NOT under the frequently loaded expense list.
- * Same Realtime Database/financeManagers authorization; no Firebase Storage needed.
+ * Same Realtime Database; finance UI name gate without device approval; no Firebase Storage needed.
  */
 (function(){
   'use strict';
@@ -31,7 +31,7 @@
     }finally{release()}
   }
   async function upload(entryId,items,batchId){
-    if(!Integration.isStaff()||!currentUser)throw Error('\uc6b4\uc601\uc9c4\ub9cc \uc601\uc218\uc99d\uc744 \uc800\uc7a5\ud569\ub2c8\ub2e4.');
+    if(!Integration.canManageFinance()||!currentUser)throw Error('\uc6b4\uc601\uc9c4\ub9cc \uc601\uc218\uc99d\uc744 \uc800\uc7a5\ud569\ub2c8\ub2e4.');
     if(items.length>MAX)throw Error('\uacbd\ube44 \ud55c \uac74\ub2f9 \uc0ac\uc9c4 3\uc7a5\uae4c\uc9c0 \uc800\uc7a5\ud569\ub2c8\ub2e4.');
     const user=currentUser.name;await token();const uid=localStorage.getItem('fb_uid'),batch=batchId||id();
     for(let i=0;i<items.length;i++){
@@ -42,7 +42,7 @@
     return items.length?{batchId:batch,count:items.length,bytes:items.reduce((n,x)=>n+x.bytes,0)}:null;
   }
   async function read(entryId,summary){
-    if(!Integration.isStaff())throw Error('\uc6b4\uc601\uc9c4\ub9cc \uc601\uc218\uc99d\uc744 \uc870\ud68c\ud569\ub2c8\ub2e4.');if(!summary?.batchId)return [];
+    if(!Integration.canManageFinance())throw Error('\uc6b4\uc601\uc9c4\ub9cc \uc601\uc218\uc99d\uc744 \uc870\ud68c\ud569\ub2c8\ub2e4.');if(!summary?.batchId)return [];
     const r=await Integration.api('expenseReceipts/'+TRIP_CODE+'/'+entryId+'/'+summary.batchId);
     return Object.entries(r.data||{}).sort(([a],[b])=>a.localeCompare(b)).map(([,x])=>x).filter(x=>x?.mime==='image/jpeg'&&typeof x.dataUrl==='string'&&x.dataUrl.startsWith('data:image/jpeg;base64,'));
   }
