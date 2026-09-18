@@ -1,0 +1,86 @@
+{
+  "scope": "JavaScript syntax and policy model only; not an emulator or production validation",
+  "expressions": 113,
+  "checks": [
+    {
+      "check": "registered manager read",
+      "pass": true
+    },
+    {
+      "check": "ordinary denied read",
+      "pass": true
+    },
+    {
+      "check": "unrecognised registered role denied",
+      "pass": true
+    },
+    {
+      "check": "unauthenticated denied read",
+      "pass": true
+    },
+    {
+      "check": "registered manager create",
+      "pass": true
+    },
+    {
+      "check": "ordinary denied write",
+      "pass": true
+    },
+    {
+      "check": "cannot self grant manager",
+      "pass": true
+    },
+    {
+      "check": "selected count exact",
+      "pass": true
+    },
+    {
+      "check": "wrong count rejected",
+      "pass": true
+    },
+    {
+      "check": "all cannot be subset",
+      "pass": true
+    },
+    {
+      "check": "unknown participant rejected",
+      "pass": true
+    },
+    {
+      "check": "zero amount rejected",
+      "pass": true
+    },
+    {
+      "check": "float minor amount rejected",
+      "pass": true
+    },
+    {
+      "check": "zero participants rejected",
+      "pass": true
+    },
+    {
+      "check": "deletion rejected",
+      "pass": true
+    },
+    {
+      "check": "another manager can update",
+      "pass": true
+    },
+    {
+      "check": "creator identity immutable",
+      "pass": true
+    },
+    {
+      "check": "spoofed modifier name rejected",
+      "pass": true
+    },
+    {
+      "check": "revision must increment",
+      "pass": true
+    },
+    {
+      "check": "legacy namespaces not in additions",
+      "pass": true
+    }
+  ]
+}

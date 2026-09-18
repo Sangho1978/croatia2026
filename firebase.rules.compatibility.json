@@ -1,0 +1,483 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "locations": {
+      "$trip": {
+        ".read": "auth != null",
+        "$slot": {
+          ".write": "auth != null"
+        }
+      }
+    },
+    "locationHistory": {
+      "$trip": {
+        ".read": "auth != null",
+        "$slot": {
+          "$point": {
+            ".write": "auth != null"
+          }
+        }
+      }
+    },
+    "attendanceCurrent": {
+      "$trip": {
+        ".read": "auth != null",
+        ".write": "auth != null"
+      }
+    },
+    "attendance": {
+      "$trip": {
+        ".read": "auth != null",
+        "$event": {
+          "$slot": {
+            ".write": "auth != null"
+          }
+        }
+      }
+    },
+    "financeManagers": {
+      "SNU17-CRO-2026-A7K9P4": {
+        "$uid": {
+          ".read": "auth != null && auth.uid === $uid",
+          ".write": false
+        }
+      }
+    },
+    "expenses": {
+      "SNU17-CRO-2026-A7K9P4": {
+        ".read": "auth != null && (root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '위재복' || root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '한상호' || root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '장현웅' || root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '이상미')",
+        ".indexOn": [
+          "date",
+          "updatedAt"
+        ],
+        "$entry": {
+          ".write": "auth != null && (root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '위재복' || root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '한상호' || root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '장현웅' || root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '이상미') && newData.exists() && newData.child('updatedBy').val() === auth.uid && newData.child('updatedByName').val() === root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() && ((!data.exists() && newData.child('createdBy').val() === auth.uid && newData.child('createdByName').val() === root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() && newData.child('revision').val() === 1) || (data.exists() && newData.child('createdBy').val() === data.child('createdBy').val() && newData.child('createdByName').val() === data.child('createdByName').val() && newData.child('createdAt').val() === data.child('createdAt').val() && newData.child('revision').val() === data.child('revision').val() + 1))",
+          ".validate": "(newData.hasChildren(['id', 'date', 'title', 'category', 'currency', 'amountMinor', 'selectionMode', 'participants', 'participantCount', 'createdBy', 'createdByName', 'createdAt', 'updatedBy', 'updatedByName', 'updatedAt', 'revision'])) && (newData.child('id').val() === $entry) && (newData.child('participantCount').val() === ((newData.child('participants').hasChild('m1') ? 1 : 0) + (newData.child('participants').hasChild('m2') ? 1 : 0) + (newData.child('participants').hasChild('m3') ? 1 : 0) + (newData.child('participants').hasChild('m4') ? 1 : 0) + (newData.child('participants').hasChild('m5') ? 1 : 0) + (newData.child('participants').hasChild('m6') ? 1 : 0) + (newData.child('participants').hasChild('m7') ? 1 : 0) + (newData.child('participants').hasChild('m8') ? 1 : 0) + (newData.child('participants').hasChild('m9') ? 1 : 0) + (newData.child('participants').hasChild('m10') ? 1 : 0) + (newData.child('participants').hasChild('m11') ? 1 : 0) + (newData.child('participants').hasChild('m12') ? 1 : 0) + (newData.child('participants').hasChild('m13') ? 1 : 0) + (newData.child('participants').hasChild('m14') ? 1 : 0) + (newData.child('participants').hasChild('m15') ? 1 : 0) + (newData.child('participants').hasChild('m16') ? 1 : 0) + (newData.child('participants').hasChild('m17') ? 1 : 0) + (newData.child('participants').hasChild('m18') ? 1 : 0) + (newData.child('participants').hasChild('m19') ? 1 : 0) + (newData.child('participants').hasChild('m20') ? 1 : 0) + (newData.child('participants').hasChild('m21') ? 1 : 0) + (newData.child('participants').hasChild('m22') ? 1 : 0) + (newData.child('participants').hasChild('m23') ? 1 : 0) + (newData.child('participants').hasChild('m24') ? 1 : 0) + (newData.child('participants').hasChild('m25') ? 1 : 0) + (newData.child('participants').hasChild('m26') ? 1 : 0) + (newData.child('participants').hasChild('m27') ? 1 : 0) + (newData.child('participants').hasChild('m28') ? 1 : 0))) && (newData.child('selectionMode').val() !== 'all' || newData.child('participantCount').val() === 28)",
+          "id": {
+            ".validate": "newData.isString() && newData.val().length <= 120"
+          },
+          "date": {
+            ".validate": "newData.isString() && newData.val().length <= 10 && newData.val().length === 10"
+          },
+          "title": {
+            ".validate": "newData.isString() && newData.val().length <= 120 && newData.val().length > 0"
+          },
+          "category": {
+            ".validate": "newData.isString() && newData.val().length <= 40"
+          },
+          "payerName": {
+            ".validate": "newData.isString() && newData.val().length <= 60"
+          },
+          "memo": {
+            ".validate": "newData.isString() && newData.val().length <= 1000"
+          },
+          "createdBy": {
+            ".validate": "newData.isString() && newData.val().length <= 128"
+          },
+          "createdByName": {
+            ".validate": "newData.isString() && newData.val().length <= 40"
+          },
+          "updatedBy": {
+            ".validate": "newData.isString() && newData.val().length <= 128"
+          },
+          "updatedByName": {
+            ".validate": "newData.isString() && newData.val().length <= 40"
+          },
+          "currency": {
+            ".validate": "newData.val() === 'EUR' || newData.val() === 'KRW'"
+          },
+          "selectionMode": {
+            ".validate": "newData.val() === 'all' || newData.val() === 'selected'"
+          },
+          "amountMinor": {
+            ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= 1000000000000 && newData.val() % 1 === 0"
+          },
+          "participantCount": {
+            ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 28 && newData.val() % 1 === 0"
+          },
+          "createdAt": {
+            ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= now + 60000"
+          },
+          "updatedAt": {
+            ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= now + 60000"
+          },
+          "revision": {
+            ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() % 1 === 0"
+          },
+          "participants": {
+            "m1": {
+              ".validate": "newData.hasChildren(['name','group'])",
+              "name": {
+                ".validate": "newData.val() === '김남구'"
+              },
+              "group": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
+              },
+              "$other": {
+                ".validate": false
+              }
+            },
+            "m2": {
+              ".validate": "newData.hasChildren(['name','group'])",
+              "name": {
+                ".validate": "newData.val() === '김동욱'"
+              },
+              "group": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
+              },
+              "$other": {
+                ".validate": false
+              }
+            },
+            "m3": {
+              ".validate": "newData.hasChildren(['name','group'])",
+              "name": {
+                ".validate": "newData.val() === '김준용'"
+              },
+              "group": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
+              },
+              "$other": {
+                ".validate": false
+              }
+            },
+            "m4": {
+              ".validate": "newData.hasChildren(['name','group'])",
+              "name": {
+                ".validate": "newData.val() === '류준호'"
+              },
+              "group": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
+              },
+              "$other": {
+                ".validate": false
+              }
+            },
+            "m5": {
+              ".validate": "newData.hasChildren(['name','group'])",
+              "name": {
+                ".validate": "newData.val() === '문미영'"
+              },
+              "group": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
+              },
+              "$other": {
+                ".validate": false
+              }
+            },
+            "m6": {
+              ".validate": "newData.hasChildren(['name','group'])",
+              "name": {
+                ".validate": "newData.val() === '문철웅'"
+              },
+              "group": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
+              },
+              "$other": {
+                ".validate": false
+              }
+            },
+            "m7": {
+              ".validate": "newData.hasChildren(['name','group'])",
+              "name": {
+                ".validate": "newData.val() === '박현종'"
+              },
+              "group": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
+              },
+              "$other": {
+                ".validate": false
+              }
+            },
+            "m8": {
+              ".validate": "newData.hasChildren(['name','group'])",
+              "name": {
+                ".validate": "newData.val() === '박형수'"
+              },
+              "group": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
+              },
+              "$other": {
+                ".validate": false
+              }
+            },
+            "m9": {
+              ".validate": "newData.hasChildren(['name','group'])",
+              "name": {
+                ".validate": "newData.val() === '변영웅'"
+              },
+              "group": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
+              },
+              "$other": {
+                ".validate": false
+              }
+            },
+            "m10": {
+              ".validate": "newData.hasChildren(['name','group'])",
+              "name": {
+                ".validate": "newData.val() === '변태윤'"
+              },
+              "group": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
+              },
+              "$other": {
+                ".validate": false
+              }
+            },
+            "m11": {
+              ".validate": "newData.hasChildren(['name','group'])",
+              "name": {
+                ".validate": "newData.val() === '양대원'"
+              },
+              "group": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
+              },
+              "$other": {
+                ".validate": false
+              }
+            },
+            "m12": {
+              ".validate": "newData.hasChildren(['name','group'])",
+              "name": {
+                ".validate": "newData.val() === '오시창'"
+              },
+              "group": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
+              },
+              "$other": {
+                ".validate": false
+              }
+            },
+            "m13": {
+              ".validate": "newData.hasChildren(['name','group'])",
+              "name": {
+                ".validate": "newData.val() === '위재복'"
+              },
+              "group": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
+              },
+              "$other": {
+                ".validate": false
+              }
+            },
+            "m14": {
+              ".validate": "newData.hasChildren(['name','group'])",
+              "name": {
+                ".validate": "newData.val() === '윤선아'"
+              },
+              "group": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
+              },
+              "$other": {
+                ".validate": false
+              }
+            },
+            "m15": {
+              ".validate": "newData.hasChildren(['name','group'])",
+              "name": {
+                ".validate": "newData.val() === '이상미'"
+              },
+              "group": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
+              },
+              "$other": {
+                ".validate": false
+              }
+            },
+            "m16": {
+              ".validate": "newData.hasChildren(['name','group'])",
+              "name": {
+                ".validate": "newData.val() === '이재학'"
+              },
+              "group": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
+              },
+              "$other": {
+                ".validate": false
+              }
+            },
+            "m17": {
+              ".validate": "newData.hasChildren(['name','group'])",
+              "name": {
+                ".validate": "newData.val() === '이주훈'"
+              },
+              "group": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
+              },
+              "$other": {
+                ".validate": false
+              }
+            },
+            "m18": {
+              ".validate": "newData.hasChildren(['name','group'])",
+              "name": {
+                ".validate": "newData.val() === '이태영'"
+              },
+              "group": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
+              },
+              "$other": {
+                ".validate": false
+              }
+            },
+            "m19": {
+              ".validate": "newData.hasChildren(['name','group'])",
+              "name": {
+                ".validate": "newData.val() === '이호형'"
+              },
+              "group": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
+              },
+              "$other": {
+                ".validate": false
+              }
+            },
+            "m20": {
+              ".validate": "newData.hasChildren(['name','group'])",
+              "name": {
+                ".validate": "newData.val() === '장현웅'"
+              },
+              "group": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
+              },
+              "$other": {
+                ".validate": false
+              }
+            },
+            "m21": {
+              ".validate": "newData.hasChildren(['name','group'])",
+              "name": {
+                ".validate": "newData.val() === '정창석'"
+              },
+              "group": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
+              },
+              "$other": {
+                ".validate": false
+              }
+            },
+            "m22": {
+              ".validate": "newData.hasChildren(['name','group'])",
+              "name": {
+                ".validate": "newData.val() === '주상화'"
+              },
+              "group": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
+              },
+              "$other": {
+                ".validate": false
+              }
+            },
+            "m23": {
+              ".validate": "newData.hasChildren(['name','group'])",
+              "name": {
+                ".validate": "newData.val() === '차두표'"
+              },
+              "group": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
+              },
+              "$other": {
+                ".validate": false
+              }
+            },
+            "m24": {
+              ".validate": "newData.hasChildren(['name','group'])",
+              "name": {
+                ".validate": "newData.val() === '최미숙'"
+              },
+              "group": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
+              },
+              "$other": {
+                ".validate": false
+              }
+            },
+            "m25": {
+              ".validate": "newData.hasChildren(['name','group'])",
+              "name": {
+                ".validate": "newData.val() === '한상호'"
+              },
+              "group": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
+              },
+              "$other": {
+                ".validate": false
+              }
+            },
+            "m26": {
+              ".validate": "newData.hasChildren(['name','group'])",
+              "name": {
+                ".validate": "newData.val() === '한성룡'"
+              },
+              "group": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
+              },
+              "$other": {
+                ".validate": false
+              }
+            },
+            "m27": {
+              ".validate": "newData.hasChildren(['name','group'])",
+              "name": {
+                ".validate": "newData.val() === '홍준희'"
+              },
+              "group": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
+              },
+              "$other": {
+                ".validate": false
+              }
+            },
+            "m28": {
+              ".validate": "newData.hasChildren(['name','group'])",
+              "name": {
+                ".validate": "newData.val() === '나종민'"
+              },
+              "group": {
+                ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 4"
+              },
+              "$other": {
+                ".validate": false
+              }
+            },
+            "$other": {
+              ".validate": false
+            }
+          },
+          "$other": {
+            ".validate": false
+          }
+        }
+      }
+    },
+    "photoAlbums": {
+      "SNU17-CRO-2026-A7K9P4": {
+        "shared": {
+          ".read": "auth != null",
+          ".write": "auth != null && (root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '위재복' || root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '한상호' || root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '장현웅' || root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '이상미') && newData.exists() && newData.child('updatedBy').val() === auth.uid && newData.child('updatedByName').val() === root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val()",
+          ".validate": "newData.hasChildren(['title','url','updatedBy','updatedByName','updatedAt'])",
+          "title": {
+            ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 100"
+          },
+          "url": {
+            ".validate": "newData.isString() && newData.val().length <= 2048 && (newData.val().beginsWith('https://photos.app.goo.gl/') || newData.val().beginsWith('https://photos.google.com/') || newData.val().beginsWith('https://drive.google.com/'))"
+          },
+          "updatedBy": {
+            ".validate": "newData.isString()"
+          },
+          "updatedByName": {
+            ".validate": "newData.isString()"
+          },
+          "updatedAt": {
+            ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= now + 60000"
+          },
+          "$other": {
+            ".validate": false
+          }
+        }
+      }
+    }
+  }
+}

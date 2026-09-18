@@ -1,0 +1,434 @@
+{
+  "backend": "In-memory HTTP mock. No production Firebase writes.",
+  "checks": [
+    {
+      "check": "344 login",
+      "pass": true
+    },
+    {
+      "check": "344 weather visible",
+      "pass": true
+    },
+    {
+      "check": "344 traffic visible",
+      "pass": true
+    },
+    {
+      "check": "344 nav fits",
+      "pass": true
+    },
+    {
+      "check": "344 two group tabs",
+      "pass": true
+    },
+    {
+      "check": "344 28 people",
+      "pass": true
+    },
+    {
+      "check": "344 group1 leader",
+      "pass": true
+    },
+    {
+      "check": "344 group2 leader",
+      "pass": true
+    },
+    {
+      "check": "344 group3 leader",
+      "pass": true
+    },
+    {
+      "check": "344 group4 leader",
+      "pass": true
+    },
+    {
+      "check": "344 presenters exactly3",
+      "pass": true
+    },
+    {
+      "check": "344 staff badges4",
+      "pass": true
+    },
+    {
+      "check": "344 no horizontal overflow",
+      "pass": true
+    },
+    {
+      "check": "344 weather remains pinned",
+      "pass": true
+    },
+    {
+      "check": "344 dated toilets kept",
+      "pass": true
+    },
+    {
+      "check": "344 inline detail open",
+      "pass": true
+    },
+    {
+      "check": "344 inline detail closed",
+      "pass": true
+    },
+    {
+      "check": "344 sheet immediate",
+      "pass": true
+    },
+    {
+      "check": "344 toilets16",
+      "pass": true
+    },
+    {
+      "check": "344 apps8",
+      "pass": true
+    },
+    {
+      "check": "344 staff expense approved",
+      "pass": true
+    },
+    {
+      "check": "344 all28 default",
+      "pass": true
+    },
+    {
+      "check": "390 login",
+      "pass": true
+    },
+    {
+      "check": "390 weather visible",
+      "pass": true
+    },
+    {
+      "check": "390 traffic visible",
+      "pass": true
+    },
+    {
+      "check": "390 nav fits",
+      "pass": true
+    },
+    {
+      "check": "390 two group tabs",
+      "pass": true
+    },
+    {
+      "check": "390 28 people",
+      "pass": true
+    },
+    {
+      "check": "390 group1 leader",
+      "pass": true
+    },
+    {
+      "check": "390 group2 leader",
+      "pass": true
+    },
+    {
+      "check": "390 group3 leader",
+      "pass": true
+    },
+    {
+      "check": "390 group4 leader",
+      "pass": true
+    },
+    {
+      "check": "390 presenters exactly3",
+      "pass": true
+    },
+    {
+      "check": "390 staff badges4",
+      "pass": true
+    },
+    {
+      "check": "390 no horizontal overflow",
+      "pass": true
+    },
+    {
+      "check": "390 weather remains pinned",
+      "pass": true
+    },
+    {
+      "check": "390 dated toilets kept",
+      "pass": true
+    },
+    {
+      "check": "390 inline detail open",
+      "pass": true
+    },
+    {
+      "check": "390 inline detail closed",
+      "pass": true
+    },
+    {
+      "check": "390 sheet immediate",
+      "pass": true
+    },
+    {
+      "check": "390 toilets16",
+      "pass": true
+    },
+    {
+      "check": "390 apps8",
+      "pass": true
+    },
+    {
+      "check": "390 staff expense approved",
+      "pass": true
+    },
+    {
+      "check": "390 all28 default",
+      "pass": true
+    },
+    {
+      "check": "690 login",
+      "pass": true
+    },
+    {
+      "check": "690 weather visible",
+      "pass": true
+    },
+    {
+      "check": "690 traffic visible",
+      "pass": true
+    },
+    {
+      "check": "690 nav fits",
+      "pass": true
+    },
+    {
+      "check": "690 two group tabs",
+      "pass": true
+    },
+    {
+      "check": "690 28 people",
+      "pass": true
+    },
+    {
+      "check": "690 group1 leader",
+      "pass": true
+    },
+    {
+      "check": "690 group2 leader",
+      "pass": true
+    },
+    {
+      "check": "690 group3 leader",
+      "pass": true
+    },
+    {
+      "check": "690 group4 leader",
+      "pass": true
+    },
+    {
+      "check": "690 presenters exactly3",
+      "pass": true
+    },
+    {
+      "check": "690 staff badges4",
+      "pass": true
+    },
+    {
+      "check": "690 no horizontal overflow",
+      "pass": true
+    },
+    {
+      "check": "690 weather remains pinned",
+      "pass": true
+    },
+    {
+      "check": "690 dated toilets kept",
+      "pass": true
+    },
+    {
+      "check": "690 inline detail open",
+      "pass": true
+    },
+    {
+      "check": "690 inline detail closed",
+      "pass": true
+    },
+    {
+      "check": "690 sheet immediate",
+      "pass": true
+    },
+    {
+      "check": "690 toilets16",
+      "pass": true
+    },
+    {
+      "check": "690 apps8",
+      "pass": true
+    },
+    {
+      "check": "690 staff expense approved",
+      "pass": true
+    },
+    {
+      "check": "690 all28 default",
+      "pass": true
+    },
+    {
+      "check": "884 login",
+      "pass": true
+    },
+    {
+      "check": "884 weather visible",
+      "pass": true
+    },
+    {
+      "check": "884 traffic visible",
+      "pass": true
+    },
+    {
+      "check": "884 nav fits",
+      "pass": true
+    },
+    {
+      "check": "884 two group tabs",
+      "pass": true
+    },
+    {
+      "check": "884 28 people",
+      "pass": true
+    },
+    {
+      "check": "884 group1 leader",
+      "pass": true
+    },
+    {
+      "check": "884 group2 leader",
+      "pass": true
+    },
+    {
+      "check": "884 group3 leader",
+      "pass": true
+    },
+    {
+      "check": "884 group4 leader",
+      "pass": true
+    },
+    {
+      "check": "884 presenters exactly3",
+      "pass": true
+    },
+    {
+      "check": "884 staff badges4",
+      "pass": true
+    },
+    {
+      "check": "884 no horizontal overflow",
+      "pass": true
+    },
+    {
+      "check": "884 weather remains pinned",
+      "pass": true
+    },
+    {
+      "check": "884 dated toilets kept",
+      "pass": true
+    },
+    {
+      "check": "884 inline detail open",
+      "pass": true
+    },
+    {
+      "check": "884 inline detail closed",
+      "pass": true
+    },
+    {
+      "check": "884 sheet immediate",
+      "pass": true
+    },
+    {
+      "check": "884 toilets16",
+      "pass": true
+    },
+    {
+      "check": "884 apps8",
+      "pass": true
+    },
+    {
+      "check": "884 staff expense approved",
+      "pass": true
+    },
+    {
+      "check": "884 all28 default",
+      "pass": true
+    },
+    {
+      "check": "expense shared success",
+      "pass": true
+    },
+    {
+      "check": "whole record participation28",
+      "pass": true
+    },
+    {
+      "check": "empty participants rejected",
+      "pass": true
+    },
+    {
+      "check": "select counter3",
+      "pass": true
+    },
+    {
+      "check": "same shared entry updated count3",
+      "pass": true
+    },
+    {
+      "check": "stale concurrent edit rejected",
+      "pass": true
+    },
+    {
+      "check": "server revision not overwritten",
+      "pass": true
+    },
+    {
+      "check": "draft restored",
+      "pass": true
+    },
+    {
+      "check": "second manager sees shared count3",
+      "pass": true
+    },
+    {
+      "check": "album saved mocked DB",
+      "pass": true
+    },
+    {
+      "check": "group leader denied finance menu",
+      "pass": true
+    },
+    {
+      "check": "ordinary direct route denied",
+      "pass": true
+    },
+    {
+      "check": "ordinary album open exists",
+      "pass": true
+    },
+    {
+      "check": "ordinary cannot edit album",
+      "pass": true
+    },
+    {
+      "check": "spoofed name not enough for save",
+      "pass": true
+    },
+    {
+      "check": "legacy attendance path unchanged",
+      "pass": true
+    },
+    {
+      "check": "legacy attendance count1",
+      "pass": true
+    },
+    {
+      "check": "legacy location key stable",
+      "pass": true
+    },
+    {
+      "check": "no JavaScript errors",
+      "pass": true
+    }
+  ],
+  "pageErrors": []
+}

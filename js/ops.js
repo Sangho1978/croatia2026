@@ -45,7 +45,7 @@
     document.getElementById('todayRoute').textContent=d.route;
     const flow=document.getElementById('todayFlow'); if(flow)flow.innerHTML=(d.flow||[]).map((x,i)=>`${i?'<i>›</i>':''}<span>${x}</span>`).join('');
     const nx=nextEventFor(d); document.getElementById('todayNextTime').textContent=nx.time; document.getElementById('todayNextLabel').textContent=nx.label; document.getElementById('todayCountdown').textContent=nx.count;
-    const w=WEATHER_SPOTS[d.date]; const ws=document.getElementById('todayWeatherState'); if(ws)ws.textContent=w?`${w.name} ${w.hi}/${w.lo}° 참고`:'도착일';
+    const w=WEATHER_SPOTS[d.date]; const ws=document.getElementById('todayWeatherState'); if(ws)ws.textContent=document.getElementById('liveWeatherMain')?.textContent||(w?`${w.name} ${w.hi}/${w.lo}° 참고`:'도착일');
     const as=document.getElementById('todayAttendanceState'); if(as){const cnt=Object.values(attChecks||{}).filter(x=>x&&x.checked).length; as.textContent=attCurrent?`${cnt}/28 · ${attCurrent.title||attCurrent.type}`:'진행 없음';}
     const ls=document.getElementById('todayLocationState'); if(ls){const sharing=localStorage.getItem('loc_sharing')==='1'; ls.textContent=sharing?(locLastWrite?`${ago(locLastWrite)} 전송`:'공유 ON'):'공유 OFF';}
     document.getElementById('todayOpsNote').innerHTML=`<b>식사·운영</b> ${d.meal||'항공·도착 일정에 맞춰 운영'}<br><b>복장·날씨</b> ${WEATHER_ACTION[d.date]||''}`;
@@ -78,7 +78,7 @@
   };
 
   function setupMemo(){const m=document.getElementById('fieldMemo');if(!m)return;m.value=localStorage.getItem('cro_field_memo')||'';m.addEventListener('input',()=>localStorage.setItem('cro_field_memo',m.value));}
-  function reorderSections(){const main=document.querySelector('main'); if(!main)return;['today','schedule','location','attendance','guide','study','weatherDetail','route','hotels','team','check','videos','emergency','more'].forEach(id=>{const s=document.getElementById(id);if(s)main.appendChild(s)});}
+  function reorderSections(){const main=document.querySelector('main'); if(!main)return;['today','schedule','location','attendance','guide','study','weatherDetail','route','hotels','team','check','videos','emergency','more'].forEach(id=>{const s=document.getElementById(id);if(s&&s.parentElement===main)main.appendChild(s)});}
   function adminVisibility(){document.querySelectorAll('.tech-only').forEach(x=>x.style.display=(currentUser?.name==='한상호'?'block':'none'));}
 
   function haversine(a,b,c,d){const R=6371000,rad=x=>x*Math.PI/180,dp=rad(c-a),dl=rad(d-b),q=Math.sin(dp/2)**2+Math.cos(rad(a))*Math.cos(rad(c))*Math.sin(dl/2)**2;return 2*R*Math.asin(Math.sqrt(q));}
