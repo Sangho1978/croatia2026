@@ -20,7 +20,7 @@
     '2026-10-18':'로마 시내는 장시간 도보가 예상됩니다. 얇은 겉옷과 물을 준비하고, 공항 이동 전 16시 전후 집결시간을 최우선으로 확인하세요.',
     '2026-10-19':'도착일입니다. 수하물·공용물품·개인 여권/지갑/휴대전화 누락 여부를 마지막으로 확인하세요.'
   };
-  let attOnlyMissing=false;
+
 
   function nowCroParts(){
     const parts=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Zagreb',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date());
@@ -67,16 +67,6 @@
 
   function setOnlineState(){const e=document.getElementById('onlineStatusChip');if(!e)return;const on=navigator.onLine;e.textContent=on?'🟢 온라인':'🟠 오프라인 · 저장 일정 이용';e.classList.toggle('online',on);e.classList.toggle('offline',!on);}
 
-  function setupChecklistStages(){
-    const groups=[...document.querySelectorAll('#checks .check-group')];
-    const map=[['departure'],['departure'],['departure'],['departure','morning'],['departure','morning','free'],['departure','morning'],['departure','morning'],['morning','free'],['morning','checkout'],['return']];
-    groups.forEach((g,i)=>g.dataset.stages=(map[i]||['all']).join(','));
-  }
-  window.filterChecklistStage=function(stage,btn){
-    document.querySelectorAll('#checkStageBar button').forEach(x=>x.classList.toggle('active',x===btn));
-    document.querySelectorAll('#checks .check-group').forEach(g=>{g.style.display=(stage==='all'||(g.dataset.stages||'').split(',').includes(stage))?'block':'none'});
-  };
-
   function setupMemo(){const m=document.getElementById('fieldMemo');if(!m)return;m.value=localStorage.getItem('cro_field_memo')||'';m.addEventListener('input',()=>localStorage.setItem('cro_field_memo',m.value));}
   function reorderSections(){const main=document.querySelector('main'); if(!main)return;['today','schedule','location','attendance','guide','study','weatherDetail','route','hotels','team','check','videos','emergency','more'].forEach(id=>{const s=document.getElementById(id);if(s&&s.parentElement===main)main.appendChild(s)});}
   function adminVisibility(){document.querySelectorAll('.tech-only').forEach(x=>x.style.display=(currentUser?.name==='한상호'?'block':'none'));}
@@ -90,27 +80,8 @@
     box.hidden=false; box.innerHTML=`<h3>📍 현재 집결지 거리</h3><div class="small muted">${esc(attCurrent.title||'집결')} · 위치공유 기준 · 먼 사람부터 표시${not?` · 위치 미공유 ${not}명`:''}</div><div class="distance-grid">${rows.slice(0,12).map(x=>{const cls=x.dist>500?'far':x.dist>150?'mid':'near',v=x.dist>=1000?(x.dist/1000).toFixed(1)+'km':Math.round(x.dist)+'m';return `<div class="distance-person"><b>${esc(x.u.name)} · ${x.u.group===0?'교수님':x.u.group+'조'}</b><span class="${cls}">${v}</span></div>`}).join('')}</div><div class="btns"><a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${attCurrent.meetingLat},${attCurrent.meetingLng}">집결지 Google 지도</a></div>`;
   }
 
-  window.attToggleMissing=function(btn){attOnlyMissing=!attOnlyMissing;btn.classList.toggle('active',attOnlyMissing);attRender();};
-  window.attRender=function(){
-    const title=document.getElementById('attTitle'),meta=document.getElementById('attMeta'),roster=document.getElementById('attRoster'),btn=document.getElementById('attMyBtn'),sum=document.getElementById('attGroupSummary');if(!title||!roster)return;
-    if(!attCurrent){title.textContent='현재 진행 중인 출석이 없습니다.';meta.textContent='한상호가 출석을 시작하면 원우 27명과 인솔 교수 1명이 실시간으로 확인할 수 있습니다.';document.getElementById('attCheckedCount').textContent='0';btn.disabled=true;btn.classList.remove('checked');btn.textContent='✓ 내 출석 확인';if(sum)sum.innerHTML='';roster.innerHTML='<div class="att-empty">새 출석이 시작되면 28명의 확인 여부가 여기에 표시됩니다.</div>';opsRenderToday();opsRenderMeetingDistance();return;}
-    title.textContent=attCurrent.title||attCurrent.type||'출석 확인'; const count=Object.values(attChecks||{}).filter(x=>x&&x.checked).length,missing=28-count;
-    meta.textContent=`${lastSeenClock(attCurrent.createdAt)} 시작 · ${attCurrent.createdBy||''}${attCurrent.meetingLat?' · 집결지 지정':''} · 미확인 ${missing}명`;
-    document.getElementById('attCheckedCount').textContent=count;
-    const mine=currentUser?attChecks[currentUser.slot]:null;btn.disabled=false;btn.classList.toggle('checked',!!mine?.checked);btn.textContent=mine?.checked?`✓ 확인완료 · ${new Date(mine.ts).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})}`:'✓ 내 출석 확인';
-    if(sum)sum.innerHTML=[1,2,3,4,0].map(g=>{const mem=APP_USERS.filter(u=>u.group===g),ok=mem.filter(u=>attChecks[u.slot]?.checked).length;return `<span class="att-group-pill ${ok<mem.length?'warn':''}">${g===0?'교수':g+'조'} ${ok}/${mem.length}</span>`}).join('');
-    roster.innerHTML=`<div class="att-missing-note">${attOnlyMissing?'미확인자만 표시 중 · ':''}현재 미확인 ${missing}명</div>`;
-    [1,2,3,4,0].forEach(g=>{let mem=APP_USERS.filter(u=>u.group===g&&attUserMatchesFilter(u));if(attOnlyMissing)mem=mem.filter(u=>!attChecks[u.slot]?.checked);if(!mem.length)return;mem.sort((a,b)=>Number(!!attChecks[a.slot]?.checked)-Number(!!attChecks[b.slot]?.checked));let h=document.createElement('div');h.className='grouphead';const gOk=mem.filter(u=>attChecks[u.slot]?.checked).length;h.textContent=g===0?'교수님':`${g}조`;roster.appendChild(h);mem.forEach(u=>{let c=attChecks[u.slot],ok=!!c?.checked,row=document.createElement('div');row.className='att-row '+(ok?'':'missing-first');row.innerHTML=`<span class="att-state ${ok?'ok':''}"></span><div class="att-name">${esc(u.name)}<small>${esc(u.org)} · ${u.group===0?'교수님':(u.leader?'조장':'조원')}</small></div><div class="att-status ${ok?'checked':''}">${ok?`확인 · ${new Date(c.ts).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})}`:'미확인'}</div>`;roster.appendChild(row)});});
-    opsRenderToday();opsRenderMeetingDistance();
-  };
-
-  window.attCreateEvent=async function(){
-    if(!currentUser||currentUser.name!=='한상호'){alert('출석 시작은 한상호만 사용할 수 있습니다.');return}
-    const type=document.getElementById('attType').value,custom=document.getElementById('attCustomTitle').value.trim(),now=Date.now(),d={id:String(now),type,title:custom||type,createdBy:currentUser.name,createdAt:now};
-    const use=document.getElementById('attUseMyLocation')?.checked,hint=document.getElementById('attMeetingHint');
-    if(use){try{if(hint)hint.textContent='현재 위치를 집결지로 확인 중…';const p=await getPos(true);d.meetingLat=+p.coords.latitude.toFixed(5);d.meetingLng=+p.coords.longitude.toFixed(5);d.meetingAccuracy=Math.round(p.coords.accuracy||0);if(hint)hint.textContent=`집결지 지정 준비 · GPS 정확도 약 ${d.meetingAccuracy}m`;}catch(e){if(hint)hint.textContent='현재 위치를 가져오지 못해 집결지 없이 출석을 시작합니다.';}}
-    const b=JSON.stringify(d);try{const tk=await token(),r=await fetch(attCurrentPath()+`?auth=${encodeURIComponent(tk)}`,{method:'PUT',headers:{'Content-Type':'application/json'},body:b}),t=await r.text();locCount(b.length+t.length);if(!r.ok)throw Error('출석 시작 실패 — Firebase Rules 확인');attCurrent=d;attChecks={};document.getElementById('attCustomTitle').value='';attRender();}catch(e){alert(e.message||e)}
-  };
+  // MIX02 attendance owns its UI and network state; dashboard stays subscribed.
+  window.addEventListener('cro-att-change',()=>{opsRenderToday();opsRenderMeetingDistance();});
 
   // Wrap existing location rendering so dashboard and meeting-distance stay current.
   const _renderRoster=window.renderRoster;
@@ -121,7 +92,7 @@
   if(typeof _appLogout==='function') window.appLogout=function(){const r=_appLogout.apply(this,arguments);adminVisibility();opsRenderToday();return r;};
 
   document.addEventListener('DOMContentLoaded',()=>{
-    reorderSections(); enhanceSchedulePanels(); setupChecklistStages(); setupMemo(); setOnlineState(); adminVisibility(); opsRenderToday(); opsRenderMeetingDistance();
+    reorderSections(); enhanceSchedulePanels(); setupMemo(); setOnlineState(); adminVisibility(); opsRenderToday(); opsRenderMeetingDistance();
     window.addEventListener('online',setOnlineState);window.addEventListener('offline',setOnlineState);
     setInterval(opsRenderToday,60000);
   });

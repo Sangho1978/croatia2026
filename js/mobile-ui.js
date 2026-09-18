@@ -11,7 +11,7 @@
     videos:['VIDEO','이동 전 짧게 보는 사전답사'],
     location:['LIVE LOCATION','조별·개인별 최근 위치 확인'],
     attendance:['CHECK-IN','28명 실시간 집결·탑승 확인'],
-    check:['CHECKLIST','출발 전부터 귀국까지 준비물 점검']
+    check:['PREPARATION','출발 전 챙길 것과 준비할 것']
   };
   function buildHeaders(){
     Object.entries(meta).forEach(([id,[eyebrow,sub]])=>{
