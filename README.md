@@ -1,3 +1,5 @@
+> MIX03: 최신 설정은 `FIREBASE_MIX03.md`와 `README_MIX03.md`를 우선하세요. 아래는 기존 버전 안내입니다.
+
 # 아드리아의 길 · MIX02
 
 **이번 기준: `croatia2026_mix01_github_pages.zip` + 출발 전 준비목록/조별 출석 간소화.**

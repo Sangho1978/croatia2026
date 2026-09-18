@@ -1,0 +1,123 @@
+{
+  "baselineFile": "아드리아의길_CROATIA2026_화장실_추천앱_최신정보보강판_분리형(1).zip",
+  "baselineSha256": "790ad4a84cd4d11f2d36ce9a8333cc6acda151b665d3ccdcf64a60d1945abb9b",
+  "prototypeReference": "croatia2026_ultimate_prototype/index.html",
+  "build": "20260918-MIX01",
+  "protectedSections": {
+    "guide": {
+      "textEqual": true,
+      "sourceChars": 12176
+    },
+    "hotels": {
+      "textEqual": true,
+      "sourceChars": 194
+    },
+    "videos": {
+      "textEqual": true,
+      "sourceChars": 2720
+    },
+    "check": {
+      "textEqual": true,
+      "sourceChars": 197
+    },
+    "study": {
+      "textEqual": true,
+      "sourceChars": 870
+    },
+    "emergency": {
+      "textEqual": true,
+      "sourceChars": 480
+    },
+    "toilets": {
+      "textEqual": true,
+      "sourceChars": 763
+    },
+    "apps": {
+      "textEqual": true,
+      "sourceChars": 374
+    },
+    "route": {
+      "textEqual": true,
+      "sourceChars": 18
+    },
+    "weatherDetail": {
+      "textEqual": true,
+      "sourceChars": 125
+    }
+  },
+  "changedGroupSizes": [
+    7,
+    7,
+    7,
+    6
+  ],
+  "unchangedLocationSlots": true,
+  "dataFilesUnchanged": [
+    "data/itinerary.js",
+    "data/checklist.js"
+  ],
+  "imageFilesUnchanged": [
+    "assets/images/embedded_04_04e59957ea.jpg",
+    "assets/images/embedded_03_15d3ba61ec.jpg",
+    "assets/images/css_14_b800704dc5.jpg",
+    "assets/images/embedded_05_931c47baf8.jpg",
+    "assets/images/embedded_10_8c5fab0784.jpg",
+    "assets/images/embedded_13_2cee542ac6.jpg",
+    "assets/images/embedded_12_e859dad0c2.jpg",
+    "assets/images/embedded_08_c24458c789.jpg",
+    "assets/images/embedded_07_7f488a7a9d.jpg",
+    "assets/images/embedded_09_873f225fb3.jpg",
+    "assets/images/embedded_01_74401fc172.jpg",
+    "assets/images/embedded_11_6f2cbf0e85.jpg",
+    "assets/images/embedded_06_4c10f14f07.jpg",
+    "assets/images/embedded_02_095c5ae8ea.jpg"
+  ],
+  "firebaseAndMapsConfigUnchanged": true,
+  "finalFiles": {
+    "FIREBASE_SETUP.md": "ac663fca81860ba02bcee74f0cbc72ba359f49732a36034a64f926eedf08d107",
+    "UI_TEST_REPORT.json": "026078972e52bbea4193cd3d82097a07790cd1fff18e4e6a517e45030c2d5cfe",
+    "ROSTER_CHANGES.json": "d4ebcc5089d8a83a45dcc12a5c8fea20b457e7b8968a1772a6372ddc1e713eac",
+    "preview_people_884.png": "d0bc1605ce0c7f5e91715351f3b5e5814341fec07bac5c3747f07bb8a3391787",
+    "preview_people_390.png": "da4e39083ca30200858f18368764dcae2aba2ca5fc35a40baff5fec3ab93c307",
+    "financeManagers.example.json": "4b616fa3307c601e4b8c15cb298532642003d9e18c8e6fd7dc8b96be50c1605b",
+    "firebase.rules.compatibility.json": "42c5db101d7e9481fba4f73903ea7c633b79807d82d6119cc3bba5e460e21fa2",
+    "preview_expenses_390.png": "6765f7b94309f448b3006f655191b39947a67da94a3188f4851a2c51c00bd7d8",
+    "RULES_STATIC_TEST.json": "a9b3297190c76ab2bc625394c4c90cfbe44ae385987f98c7426e846d7c77f5ff",
+    "README.md": "9a211a67426f1229dbf75d352c6cf40f62197c83c771ba0c812d19f58c2e886b",
+    "preview_finance_fold.png": "1b5ab968c8968a8585b8a23f0516d16ed0137c13a750319f3f06a00a0bf2e44d",
+    "firebase.rules.additions.json": "5fffe68b70a79e65415e9202f2131c4b9c86d198567a120d39a955ea128edffa",
+    "index.html": "36d813e9e1867b984d06b5d14f33f28e366fbbce8c32f39b355af0712609930b",
+    "data/roster.js": "17eed3fadf4b4e1276677c4c86035ea1268e9848fd60b5b797b368c7c75841b7",
+    "data/itinerary.js": "177dc6c4cee4b7e6a8f560487af37cef493f163521b9f46a003aa4ff67748c68",
+    "data/checklist.js": "562125914ddb7b3a3c4fcf91ea08a15fa7718e5369def2291eec5e97e52d66e3",
+    "css/field-tools.css": "b21aa3b5a56ee52cb12a8026bc39edc3b0738e4fad6056b62e23af8f04175a3d",
+    "css/integration.css": "db97b6d90956744f1a7444e6155ced22641bef907a6f8d54b51cbef0341dc03d",
+    "css/app.css": "7478554072d96b0000dae1e0278e567e46ac0c9dd17cf44f015a8d4fbabb3538",
+    "js/videos.js": "f783f6c142a51abb0b57e294bf964de2727d379d1c763951d24d0b25d396e23c",
+    "js/app-core.js": "7e7145ea7980f71d3b7465675a108d2b6739f43008161cd6c7d923af4cb90708",
+    "js/mobile-ui.js": "a574f2d3b0d7282913cd0ea7d2993719611eed476a86039d7269f4dc5b586ff6",
+    "js/photos.js": "9f037ccf26e20b56e4ab15d06c6be0a91cbc14a9d13842a517c76970d0a1d74b",
+    "js/config.js": "de731dcb17755aca8828a6e31a74f03c868ac770e60df4d0958c9624f0d6a631",
+    "js/router.js": "1ec39f4229000025ca50c80e0eb7438c4ddfb07972aa9154e67c42f0ed07324d",
+    "js/expenses.js": "19049578088632658e32a90c7677c70b5645df8824bfba94a10efd92fd33d949",
+    "js/ops.js": "9fb0e98421dea73dff5b91800542595517128ffb0d709e5b1453bc4809140ab0",
+    "js/field-tools.js": "ea15f3b2f0cb98b777b3ec338542900a099b8c0c01ec8a9aeab7d28725b556dd",
+    "js/net-meter.js": "9f92bf2606c357c7c279d8bd57e5545d72f3a9de1d271fd01a88fc67420fc70c",
+    "js/integration.js": "9aaebc27223cf5f97de968d2439fab449b2481ada7f25c8d75b501762aa24bbd",
+    "tools/merge-rules.mjs": "ba5867c0284f3fabcf0cc2bb19067b2c298d2ffc02bff9b6c9efc3385a77ae4d",
+    "assets/images/embedded_04_04e59957ea.jpg": "2795173b42b9e420c940c93816f0f776e9632fdaf8eea28b961870878256680c",
+    "assets/images/embedded_03_15d3ba61ec.jpg": "767074e47632774a490c1819f70e028fd4e060d0cb8f368e135874a210d7f3c5",
+    "assets/images/css_14_b800704dc5.jpg": "4780fbb087a6a31bc083d6ef554f3fcd9a066a476a8532d100e5550bb7f7168b",
+    "assets/images/embedded_05_931c47baf8.jpg": "edd7f052c0c02a754a313b9890a6d81d3e8a2e6bc82eaa83ed185f5e13fe3102",
+    "assets/images/embedded_10_8c5fab0784.jpg": "42c1ede1a7c8fb40d5e5f3bf76243b6d0c89686fc6e8710952dd05a9191ea77d",
+    "assets/images/embedded_13_2cee542ac6.jpg": "0fb67956d4f424462546dd7e1101f67e65c3bc101c95b512263451f052b19ca0",
+    "assets/images/embedded_12_e859dad0c2.jpg": "b853c30c34efab4189988c928e1c627c8cb9ec273cb701b6755aa2cc3c73c21c",
+    "assets/images/embedded_08_c24458c789.jpg": "ef1408e5c0bb9e19956bab89711ca013dc1d8cf62d61a218beaad33aee530bc4",
+    "assets/images/embedded_07_7f488a7a9d.jpg": "e2f26c3ba8793aac97f38c94ea233aea738a1342b29bebbc26b337b7890c9647",
+    "assets/images/embedded_09_873f225fb3.jpg": "b68c06d853d039d8771125a5ff04e49606eaef0ba80b26a1d9f2e6b3977c3d1c",
+    "assets/images/embedded_01_74401fc172.jpg": "9c970ab83b0032f7e508f94ca4dd39076db2a91e8c46c6688f7d5d64a85cdea2",
+    "assets/images/embedded_11_6f2cbf0e85.jpg": "231d21f3c2a38669ee1821c39e0a87bbe5ca64d565df2f7f003311d46e67ec98",
+    "assets/images/embedded_06_4c10f14f07.jpg": "aa8bc1cdf74f6d2b2fba012f3a673346efc1ab25166f9152433852de4df6c70d",
+    "assets/images/embedded_02_095c5ae8ea.jpg": "e6170511c5370385de28876b3026b10b77549c89de948db00c4bd4deb3fc278b"
+  }
+}

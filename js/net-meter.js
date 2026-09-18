@@ -12,6 +12,6 @@
     if(track){res.clone().arrayBuffer().then(b=>{totals.received+=b.byteLength;paint()}).catch(()=>{})}
     return res;
   };
-  window.AppTraffic={totals,paint,description:()=>`이 화면을 연 뒤 앱 데이터 요청 ${totals.requests}회\n송신 본문 ${(totals.sent/1024).toFixed(1)} KB / 수신 본문 ${(totals.received/1024).toFixed(1)} KB\n\n날씨·환율·Firebase·경비·앨범 정보의 요청/응답 본문 추정량입니다. 지도 타일·사진·HTML/CSS/JS·통신 헤더·TLS 및 외부 앱 사용량은 포함하지 않습니다. 통신사 청구량과 다릅니다.`};
+  window.AppTraffic={totals,paint,description:()=>`이 화면을 연 뒤 앱 데이터 요청 ${totals.requests}회\n송신 본문 ${(totals.sent/1024).toFixed(1)} KB / 수신 본문 ${(totals.received/1024).toFixed(1)} KB\n\n날씨·환율·Firebase·경비·영수증 이미지·앨범 정보의 요청/응답 본문 추정량입니다. 지도 타일·외부 사진·HTML/CSS/JS·통신 헤더·TLS 및 외부 앱 사용량은 포함하지 않습니다. 통신사 청구량과 다릅니다.`};
   document.addEventListener('DOMContentLoaded',paint);
 })();

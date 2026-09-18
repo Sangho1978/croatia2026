@@ -1,0 +1,107 @@
+{
+  "baseline_zip": "croatia2026_mix02_github_pages.zip",
+  "unchanged_files": [
+    "preview_preparation_390.png",
+    "OVERWRITE_MIX02.txt",
+    "RULES_STATIC_TEST.json",
+    "preview_attendance_390.png",
+    "preview_attendance_884.png",
+    "VERIFY_REPORT.md",
+    "CHANGES_MIX02.md",
+    "FIREBASE_SETUP.md",
+    "PRESERVATION.json",
+    "UI_TEST_REPORT.json",
+    "VERIFY_MIX02.md",
+    "financeManagers.example.json",
+    "VERIFY_MIX02.json",
+    "README.md",
+    "ROSTER_CHANGES.json",
+    "css/field-tools.css",
+    "css/attendance-prep.css",
+    "css/integration.css",
+    "css/app.css",
+    "data/itinerary.js",
+    "data/roster.js",
+    "data/checklist.js",
+    "js/field-tools.js",
+    "js/photos.js",
+    "js/attendance.js",
+    "js/preparation.js",
+    "js/router.js",
+    "js/videos.js",
+    "js/config.js",
+    "js/mobile-ui.js",
+    "assets/images/embedded_10_8c5fab0784.jpg",
+    "assets/images/embedded_08_c24458c789.jpg",
+    "assets/images/embedded_11_6f2cbf0e85.jpg",
+    "assets/images/embedded_03_15d3ba61ec.jpg",
+    "assets/images/embedded_02_095c5ae8ea.jpg",
+    "assets/images/embedded_12_e859dad0c2.jpg",
+    "assets/images/embedded_05_931c47baf8.jpg",
+    "assets/images/css_14_b800704dc5.jpg",
+    "assets/images/embedded_09_873f225fb3.jpg",
+    "assets/images/embedded_13_2cee542ac6.jpg",
+    "assets/images/embedded_06_4c10f14f07.jpg",
+    "assets/images/embedded_01_74401fc172.jpg",
+    "assets/images/embedded_07_7f488a7a9d.jpg",
+    "assets/images/embedded_04_04e59957ea.jpg"
+  ],
+  "modified_files": [
+    [
+      "index.html",
+      "modified"
+    ],
+    [
+      "firebase.rules.additions.json",
+      "modified"
+    ],
+    [
+      "firebase.rules.compatibility.json",
+      "modified"
+    ],
+    [
+      "js/net-meter.js",
+      "modified"
+    ],
+    [
+      "js/app-core.js",
+      "modified"
+    ],
+    [
+      "js/expenses.js",
+      "modified"
+    ],
+    [
+      "js/integration.js",
+      "modified"
+    ],
+    [
+      "js/ops.js",
+      "modified"
+    ],
+    [
+      "tools/merge-rules.mjs",
+      "modified"
+    ]
+  ],
+  "section_text_equal": {
+    "today": true,
+    "weatherDetail": true,
+    "route": true,
+    "schedule": true,
+    "guide": true,
+    "hotels": true,
+    "videos": true,
+    "location": false,
+    "check": true,
+    "study": true,
+    "emergency": true,
+    "toilets": true,
+    "apps": true,
+    "more": true,
+    "group": true,
+    "photos": true,
+    "expenses": true
+  },
+  "assets_same": 14
+}

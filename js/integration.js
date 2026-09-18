@@ -40,7 +40,7 @@
       const url=firebaseConfig.databaseURL.replace(/\/$/,'')+'/'+path+'.json?auth='+encodeURIComponent(tk);
       const res=await fetch(url,{...options,headers:{...(options.body?{'Content-Type':'application/json'}:{}),...(options.headers||{})},cache:'no-store',signal:controller.signal});
       const text=await res.text();let data=null;try{data=text?JSON.parse(text):null}catch(_){}
-      if(!res.ok){const e=Error(res.status===412?'다른 운영진이 수정했습니다. 최신 기록을 다시 불러와 주세요.':[401,403].includes(res.status)?'접근 권한이 없습니다. Firebase 운영진 기기 ID 등록을 확인해 주세요.':'서버 저장·조회에 실패했습니다. ('+res.status+')');e.status=res.status;throw e}
+      if(!res.ok){const e=Error(res.status===412?'다른 운영진이 수정했습니다. 최신 기록을 다시 불러와 주세요.':[401,403].includes(res.status)?'접근 권한이 없습니다. Firebase 운영진 기기 ID 등록을 확인해 주세요.':'서버 저장·조회에 실패했습니다. ('+res.status+')');e.status=res.status;e.path=path;e.method=options.method||'GET';throw e}
       return {data,etag:res.headers.get('ETag')};
     }catch(e){if(e.name==='AbortError')throw Error('연결 시간이 초과되었습니다. 입력 내용은 초안으로 보관됩니다.');throw e}finally{clearTimeout(timer)}
   }

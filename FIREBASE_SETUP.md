@@ -1,3 +1,5 @@
+> MIX03: 최신 설정은 `FIREBASE_MIX03.md`와 `README_MIX03.md`를 우선하세요. 아래는 기존 버전 안내입니다.
+
 # Firebase 적용 안내 · MIX01
 
 ## 기준과 보존 범위

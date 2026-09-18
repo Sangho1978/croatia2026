@@ -1,0 +1,486 @@
+{
+  "build": "20260918-MIX02",
+  "baseline_zip": "croatia2026_mix01_github_pages.zip",
+  "baseline_sha256": "96f9f40410fbeff3a504da016802cf60486c2142953197375cc9d3b88b66303e",
+  "unchanged_html_sections": {
+    "today": true,
+    "schedule": true,
+    "location": true,
+    "team": true,
+    "guide": true,
+    "hotels": true,
+    "videos": true,
+    "study": true,
+    "emergency": true,
+    "toilets": true,
+    "apps": true,
+    "expenses": true,
+    "photos": true
+  },
+  "unchanged_files_sha256": {
+    "js/config.js": true,
+    "data/roster.js": true,
+    "data/itinerary.js": true,
+    "js/expenses.js": true,
+    "js/photos.js": true,
+    "js/integration.js": true,
+    "js/router.js": true,
+    "js/field-tools.js": true,
+    "js/net-meter.js": true,
+    "css/app.css": true,
+    "css/integration.css": true,
+    "css/field-tools.css": true,
+    "firebase.rules.additions.json": true,
+    "firebase.rules.compatibility.json": true,
+    "assets/images/embedded_06_4c10f14f07.jpg": true,
+    "assets/images/css_14_b800704dc5.jpg": true,
+    "assets/images/embedded_07_7f488a7a9d.jpg": true,
+    "assets/images/embedded_02_095c5ae8ea.jpg": true,
+    "assets/images/embedded_01_74401fc172.jpg": true,
+    "assets/images/embedded_11_6f2cbf0e85.jpg": true,
+    "assets/images/embedded_04_04e59957ea.jpg": true,
+    "assets/images/embedded_13_2cee542ac6.jpg": true,
+    "assets/images/embedded_09_873f225fb3.jpg": true,
+    "assets/images/embedded_03_15d3ba61ec.jpg": true,
+    "assets/images/embedded_10_8c5fab0784.jpg": true,
+    "assets/images/embedded_08_c24458c789.jpg": true,
+    "assets/images/embedded_05_931c47baf8.jpg": true,
+    "assets/images/embedded_12_e859dad0c2.jpg": true
+  },
+  "missing_local_references": [],
+  "test_count": 85,
+  "tests": [
+    {
+      "test": "login 한 상 호",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "bottom 5 items",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "only start reset admin",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "no event type or filters",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "all 28 shown before start",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "leaders first before start",
+      "pass": true,
+      "detail": [
+        "변태윤",
+        "김준용",
+        "홍준희",
+        "한성룡"
+      ]
+    },
+    {
+      "test": "login 변태윤",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "nonadmin actions hidden",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "SSE round shared",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "two device shared check",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "green lamp and saved time",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "leader stays first when checked",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "duplicate check no request",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "2 complete 26 missing",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "original Han key and new group retained",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "SSE bytes included",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "live connection indicator",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "participant does not send admin write",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "reset shows all gray",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "old attendance history kept",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "waiting self button disabled",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "new round unique id",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "new round not old checks",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "late old event ignored",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "offline count unchanged",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "offline clearly labelled",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "write denied stays unchecked",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "write error shown",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "28 complete 0 missing",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "all group complete signals",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "final status without finish action",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "viewport no x overflow 344",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "28 cells retained 344",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "weather pinned 344",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "viewport no x overflow 390",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "28 cells retained 390",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "weather pinned 390",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "viewport no x overflow 690",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "28 cells retained 690",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "weather pinned 690",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "viewport no x overflow 884",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "28 cells retained 884",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "weather pinned 884",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "people 28 intact",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "prep list 50",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "prep no stage filters",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "legacy exact item migrated",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "old unrelated item not misapplied",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "no daily hotel routines",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "prep saves stable id",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "only unprepared filter",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "login 한상호",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "prep reload persistence",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "route toilets",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "route apps",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "route schedule",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "route location",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "route hotels",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "route guide",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "route videos",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "route study",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "route expenses",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "route photos",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "daily toilet cards kept",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "inline guide still opens",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "finance members still 28",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "finance individual selection kept",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "finance blocked normal member",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "more sheet visible",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "no JS runtime errors",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "test": "login 한상호",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "poll fallback when SSE unavailable",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "5-second fallback picks up other device",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "poll label explicit",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "reconnect switches back to live",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "Firebase PATCH processed",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "cancel reset keeps current round",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "large font no overflow 344",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "large font no overflow 390",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "large font no overflow 690",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "large font no overflow 884",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "checklist reset only preparation",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "checklist reset leaves event intact",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "no writes outside attendance",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "test": "no runtime errors",
+      "pass": true,
+      "detail": []
+    }
+  ],
+  "runtime_errors": [],
+  "test_network": "two browser pages with simulated Firebase HTTP/SSE; actual external project was not modified"
+}

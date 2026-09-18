@@ -30,6 +30,7 @@
     const d=localDate(); if(d<'2026-10-12') return days[0]; if(d>'2026-10-19') return days[days.length-1]; return days.find(x=>x.date===d)||days[0];
   }
   function nextEventFor(d){
+    if(window.FlightPlan&&d.eventInstants)return FlightPlan.next(d);
     const today=localDate();
     if(today<d.date) return {time:d.events?.[0]?.[0]||'',label:d.events?.[0]?.[1]||d.title,count:`여행 시작 D-${Math.max(0,daysDiff(d.date,today))}`};
     if(today>d.date) return {time:'완료',label:'해당 날짜 일정이 종료되었습니다.',count:''};
@@ -49,6 +50,7 @@
     const as=document.getElementById('todayAttendanceState'); if(as){const cnt=Object.values(attChecks||{}).filter(x=>x&&x.checked).length; as.textContent=attCurrent?`${cnt}/28 · ${attCurrent.title||attCurrent.type}`:'진행 없음';}
     const ls=document.getElementById('todayLocationState'); if(ls){const sharing=localStorage.getItem('loc_sharing')==='1'; ls.textContent=sharing?(locLastWrite?`${ago(locLastWrite)} 전송`:'공유 ON'):'공유 OFF';}
     document.getElementById('todayOpsNote').innerHTML=`<b>식사·운영</b> ${d.meal||'항공·도착 일정에 맞춰 운영'}<br><b>복장·날씨</b> ${WEATHER_ACTION[d.date]||''}`;
+    if(window.LocationSession)LocationSession.paint();
     document.getElementById('todayBtns').innerHTML=(d.map?`<a class="btn primary" target="_blank" rel="noopener" href="${d.map}">📍 오늘 동선 지도</a>`:'')+`<a class="btn" href="#schedule">◷ 오늘 상세일정</a><a class="btn" href="#attendance">✓ 출석</a><a class="btn" href="#location">◎ 위치</a>`;
   }
 
@@ -73,7 +75,7 @@
 
   function haversine(a,b,c,d){const R=6371000,rad=x=>x*Math.PI/180,dp=rad(c-a),dl=rad(d-b),q=Math.sin(dp/2)**2+Math.cos(rad(a))*Math.cos(rad(c))*Math.sin(dl/2)**2;return 2*R*Math.asin(Math.sqrt(q));}
   function opsRenderMeetingDistance(){
-    const box=document.getElementById('meetingDistanceCard'); if(!box)return;
+    const box=document.getElementById('meetingDistanceCard'); if(!box)return;box.hidden=true;return;
     if(!attCurrent?.meetingLat||!attCurrent?.meetingLng){box.hidden=true;return;}
     const rows=APP_USERS.map(u=>{const r=locCache[u.slot];if(!r)return null;return {u,r,dist:haversine(attCurrent.meetingLat,attCurrent.meetingLng,r.lat,r.lng)}}).filter(Boolean).sort((a,b)=>b.dist-a.dist);
     const not=APP_USERS.length-rows.length;

@@ -412,21 +412,6 @@
           },
           "$other": {
             ".validate": false
-          },
-          "receiptSummary": {
-            ".validate": "newData.hasChildren(['batchId','count','bytes']) && newData.child('count').val() === ((root.child('expenseReceipts').child('SNU17-CRO-2026-A7K9P4').child($entry).child(newData.child('batchId').val()).hasChild('r1')?1:0)+(root.child('expenseReceipts').child('SNU17-CRO-2026-A7K9P4').child($entry).child(newData.child('batchId').val()).hasChild('r2')?1:0)+(root.child('expenseReceipts').child('SNU17-CRO-2026-A7K9P4').child($entry).child(newData.child('batchId').val()).hasChild('r3')?1:0))",
-            "batchId": {
-              ".validate": "newData.isString() && newData.val().matches(/^rb_[a-zA-Z0-9_-]{1,80}$/)"
-            },
-            "count": {
-              ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 3 && newData.val() % 1 === 0"
-            },
-            "bytes": {
-              ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 921600"
-            },
-            "$other": {
-              ".validate": false
-            }
           }
         }
       }
@@ -454,50 +439,6 @@
           },
           "$other": {
             ".validate": false
-          }
-        }
-      }
-    },
-    "expenseReceipts": {
-      "SNU17-CRO-2026-A7K9P4": {
-        "$entry": {
-          ".read": "auth != null && (root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '위재복' || root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '한상호' || root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '장현웅' || root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '이상미')",
-          "$batch": {
-            ".validate": "$batch.matches(/^rb_[a-zA-Z0-9_-]{1,80}$/)",
-            "$photo": {
-              ".write": "auth != null && (root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '위재복' || root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '한상호' || root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '장현웅' || root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === '이상미') && $photo.matches(/^r[123]$/) && (!newData.exists() || (newData.child('uid').val() === auth.uid && (!data.exists() || data.child('uid').val() === auth.uid)))",
-              ".validate": "newData.hasChildren([\"uid\", \"uploadedBy\", \"uploadedAt\", \"fileName\", \"mime\", \"bytes\", \"width\", \"height\", \"dataUrl\"])",
-              "uid": {
-                ".validate": "newData.isString() && newData.val() === auth.uid"
-              },
-              "uploadedBy": {
-                ".validate": "newData.isString() && newData.val() === root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val()"
-              },
-              "uploadedAt": {
-                ".validate": "newData.isNumber() && newData.val() <= now+60000"
-              },
-              "fileName": {
-                ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 100"
-              },
-              "mime": {
-                ".validate": "newData.val() === 'image/jpeg'"
-              },
-              "bytes": {
-                ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 307200"
-              },
-              "width": {
-                ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 2400"
-              },
-              "height": {
-                ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 2400"
-              },
-              "dataUrl": {
-                ".validate": "newData.isString() && newData.val().length <= 409623 && newData.val().beginsWith('data:image/jpeg;base64,')"
-              },
-              "$other": {
-                ".validate": false
-              }
-            }
           }
         }
       }
