@@ -40,6 +40,7 @@
     const state=document.getElementById('locShareStatus');if(state)state.textContent=label+(message?' \u2014 '+message:'');
     const home=document.getElementById('todayLocationState');if(home)home.textContent=label;
     const basis=document.getElementById('locationDistanceBasis');if(basis)basis.textContent=(currentUser?.name||'\ub85c\uadf8\uc778 \uc0ac\uc6a9\uc790')+' \uae30\uc900 \uc9c1\uc120\uac70\ub9ac'+(fix?' \u00b7 '+textClock(fix.ts)+' \u00b7 GPS \uc57d '+Math.round(fix.accuracy||0)+' m':' \u00b7 \uc704\uce58 \ud5c8\uc6a9 \ud6c4 \uacc4\uc0b0')+'\n\ub3c4\ubcf4\uac70\ub9ac\uac00 \uc544\ub2d9\ub2c8\ub2e4. 5\ubd84 \ucd08\uacfc \uc0c1\ub300 \uc704\uce58\ub294 \uc2dc\uac01\uc744 \ud655\uc778\ud558\uc138\uc694.';
+    window.dispatchEvent(new CustomEvent('cro-location-state'));
   }
   function permissionError(e){if(e.code===1){phase='permission';message='\ube0c\ub77c\uc6b0\uc800\uc758 \uc0ac\uc774\ud2b8 \uc124\uc815\uc5d0\uc11c \uc704\uce58\ub97c \ud5c8\uc6a9\ud574 \uc8fc\uc138\uc694.'}else{phase='error';message=e.message||'\uc704\uce58 \ud655\uc778\uc5d0 \uc2e4\ud328\ud588\uc2b5\ub2c8\ub2e4.'}}
   function getFix(high=false){return new Promise((resolve,reject)=>{
@@ -53,7 +54,7 @@
     writeJob=(async()=>{
       try{
         phase='locating';message='';paint();const p=await getFix(high);
-        if(!same(n,u)||!want)return;fix=p;locLastPos={coords:{latitude:p.lat,longitude:p.lng,accuracy:p.accuracy},timestamp:p.ts};renderRoster();
+        if(!same(n,u)||!want)return;if(document.hidden){phase='paused';message='화면 복귀 후 다시 갱신합니다.';return;}fix=p;locLastPos={coords:{latitude:p.lat,longitude:p.lng,accuracy:p.accuracy},timestamp:p.ts};renderRoster();
         await token();if(!same(n,u)||!want)return;
         const now=Date.now(),data={uid:localStorage.getItem('fb_uid'),slot:u.slot,group:u.group,name:u.name,lat:p.lat,lng:p.lng,accuracy:p.accuracy,ts:now,pageState:'foreground'};
         phase='sending';paint();
@@ -161,11 +162,24 @@
     locRefreshAll(false);readTimer=setInterval(()=>{if(currentUser&&!document.hidden)locRefreshAll(false)},120000);
   }
   window.addEventListener('cro-auth-change',changed);
-  window.addEventListener('online',()=>{if(retryStop)clearRemote(retryStop);if(want)send(false);locRefreshAll(false)});
-  window.addEventListener('pageshow',()=>{if(want&&!document.hidden&&Date.now()-ack>PERIOD)send(false)});
-  document.addEventListener('visibilitychange',()=>{paint();if(!document.hidden&&currentUser){if(want&&phase!=='permission'&&Date.now()-ack>PERIOD)send(false);locRefreshAll(false)}});
+  let lastResumeAt=0;
+  async function resumeVisible(){
+    paint();
+    if(document.hidden||!currentUser||!navigator.onLine)return;
+    const now=Date.now();if(now-lastResumeAt<2500)return;lastResumeAt=now;
+    if(retryStop)await clearRemote(retryStop);
+    const tasks=[];
+    // Request a fresh fix on return only if sharing was already enabled.
+    if(want&&phase!=='permission'&&now-ack>45000)tasks.push(send(false));
+    if(now-readAt>15000)tasks.push(locRefreshAll(false));
+    await Promise.allSettled(tasks);
+  }
+  window.addEventListener('online',resumeVisible);
+  window.addEventListener('pageshow',resumeVisible);
+  document.addEventListener('visibilitychange',()=>{paint();if(!document.hidden)resumeVisible()});
+  document.addEventListener('resume',resumeVisible);
   document.addEventListener('click',e=>{if(e.target.closest('#locationHeaderToggle'))want?locStopSharing():locStartSharing()});
   window.addEventListener('cro-route',e=>{if(e.detail?.view==='location'){renderRoster();locRefreshAll(false)}});
   document.addEventListener('DOMContentLoaded',()=>{paint();renderRoster();if(currentUser)changed()});
-  window.LocationSession={paint,refresh:()=>locRefreshAll(true),distance,info:distanceInfo,get state(){return {want,phase,message,owner:owner?.slot,lastSentAt:ack,lastFix:fix,stopPending:!!retryStop}}};
+  window.LocationSession={paint,resume:resumeVisible,refresh:()=>locRefreshAll(true),distance,info:distanceInfo,get state(){return {want,phase,message,owner:owner?.slot,lastSentAt:ack,lastFix:fix,stopPending:!!retryStop}}};
 })();

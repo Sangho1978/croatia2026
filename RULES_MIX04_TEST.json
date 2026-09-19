@@ -1,9 +1,0 @@
-{
-  "merge": "passed",
-  "preservesOtherNodes": true,
-  "preservesOtherTrips": true,
-  "validationPreserved": true,
-  "noDeviceApprovalReference": true,
-  "rootPublicAccess": false,
-  "verification": "JSON + node structural tests. Not executed by Firebase emulator or production rule engine."
-}

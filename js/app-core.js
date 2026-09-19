@@ -41,11 +41,21 @@ function renderExpectedOutlook(){let box=document.getElementById('tripWeatherOut
 function renderHourlyWeather(w,target){let box=document.getElementById('hourlyWeather');if(!box)return;let times=w.hourly?.time||[],temps=w.hourly?.temperature_2m||[],feels=w.hourly?.apparent_temperature||[],rain=w.hourly?.precipitation_probability||[],codes=w.hourly?.weather_code||[],wind=w.hourly?.wind_speed_10m||[];let nowHour=new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Zagreb',hour:'2-digit',hour12:false}).format(new Date());let keep=[];for(let i=0;i<times.length;i++){let t=times[i],h=t.slice(11,13);if(target.date===croDate()){if(+h < Math.max(0,+nowHour-1))continue;if(keep.length>=12)break}else{if(+h<7||+h>21||(+h%2))continue;if(keep.length>=8)break}keep.push(i)}box.innerHTML=keep.map(i=>{let h=times[i].slice(11,16),isNow=target.date===croDate()&&times[i].slice(11,13)===String(nowHour).padStart(2,'0');return `<div class="hourly-item ${isNow?'now':''}"><div class="hourly-time">${h}</div><div class="hourly-icon">${weatherIcon(codes[i])}</div><div class="hourly-temp">${Math.round(temps[i])}°</div><div class="hourly-rain">비 ${rain[i]??0}% · ${Math.round(wind[i]??0)}km/h</div><div class="hourly-rain">체감 ${Math.round(feels[i]??temps[i])}°</div></div>`}).join('')}
 async function refreshWeather(){let t=weatherTarget(),today=croDate(),diff=daysDiff(t.date,today),main=document.getElementById('liveWeatherMain'),upd=document.getElementById('weatherUpdated'),title=document.getElementById('weatherDetailTitle'),big=document.getElementById('weatherBigTemp'),meta=document.getElementById('weatherDetailMeta');renderExpectedOutlook();if(diff>15||diff<0){main.textContent=`🌤️ ${t.date.slice(5).replace('-','/')} ${t.name} 예상 ${t.hi}/${t.lo}°`;upd.textContent='장기 참고값 · 상세보기';title.textContent=`${t.name} · 여행 예상날씨`;big.textContent=`${t.hi}°`;meta.textContent=`최고 ${t.hi}° · 최저 ${t.lo}° · 상세 실시간 예보는 약 16일 전부터 자동 표시됩니다.`;document.getElementById('hourlyWeather').innerHTML='<div class="note" style="min-width:100%">현재는 장기예보 범위 밖입니다. 여행이 가까워지면 이 영역이 해당 날짜의 시간대별 기온·강수확률·바람으로 자동 전환됩니다.</div>';return}try{let url=`https://api.open-meteo.com/v1/forecast?latitude=${t.lat}&longitude=${t.lon}&hourly=temperature_2m,apparent_temperature,precipitation_probability,weather_code,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,weather_code&timezone=Europe%2FZagreb&start_date=${t.date}&end_date=${t.date}`;let w=await tinyFetch(url),hi=Math.round(w.daily.temperature_2m_max[0]),lo=Math.round(w.daily.temperature_2m_min[0]),rain=w.daily.precipitation_probability_max?.[0]??0,code=w.daily.weather_code?.[0]??1,firstTemp=w.hourly?.temperature_2m?.[0];main.textContent=`${weatherIcon(code)} ${t.name} ${hi}/${lo}° · 비 ${rain}%`;upd.textContent=fmtFetchTime()+' 갱신 · 상세보기';title.textContent=`${t.date.slice(5).replace('-','/')} ${t.name} 시간대별 예보`;big.textContent=(firstTemp!=null?Math.round(firstTemp):hi)+'°';meta.textContent=`최고 ${hi}° · 최저 ${lo}° · 최대 강수확률 ${rain}% · ${fmtFetchTime()} 갱신`;renderHourlyWeather(w,t);}catch(e){main.textContent=`🌤️ ${t.name} 예상 ${t.hi}/${t.lo}°`;upd.textContent='예보 연결 실패 · 참고값';title.textContent=t.name+' 예상날씨';big.textContent=t.hi+'°';meta.textContent=`예상 최고 ${t.hi}° · 최저 ${t.lo}°`;}}
 renderDays();
-let currentEurKrw=1555;
-function updateGuidePrices(rate){currentEurKrw=rate||1555;document.querySelectorAll('.eur-price').forEach(el=>{let e=parseFloat(el.dataset.eur||'0');if(!e)return;let won=Math.round(e*currentEurKrw/100)*100;el.textContent=`≈ ₩${won.toLocaleString('ko-KR')}`})}
-async function refreshFx(){let main=document.getElementById('liveFxMain'),upd=document.getElementById('fxUpdated');try{let x=await tinyFetch('https://api.frankfurter.app/latest?from=EUR&to=KRW'),r=Math.round(x.rates.KRW);main.textContent='💶 €1 = ₩'+r.toLocaleString('ko-KR');upd.textContent=`${x.date||''} · ${fmtFetchTime()} 확인`;updateGuidePrices(r);}catch(e){main.textContent='💶 €1 ≈ ₩1,555';upd.textContent='저장 참고값 · 실시간 확인 실패';updateGuidePrices(1555);}}
-async function refreshLive(){await Promise.allSettled([refreshWeather(),refreshFx()])}
-refreshLive();setInterval(refreshLive,3600000);
+// FX retrieval is owned by fx-service.js; do not hide errors with a fixed rate.
+let currentEurKrw=null;
+function updateGuidePrices(rate){
+  const valid=typeof rate==='number'&&Number.isFinite(rate)&&rate>0;
+  currentEurKrw=valid?rate:null;
+  document.querySelectorAll('.eur-price').forEach(el=>{
+    const eur=Number(el.dataset.eur);if(!Number.isFinite(eur))return;
+    el.textContent=valid?'≈ ₩'+(Math.round(eur*rate/100)*100).toLocaleString('ko-KR'):'원화 환산 대기';
+  });
+}
+async function refreshFx(force=false){return window.FxService?.refresh(force);}
+async function refreshLive(){return Promise.allSettled([refreshWeather(),refreshFx()]);}
+refreshWeather();
+setInterval(()=>{if(!document.hidden)refreshWeather()},3600000);
+
 // ===== login + location + attendance =====
 const LIVE5=5*60*1000, RECENT15=15*60*1000, RECENT30=30*60*1000, HOUR1=60*60*1000, HOUR3=3*60*60*1000, HOUR6=6*60*60*1000, SHOWMAX=24*60*60*1000;
 const APP_USERS=TEAM_MEMBERS.map(u=>{let lm=LOC_MEMBERS.find(x=>x.name===u.name);return {...u,slot:u.group===0?'prof1':(lm?.slot||''),groupLabel:u.group===0?'교수님':`${u.group}조`}});

@@ -4,10 +4,11 @@
 <!-- CRO_APP_BUILD:20260913.fold-login -->
 <html lang="ko"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/><meta content="#0b456b" name="theme-color"/>
 <title>아드리아의 길 · 28인의 크로아티아 연수</title>
-<meta content="no-cache, no-store, must-revalidate" http-equiv="Cache-Control"/><meta content="no-cache" http-equiv="Pragma"/><meta content="0" http-equiv="Expires"/><link href="css/app.css?v=20260919-MIX05" rel="stylesheet"/>
-<link href="css/field-tools.css?v=20260919-MIX05" rel="stylesheet"/>
-<link href="css/integration.css?v=20260919-MIX05" rel="stylesheet"/><link href="css/attendance-prep.css?v=20260919-MIX05" rel="stylesheet"/>
-<link href="css/mix03.css?v=20260919-MIX05" rel="stylesheet"/><link rel="stylesheet" href="css/usability.css?v=20260919-MIX05"></head><body class="mobile-redesign mixed-app" data-build="20260919-MIX05">
+<meta content="no-cache, no-store, must-revalidate" http-equiv="Cache-Control"/><meta content="no-cache" http-equiv="Pragma"/><meta content="0" http-equiv="Expires"/><link href="css/app.css?v=20260919-MIX06" rel="stylesheet"/>
+<link href="css/field-tools.css?v=20260919-MIX06" rel="stylesheet"/>
+<link href="css/integration.css?v=20260919-MIX06" rel="stylesheet"/><link href="css/attendance-prep.css?v=20260919-MIX06" rel="stylesheet"/>
+<link href="css/mix03.css?v=20260919-MIX06" rel="stylesheet"/><link rel="stylesheet" href="css/usability.css?v=20260919-MIX06"><link rel="stylesheet" href="css/compact-header.css?v=20260919-MIX06"/>
+</head><body class="mobile-redesign mixed-app" data-build="20260919-MIX06">
 <div id="loginScreen" class="login-screen">
 <div class="login-panel login-panel-simple" role="dialog" aria-labelledby="loginTitle" aria-modal="true">
 <div class="login-brand">ADRIATIC LEADERSHIP JOURNEY</div><h1 id="loginTitle">아드리아의 길<br><span>CROATIA 2026</span></h1><p class="login-course">서울대학교 행정대학원 공공리더십과정 17기</p>
@@ -17,7 +18,29 @@
 <button id="loginSubmit" class="login-btn" onclick="appLogin()" type="button">로그인</button><button id="loginSwitch" type="button" class="login-switch" onclick="appUseAnotherAccount()" hidden>다른 사용자로 로그인</button>
 <div id="loginError" class="login-error" role="alert" aria-live="polite"></div></div></div>
 <div class="account-pop" id="accountPop"><b id="accountName">-</b><div class="small muted" id="accountMeta"></div><button onclick="appLogout()">로그아웃</button><p class="quiet" id="tripRoleText"></p><button onclick="Integration.showIdentity()" type="button">내 Firebase 기기 ID 확인</button><div class="uid-box" hidden="" id="myFirebaseUid"></div></div>
-<div class="live mix-top" role="banner"><div class="mix-brand-row"><a class="mix-brand" href="#today"><span>SEOUL NATIONAL UNIVERSITY · GSPA 17</span><b>아드리아의 길 <em>2026</em></b></a><a aria-label="긴급 연락" class="mix-emergency" href="#emergency">긴급</a><button aria-label="내 계정" class="mix-avatar" id="loginUserChip" onclick="toggleAccountPop()">로그인</button></div><div class="mix-clock-row" aria-label="현지시간과 한국시간" title="현지: 크로아티아·로마 / 한국: 서울"><div><span>현지</span><time id="clockLocal">--:--</time><small id="clockLocalDate"></small></div><div><span>한국</span><time id="clockKorea">--:--</time><small id="clockKoreaDate"></small></div></div><div class="mix-weather-row"><a class="chip weather" href="#weatherDetail" id="liveWeather"><span id="liveWeatherMain">날씨 확인 중</span><small id="weatherUpdated">날씨 상세</small></a><span class="chip fx" id="liveFx"><span id="liveFxMain">환율 확인 중</span><small id="fxUpdated">확인 시각</small></span></div><div class="mix-location-row"><a aria-live="polite" href="#location" id="liveLoc">내 위치 OFF</a><button id="locationHeaderToggle" type="button">켜기</button></div><div class="mix-info-row"><button id="trafficButton" title="이 세션에서 앱이 주고받은 요청·응답 본문 추정량" type="button"><span id="trafficTotal">데이터 0 KB</span></button><span id="onlineStatusChip">온라인</span><div class="font-tools"><button aria-label="글자 작게" onclick="fontStep(-1)">A−</button><button aria-label="글자 크게" onclick="fontStep(1)">A+</button></div></div><span hidden="" id="liveData"></span></div>
+<div class="live mix-top compact-top" role="banner" data-expanded="false">
+ <div class="top-brief" aria-label="여행 요약 정보">
+  <a class="brief-cell brief-weather" href="#weatherDetail" aria-label="날씨 상세"><strong id="briefWeather">날씨</strong><small id="briefWeatherNote">확인 중</small></a>
+  <button class="brief-cell brief-clocks" type="button" data-header-open aria-label="현지·한국 시간 상세"><span>현지 <b id="briefLocal">--:--</b></span><span>한국 <b id="briefKorea">--:--</b></span></button>
+  <button class="brief-cell brief-fx" type="button" data-header-open aria-label="유로 환율 상세"><strong id="briefFx">€ —</strong><small id="briefFxNote">연결 대기</small></button>
+  <a class="brief-cell brief-location" href="#location" id="briefLocationLink" aria-label="내 위치 상태와 지도"><strong id="briefLocation">⌖ OFF</strong><small id="briefLocationNote">로그인 전</small></a>
+  <button id="headerToggle" class="brief-cell brief-expand" type="button" aria-controls="headerDetails" aria-expanded="false" aria-label="상단 정보 펼치기"><strong id="headerChevron" aria-hidden="true">⌄</strong><small id="briefTraffic">↕ 0KB</small></button>
+ </div>
+ <div id="headerDetails" class="top-details" hidden>
+  <div class="top-inner">
+   <div class="mix-brand-row"><a class="mix-brand" href="#today"><b>아드리아의 길 <em>2026</em></b></a><a class="mix-emergency" href="#emergency">긴급</a><button class="mix-avatar" id="loginUserChip" onclick="toggleAccountPop()" aria-label="내 계정">로그인</button></div>
+   <div class="mix-clock-row" aria-label="현지시간과 한국시간"><div><span>현지</span><time id="clockLocal">--:--</time><small id="clockLocalDate"></small></div><div><span>한국</span><time id="clockKorea">--:--</time><small id="clockKoreaDate"></small></div></div>
+   <div class="mix-weather-row"><a class="chip weather" href="#weatherDetail" id="liveWeather"><span id="liveWeatherMain">날씨 확인 중</span><small id="weatherUpdated">날씨 상세</small></a><div class="chip fx" id="liveFx"><span id="liveFxMain">환율 연결 대기</span><small id="fxUpdated">환율 기준일 확인 중</small></div></div>
+   <div class="fx-extra"><span id="fxSource">공식 기준환율 조회</span><button id="fxRefresh" type="button">환율 새로고침</button></div>
+   <div id="fxStatus" class="fx-status" role="status">환율은 최신 공시 기준입니다. 초단위 실시간 시세가 아닙니다.</div>
+   <details class="fx-diagnostics"><summary>환율 출처·연결 확인</summary><p id="fxDiagnostics">아직 조회하지 않았습니다.</p><div id="fxAttribution"><a href="https://frankfurter.dev/" target="_blank" rel="noopener noreferrer">Frankfurter / ECB</a><a href="https://www.exchangerate-api.com/" target="_blank" rel="noopener noreferrer">Rates By Exchange Rate API</a></div><small>매매·카드 청구환율은 수수료와 적용 시점에 따라 다릅니다.</small></details>
+   <div class="mix-location-row"><a href="#location" id="liveLoc" aria-live="polite">내 위치 OFF</a><button id="locationHeaderToggle" type="button">켜기</button></div>
+   <div class="mix-info-row"><button id="trafficButton" title="이 브라우저의 앱 요청·응답 본문 누적 추정량" type="button"><span id="trafficTotal">데이터사용누적 0 KB</span></button><span id="onlineStatusChip">온라인</span><div class="font-tools"><button onclick="fontStep(-1)" aria-label="글자 작게">A−</button><button onclick="fontStep(1)" aria-label="글자 크게">A+</button></div></div>
+   <div class="top-utility"><button type="button" data-location-help>화면을 닫으면 위치는?</button><button type="button" data-header-close>상단 접기 ↑</button></div>
+  </div>
+ </div>
+ <span id="liveData" hidden></span>
+</div>
 <main>
 <section class="app-view" data-view="today" id="today"><h2>오늘</h2>
 <div class="ops-today-hero">
@@ -159,7 +182,7 @@
 </div>
 </section>
 <section class="app-view" data-view="location" id="location"><h2>우리 일행 위치</h2>
-<div class="my-id-card"><b id="locMyIdentity">로그인 정보를 확인 중입니다.</b><span id="locMyIdentityMeta"></span></div><div class="location-basis" id="locationDistanceBasis"></div>
+<div class="my-id-card"><b id="locMyIdentity">로그인 정보를 확인 중입니다.</b><span id="locMyIdentityMeta"></span></div><div class="location-basis" id="locationDistanceBasis"></div><div class="location-runtime-tools"><button id="screenWakeToggle" type="button" aria-pressed="false">화면 켜두기</button><span id="screenWakeStatus" role="status">이 화면을 열어둔 동안만 화면 꺼짐을 방지합니다.</span><button type="button" data-location-help>위치 전송 안내</button></div>
 <div class="loc-summary loc5-totals"><div class="loc-stat"><b>28</b><small>전체</small></div><div class="loc-stat"><b id="locLiveCount">0</b><small>ON</small></div><div class="loc-stat"><b id="locOffCount">28</b><small>OFF / 미확인</small></div><div class="loc-stat"><b id="locLastRefresh">-</b><small>최근 조회</small></div></div><span id="locStaleCount" hidden>0</span><div id="locGroupTotals" class="loc5-group-totals" aria-label="조별 위치 ON 인원"></div>
 <div class="card meeting-distance" hidden="" id="meetingDistanceCard"></div>
 <details class="card loc5-controls"><summary>내 위치 설정 · 지금 갱신</summary><div class="loc-simple-head"><h3>내 위치 공유</h3><span class="small muted" id="locShareStatus">공유 OFF</span></div><p class="small">로그인하면 위치공유를 자동 시작합니다. 위치 권한은 본인이 허용해야 하며, 직접 끄면 그 선택을 유지합니다. 화면이 열려 있을 때 5분 간격으로 전송하고 복귀하면 다시 갱신합니다.</p><div class="actions"><button class="primary" onclick="locStartSharing()">📍 위치 공유 시작</button><button onclick="locUpdateNow(true)">현재 위치 1회 전송</button><button class="stop" onclick="locStopSharing()">공유 중지</button></div><details class="loc-tech"><summary>데이터 사용량 · 위치이력 안내</summary><div class="loc-data-est">위치와 이력은 성공한 전송마다 저장됩니다. 데이터량은 상단의 요청·응답 본문 측정치를 참고하세요. 지도 타일·통신헤더·TLS는 제외됩니다.<br/><span id="locDataUsage">이번 세션 위치 데이터 약 0 KB</span></div></details></details>
@@ -243,8 +266,21 @@
 <div class="app-sheet-group"><h3>현장 · 여행</h3><div class="app-sheet-grid"><button data-route="toilets" type="button"><b>🚻</b><span>화장실</span><small>요금 · 위치</small></button><button data-route="guide" type="button"><b>▤</b><span>관광가이드</span><small>역사 · 관람 포인트</small></button><button data-route="hotels" type="button"><b>▣</b><span>호텔</span><small>숙박 · 지도</small></button><button data-route="weatherDetail" type="button"><b>☀</b><span>날씨</span><small>시간대별 예보</small></button><button data-route="route" type="button"><b>↗</b><span>전체동선</span><small>여정 한눈에</small></button><button data-route="apps" type="button"><b>▧</b><span>추천앱</span><small>현지 도구</small></button><button data-route="videos" type="button"><b>▶</b><span>추천영상</span><small>출발 전 예습</small></button></div></div><div class="app-sheet-group"><h3>연수 · 기록</h3><div class="app-sheet-grid"><button type="button" data-route="members"><b>♙</b><span>팀원 명부</span><small>연수 직책 · 전화</small></button><button data-route="check" type="button"><b>✓</b><span>여행준비</span><small>출발 준비물</small></button><button data-route="study" type="button"><b>✎</b><span>연수노트</span><small>관찰 · 보고서</small></button><button data-route="photos" type="button"><b>▦</b><span>공동사진</span><small>공유앨범</small></button><button data-route="expenses" data-finance-only="true" hidden="" type="button"><b>€</b><span>공동경비</span><small>이상미·한상호</small></button></div></div><div class="app-sheet-group"><h3>안전 · 안내</h3><div class="app-sheet-grid"><button data-route="emergency" type="button"><b>!</b><span>긴급·비상</span><small>즉시 연락</small></button><button data-route="more" type="button"><b>ⓘ</b><span>앱 안내</span><small>운영 기준</small></button></div></div></div>
 </div>
 <nav aria-label="주요 메뉴" class="bottom"><button class="app-nav-btn" data-route="today" type="button"><b aria-hidden="true">⌂</b><span>오늘</span></button><button class="app-nav-btn" data-route="schedule" type="button"><b aria-hidden="true">◷</b><span>일정</span></button><button class="app-nav-btn" data-route="location" type="button"><b aria-hidden="true">⌖</b><span>지도</span></button><button class="app-nav-btn" data-route="group" type="button"><b aria-hidden="true">♧</b><span>그룹</span></button><button class="app-nav-btn" id="moreNavBtn" type="button"><b aria-hidden="true">☰</b><span>더보기</span></button></nav>
-<script src="js/net-meter.js?v=20260919-MIX05"></script><script src="js/config.js?v=20260919-MIX05"></script><script src="data/roster.js?v=20260919-MIX05"></script><script src="data/itinerary.js?v=20260919-MIX05"></script><script src="data/flight-plan.js?v=20260919-MIX05"></script><script src="data/checklist.js?v=20260919-MIX05"></script><script src="js/app-core.js?v=20260919-MIX05"></script><script src="js/videos.js?v=20260919-MIX05"></script><script src="js/mobile-ui.js?v=20260919-MIX05"></script><script src="js/ops.js?v=20260919-MIX05"></script><script src="js/router.js?v=20260919-MIX05"></script>
-<script src="js/field-tools.js?v=20260919-MIX05"></script>
-<script src="js/integration.js?v=20260919-MIX05"></script><script src="js/receipt-store.js?v=20260919-MIX05"></script><script src="js/expenses.js?v=20260919-MIX05"></script><script src="js/photos.js?v=20260919-MIX05"></script><script src="js/attendance.js?v=20260919-MIX05"></script>
-<script src="js/preparation.js?v=20260919-MIX05"></script>
-<script src="js/location-session.js?v=20260919-MIX05"></script><script src="js/flight-details.js?v=20260919-MIX05"></script><script src="js/usability.js?v=20260919-MIX05"></script></body></html>
+<script src="js/net-meter.js?v=20260919-MIX06"></script><script src="js/config.js?v=20260919-MIX06"></script><script src="data/roster.js?v=20260919-MIX06"></script><script src="data/itinerary.js?v=20260919-MIX06"></script><script src="data/flight-plan.js?v=20260919-MIX06"></script><script src="data/checklist.js?v=20260919-MIX06"></script><script src="js/app-core.js?v=20260919-MIX06"></script><script src="js/videos.js?v=20260919-MIX06"></script><script src="js/mobile-ui.js?v=20260919-MIX06"></script><script src="js/ops.js?v=20260919-MIX06"></script><script src="js/router.js?v=20260919-MIX06"></script>
+<script src="js/field-tools.js?v=20260919-MIX06"></script>
+<script src="js/integration.js?v=20260919-MIX06"></script><script src="js/receipt-store.js?v=20260919-MIX06"></script><script src="js/expenses.js?v=20260919-MIX06"></script><script src="js/photos.js?v=20260919-MIX06"></script><script src="js/attendance.js?v=20260919-MIX06"></script>
+<script src="js/preparation.js?v=20260919-MIX06"></script>
+<script src="js/location-session.js?v=20260919-MIX06"></script><script src="js/flight-details.js?v=20260919-MIX06"></script><script src="js/usability.js?v=20260919-MIX06"></script><dialog id="locationHelp" class="runtime-dialog" aria-labelledby="locationHelpTitle">
+ <div class="runtime-dialog-head"><h2 id="locationHelpTitle">위치 공유, 언제 동작하나요?</h2><button type="button" data-location-help-close aria-label="닫기">×</button></div>
+ <p><strong>이 웹앱을 보고 있을 때</strong>는 위치 권한과 인터넷이 있으면 5분 간격으로 전송합니다. 화면으로 돌아오면 오래된 위치와 일행 목록을 다시 확인합니다.</p>
+ <p><strong>다른 앱 사용·화면 잠금·브라우저 종료</strong> 중에는 GPS 전송을 계속 보장할 수 없습니다. 홈 화면에 설치해도 이 제한은 같습니다. 꺼두었던 위치공유를 임의로 켜지는 않습니다.</p>
+ <div class="runtime-note"><b>‘화면 켜두기’는 백그라운드 기능이 아닙니다.</b><br>지원 브라우저에서 이 페이지를 계속 보며 자동 화면 꺼짐을 줄이는 선택 기능입니다. 수동 잠금·앱 전환·절전 모드에서는 해제되거나 거절될 수 있습니다. 배터리 소모에 주의하세요.</div>
+ <h3>웹앱을 닫아도 공유하려면</h3><p>아이폰·안드로이드의 <b>Google Maps 앱 → 프로필 → 위치 공유</b>에서 신뢰하는 일행과 직접 공유하는 방법이 있습니다. 공유 범위와 기간은 본인이 정하고 여행 후 중지하세요.</p>
+ <div class="runtime-links"><a href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer">Google Maps 열기</a><a href="https://support.google.com/maps/answer/15437054?hl=ko&amp;co=GENIE.Platform%3DiOS" target="_blank" rel="noopener noreferrer">아이폰 안내</a><a href="https://support.google.com/maps/answer/15437054?hl=ko&amp;co=GENIE.Platform%3DAndroid" target="_blank" rel="noopener noreferrer">안드로이드 안내</a></div>
+ <p class="runtime-small">Google Maps의 위치 공유는 별도 서비스입니다. 이 앱의 28명 위치지도나 Firebase에 자동으로 합쳐지는 기능은 넣지 않았습니다. 하나의 앱에서 계속 전송하려면 iOS·Android 네이티브 위치 권한 및 백그라운드 기능을 갖춘 설치형 앱이 필요합니다.</p>
+ <button type="button" class="runtime-done" data-location-help-close>확인</button>
+</dialog>
+<script src="js/fx-service.js?v=20260919-MIX06"></script>
+<script src="js/runtime-support.js?v=20260919-MIX06"></script>
+<script src="js/compact-header.js?v=20260919-MIX06"></script>
+</body></html>
