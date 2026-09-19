@@ -54,3 +54,27 @@ body.mixed-app #locRoster.is-detail .loc5-person{min-height:98px}
 /* Keep the banner sticky to the viewport, not a non-scrolling body overflow box.
    Inline overflow:hidden from the menu/dialog still wins for vertical scroll lock. */
 body.mixed-app{overflow-x:clip!important;overflow-y:visible}
+
+/* MIX07: scoped contrast fix. Legacy #todayDate/#todayRoute colour rules
+ * were intended for a white card and incorrectly won on this dark hero. */
+body.mixed-app #today .ops-today-hero{
+  background:linear-gradient(145deg,#083e62,#0b6278 58%,#0d6b74);
+  color:#ffffff;
+}
+body.mixed-app #today .ops-today-hero #todayDate,
+body.mixed-app #today .ops-today-hero #todayRoute,
+body.mixed-app #today .ops-today-hero #todayTitle,
+body.mixed-app #today .ops-today-hero #todayMode{
+  color:#ffffff!important;opacity:1!important;
+}
+body.mixed-app #today .ops-today-hero #todayRoute{
+  font-size:.94em;line-height:1.7;word-break:keep-all;overflow-wrap:break-word;
+}
+body.mixed-app #today .ops-today-hero #todayDate{line-height:1.6;}
+body.mixed-app #today .ops-today-hero .ops-flow span,
+body.mixed-app #today .ops-today-hero .ops-flow i{color:#ffffff;opacity:1;}
+body.mixed-app .location-scope-note{
+  margin:10px 0 12px;padding:11px 13px;border-radius:14px;
+  background:#edf5f8;border:1px solid #cee0e8;color:#214b60;
+  font-size:.83em;line-height:1.65;word-break:keep-all;
+}

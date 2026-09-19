@@ -1,3 +1,35 @@
+# MIX07 - contrast, emergency contact, app-wide location
+
+Base archive: croatia2026_mix06_under100_github_pages.zip (54 files).
+Output archive: croatia2026.zip (same 54 deployment files).
+Build: 20260919-MIX07
+
+Changes limited to:
+- index.html: build marker, cache keys for three changed resources, clearer location help.
+- css/usability.css: scoped high-contrast white text on the Today itinerary hero.
+- js/usability.js: add deputy leader Jang Hyeon-ung from the existing roster.
+- js/location-session.js: single app-session send/read loops across all SPA views;
+  preserve explicit OFF, stop publishing while browser document is hidden;
+  resume on focus/pageshow/visibility/online. No route restarts the publish clock.
+- README.md: this release note.
+
+Unchanged: Firebase rules, config/API keys, member IDs, group data, itinerary,
+attendance, expenses/receipts, photos, toilet/app information, images.
+No database reset and no Firebase Rules update are required by this patch.
+
+Deploy all ZIP contents at the existing site root, preserving folders.
+The ZIP has index.html at the root, not inside a second parent folder.
+No live Firebase data was written and no Rules were published during testing.
+
+## Location behaviour
+After login, sharing starts unless the user previously selected OFF.
+Publishing is every 5 minutes while this app is visible, in ANY menu.
+Roster reads run every 2 minutes in any menu. This does not require the map tab.
+Background apps, screen lock and browser close are not continuous GPS modes.
+Location permission and an internet connection remain required.
+
+## Previous release notes (retained)
+
 # MIX06 상단 간소화 · 환율 · 위치 복귀
 
 기준 원본: croatia2026_mix05_github_pages.zip

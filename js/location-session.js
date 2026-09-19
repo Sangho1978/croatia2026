@@ -1,4 +1,4 @@
-/* MIX03. Per-login location session, explicit OFF, group colour and distance.
+/* MIX07. App-wide session (not tied to any route). Based on MIX03. Per-login location session, explicit OFF, group colour and distance.
  * Uses the original member slots; does not reinterpret slot names as groups.
  * A visible web page can refresh every five minutes, not guarantee background GPS.
  */
@@ -48,6 +48,17 @@
     navigator.geolocation.getCurrentPosition(p=>resolve({lat:+p.coords.latitude.toFixed(5),lng:+p.coords.longitude.toFixed(5),accuracy:Math.round(p.coords.accuracy||0),ts:p.timestamp||Date.now()}),reject,{enableHighAccuracy:high,maximumAge:30000,timeout:15000});
   })}
   async function request(path,options={}){const tk=await token(),ctrl=new AbortController(),tid=setTimeout(()=>ctrl.abort(),12000);try{const r=await fetch(firebaseConfig.databaseURL.replace(/\/$/,'')+'/'+path+'.json?auth='+encodeURIComponent(tk),{...options,headers:{...(options.body?{'Content-Type':'application/json'}:{}),...(options.headers||{})},cache:'no-store',signal:ctrl.signal});const t=await r.text();locCount(new TextEncoder().encode(t).length+(options.body?new TextEncoder().encode(options.body).length:0));if(!r.ok){const e=Error(r.status===401||r.status===403?'\uc704\uce58 Firebase Rules/\uc2ac\ub86f \uc18c\uc720\uad8c\uc744 \ud655\uc778\ud574 \uc8fc\uc138\uc694.':'\uc704\uce58 \uc5f0\uacb0 \uc2e4\ud328 ('+r.status+')');e.status=r.status;throw e}return t&&t!=='null'?JSON.parse(t):null}finally{clearTimeout(tid)}}
+  // These loops belong to the logged-in session, not the location view.
+  // document.hidden refers to the browser document; hidden SPA sections do not pause it.
+  function ensureSessionLoops(){
+    if(!currentUser)return;
+    if(!readTimer)readTimer=setInterval(()=>{
+      if(currentUser&&!document.hidden&&navigator.onLine)locRefreshAll(false);
+    },120000);
+    if(want&&!timer)timer=setInterval(()=>{
+      if(currentUser&&want&&!document.hidden&&navigator.onLine&&phase!=='permission')send(false);
+    },PERIOD);
+  }
   async function send(high=false){
     if(!want||!currentUser||document.hidden||writeJob)return writeJob;
     const n=epoch,u={...currentUser};
@@ -77,10 +88,10 @@
   };
   window.locStartSharing=async function(){
     if(!currentUser)return;const u=currentUser;
-    if(want&&owner?.slot===u.slot){if(phase==='permission'||phase==='error')await send(false);return;}
+    if(want&&owner?.slot===u.slot){ensureSessionLoops();if(phase==='permission'||phase==='error')await send(false);return;}
     owner={...u};epoch++;want=true;phase='locating';message='';fix=null;ack=0;
     localStorage.setItem('loc_sharing','1');localStorage.setItem('cro.loc.auto.'+u.slot,'1');
-    clearInterval(timer);timer=setInterval(()=>{if(!document.hidden&&want)send(false)},PERIOD);paint();
+    ensureSessionLoops();paint();
     await send(false);if(refreshJob)await refreshJob;await locRefreshAll(false);
   };
   window.locUpdateNow=async function(high=false){
@@ -152,20 +163,21 @@
   };
   window.updateLeafletMarkers=()=>updateMarkers();
   function changed(){
-    readAt=0;readError=false;epoch++;want=false;phase='off';owner=currentUser?{...currentUser}:null;fix=null;ack=0;message='';locLastWrite=0;locLastPos=null;clearInterval(timer);clearInterval(readTimer);
+    readAt=0;readError=false;epoch++;want=false;phase='off';owner=currentUser?{...currentUser}:null;fix=null;ack=0;message='';locLastWrite=0;locLastPos=null;clearInterval(timer);timer=null;clearInterval(readTimer);readTimer=null;
     localStorage.setItem('loc_sharing','0');paint();
     if(!currentUser){locCache={};renderRoster();return;}
     try{retryStop=JSON.parse(localStorage.getItem(stopKey)||'null')}catch(_){}
     if(retryStop)clearRemote(retryStop);
     const preference=localStorage.getItem('cro.loc.auto.'+currentUser.slot);
     if(preference!=='0')setTimeout(()=>{if(currentUser&&owner?.slot===currentUser.slot)locStartSharing()},50);
-    locRefreshAll(false);readTimer=setInterval(()=>{if(currentUser&&!document.hidden)locRefreshAll(false)},120000);
+    locRefreshAll(false);ensureSessionLoops();
   }
   window.addEventListener('cro-auth-change',changed);
   let lastResumeAt=0;
   async function resumeVisible(){
     paint();
     if(document.hidden||!currentUser||!navigator.onLine)return;
+    ensureSessionLoops();
     const now=Date.now();if(now-lastResumeAt<2500)return;lastResumeAt=now;
     if(retryStop)await clearRemote(retryStop);
     const tasks=[];
@@ -176,10 +188,15 @@
   }
   window.addEventListener('online',resumeVisible);
   window.addEventListener('pageshow',resumeVisible);
+  window.addEventListener('focus',resumeVisible);
   document.addEventListener('visibilitychange',()=>{paint();if(!document.hidden)resumeVisible()});
   document.addEventListener('resume',resumeVisible);
   document.addEventListener('click',e=>{if(e.target.closest('#locationHeaderToggle'))want?locStopSharing():locStartSharing()});
-  window.addEventListener('cro-route',e=>{if(e.detail?.view==='location'){renderRoster();locRefreshAll(false)}});
+  window.addEventListener('cro-route',e=>{
+    // Keep ON/OFF and the timers alive across today / schedule / group / more.
+    ensureSessionLoops();paint();
+    if(e.detail?.view==='location'){renderRoster();locRefreshAll(false)}
+  });
   document.addEventListener('DOMContentLoaded',()=>{paint();renderRoster();if(currentUser)changed()});
-  window.LocationSession={paint,resume:resumeVisible,refresh:()=>locRefreshAll(true),distance,info:distanceInfo,get state(){return {want,phase,message,owner:owner?.slot,lastSentAt:ack,lastFix:fix,stopPending:!!retryStop}}};
+  window.LocationSession={paint,resume:resumeVisible,refresh:()=>locRefreshAll(true),distance,info:distanceInfo,get state(){return {want,phase,message,owner:owner?.slot,lastSentAt:ack,lastFix:fix,stopPending:!!retryStop,publishEveryMs:PERIOD,readEveryMs:120000,publisherRunning:!!timer,readerRunning:!!readTimer,scope:'app-wide'}}};
 })();

@@ -37,7 +37,7 @@
     }).join('')||'<div class="empty-card">\uac80\uc0c9 \uacb0\uacfc\uac00 \uc5c6\uc2b5\ub2c8\ub2e4.</div>';
   }
   function emergencyCards(){
-    const definitions=[['\uc704\uc7ac\ubcf5','\ud300\uc7a5'],['\uc774\uc0c1\ubbf8','\ucd1d\ubb34'],['\ud55c\uc0c1\ud638','\ubd80\ud300\uc7a5'],['\ub098\uc885\ubbfc','\uc778\uc194 \uad50\uc218']];
+    const definitions=[['\uc704\uc7ac\ubcf5','\ud300\uc7a5'],['\uc774\uc0c1\ubbf8','\ucd1d\ubb34'],['\ud55c\uc0c1\ud638','\ubd80\ud300\uc7a5'],['\uc7a5\ud604\uc6c5','\ubd80\ud300\uc7a5'],['\ub098\uc885\ubbfc','\uc778\uc194 \uad50\uc218']];
     const contacts=definitions.map(([name,role])=>{const u=TEAM_MEMBERS.find(p=>p.name===name);return u?{...u,callRole:role}:null}).filter(Boolean);
     // This contact is retained from MIX04, not independently re-verified here.
     contacts.push({name:'\uc5ec\ud589\uc0ac \uc778\uc194\uc790',callRole:'\uc5ec\ud589\uc0ac',phone:'010-9416-1883',org:'\uae30\uc874 \uc548\ub0b4\uc790\ub8cc \uc5f0\ub77d\ucc98'});
