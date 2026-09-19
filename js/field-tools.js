@@ -61,18 +61,6 @@ function renderToilets(){
  </article>`).join('');
 }
 function openToiletsForDate(date){toiletDateFilter=date||'all';renderToilets();if(window.AppRouter)AppRouter.go('toilets');else location.hash='#toilets';}
-function compactToilets(date){return TOILET_DATA.filter(t=>t.dates.includes(date)).sort((a,b)=>(a.priority||99)-(b.priority||99)).slice(0,4)}
-function decorateScheduleToilets(){
- const panels=[...document.querySelectorAll('#dayPanels .panel')];
- panels.forEach((panel,i)=>{
-  if(panel.querySelector('.day-toilet-card'))return;
-  const d=window.days?.[i] || (typeof days!=='undefined'?days[i]:null); if(!d)return;
-  const list=compactToilets(d.date); if(!list.length)return;
-  const box=document.createElement('div');box.className='day-toilet-card';
-  box.innerHTML=`<div class="day-toilet-title"><b>🚻 이 날짜 화장실 계획</b><button type="button" class="day-toilet-all" data-open-toilets="${d.date}">전체 보기</button></div>`+list.map(t=>`<div class="day-toilet-row"><div><strong>${esc(t.city)} · ${esc(t.name)}</strong><small>${esc(t.near)}</small></div><span class="day-toilet-price">${esc(t.fee)}</span><a class="day-toilet-map" target="_blank" rel="noopener noreferrer" href="${mapUrl(t.query)}">지도</a></div>`).join('');
-  const weather=panel.querySelector('.day-weather-box'); if(weather) weather.insertAdjacentElement('afterend',box); else panel.prepend(box);
- });
-}
 function renderAppTabs(){const el=document.getElementById('appRecoTabs');if(!el)return;const cats=['전체','필수','현지특화','선택'];el.innerHTML=cats.map(c=>`<button type="button" class="app-reco-tab ${appCatFilter===c?'active':''}" data-appcat="${c}">${c}</button>`).join('')}
 function renderApps(){const grid=document.getElementById('travelAppGrid');if(!grid)return;renderAppTabs();const list=TRAVEL_APPS.filter(a=>appCatFilter==='전체'||a.cat===appCatFilter);grid.innerHTML=list.map(a=>`<article class="travel-app-card"><div class="travel-app-head"><div class="travel-app-icon">${a.icon}</div><div><h3>${esc(a.name)}</h3><div class="app-rec-level">${esc(a.level)} · ${esc(a.cat)}</div></div></div><p>${esc(a.why)}</p><div class="app-use"><b>이번 일정에서</b><br>${esc(a.use)}</div>${a.caution?`<div class="app-caution">⚠ ${esc(a.caution)}</div>`:''}<div class="travel-app-actions"><a class="app-official" href="${esc(a.url)}" target="_blank" rel="noopener noreferrer">${esc(a.label)} ↗</a>${a.source?`<span class="source-badge">${esc(a.source)}</span>`:''}</div></article>`).join('')}
 
@@ -86,8 +74,7 @@ window.TOILET_DATA=TOILET_DATA;
 window.TRAVEL_APPS=TRAVEL_APPS;
 document.addEventListener('DOMContentLoaded',()=>{
  toiletDateFilter=chooseInitialToiletDate();
- renderToilets();renderApps();decorateScheduleToilets();
- // Re-decorate if schedule was rebuilt by another module later.
- setTimeout(decorateScheduleToilets,250);
+ renderToilets();renderApps();
+
 });
 })();

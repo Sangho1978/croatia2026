@@ -87,22 +87,59 @@
   };
   window.locRefreshAll=async function(manual=false){
     if(!currentUser)return;if(refreshJob)return refreshJob;
-    const n=epoch,u={...currentUser};refreshJob=(async()=>{try{const j=await request('locations/'+TRIP_CODE);if(!same(n,u))return;const cache={};Object.entries(j||{}).forEach(([k,v])=>{if(APP_BY_SLOT[k]&&valid(v)&&age(v)<SHOWMAX)cache[k]=v});locCache=cache;readAt=Date.now();localStorage.setItem('loc_read',String(readAt));const e=document.getElementById('locBackendState');if(e)e.textContent='Firebase \uc870\ud68c \uc815\uc0c1 \u00b7 '+textClock(readAt);renderRoster()}catch(e){const el=document.getElementById('locBackendState');if(el)el.textContent='\uc870\ud68c \uc2e4\ud328 \u00b7 \uc774\uc804 \uc704\uce58\uc77c \uc218 \uc788\uc2b5\ub2c8\ub2e4. '+e.message;if(manual)message=e.message;paint()}finally{refreshJob=null}})();return refreshJob;
+    const n=epoch,u={...currentUser};refreshJob=(async()=>{try{const j=await request('locations/'+TRIP_CODE);if(!same(n,u))return;const cache={};Object.entries(j||{}).forEach(([k,v])=>{if(APP_BY_SLOT[k]&&valid(v)&&age(v)<SHOWMAX)cache[k]=v});locCache=cache;readError=false;readAt=Date.now();localStorage.setItem('loc_read',String(readAt));const e=document.getElementById('locBackendState');if(e)e.textContent='Firebase \uc870\ud68c \uc815\uc0c1 \u00b7 '+textClock(readAt);renderRoster()}catch(e){readError=true;const el=document.getElementById('locBackendState');if(el)el.textContent='\uc870\ud68c \uc2e4\ud328 \u00b7 \uc774\uc804 \uc704\uce58\uc77c \uc218 \uc788\uc2b5\ub2c8\ub2e4. '+e.message;if(manual)message=e.message;paint();renderRoster()}finally{refreshJob=null}})();return refreshJob;
   };
   const previousLogout=window.appLogout;
   window.appLogout=async function(){loggingOut=true;try{return await previousLogout.apply(this,arguments)}finally{loggingOut=false}};
   window.updateLiveLocChip=paint;
   // Age is text only. Marker colours never encode elapsed time.
   function statusOf(r){if(!valid(r))return '\uacf5\uc720 \uc5c6\uc74c';if(r.sharing===false)return 'OFF';if(!enabled(r))return '\uac31\uc2e0 \uc9c0\uc5f0 \u00b7 ON \uc5ec\ubd80 \ud655\uc778 \ud544\uc694';return age(r)<=FRESH?'\ucd5c\uadfc \uc704\uce58':'\uc774\uc804 \uc704\uce58 \uae30\uc900'}
+  let rosterMode=localStorage.getItem('cro.location.view.v5')==='detail'?'detail':'compact';
+  let readError=false;
+  function visibleState(u,r){
+    if(u.slot===currentUser?.slot && !want)return {label:'OFF',on:false,detail:'\uacf5\uc720 \uc548 \ud568'};
+    if(enabled(r))return {label:'ON',on:true,detail:ago(r.ts)};
+    if(valid(r)&&r.sharing!==false)return {label:'\uc9c0\uc5f0',on:false,detail:'\uc774\uc804 \uc704\uce58'};
+    return {label:readAt?'OFF':'\ubbf8\ud655\uc778',on:false,detail:readAt?'\ubbf8\uacf5\uc720':'\uc870\ud68c \ub300\uae30'};
+  }
   window.renderRoster=function(){
     const box=document.getElementById('locRoster');if(!box)return;
-    let a=0,b=0,c=0;APP_USERS.forEach(u=>{const r=locCache[u.slot];if(enabled(r)&&age(r)<=FRESH)a++;else if(enabled(r))b++;else c++;});
-    let html='';for(const g of [1,2,3,4,0]){const users=APP_USERS.filter(u=>u.group===g&&locUserMatchesFilter(u)).sort((a,b)=>a.groupOrder-b.groupOrder);if(!users.length)continue;
-      html+=`<div class="grouphead"><i class="group-colour-dot" style="--group:${locGroupColor(g)}"></i> ${g?g+'\uc870':'\uad50\uc218\ub2d8'} \u00b7 ${users.length}\uba85</div>`;
-      for(const u of users){const r=locCache[u.slot],di=distanceInfo(r,u),me=u.slot===currentUser?.slot;html+=`<article class="person loc-person3" data-location-slot="${u.slot}"><i class="group-colour-dot" style="--group:${locGroupColor(g)}" aria-hidden="true"></i><div class="loc-person-copy"><div class="pname">${esc(u.name)}${u.leader?' <span class="loc-leader">\uc870\uc7a5</span>':''}${me?' <small>\ub098</small>':''}</div><b class="distance-value" data-metres="${di.metres??''}">${esc(di.label)}</b><div class="pmeta">${esc(statusOf(r))}${valid(r)?' \u00b7 '+textClock(r.ts)+' ('+ago(r.ts)+') \u00b7 GPS \uc57d '+Math.round(r.accuracy||0)+'m':''}</div></div><button class="mini" type="button" onclick="locOpenPerson('${u.slot}')">\uc0c1\uc138</button></article>`;}}
-    box.innerHTML=html;document.getElementById('locLiveCount').textContent=a;document.getElementById('locStaleCount').textContent=b;document.getElementById('locOffCount').textContent=c;
-    document.getElementById('locLastRefresh').textContent=readAt?new Intl.DateTimeFormat('ko-KR',{timeZone:'Europe/Zagreb',hour:'2-digit',minute:'2-digit'}).format(readAt):'-';paint();updateMarkers();
+    const focusSlot=document.activeElement?.dataset?.locationSlot;
+    const summary=[1,2,3,4,0].map(g=>{
+      const list=APP_USERS.filter(u=>u.group===g).sort((a,b)=>a.groupOrder-b.groupOrder);
+      const online=list.filter(u=>visibleState(u,locCache[u.slot]).on).length;
+      return {g,list,online,offline:list.length-online};
+    });
+    const online=summary.reduce((n,g)=>n+g.online,0);
+    const totals=document.getElementById('locGroupTotals');
+    if(totals)totals.innerHTML=summary.map(({g,list,online,offline})=>`<button type="button" data-loc-group="${g||'prof'}" style="--group:${locGroupColor(g)}" aria-label="${g?g+'\uc870':'\uad50\uc218'} ON ${online}\uba85, OFF \ubbf8\ud655\uc778 ${offline}\uba85"><span>${g?g+'\uc870':'\uad50\uc218'}</span><b>ON ${online}<small>/${list.length}</small></b></button>`).join('');
+    box.className='roster loc5-board '+(rosterMode==='detail'?'is-detail':'is-compact');
+    let html='';
+    for(const item of summary){
+      const {g,online,offline}=item,list=item.list.filter(locUserMatchesFilter);if(!list.length)continue;
+      html+=`<section class="loc5-group" data-location-group="${g}" style="--group:${locGroupColor(g)}"><header><h4>${g?g+'\uc870':'\uc778\uc194 \uad50\uc218'}</h4><span><b>ON ${online}</b> \u00b7 OFF/\ubbf8\ud655\uc778 ${offline}</span></header><div class="loc5-members">`;
+      for(const u of list){
+        const r=locCache[u.slot],di=distanceInfo(r,u),s=visibleState(u,r),me=u.slot===currentUser?.slot;
+        const dist=di.label.replace('\uc774\uc804 \uc704\uce58 \uae30\uc900 ','').replace('\uc624\ucc28\ubc94\uc704 \ub0b4 ','');
+        const meta=rosterMode==='detail'?`${statusOf(r)}${valid(r)?' \u00b7 '+textClock(r.ts)+' ('+ago(r.ts)+') \u00b7 GPS \uc57d '+Math.round(r.accuracy||0)+'m':''}`:s.detail;
+        html+=`<button class="loc5-person ${u.leader?'is-leader':''} ${s.on?'is-on':'is-off'}" type="button" data-location-slot="${u.slot}" onclick="locOpenPerson('${u.slot}')" aria-label="${esc(u.name)}, ${s.label}, ${esc(di.label)}, \uc0c1\uc138\ubcf4\uae30"><span class="loc5-name"><b>${esc(u.name)}</b>${u.leader?'<small>\uc870\uc7a5</small>':''}${me?'<small>\ub098</small>':''}</span><span class="loc5-status">${s.label}</span><span class="distance-value" data-metres="${di.metres??''}" title="${esc(di.label)}">${esc(dist)}</span><span class="loc5-meta">${esc(meta)}</span></button>`;
+      }
+      html+='</div></section>';
+    }
+    box.innerHTML=html;
+    if(focusSlot)box.querySelector(`[data-location-slot="${focusSlot}"]`)?.focus({preventScroll:true});
+    document.getElementById('locLiveCount').textContent=online;
+    document.getElementById('locStaleCount').textContent=APP_USERS.filter(u=>enabled(locCache[u.slot])&&age(locCache[u.slot])>FRESH).length;
+    document.getElementById('locOffCount').textContent=APP_USERS.length-online;
+    document.getElementById('locLastRefresh').textContent=readAt?new Intl.DateTimeFormat('ko-KR',{timeZone:'Europe/Zagreb',hour:'2-digit',minute:'2-digit'}).format(readAt):'-';
+    const note=document.getElementById('locStateNote');if(note)note.textContent=readError?'\uc870\ud68c \uc2e4\ud328 \u00b7 \uc800\uc7a5\ub41c \ucd5c\uadfc \uc0c1\ud0dc\uc785\ub2c8\ub2e4. ON\ub3c4 \ub2f9\uc0ac\uc790\uc5d0\uac8c \ud655\uc778\ud574 \uc8fc\uc138\uc694.':readAt?'ON = 10\ubd84 \uc774\ub0b4 \uc218\uc2e0. OFF/\ubbf8\ud655\uc778\uc5d0\ub294 \ubbf8\uacf5\uc720\uc640 \uac31\uc2e0 \uc9c0\uc5f0\uc774 \ud3ec\ud568\ub429\ub2c8\ub2e4. \uc774\ub984\uc744 \ub204\ub974\uba74 \uc0c1\uc138\ubcf4\uae30.':'\uc11c\ubc84 \uc870\ud68c \uc804 \u00b7 \uc704\uce58 \uc0c1\ud0dc\ub97c \ud655\uc778\ud558\uace0 \uc788\uc2b5\ub2c8\ub2e4.';
+    document.querySelectorAll('[data-loc-view]').forEach(e=>e.setAttribute('aria-pressed',String(e.dataset.locView===rosterMode)));
+    paint();updateMarkers();
   };
+  document.addEventListener('click',e=>{
+    const view=e.target.closest('[data-loc-view]');if(view){rosterMode=view.dataset.locView==='detail'?'detail':'compact';localStorage.setItem('cro.location.view.v5',rosterMode);renderRoster();}
+    const g=e.target.closest('[data-loc-group]');if(g){const f=g.dataset.locGroup;locSetFilter(f,document.querySelector('#locFilters [data-filter="'+f+'"]'));}
+  });
   window.locOpenPerson=async function(slot){const u=APP_BY_SLOT[slot],r=locCache[slot],box=document.getElementById('locPersonDetail');if(!u||!box)return;const d=distanceInfo(r,u);box.classList.add('show');box.innerHTML=`<div class="loc-simple-head"><h3>${esc(u.name)} \u00b7 ${userGroupText(u)}</h3><button type="button" onclick="this.closest('#locPersonDetail').classList.remove('show')">\ub2eb\uae30</button></div><b>${esc(d.label)}${d.metres!==null&&!Number.isNaN(d.metres)?' \u00b7 \uc9c1\uc120\uac70\ub9ac':''}</b><p>${esc(statusOf(r))}${valid(r)?'<br>'+textClock(r.ts)+' ('+ago(r.ts)+') \u00b7 GPS \uc57d '+Math.round(r.accuracy||0)+'m':''}</p>${valid(r)?`<div class="actions"><a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${r.lat},${r.lng}">Google \uc9c0\ub3c4</a><button onclick="locLoadHistory('${slot}',true)">\uc774\ub3d9\uc774\ub825</button><a class="btn" href="tel:+82${u.phone.replace(/\D/g,'').slice(1)}">\uc804\ud654</a></div>`:''}<div id="locHistoryList" class="loc-history-list"></div>`;box.scrollIntoView({behavior:'smooth',block:'nearest'});};
   function mapLabel(u,r){return esc(u.name)+' \u00b7 '+esc(distanceInfo(r,u).label)}
   function popup(u,r){return `<b>${esc(u.name)} \u00b7 ${u.group?u.group+'\uc870':'\uad50\uc218'}</b><p>${esc(distanceInfo(r,u).label)}<br>${textClock(r.ts)} (${ago(r.ts)})<br>GPS \uc57d ${Math.round(r.accuracy||0)} m</p>`}
@@ -114,7 +151,7 @@
   };
   window.updateLeafletMarkers=()=>updateMarkers();
   function changed(){
-    epoch++;want=false;phase='off';owner=currentUser?{...currentUser}:null;fix=null;ack=0;message='';locLastWrite=0;locLastPos=null;clearInterval(timer);clearInterval(readTimer);
+    readAt=0;readError=false;epoch++;want=false;phase='off';owner=currentUser?{...currentUser}:null;fix=null;ack=0;message='';locLastWrite=0;locLastPos=null;clearInterval(timer);clearInterval(readTimer);
     localStorage.setItem('loc_sharing','0');paint();
     if(!currentUser){locCache={};renderRoster();return;}
     try{retryStop=JSON.parse(localStorage.getItem(stopKey)||'null')}catch(_){}

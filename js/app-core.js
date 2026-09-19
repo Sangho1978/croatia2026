@@ -55,10 +55,56 @@ let attCurrent=null,attChecks={},attTimer=null,attFilter='all';
 function esc(x){return String(x||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function userByName(n){return APP_USERS.find(u=>u.name===String(n||'').trim())}
 function userGroupText(u){return u?.group===0?'교수님':`${u?.group||'-'}조${u?.leader?' · 조장':''}${u?.tripRole?' · '+u.tripRole:''}`}
-function appInitLogin(){document.body.classList.remove('login-ready');let saved=localStorage.getItem('cro_login_name')||'';currentUser=null;let input=document.getElementById('loginName');if(input&&userByName(saved))input.value=saved;document.getElementById('loginScreen').classList.remove('hidden');setTimeout(()=>{(input?.value?document.getElementById('loginPass'):input)?.focus?.()},180)}
-function appLogin(){let rawName=document.getElementById('loginName').value||'',name=rawName.replace(/\s+/g,''),pass=(document.getElementById('loginPass').value||'').replace(/\D/g,''),u=userByName(name),err=document.getElementById('loginError');document.getElementById('loginName').value=name;if(!u){err.textContent='명단에 없는 이름입니다. 성명을 정확히 입력해 주세요.';return}let last4=(u.phone||'').replace(/\D/g,'').slice(-4);if(pass!==last4){err.textContent='휴대전화번호 끝 4자리가 맞지 않습니다.';return}currentUser=u;localStorage.setItem('cro_login_name',u.name);localStorage.setItem('loc_slot',u.slot);localStorage.setItem('loc_name',u.name);err.textContent='';appEnter()}
+// MIX05: remember only a successful local identity; enter after an explicit tap.
+const LOGIN_MEMORY_KEY='cro.login.identity.v5';
+let rememberedLogin=null;
+function rememberedAccount(){
+  try{
+    const name=localStorage.getItem('cro_login_name')||'',u=userByName(name);
+    if(!u)return null;
+    const saved=JSON.parse(localStorage.getItem(LOGIN_MEMORY_KEY)||'null');
+    if(saved && (saved.name!==u.name || saved.memberId!==u.memberId))return null;
+    return u;
+  }catch(_){return null}
+}
+function paintLoginGate(){
+  const known=!!rememberedLogin;
+  document.querySelectorAll('#loginScreen .login-field').forEach(e=>e.hidden=known);
+  const card=document.getElementById('rememberedLoginCard');
+  if(card){card.hidden=!known;document.getElementById('rememberedLoginName').textContent=known?rememberedLogin.name+'\ub2d8':'';document.getElementById('rememberedLoginRole').textContent=known?userGroupText(rememberedLogin):'';}
+  document.getElementById('loginSubmit').textContent=known?rememberedLogin.name+'\ub2d8\uc73c\ub85c \ub85c\uadf8\uc778':'\ub85c\uadf8\uc778';
+  document.getElementById('loginSwitch').hidden=!known;
+  document.getElementById('loginName').value=known?rememberedLogin.name:'';
+  document.getElementById('loginPass').value='';
+  document.getElementById('loginError').textContent='';
+}
+function appInitLogin(){
+  document.body.classList.remove('login-ready');currentUser=null;
+  rememberedLogin=rememberedAccount();paintLoginGate();
+  document.getElementById('loginScreen').classList.remove('hidden');
+}
+function appUseAnotherAccount(){
+  if(currentUser){appLogout();return}
+  ['cro_login_name','cro_login_pass',LOGIN_MEMORY_KEY].forEach(k=>localStorage.removeItem(k));
+  rememberedLogin=null;paintLoginGate();
+}
+function appLogin(){
+  const err=document.getElementById('loginError');let u;
+  if(rememberedLogin){
+    u=rememberedAccount();
+    if(!u||u.memberId!==rememberedLogin.memberId){rememberedLogin=null;paintLoginGate();err.textContent='\uc800\uc7a5\ub41c \uacc4\uc815\uc744 \ub2e4\uc2dc \ud655\uc778\ud574 \uc8fc\uc138\uc694.';return;}
+  }else{
+    const name=(document.getElementById('loginName').value||'').replace(/\s+/g,''),pass=(document.getElementById('loginPass').value||'').trim();
+    document.getElementById('loginName').value=name;u=userByName(name);
+    if(!u||!/^\d{4}$/.test(pass)||pass!==u.phone.replace(/\D/g,'').slice(-4)){err.textContent='\uc774\ub984\uacfc \ud734\ub300\uc804\ud654 \ub05d 4\uc790\ub9ac\ub97c \ud655\uc778\ud574 \uc8fc\uc138\uc694.';return;}
+  }
+  currentUser=u;
+  try{localStorage.setItem('cro_login_name',u.name);localStorage.setItem(LOGIN_MEMORY_KEY,JSON.stringify({name:u.name,memberId:u.memberId}));localStorage.removeItem('cro_login_pass');}catch(_){}
+  localStorage.setItem('loc_slot',u.slot);localStorage.setItem('loc_name',u.name);
+  rememberedLogin=u;document.getElementById('loginPass').value='';err.textContent='';appEnter();
+}
 function appEnter(){document.body.classList.add('spa-mode','login-ready');document.getElementById('loginScreen').classList.add('hidden');let chip=document.getElementById('loginUserChip');chip.innerHTML=`👤 ${esc(currentUser.name)}<small>${userGroupText(currentUser)}</small>`;document.getElementById('accountName').textContent=currentUser.name;document.getElementById('accountMeta').textContent=`${userGroupText(currentUser)} · ${currentUser.org} · ${currentUser.title}`;let id=document.getElementById('locMyIdentity'),meta=document.getElementById('locMyIdentityMeta');if(id)id.textContent=`${currentUser.name} · ${userGroupText(currentUser)}`;if(meta)meta.textContent=`${currentUser.org} · ${currentUser.title} · 위치 DB 이름: ${currentUser.name}`;let admin=currentUser.name==='한상호';document.getElementById('attAdmin')?.classList.toggle('show',admin);localStorage.setItem('loc_slot',currentUser.slot);window.dispatchEvent(new CustomEvent('cro-auth-change'));locRefreshAll(false);attRefresh(false)}
-async function appLogout(){try{if(localStorage.getItem('loc_sharing')==='1')await locStopSharing()}catch(e){}localStorage.removeItem('cro_login_name');document.body.classList.remove('login-ready');currentUser=null;window.dispatchEvent(new CustomEvent('cro-auth-change'));document.getElementById('accountPop').classList.remove('show');document.getElementById('loginPass').value='';document.getElementById('loginScreen').classList.remove('hidden')}
+async function appLogout(){try{if(localStorage.getItem('loc_sharing')==='1')await locStopSharing()}catch(e){}localStorage.removeItem('cro_login_name');localStorage.removeItem('cro_login_pass');localStorage.removeItem(LOGIN_MEMORY_KEY);rememberedLogin=null;paintLoginGate();document.body.classList.remove('login-ready');currentUser=null;window.dispatchEvent(new CustomEvent('cro-auth-change'));document.getElementById('accountPop').classList.remove('show');document.getElementById('loginPass').value='';document.getElementById('loginScreen').classList.remove('hidden')}
 function toggleAccountPop(){document.getElementById('accountPop').classList.toggle('show')}
 function ago(ts){if(!ts)return '-';let m=Math.floor((Date.now()-ts)/60000);if(m<1)return '방금';if(m<60)return `${m}분 전`;let h=Math.floor(m/60);if(h<24)return `${h}시간 ${m%60}분 전`;return `${Math.floor(h/24)}일 전`}
 function lastSeenClock(ts){return new Intl.DateTimeFormat('ko-KR',{timeZone:'Europe/Zagreb',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}).format(new Date(ts))}

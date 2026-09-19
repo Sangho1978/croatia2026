@@ -1,0 +1,59 @@
+{
+  "source_base": "croatia2026_mix04_github_pages.zip",
+  "base_sha256": "e6a059300ec5173a3b13e40a5b2f4555a163c1b29490eb58b84414a6e531969a",
+  "source_files_modified": [
+    "index.html",
+    "js/app-core.js",
+    "js/field-tools.js",
+    "js/integration.js",
+    "js/location-session.js"
+  ],
+  "protected_files_sha256": {
+    "data/roster.js": "17eed3fadf4b4e1276677c4c86035ea1268e9848fd60b5b797b368c7c75841b7",
+    "data/itinerary.js": "177dc6c4cee4b7e6a8f560487af37cef493f163521b9f46a003aa4ff67748c68",
+    "data/flight-plan.js": "586f15560a837d391b760319e65d9909d60fddf2e3cca71149b0b1d99c0add7c",
+    "data/checklist.js": "66bd1086cfd22f96ecad5ae684c6604d26d85e45751aa2e5aa7132102635f5e4",
+    "js/attendance.js": "5cfbe9fa4dd34b21f905c6d7bb5e2fb773693ea3b38ea5ef218c06723055d437",
+    "js/expenses.js": "25ad808bc5f99e49365e747804128c823b16eb1f45e7f1a35ade8776f02c4530",
+    "js/receipt-store.js": "0b0c46ffa1ab9a692eac7aac75d396d698b89ebca282d1bbfd29cc9395cb38b2",
+    "js/photos.js": "9f037ccf26e20b56e4ab15d06c6be0a91cbc14a9d13842a517c76970d0a1d74b",
+    "js/config.js": "de731dcb17755aca8828a6e31a74f03c868ac770e60df4d0958c9624f0d6a631",
+    "js/net-meter.js": "b452749eb968651c0682bd0870298a4d0faf7a0583884c4acaeadc7bf915dd76",
+    "js/preparation.js": "850cf6879bc43eb0064643962a62d8f283f718e27ecfa1090826795a7ad3b137",
+    "js/flight-details.js": "29aff4af9a41735f01504e788605c1cb9dd67ad328e0e2a2bd14994fe42b1b2c",
+    "js/router.js": "01061052d697c434aca8d25dc6bc1c0b86265995e23b7ac38bf1ba580f2c28e7",
+    "js/videos.js": "f783f6c142a51abb0b57e294bf964de2727d379d1c763951d24d0b25d396e23c",
+    "firebase.rules.finance-simple.json": "ec00789c3b4011bb5dd0d7540a640eea684942d298f25ba5c4ecb585812f29f6"
+  },
+  "unchanged_content_sections": {
+    "today": true,
+    "weatherDetail": true,
+    "route": true,
+    "schedule": true,
+    "guide": true,
+    "hotels": true,
+    "videos": true,
+    "check": true,
+    "study": true,
+    "toilets": true,
+    "apps": true,
+    "more": true,
+    "group": true,
+    "photos": true,
+    "expenses": true
+  },
+  "unchanged_location_data_contract_functions": {
+    "GPS acquisition": true,
+    "Network request helper": true,
+    "Position and history writes": true,
+    "Google and Leaflet markers": true
+  },
+  "unchanged_images": 14,
+  "new_modules": [
+    "js/usability.js",
+    "css/usability.css"
+  ],
+  "checks_passed": 204,
+  "page_errors": [],
+  "external_validation": "GPS, authentication, local storage and Firebase responses simulated; no production access or rule publication."
+}

@@ -82,7 +82,7 @@
     try{await token();e.textContent=localStorage.getItem('fb_uid')||'기기 ID 확인 실패'}catch(err){e.textContent=err.message}
   }
   function feedback(el,text,kind=''){if(el){el.className='form-feedback '+kind;el.textContent=text}}
-  window.Integration={isStaff,canManageFinance,idOf,escape,api,showIdentity,renderPeople,feedback,byName,get build(){return '20260918-MIX01'}};
+  window.Integration={isStaff,canManageFinance,idOf,escape,api,showIdentity,renderPeople,personCard,badges,feedback,byName,get build(){return '20260918-MIX01'}};
   window.addEventListener('cro-auth-change',applyIdentity);
   document.addEventListener('input',e=>{if(e.target.id==='peopleSearch')renderPeople()});
   document.addEventListener('click',e=>{

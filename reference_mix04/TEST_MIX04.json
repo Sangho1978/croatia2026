@@ -1,0 +1,317 @@
+{
+  "tests": [
+    {
+      "test": "login_han",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "han_finance_menu_visible",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "han_ready_without_device_approval",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "no_uid_registration_form",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "header_names_only",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "all_28_saved",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "receipt_saved",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "no_approval_db_access",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "lee_reads_han_record",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "deselect_all",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "zero_participants_not_written",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "lee_edits_shared_record",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "receipt_retained_during_edit",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "lee_can_read_han_receipt",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "refresh_syncs_edits",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "new_browser_same_name_no_approval",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "all_28_name_gate",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "menu_hidden_12",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "route_guard_12",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "api_client_guard_12",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "no_finance_request_12",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "menu_hidden_19",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "route_guard_19",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "api_client_guard_19",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "no_finance_request_19",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "menu_hidden_27",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "route_guard_27",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "api_client_guard_27",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "no_finance_request_27",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "menu_hidden_0",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "route_guard_0",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "api_client_guard_0",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "no_finance_request_0",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "old_rules_error_mentions_once_not_uid",
+      "pass": true,
+      "detail": "공유 저장 연결 확인\n\n기기 승인이 아닌 Rules 변경이 필요합니다. MIX04 경비 규칙을 한 번만 적용해 주세요.\n\n다시 연결"
+    },
+    {
+      "test": "save_disabled_on_rules_failure",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "retry_recovers",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "route_today_390",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "route_schedule_390",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "route_location_390",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "route_group_390",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "route_toilets_390",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "route_apps_390",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "route_check_390",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "route_guide_390",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "people_28_390",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "attendance_28_390",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "attendance_admin_unchanged_390",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "bottom_menu_visible_390",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "route_today_884",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "route_schedule_884",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "route_location_884",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "route_group_884",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "route_toilets_884",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "route_apps_884",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "route_check_884",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "route_guide_884",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "people_28_884",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "attendance_28_884",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "attendance_admin_unchanged_884",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "bottom_menu_visible_884",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "test": "no_js_page_errors",
+      "pass": true,
+      "detail": "[]"
+    },
+    {
+      "test": "no_device_approval_calls_all_tests",
+      "pass": true,
+      "detail": ""
+    }
+  ],
+  "pageErrors": [],
+  "requestCount": 72,
+  "method": "Playwright + intercepted local files and in-memory Firebase REST. No production writes or real Firebase Rules engine."
+}
