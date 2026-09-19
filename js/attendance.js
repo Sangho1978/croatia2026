@@ -16,7 +16,7 @@
   let currentStreamOK=false,checksStreamOK=false,connectMode='waiting',failure='';
   const sorted=g=>people().filter(u=>u.group===g).sort((a,b)=>Number(b.leader)-Number(a.leader)||a.groupOrder-b.groupOrder);
   const checked=u=>attChecks?.[u.slot]?.checked===true;
-  const shortTime=t=>Number.isFinite(+t)&&+t>0?new Intl.DateTimeFormat('ko-KR',{timeZone:'Europe/Zagreb',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(new Date(+t)):'';
+  const shortTime=t=>Number.isFinite(+t)&&+t>0?(window.AppTime?AppTime.label(+t):new Date(+t).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})):'';
   function feedback(text='',bad=false){const e=document.getElementById('attFeedback');if(e){e.hidden=!text;e.textContent=text;e.classList.toggle('is-error',bad)}}
   function setMode(){
     if(!currentUser)connectMode='waiting';
@@ -49,7 +49,7 @@
     state.textContent=!known?'연결 중':!active?'대기':!checksKnown?'확인 중':done===total?'모두 확인':'진행 중';
     state.classList.toggle('is-open',active);state.classList.toggle('is-complete',active&&ready&&done===total);
     document.getElementById('attTitle').textContent='28명 출석 확인';
-    document.getElementById('attMeta').textContent=active?(shortTime(attCurrent.createdAt)+' 시작 · 크로아티아 시간'):'시작하면 본인의 출석 버튼을 눌러 주세요.';
+    document.getElementById('attMeta').textContent=active?(shortTime(attCurrent.createdAt)+' 시작'):'시작 대기';
     const sync=document.getElementById('attSyncStatus');sync.textContent=syncLabel();sync.dataset.mode=connectMode;
     const admin=document.getElementById('attAdmin');admin.classList.toggle('show',isAdmin());admin.hidden=!isAdmin();
     const canWrite=currentUser&&navigator.onLine&&ready&&!adminBusy;
@@ -196,7 +196,7 @@
       if(activeMeta(res.data)){setMeta(res.data);throw Error('이미 진행 중입니다. 다시 확인하려면 리셋 후 시작해 주세요.');}
       if(!res.etag)throw Error('서버 상태를 확인하지 못했습니다. 다시 시도해 주세요.');
       const random=new Uint32Array(1);crypto.getRandomValues(random);const id=String(Date.now())+'-'+random[0].toString(36);
-      const data={id,title:'28명 출석 확인',type:'출석 확인',createdBy:OPERATOR,createdAt:{'.sv':'timestamp'}};
+      const started=Date.now(),st=window.AppTime?AppTime.stored(started):null;const data={id,title:'28명 출석 확인',type:'출석 확인',createdBy:OPERATOR,createdAt:{'.sv':'timestamp'},...(st?{timeCroatia:st.croatia,timeKorea:st.korea}: {})};
       const saved=await request(currentPath(),{method:'PUT',headers:{'if-match':res.etag},body:JSON.stringify(data)});
       if(!sameSession(epoch))return;
       revision++;setMeta(saved.data);attChecks={};checksKnown=true;markGood();openCheckStream();feedback();
@@ -234,7 +234,7 @@
       let saved=previous.data;
       if(!saved?.checked){
         if(!previous.etag)throw Error('체크 상태를 확인하지 못했습니다. 다시 눌러 주세요.');
-        const value={uid:localStorage.getItem('fb_uid')||'',slot:user.slot,name:user.name,group:user.group,checked:true,ts:{'.sv':'timestamp'}};
+        const checkedAt=Date.now(),ct=window.AppTime?AppTime.stored(checkedAt):null;const value={uid:localStorage.getItem('fb_uid')||'',slot:user.slot,name:user.name,group:user.group,checked:true,ts:{'.sv':'timestamp'},...(ct?{timeCroatia:ct.croatia,timeKorea:ct.korea}: {})};
         saved=(await request(path,{method:'PUT',headers:{'if-match':previous.etag},body:JSON.stringify(value)})).data;
       }
       const confirmRound=await request(currentPath());if(!sameSession(epoch))return;

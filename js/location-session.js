@@ -14,7 +14,7 @@
   const enabled=r=>valid(r)&&r.sharing!==false&&age(r)<=LEASE&&(!r.expiresAt||r.expiresAt>Date.now());
   const same=(n,u)=>n===epoch&&currentUser?.slot===u?.slot;
   function latestSelf(){return fix&&Date.now()-fix.ts<=FRESH?fix:null}
-  function textClock(ts){return typeof ts==='number'?new Intl.DateTimeFormat('ko-KR',{timeZone:'Europe/Zagreb',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}).format(ts):'-'}
+  function textClock(ts){return typeof ts==='number'&&window.AppTime?AppTime.label(ts):(typeof ts==='number'?new Date(ts).toLocaleString('ko-KR'):'-')}
   function distance(a,b){const r=x=>x*Math.PI/180,p=r(b.lat-a.lat),q=r(b.lng-a.lng),v=Math.sin(p/2)**2+Math.cos(r(a.lat))*Math.cos(r(b.lat))*Math.sin(q/2)**2;return 6371000*2*Math.asin(Math.sqrt(Math.min(1,Math.max(0,v))))}
   function distanceInfo(r,u){
     if(currentUser?.slot===u?.slot)return {label:'\ub098',metres:0};
@@ -67,7 +67,7 @@
         phase='locating';message='';paint();const p=await getFix(high);
         if(!same(n,u)||!want)return;if(document.hidden){phase='paused';message='화면 복귀 후 다시 갱신합니다.';return;}fix=p;locLastPos={coords:{latitude:p.lat,longitude:p.lng,accuracy:p.accuracy},timestamp:p.ts};renderRoster();
         await token();if(!same(n,u)||!want)return;
-        const now=Date.now(),data={uid:localStorage.getItem('fb_uid'),slot:u.slot,group:u.group,name:u.name,lat:p.lat,lng:p.lng,accuracy:p.accuracy,ts:now,pageState:'foreground'};
+        const now=Date.now(),clock=window.AppTime?AppTime.stored(now):null,data={uid:localStorage.getItem('fb_uid'),slot:u.slot,group:u.group,name:u.name,lat:p.lat,lng:p.lng,accuracy:p.accuracy,ts:now,pageState:'foreground',...(clock?{timeCroatia:clock.croatia,timeKorea:clock.korea}: {})};
         phase='sending';paint();
         await request('locations/'+TRIP_CODE+'/'+u.slot,{method:'PUT',body:JSON.stringify(data)});
         if(!same(n,u)||!want)return;
@@ -143,8 +143,8 @@
     document.getElementById('locLiveCount').textContent=online;
     document.getElementById('locStaleCount').textContent=APP_USERS.filter(u=>enabled(locCache[u.slot])&&age(locCache[u.slot])>FRESH).length;
     document.getElementById('locOffCount').textContent=APP_USERS.length-online;
-    document.getElementById('locLastRefresh').textContent=readAt?new Intl.DateTimeFormat('ko-KR',{timeZone:'Europe/Zagreb',hour:'2-digit',minute:'2-digit'}).format(readAt):'-';
-    const note=document.getElementById('locStateNote');if(note)note.textContent=readError?'\uc870\ud68c \uc2e4\ud328 \u00b7 \uc800\uc7a5\ub41c \ucd5c\uadfc \uc0c1\ud0dc\uc785\ub2c8\ub2e4. ON\ub3c4 \ub2f9\uc0ac\uc790\uc5d0\uac8c \ud655\uc778\ud574 \uc8fc\uc138\uc694.':readAt?'ON = 10\ubd84 \uc774\ub0b4 \uc218\uc2e0. OFF/\ubbf8\ud655\uc778\uc5d0\ub294 \ubbf8\uacf5\uc720\uc640 \uac31\uc2e0 \uc9c0\uc5f0\uc774 \ud3ec\ud568\ub429\ub2c8\ub2e4. \uc774\ub984\uc744 \ub204\ub974\uba74 \uc0c1\uc138\ubcf4\uae30.':'\uc11c\ubc84 \uc870\ud68c \uc804 \u00b7 \uc704\uce58 \uc0c1\ud0dc\ub97c \ud655\uc778\ud558\uace0 \uc788\uc2b5\ub2c8\ub2e4.';
+    document.getElementById('locLastRefresh').textContent=readAt?textClock(readAt):'-';
+    const note=document.getElementById('locStateNote');if(note)note.textContent=readError?'\uc870\ud68c \uc2e4\ud328 \u00b7 \uc800\uc7a5\ub41c \ucd5c\uadfc \uc0c1\ud0dc\uc785\ub2c8\ub2e4. ON\ub3c4 \ub2f9\uc0ac\uc790\uc5d0\uac8c \ud655\uc778\ud574 \uc8fc\uc138\uc694.':readAt?'ON = 최근 수신 · 이름을 누르면 상세':'\uc11c\ubc84 \uc870\ud68c \uc804 \u00b7 \uc704\uce58 \uc0c1\ud0dc\ub97c \ud655\uc778\ud558\uace0 \uc788\uc2b5\ub2c8\ub2e4.';
     document.querySelectorAll('[data-loc-view]').forEach(e=>e.setAttribute('aria-pressed',String(e.dataset.locView===rosterMode)));
     paint();updateMarkers();
   };
