@@ -60,3 +60,148 @@ body.mixed-app .location-runtime-tools #screenWakeStatus{flex:1 1 180px;min-widt
 @media(prefers-reduced-motion:reduce){.compact-top *{scroll-behavior:auto!important}}
 
 body.mixed-app .compact-top #fxUpdated{white-space:pre-line}
+
+/* MIX08: UI clarification only. Business logic and data are unchanged. */
+body.mixed-app .top-brief{
+  grid-template-columns:minmax(46px,.9fr) minmax(84px,1.38fr) minmax(60px,1.08fr) minmax(49px,.85fr) 72px;
+  gap:3px;
+}
+body.mixed-app .compact-top .brief-cell{border-radius:10px;min-height:52px}
+body.mixed-app .compact-top .brief-weather,
+body.mixed-app .compact-top .brief-fx{border:1px solid #d1dfe6!important;background:#fff!important}
+body.mixed-app .compact-top .brief-weather{background:#edf6f4!important}
+body.mixed-app .compact-top .brief-clocks{background:#f6fafc!important}
+body.mixed-app .compact-top .brief-cell:active{filter:brightness(.94)}
+body.mixed-app .compact-top #headerToggle{
+  padding:5px 3px!important;gap:6px;background:#134f70!important;color:#fff!important;
+  border:2px solid #134f70!important;border-radius:12px;box-shadow:0 2px 5px #123f561c!important;
+  overflow:visible;
+}
+body.mixed-app .compact-top #headerToggle .header-toggle-action{
+  display:flex;align-items:center;justify-content:center;gap:4px;white-space:nowrap;line-height:1.25;
+}
+body.mixed-app .compact-top #headerAction{font-size:13px;font-weight:900;letter-spacing:0;color:inherit}
+body.mixed-app .compact-top #headerChevron{font-size:11px;line-height:1;color:inherit}
+body.mixed-app .compact-top #headerToggle #briefTraffic{font-size:10px!important;color:#f0f7fb!important;letter-spacing:0}
+body.mixed-app .compact-top #headerToggle[aria-expanded="true"]{
+  background:#def2ef!important;border-color:#18746e!important;color:#135951!important;
+  box-shadow:inset 0 0 0 1px #18746e22!important;
+}
+body.mixed-app .compact-top #headerToggle[aria-expanded="true"] #briefTraffic{color:#285f5b!important}
+body.mixed-app .compact-top[data-expanded="true"]{border-bottom:2px solid #29756f;box-shadow:0 8px 22px #163e571c!important}
+body.mixed-app .compact-top .top-details{background:#fff;border-top:2px solid #18746e;margin-top:0}
+body.mixed-app .compact-top .header-detail-caption{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 10px;padding:0 0 10px;
+  border-bottom:1px solid #d4e2e6;color:#254f62;font-size:.86rem;font-weight:850;
+}
+body.mixed-app .compact-top .header-detail-caption>span{min-width:0;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+body.mixed-app .compact-top .header-detail-caption b{color:#18746e;font-size:.65rem}
+body.mixed-app .compact-top .header-detail-caption small{padding:3px 6px;border-radius:6px;font-size:.66rem;background:#e4f4ef;color:#165c50}
+body.mixed-app .compact-top .header-detail-caption button,
+body.mixed-app .compact-top .top-utility [data-header-close]{
+  min-height:44px;min-width:77px;flex:0 0 auto;background:#def2ef!important;border:1px solid #448f84!important;
+  border-radius:10px;padding:8px 12px;font-size:.8rem;font-weight:850;color:#135951!important;
+}
+body.mixed-app .compact-top .brief-location[data-tone="on"]{background:#e6f4ed!important;border:1px solid #a9ccb9!important}
+body.mixed-app .compact-top .brief-location[data-tone="on"] strong{color:#145d40!important}
+body.mixed-app .compact-top .brief-location[data-tone="off"]{background:#edf1f4!important;border:1px solid #ccd7df!important}
+body.mixed-app .compact-top .brief-location[data-tone="off"] strong{color:#465d6b!important}
+body.mixed-app .compact-top .brief-location[data-tone="warning"]{background:#fff3de!important;border:1px solid #d9bb83!important}
+body.mixed-app .compact-top .brief-location[data-tone="warning"] strong{color:#83541a!important}
+body.mixed-app .compact-top .brief-location[data-tone="warning"] small{color:#83541a!important}
+body.mixed-app .compact-top #trafficButton{border:1px solid #d0e1e8;border-radius:10px;background:#f3f8fb;padding:7px 8px}
+body.mixed-app .compact-top #locationHeaderToggle{border:1px solid #6d899a;box-shadow:none;background:#fff}
+
+/* One visual grammar: navy=selected/action, teal=opened/completed, gray=idle. */
+body.mixed-app .bottom .app-nav-btn.is-active{
+  background:#134f70!important;color:#fff!important;border:1px solid #134f70!important;box-shadow:0 3px 8px #134f7022;
+}
+body.mixed-app .bottom .app-nav-btn.is-active b,
+body.mixed-app .bottom .app-nav-btn.is-active span{color:#fff!important}
+body.mixed-app .bottom .app-nav-btn svg{width:24px;height:24px;display:block}
+body.mixed-app .bottom .app-nav-btn{border:1px solid transparent!important}
+body.mixed-app .app-sheet-head .app-sheet-close{width:auto;min-width:82px;min-height:46px;padding:9px 13px;font-size:.88rem;border:1px solid #7d98a8;color:#2c5268;background:#fff}
+body.mixed-app .app-sheet-grid button{border:1px solid #c9dce4}
+body.mixed-app .app-sheet-grid button b svg{width:28px;height:28px;stroke:#244f68}
+body.mixed-app .group-tabs button{border:1px solid transparent;position:relative}
+body.mixed-app .group-tabs button[aria-selected="true"],
+body.mixed-app .loc5-view-controls button[aria-pressed="true"],
+body.mixed-app .expense-mode button.active,
+body.mixed-app .people-filters button.active,
+body.mixed-app .loc-filter button.active,
+body.mixed-app #dayTabs .tab.active,
+body.mixed-app .toilet-filter.active,
+body.mixed-app .app-reco-tab.active{
+  background:#134f70!important;color:#fff!important;border:1px solid #134f70!important;
+  box-shadow:0 3px 9px #134f701a!important;
+}
+body.mixed-app .group-tabs button[aria-selected="true"]::before,
+body.mixed-app .loc5-view-controls button[aria-pressed="true"]::before,
+body.mixed-app .expense-mode button.active::before,
+body.mixed-app .people-filters button.active::before,
+body.mixed-app .loc-filter button.active::before,
+body.mixed-app #dayTabs .tab.active::before,
+body.mixed-app .toilet-filter.active::before,
+body.mixed-app .app-reco-tab.active::before{content:'\2713';display:inline-block;margin-right:5px;font-weight:900}
+body.mixed-app .loc5-view-controls button{padding-inline:9px}
+body.mixed-app #dayTabs .tab{flex:0 0 auto}
+body.mixed-app .att2-actions button:disabled:not(.checked){
+  opacity:1!important;background:#edf1f4!important;color:#637582!important;border:1px dashed #adbdc7!important;box-shadow:none!important;
+}
+body.mixed-app .loc5-person.is-on .loc5-status::before{content:'\25cf';margin-right:4px;font-size:.68em}
+body.mixed-app .loc5-person.is-off .loc5-status::before{content:'\25cb';margin-right:4px;font-size:.85em}
+body.mixed-app .ops-status>div{min-width:0;max-width:100%}
+body.mixed-app .ops-status small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* Retain the original content; use a consistent open/close affordance. */
+body.mixed-app details.ui-disclosure>summary{
+  display:flex!important;align-items:center;justify-content:space-between;gap:9px;width:100%;
+  min-height:46px!important;padding:10px 12px!important;list-style:none!important;
+  border:1px solid #c4d8e3!important;border-radius:12px;background:#f0f6fa!important;color:#244f65!important;
+  cursor:pointer;font-weight:800;box-shadow:none!important;
+}
+body.mixed-app details.ui-disclosure>summary::-webkit-details-marker{display:none}
+body.mixed-app details.ui-disclosure>summary::marker{content:''}
+body.mixed-app details.ui-disclosure>summary::before,
+body.mixed-app details.ui-disclosure>summary::after{content:none!important;display:none!important}
+body.mixed-app details.ui-disclosure>summary .ui-disclosure-label{min-width:0;line-height:1.5;overflow-wrap:anywhere}
+body.mixed-app details.ui-disclosure>summary .ui-disclosure-action{
+  display:inline-flex;align-items:center;gap:4px;flex:0 0 auto;white-space:nowrap;
+  padding:6px 8px;border-radius:8px;background:#134f70;color:#fff;font-size:.75rem;line-height:1.2;font-weight:850;
+}
+body.mixed-app details.ui-disclosure>summary .ui-disclosure-action b{font-size:.62rem;color:inherit}
+body.mixed-app details.ui-disclosure[open]>summary{background:#e8f5f0!important;border-color:#679c8e!important;color:#1e5d50!important}
+body.mixed-app details.ui-disclosure[open]>summary .ui-disclosure-action{background:#1a6a5a;color:#fff}
+body.mixed-app details.inline-attraction-detail[open]{border-left:3px solid #509381;padding-left:9px}
+body.mixed-app .inline-close{background:#e8f5f0!important;color:#1e5d50!important;border:1px solid #679c8e!important}
+body.mixed-app .compact-top .fx-diagnostics.ui-disclosure>summary{font-size:.75rem;padding:8px 10px!important}
+body.mixed-app .ui-disclosure>summary:focus-visible,
+body.mixed-app button:focus-visible,
+body.mixed-app a:focus-visible{outline:3px solid #b9670c!important;outline-offset:2px}
+body.mixed-app [data-busy="true"]{cursor:progress}
+@media(max-width:370px){
+  body.mixed-app .top-brief{grid-template-columns:minmax(42px,.85fr) minmax(75px,1.3fr) minmax(59px,1.06fr) minmax(44px,.85fr) 66px;gap:2px}
+  body.mixed-app .compact-top #headerAction{font-size:12px}
+  body.mixed-app .compact-top #headerChevron{font-size:10px}
+  body.mixed-app .compact-top #headerToggle{gap:6px}
+  body.mixed-app .compact-top .brief-location strong{font-size:.78rem}
+  body.mixed-app .compact-top .brief-clocks span{gap:2px;font-size:.63rem}
+  body.mixed-app details.ui-disclosure>summary{padding:9px 10px!important;gap:6px}
+  body.mixed-app details.ui-disclosure>summary .ui-disclosure-action{padding:6px;font-size:.7rem}
+}
+@media(min-width:650px){
+  body.mixed-app .top-brief{grid-template-columns:1fr 1.5fr 1.15fr 1fr 92px;gap:9px}
+  body.mixed-app .compact-top #headerAction{font-size:15px}
+  body.mixed-app .compact-top #headerChevron{font-size:12px}
+  body.mixed-app .compact-top #headerToggle #briefTraffic{font-size:11px!important}
+}
+@media(forced-colors:active){
+  body.mixed-app .bottom .is-active,body.mixed-app #headerToggle,body.mixed-app details.ui-disclosure>summary{border:2px solid ButtonText!important}
+}
+/* Short landscape windows: keep all five rail items visible, including More. */
+@media(min-width:840px) and (max-height:520px){
+  body.spa-mode.mixed-app.login-ready>nav.bottom{gap:6px!important;padding:10px 7px!important}
+  body.spa-mode.mixed-app.login-ready>nav.bottom>.app-nav-btn{
+    height:min(72px,calc((100dvh - 44px)/5))!important;min-height:44px!important;flex:0 0 auto!important;
+  }
+}

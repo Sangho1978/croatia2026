@@ -68,3 +68,18 @@ HTML/CSS/JS, 지도 타일, TLS/헤더, SSE 스트림, 외부 앱 사용량은 �
 ## 보존
 조편성·직책·로그인·출석·경비·영수증·사진·일정·관광·화장실·앱·준비물 데이터는 MIX05를 유지합니다.
 기존 관광정보의 출처일을 이번 수정으로 새로 갱신한 것은 아닙니다.
+
+
+## MIX08 - 2026-09-19 / UI clarity only
+
+- Header: explicit Expand / Collapse labels with filled triangle icons and contrasting states.
+- Reopening the header resets its own scroll to the top; closing restores keyboard focus.
+- Shared disclosure indicators for guide details, location settings, history and other details.
+- Selected navigation / tabs / filters now have stronger contrast; tabs also use a check mark.
+- Group navigation now uses a people icon. ON / OFF / attention have text and distinct symbols.
+- Short landscape navigation rail fits all five targets.
+- No changes to data, Firebase rules, credentials, location timers, attendance or finance services.
+
+Deploy all files with the same paths. The ZIP still has 54 files.
+Cache versions were changed for css/compact-header.css and js/compact-header.js only.
+Preview screenshots use mock FX, GPS, and database responses (not live participants).
