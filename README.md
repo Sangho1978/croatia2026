@@ -83,3 +83,11 @@ HTML/CSS/JS, 지도 타일, TLS/헤더, SSE 스트림, 외부 앱 사용량은 �
 Deploy all files with the same paths. The ZIP still has 54 files.
 Cache versions were changed for css/compact-header.css and js/compact-header.js only.
 Preview screenshots use mock FX, GPS, and database responses (not live participants).
+
+
+## MIX10 UI feedback
+- 위치 현황 4개 세로형 카드를 3개 핵심 수치 + 최근 조회 한 줄 구조로 변경
+- 위치 빠른 실행 버튼에 처리중/완료/실패 피드백과 하단 토스트 추가
+- 지도 열기 버튼은 열린 상태에서 `지도 닫기`로 변경
+- 거리/위치공유 설명은 기본 접힘으로 변경
+- 기존 관광 가이드, 일정, Firebase 저장 경로와 데이터 구조는 변경하지 않음
