@@ -1,4 +1,4 @@
-/* MIX18 Shared expense manager: receipt-first entry + use-date ledger + safe delete + Excel settlement. */
+/* MIX20 Shared expense manager: receipt-first entry + chronological date chips + safe delete + Excel settlement. */
 (function(){
   let owner='',storageReady=false,records={},selected=new Set(),mode='all',editId=null,editEtag=null,original=null,saveBusy=false,fetchEpoch=0,pendingId=null;
   let receiptItems=[],receiptChanged=false,receiptBusy=false,receiptBatch=null,receiptEpoch=0,ocrBusy=false,ocrResult=null;
@@ -143,13 +143,13 @@
     try{const r=await Integration.api('expenses/'+TRIP_CODE,{headers:{'X-Firebase-ETag':'true'}});if(epoch!==fetchEpoch||currentUser?.name!==name)return;records=r.data||{};storageReady=true;renderRecords();accessMessage(Integration.canManageFinance()?'등록·수정 가능 · 장부 연결됨':'28명 공용 장부 · 조회 전용',true)}
     catch(e){if(epoch!==fetchEpoch||currentUser?.name!==name)return;storageReady=false;records={};renderRecords();const msg=(e.status===401||e.status===403)?'Firebase 공동경비 Rules를 확인해 주세요.':e.message;accessMessage(msg,false)}
   }
-  function allRecordDates(){return [...new Set([...TRIP_DATES,...Object.values(records).filter(activeRecord).map(usageDateOf).filter(Boolean)])].sort().reverse()}
+  function allRecordDates(){return [...new Set([...TRIP_DATES,...Object.values(records).filter(activeRecord).map(usageDateOf).filter(Boolean)])].sort()}
   function visibleItems(){
     const from=document.getElementById('ledgerFrom')?.value||'',to=document.getElementById('ledgerTo')?.value||'',q=(document.getElementById('ledgerSearch')?.value||'').trim().toLowerCase();
     return Object.entries(records).filter(([,r])=>{if(!activeRecord(r))return false;const d=usageDateOf(r);return (ledgerDay==='all'||d===ledgerDay)&&(!from||d>=from)&&(!to||d<=to)&&(!q||((r.merchant||'')+' '+r.title+' '+r.category+' '+r.payerName+' '+r.memo).toLowerCase().includes(q))}).sort((a,b)=>usageDateOf(b[1]).localeCompare(usageDateOf(a[1]))||(b[1].createdAt||0)-(a[1].createdAt||0));
   }
   function renderDayChips(){
-    const box=document.getElementById('ledgerDayChips');if(!box)return;const dates=allRecordDates(),today=nowLocalDate(),place=currentPlace();if(!dates.includes(today))dates.unshift(today);box.innerHTML=`<button type="button" data-ledger-day="all" class="${ledgerDay==='all'?'active':''}">전체</button>`+dates.map(d=>`<button type="button" data-ledger-day="${d}" class="${ledgerDay===d?'active':''}">${d===today?'오늘 · '+place.label+' ':''}${d.slice(5).replace('-','/')} ${weekday(d)}</button>`).join('');
+    const box=document.getElementById('ledgerDayChips');if(!box)return;const dates=allRecordDates(),today=nowLocalDate(),place=currentPlace();if(!dates.includes(today)){dates.push(today);dates.sort()}box.innerHTML=`<button type="button" data-ledger-day="all" class="${ledgerDay==='all'?'active':''}">전체</button>`+dates.map(d=>`<button type="button" data-ledger-day="${d}" class="${ledgerDay===d?'active':''}">${d===today?'오늘 · '+place.label+' ':''}${d.slice(5).replace('-','/')} ${weekday(d)}</button>`).join('');
   }
   function renderRecords(){
     if(!document.getElementById('expenseRecords'))return;const items=visibleItems(),sums={EUR:0,KRW:0},daily={};let estKrw=0;items.forEach(([,r])=>{const date=usageDateOf(r);if(r.currency in sums&&Number.isFinite(r.amountMinor)){sums[r.currency]+=r.amountMinor;(daily[date]??={EUR:0,KRW:0,n:0,estKrw:0})[r.currency]+=r.amountMinor;daily[date].n++}if(Number.isFinite(r.estimatedKrw)){estKrw+=r.estimatedKrw;(daily[date]??={EUR:0,KRW:0,n:0,estKrw:0}).estKrw+=r.estimatedKrw}});renderDayChips();
