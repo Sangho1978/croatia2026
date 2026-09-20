@@ -175,3 +175,12 @@ Preview screenshots use mock FX, GPS, and database responses (not live participa
 - 로마 FCO 및 자그레브 공항 공식 분실물 페이지/연락처, 크로아티아 HR112 Upozorenje, 이탈리아 112 Where ARE U 및 IT-alert 링크를 제공합니다.
 - 112 신고 시 바로 읽을 수 있는 영어 전달 순서 예문을 추가했습니다.
 - Firebase 데이터/Rules는 변경하지 않습니다. 자세한 출처는 `EMERGENCY_MIX21.md` 참고.
+
+## MIX22 여행 뉴스·재난 알림
+- `더보기 → 실시간 뉴스`에서 크로아티아 방문도시와 로마·FCO 관련 최근 7일 주요 뉴스를 확인합니다.
+- HINA·HRT·ANSA·Reuters·AP 등 주요 출처를 GDELT 공개 검색으로 조회하고 국가별 최대 12건을 표시합니다.
+- 영어 제목은 한국어로 자동 번역하고 원문 제목·원문보기·번역해서 보기 링크를 함께 제공합니다.
+- 산불·지진·홍수·대피·공항폐쇄·항공차질·파업·강풍·도로통제 등 일정 영향도가 높은 최근 72시간 기사는 로그인 직후 팝업과 오늘 화면 배너로 우선 노출합니다.
+- DHMZ·HAK·Croatia Civil Protection·Italy Protezione Civile·MIT 파업 일정·FCO 실시간 항공편 공식 링크를 함께 제공합니다.
+- 앱이 열린 동안 1시간마다 갱신하며, 다시 열었을 때 캐시가 1시간 이상 오래되면 즉시 새로 검색합니다. 정적 PWA가 완전히 종료된 동안의 백그라운드 검색은 보장하지 않습니다.
+- Firebase 데이터/Rules 변경 없음. 세부 동작과 공식 링크는 `NEWS_MIX22.md` 참고.
