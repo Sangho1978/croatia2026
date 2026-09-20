@@ -2,13 +2,13 @@
 <!-- build: 20260913-r3 | SPA refactor: single-app routing + bottom sheet + 5-core-nav --><!DOCTYPE html>
 
 <!-- CRO_APP_BUILD:20260913.fold-login -->
-<html lang="ko"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/><meta content="#0b456b" name="theme-color"/>
+<html lang="ko"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/><meta content="#0b456b" name="theme-color"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-status-bar-style" content="default"/><link rel="manifest" href="manifest.webmanifest?v=20260920-MIX12"/>
 <title>아드리아의 길 · 28인의 크로아티아 연수</title>
-<meta content="no-cache, no-store, must-revalidate" http-equiv="Cache-Control"/><meta content="no-cache" http-equiv="Pragma"/><meta content="0" http-equiv="Expires"/><link href="css/app.css?v=20260920-MIX11" rel="stylesheet"/>
+<meta content="no-cache, no-store, must-revalidate" http-equiv="Cache-Control"/><meta content="no-cache" http-equiv="Pragma"/><meta content="0" http-equiv="Expires"/><link href="css/app.css?v=20260920-MIX12" rel="stylesheet"/>
 <link href="css/field-tools.css?v=20260919-MIX06" rel="stylesheet"/>
-<link href="css/integration.css?v=20260919-MIX06" rel="stylesheet"/><link href="css/attendance-prep.css?v=20260919-MIX06" rel="stylesheet"/>
-<link href="css/mix03.css?v=20260919-MIX06" rel="stylesheet"/><link rel="stylesheet" href="css/usability.css?v=20260920-MIX11"><link rel="stylesheet" href="css/compact-header.css?v=20260920-MIX11"/><link rel="stylesheet" href="css/action-first.css?v=20260919-MIX10"/>
-</head><body class="mobile-redesign mixed-app" data-build="20260920-MIX11">
+<link href="css/integration.css?v=20260919-MIX06" rel="stylesheet"/><link href="css/attendance-prep.css?v=20260920-MIX12" rel="stylesheet"/>
+<link href="css/mix03.css?v=20260919-MIX06" rel="stylesheet"/><link rel="stylesheet" href="css/usability.css?v=20260920-MIX12"><link rel="stylesheet" href="css/compact-header.css?v=20260920-MIX12"/><link rel="stylesheet" href="css/action-first.css?v=20260919-MIX10"/>
+</head><body class="mobile-redesign mixed-app" data-build="20260920-MIX12">
 <div id="loginScreen" class="login-screen">
 <div class="login-panel login-panel-simple" role="dialog" aria-labelledby="loginTitle" aria-modal="true">
 <div class="login-brand">ADRIATIC LEADERSHIP JOURNEY</div><h1 id="loginTitle">아드리아의 길<br><span>CROATIA 2026</span></h1><p class="login-course">서울대학교 행정대학원 공공리더십과정 17기</p>
@@ -254,9 +254,16 @@
 <a href="#emergency"><b>!</b><span>긴급·비상</span></a>
 </div></header></details></section>
 <section class="app-view" data-view="group" id="group"><div class="mix-view-heading"><small>TOGETHER · 28</small><h2>그룹</h2><p>원우 27명 · 인솔 교수 1명</p></div><div aria-label="그룹 메뉴" class="group-tabs" role="tablist"><button aria-controls="attendance" data-group-tab="attendance" id="tabAttendance" role="tab">출석</button><button aria-controls="team" data-group-tab="people" id="tabPeople" role="tab">사람</button></div><section class="group-pane" data-group-pane="attendance" id="attendance" role="tabpanel">
-<div class="att2-head"><h3 id="attTitle">28명 출석 확인</h3><span class="att2-state" id="attStateLabel">대기</span></div>
+<div class="att2-head"><div><h3 id="attTitle">28명 출석 확인</h3><small id="attRoundType">출석 준비</small></div><span class="att2-state" id="attStateLabel">대기</span></div>
+<div id="attAnnouncement" class="att-announcement" role="status" aria-live="assertive" hidden></div>
+<div class="att-round-editor" id="attRoundEditor" hidden>
+ <label><span>분류</span><select id="attType"><option value="버스탑승">버스탑승</option><option value="장소집결">장소집결</option><option value="식사">식사</option><option value="기타">기타</option></select></label>
+ <label class="att-title-field"><span>표시 제목</span><input id="attCustomTitle" maxlength="60" placeholder="예: 플리트비체 출발 전 버스탑승"/></label>
+ <button id="attEditBtn" type="button" onclick="attEditCurrent()">✎ 진행 중 제목 수정</button>
+</div>
 <div aria-atomic="true" aria-live="polite" class="att2-totals"><div><span>전체</span><b id="attTotalCount">28</b></div><div class="is-done"><span>체크완료</span><b id="attCheckedCount">0</b></div><div class="is-missing"><span>미체크</span><b id="attMissingCount">28</b></div></div>
-<div class="att2-actions"><button disabled="" id="attMyBtn" onclick="attToggleSelf()" type="button">시작을 기다리고 있습니다</button><div class="att-admin att2-admin" id="attAdmin"><button id="attStartBtn" onclick="attCreateEvent()" type="button">▶ 시작</button><button disabled="" id="attResetBtn" onclick="attResetCurrent()" type="button">↺ 리셋</button></div></div>
+<div class="att2-actions"><button disabled="" id="attMyBtn" onclick="attToggleSelf()" type="button">시작을 기다리고 있습니다</button><div class="att-admin att2-admin" id="attAdmin"><button id="attStartBtn" onclick="attCreateEvent()" type="button">▶ 출석 시작</button><button disabled="" id="attResetBtn" onclick="attResetCurrent()" type="button">↺ 리셋</button></div></div>
+<div class="att-notify-row"><button id="attNotifyBtn" type="button" onclick="AttendanceNotify.enable()">🔔 알림 켜기</button><small id="attNotifyHelp">앱 실행 중 출석 시작·완료 알림</small></div>
 <div class="att2-live"><span id="attMeta">시작 대기</span><span id="attSyncStatus" role="status">연결 대기</span></div>
 <p aria-live="polite" class="att2-feedback" hidden="" id="attFeedback" role="status"></p>
 <div aria-label="조별 체크완료 인원" class="att2-group-totals" id="att2GroupTotals"></div>
@@ -271,11 +278,11 @@
 <div class="app-sheet-group"><h3>현장 · 여행</h3><div class="app-sheet-grid"><button data-route="toilets" type="button"><b>🚻</b><span>화장실</span><small>요금 · 위치</small></button><button data-route="guide" type="button"><b>▤</b><span>관광가이드</span><small>역사 · 관람 포인트</small></button><button data-route="hotels" type="button"><b>▣</b><span>호텔</span><small>숙박 · 지도</small></button><button data-route="weatherDetail" type="button"><b>☀</b><span>날씨</span><small>시간대별 예보</small></button><button data-route="route" type="button"><b>↗</b><span>전체동선</span><small>여정 한눈에</small></button><button data-route="apps" type="button"><b>▧</b><span>추천앱</span><small>현지 도구</small></button><button data-route="videos" type="button"><b>▶</b><span>추천영상</span><small>출발 전 예습</small></button></div></div><div class="app-sheet-group"><h3>연수 · 기록</h3><div class="app-sheet-grid"><button type="button" data-route="members"><b><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="9" cy="7" r="3"/><path d="M3 21v-3a6 6 0 0 1 12 0v3M16 4a3 3 0 0 1 0 6M18 13a5 5 0 0 1 3 5v3"/></svg></b><span>팀원 명부</span><small>연수 직책 · 전화</small></button><button data-route="check" type="button"><b>✓</b><span>여행준비</span><small>출발 준비물</small></button><button data-route="study" type="button"><b>✎</b><span>연수노트</span><small>관찰 · 보고서</small></button><button data-route="photos" type="button"><b>▦</b><span>공동사진</span><small>공유앨범</small></button><button data-route="expenses" data-finance-only="true" hidden="" type="button"><b>€</b><span>공동경비</span><small>이상미·한상호</small></button></div></div><div class="app-sheet-group"><h3>안전 · 안내</h3><div class="app-sheet-grid"><button data-route="emergency" type="button"><b>!</b><span>긴급·비상</span><small>즉시 연락</small></button><button data-route="more" type="button"><b>ⓘ</b><span>앱 안내</span><small>운영 기준</small></button></div></div></div>
 </div>
 <div id="appActionToast" class="app-action-toast" role="status" aria-live="polite" aria-atomic="true"></div><nav aria-label="주요 메뉴" class="bottom"><button class="app-nav-btn" data-route="today" type="button"><b aria-hidden="true">⌂</b><span>오늘</span></button><button class="app-nav-btn" data-route="schedule" type="button"><b aria-hidden="true">◷</b><span>일정</span></button><button class="app-nav-btn" data-route="location" type="button"><b aria-hidden="true">⌖</b><span>지도</span></button><button class="app-nav-btn" data-route="group" type="button"><b aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="9" cy="7" r="3"/><path d="M3 21v-3a6 6 0 0 1 12 0v3M16 4a3 3 0 0 1 0 6M18 13a5 5 0 0 1 3 5v3"/></svg></b><span>그룹</span></button><button class="app-nav-btn" id="moreNavBtn" type="button"><b aria-hidden="true">☰</b><span>더보기</span></button></nav>
-<script src="js/net-meter.js?v=20260919-MIX06"></script><script src="js/config.js?v=20260920-MIX11"></script><script src="data/roster.js?v=20260919-MIX06"></script><script src="data/itinerary.js?v=20260919-MIX06"></script><script src="data/flight-plan.js?v=20260919-MIX06"></script><script src="data/checklist.js?v=20260919-MIX06"></script><script src="js/time-dual.js?v=20260919-MIX10"></script><script src="js/app-core.js?v=20260919-MIX06"></script><script src="js/videos.js?v=20260919-MIX06"></script><script src="js/mobile-ui.js?v=20260919-MIX06"></script><script src="js/ops.js?v=20260919-MIX06"></script><script src="js/router.js?v=20260919-MIX06"></script>
+<script src="js/net-meter.js?v=20260919-MIX06"></script><script src="js/config.js?v=20260920-MIX12"></script><script src="data/roster.js?v=20260919-MIX06"></script><script src="data/itinerary.js?v=20260919-MIX06"></script><script src="data/flight-plan.js?v=20260919-MIX06"></script><script src="data/checklist.js?v=20260919-MIX06"></script><script src="js/time-dual.js?v=20260919-MIX10"></script><script src="js/app-core.js?v=20260919-MIX06"></script><script src="js/videos.js?v=20260919-MIX06"></script><script src="js/mobile-ui.js?v=20260919-MIX06"></script><script src="js/ops.js?v=20260919-MIX06"></script><script src="js/router.js?v=20260919-MIX06"></script>
 <script src="js/field-tools.js?v=20260919-MIX06"></script>
-<script src="js/integration.js?v=20260920-MIX11"></script><script src="js/receipt-store.js?v=20260919-MIX06"></script><script src="js/expenses.js?v=20260919-MIX10"></script><script src="js/photos.js?v=20260919-MIX06"></script><script src="js/attendance.js?v=20260919-MIX10"></script>
+<script src="js/integration.js?v=20260920-MIX12"></script><script src="js/receipt-store.js?v=20260919-MIX06"></script><script src="js/expenses.js?v=20260919-MIX10"></script><script src="js/photos.js?v=20260919-MIX06"></script><script src="js/attendance-notify.js?v=20260920-MIX12"></script><script src="js/attendance.js?v=20260920-MIX12"></script>
 <script src="js/preparation.js?v=20260919-MIX06"></script>
-<script src="js/location-session.js?v=20260920-MIX11"></script><script src="js/flight-details.js?v=20260919-MIX06"></script><script src="js/usability.js?v=20260919-MIX10"></script><dialog id="locationHelp" class="runtime-dialog" aria-labelledby="locationHelpTitle">
+<script src="js/location-session.js?v=20260920-MIX12"></script><script src="js/flight-details.js?v=20260919-MIX06"></script><script src="js/usability.js?v=20260919-MIX10"></script><dialog id="locationHelp" class="runtime-dialog" aria-labelledby="locationHelpTitle">
  <div class="runtime-dialog-head"><h2 id="locationHelpTitle">위치 공유, 언제 동작하나요?</h2><button type="button" data-location-help-close aria-label="닫기">×</button></div>
  <p><strong>지도 화면에 머물러 있지 않아도 됩니다.</strong> 로그인 후 위치 ON이고 웹앱이 화면에 보이면, 오늘·일정·그룹·화장실·공동경비 등 모든 메뉴에서 5분 간격으로 전송합니다. 위치 권한과 인터넷이 필요합니다. 일행 위치는 2분 간격으로 확인합니다. 다른 앱에서 돌아오면 갱신이 필요한 위치를 다시 확인합니다.</p>
  <p><strong>다른 앱 사용·화면 잠금·브라우저 종료</strong> 중에는 GPS 전송을 계속 보장할 수 없습니다. 홈 화면에 설치해도 이 제한은 같습니다. 꺼두었던 위치공유를 임의로 켜지는 않습니다.</p>
@@ -285,7 +292,7 @@
  <p class="runtime-small">Google Maps의 위치 공유는 별도 서비스입니다. 이 앱의 28명 위치지도나 Firebase에 자동으로 합쳐지는 기능은 넣지 않았습니다. 하나의 앱에서 계속 전송하려면 iOS·Android 네이티브 위치 권한 및 백그라운드 기능을 갖춘 설치형 앱이 필요합니다.</p>
  <button type="button" class="runtime-done" data-location-help-close>확인</button>
 </dialog>
-<script src="js/fx-service.js?v=20260920-MIX11"></script>
+<script src="js/fx-service.js?v=20260920-MIX12"></script>
 <script src="js/runtime-support.js?v=20260919-MIX06"></script>
-<script src="js/compact-header.js?v=20260920-MIX11"></script>
+<script src="js/compact-header.js?v=20260920-MIX12"></script>
 </body></html>

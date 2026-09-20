@@ -1,4 +1,4 @@
-/* MIX02: one current round, 28 fixed identities, leader-first group board.
+/* MIX12: categorized rounds, editable title, auto-complete at 28/28, leader+presenter badges. Based on MIX02: one current round, 28 fixed identities, leader-first group board.
  * Existing attendanceCurrent/<trip> and attendance/<trip>/<event>/<slot> paths are unchanged.
  * Firebase REST SSE: https://firebase.google.com/docs/reference/rest/database#section-streaming
  * Start/reset remain limited to the original operator (Han) in the client UI.
@@ -16,6 +16,11 @@
   let currentStreamOK=false,checksStreamOK=false,connectMode='waiting',failure='';
   const sorted=g=>people().filter(u=>u.group===g).sort((a,b)=>Number(b.leader)-Number(a.leader)||a.groupOrder-b.groupOrder);
   const checked=u=>attChecks?.[u.slot]?.checked===true;
+  const roundDone=()=>!!attCurrent&&checksKnown&&people().filter(checked).length===people().length;
+  const roundAccepting=()=>!!attCurrent&&!roundDone();
+  const editorValues=()=>{const type=document.getElementById('attType')?.value||'장소집결',custom=(document.getElementById('attCustomTitle')?.value||'').trim();return {type,title:custom||type+' 출석체크'}};
+  function announceStart(meta){if(meta?.id)window.AttendanceNotify?.announceStart(meta)}
+  function announceComplete(meta){if(meta?.id)window.AttendanceNotify?.announceComplete(meta)}
   const shortTime=t=>Number.isFinite(+t)&&+t>0?(window.AppTime?AppTime.label(+t):new Date(+t).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})):'';
   function feedback(text='',bad=false){const e=document.getElementById('attFeedback');if(e){e.hidden=!text;e.textContent=text;e.classList.toggle('is-error',bad)}}
   function setMode(){
@@ -31,61 +36,66 @@
   }
   function activeMeta(value){return value&&typeof value==='object'&&typeof value.id==='string'?value:null}
   function setMeta(value){
-    const next=activeMeta(value),changed=(attCurrent?.id||'')!==(next?.id||'');
+    const prev=attCurrent,next=activeMeta(value),changed=(prev?.id||'')!==(next?.id||'');
     attCurrent=next;known=true;
-    if(changed){attChecks={};checksKnown=!next;closeChecks();}
+    if(changed){attChecks={};checksKnown=!next;closeChecks();if(next)setTimeout(()=>announceStart(next),0);}
     if(!next)checksKnown=true;
     return changed;
   }
   function notify(){window.dispatchEvent(new CustomEvent('cro-att-change'))}
   function render(){
     const box=document.getElementById('attRoster');if(!box)return;
-    const active=!!attCurrent,ready=known&&(!active||checksKnown);
-    const done=active&&ready?people().filter(checked).length:0,total=people().length,missing=total-done;
+    const exists=!!attCurrent,ready=known&&(!exists||checksKnown);
+    const done=exists&&ready?people().filter(checked).length:0,total=people().length,missing=total-done,complete=exists&&ready&&done===total,accepting=exists&&!complete;
     document.getElementById('attTotalCount').textContent=total;
     document.getElementById('attCheckedCount').textContent=ready?done:'–';
     document.getElementById('attMissingCount').textContent=ready?missing:'–';
     const state=document.getElementById('attStateLabel');
-    state.textContent=!known?'연결 중':!active?'대기':!checksKnown?'확인 중':done===total?'모두 확인':'진행 중';
-    state.classList.toggle('is-open',active);state.classList.toggle('is-complete',active&&ready&&done===total);
-    document.getElementById('attTitle').textContent='28명 출석 확인';
-    document.getElementById('attMeta').textContent=active?(shortTime(attCurrent.createdAt)+' 시작'):'시작 대기';
+    state.textContent=!known?'연결 중':!exists?'대기':!checksKnown?'확인 중':complete?'완료':'진행 중';
+    state.classList.toggle('is-open',accepting);state.classList.toggle('is-complete',complete);
+    document.getElementById('attTitle').textContent=exists?(attCurrent.title||'28명 출석 확인'):'28명 출석 확인';
+    const typeLabel=document.getElementById('attRoundType');if(typeLabel)typeLabel.textContent=exists?(attCurrent.type||'출석 확인'):'출석 준비';
+    document.getElementById('attMeta').textContent=exists?(shortTime(attCurrent.createdAt)+' 시작'+(complete?' · 28/28 자동 완료':'')):'시작 대기';
     const sync=document.getElementById('attSyncStatus');sync.textContent=syncLabel();sync.dataset.mode=connectMode;
-    const admin=document.getElementById('attAdmin');admin.classList.toggle('show',isAdmin());admin.hidden=!isAdmin();
+    const admin=document.getElementById('attAdmin'),editor=document.getElementById('attRoundEditor');admin.classList.toggle('show',isAdmin());admin.hidden=!isAdmin();if(editor)editor.hidden=!isAdmin();
     const canWrite=currentUser&&navigator.onLine&&ready&&!adminBusy;
-    document.getElementById('attStartBtn').disabled=!canWrite||active;
-    document.getElementById('attResetBtn').disabled=!canWrite||!active;
+    document.getElementById('attStartBtn').disabled=!canWrite||accepting;
+    document.getElementById('attResetBtn').disabled=!canWrite||!exists;
+    const edit=document.getElementById('attEditBtn');if(edit)edit.disabled=!canWrite||!accepting;
+    const typ=document.getElementById('attType'),titleInput=document.getElementById('attCustomTitle');
+    if(exists&&document.activeElement!==typ&&typ&&[...typ.options].some(o=>o.value===attCurrent.type))typ.value=attCurrent.type;
+    if(exists&&document.activeElement!==titleInput&&titleInput)titleInput.value=attCurrent.title||'';
     const mine=currentUser&&checked(currentUser),btn=document.getElementById('attMyBtn');
-    btn.disabled=!canWrite||!active||!!mine||selfBusy;
-    btn.classList.toggle('checked',!!mine&&active);
-    btn.textContent=selfBusy?'저장 중…':!active?'시작을 기다리고 있습니다':mine?'✓ 내 체크완료 · '+shortTime(attChecks[currentUser.slot]?.ts):'✓ 내 출석 체크';
+    btn.disabled=!canWrite||!accepting||!!mine||selfBusy;
+    btn.classList.toggle('checked',!!mine&&exists);
+    btn.textContent=selfBusy?'저장 중…':!exists?'시작을 기다리고 있습니다':complete?'✓ 28명 모두 완료':mine?'✓ 내 체크완료 · '+shortTime(attChecks[currentUser.slot]?.ts):'✓ 내 출석 체크';
     const notice=document.getElementById('attMissingNotice');
-    notice.classList.toggle('all-done',active&&ready&&!missing);
-    notice.textContent=!ready?'최신 출석을 불러오는 중입니다.':!active?'회색 이름은 아직 미체크 상태입니다.':!missing?'✓ 28명 모두 체크했습니다.':missing<=10?'미체크 '+missing+'명 · '+people().filter(u=>!checked(u)).map(u=>u.name).join(' · '):'미체크 '+missing+'명 · 아래 조별 회색 이름을 확인하세요.';
+    notice.classList.toggle('all-done',complete);
+    notice.textContent=!ready?'최신 출석을 불러오는 중입니다.':!exists?'출석 시작을 기다리고 있습니다.':complete?'✓ 28명 모두 출석 체크 완료 · 자동 종결되었습니다.':missing<=10?'미체크 '+missing+'명 · '+people().filter(u=>!checked(u)).map(u=>u.name).join(' · '):'미체크 '+missing+'명 · 아래 조별 회색 이름을 확인하세요.';
     const mini=document.getElementById('att2GroupTotals');
-    if(mini)mini.innerHTML=order.map(g=>{const mem=sorted(g),n=active&&ready?mem.filter(checked).length:0;return '<div class="'+(active&&ready&&n===mem.length?'done':'')+'"><span>'+(g?g+'조':'교수')+'</span><b>'+(ready?n:'–')+'<small>/'+mem.length+'</small></b></div>'}).join('');
-    notice.hidden=ready&&missing>10;
-    // Update small rows in place, so network refreshes do not move scroll or focus.
+    if(mini)mini.innerHTML=order.map(g=>{const mem=sorted(g),n=exists&&ready?mem.filter(checked).length:0;return '<div class="'+(exists&&ready&&n===mem.length?'done':'')+'"><span>'+(g?g+'조':'교수')+'</span><b>'+(ready?n:'–')+'<small>/'+mem.length+'</small></b></div>'}).join('');
+    notice.hidden=ready&&missing>10&&!complete;
     for(const g of order){
       const list=sorted(g);let panel=box.querySelector('[data-att-group="'+g+'"]');
       if(!panel){panel=document.createElement('section');panel.className='att2-group';panel.dataset.attGroup=String(g);panel.innerHTML='<header><h4></h4><span class="att2-group-count"></span></header><div class="att2-members"></div>';box.appendChild(panel);}
-      const n=active&&ready?list.filter(checked).length:0;
+      const n=exists&&ready?list.filter(checked).length:0;
       panel.querySelector('h4').textContent=g?g+'조':'인솔 교수';
       panel.querySelector('.att2-group-count').textContent=(ready?n:'–')+'/'+list.length+(ready?' · 미체크 '+(list.length-n):' · 확인 중');
-      panel.classList.toggle('complete',active&&ready&&n===list.length);
+      panel.classList.toggle('complete',exists&&ready&&n===list.length);
       const rows=panel.querySelector('.att2-members');
       for(const u of list){let row=rows.querySelector('[data-att-slot="'+u.slot+'"]');
         if(!row){row=document.createElement('div');row.className='att2-person';row.dataset.attSlot=u.slot;row.dataset.person=u.name;
-          const badge=u.leader?'<span class="att2-leader">조장</span>':u.presenter?'<span class="att2-presenter">발표</span>':'';
-          row.innerHTML='<span class="att2-lamp" aria-hidden="true"></span><div class="att2-person-name"><b>'+esc(u.name)+'</b>'+badge+'</div><div class="att2-person-state"><strong></strong><time></time></div>';rows.appendChild(row);
+          const badge=(u.leader?'<span class="att2-leader">조장</span>':'')+(u.presenter?'<span class="att2-presenter">발표</span>':'');
+          row.innerHTML='<span class="att2-lamp" aria-hidden="true"></span><div class="att2-person-name"><b>'+esc(u.name)+'</b><span class="att2-role-badges">'+badge+'</span></div><div class="att2-person-state"><strong></strong><time></time></div>';rows.appendChild(row);
         }
-        const ok=active&&ready&&checked(u);
+        const ok=exists&&ready&&checked(u);
         row.classList.toggle('is-checked',!!ok);row.classList.toggle('is-leader',!!u.leader);
         row.querySelector('strong').textContent=!ready?'확인 중':ok?'완료':'미체크';
         const time=row.querySelector('time');time.textContent=ok?shortTime(attChecks[u.slot]?.ts):'';
-        row.setAttribute('aria-label',u.name+(u.leader?' 조장':'')+' · '+(!ready?'확인 중':ok?'체크완료 '+time.textContent:'미체크'));
+        row.setAttribute('aria-label',u.name+(u.leader?' 조장':'')+(u.presenter?' 발표':'')+' · '+(!ready?'확인 중':ok?'체크완료 '+time.textContent:'미체크'));
       }
     }
+    if(complete)announceComplete(attCurrent);
   }
   function markGood(){failure='';lastSync=Date.now();setMode();render();notify()}
   function markError(e){failure=e?.message||'연결 실패';setMode();render()}
@@ -187,20 +197,38 @@
     },5000);
   }
   async function create(){
-    if(!isAdmin()){feedback('시작·리셋은 기존 담당자인 한상호만 사용할 수 있습니다.',true);return}
+    if(!isAdmin()){feedback('출석 시작·리셋은 한상호만 사용할 수 있습니다.',true);return}
     if(adminBusy)return;if(!navigator.onLine){feedback('인터넷 연결 후 시작해 주세요.',true);return}
     adminBusy=true;feedback();render();const epoch=authEpoch;
     try{
       const res=await request(currentPath(),{headers:{'X-Firebase-ETag':'true'}});
       if(!sameSession(epoch)||!isAdmin())return;
-      if(activeMeta(res.data)){setMeta(res.data);throw Error('이미 진행 중입니다. 다시 확인하려면 리셋 후 시작해 주세요.');}
+      const old=activeMeta(res.data);
+      if(old){
+        const oldChecks=cleanChecks((await request(roundPath(old.id))).data);
+        if(Object.values(oldChecks).filter(x=>x?.checked).length<people().length){setMeta(old);throw Error('이미 진행 중인 출석이 있습니다. 리셋하거나 28명 완료 후 새로 시작해 주세요.');}
+      }
       if(!res.etag)throw Error('서버 상태를 확인하지 못했습니다. 다시 시도해 주세요.');
       const random=new Uint32Array(1);crypto.getRandomValues(random);const id=String(Date.now())+'-'+random[0].toString(36);
-      const started=Date.now(),st=window.AppTime?AppTime.stored(started):null;const data={id,title:'28명 출석 확인',type:'출석 확인',createdBy:OPERATOR,createdAt:{'.sv':'timestamp'},...(st?{timeCroatia:st.croatia,timeKorea:st.korea}: {})};
+      const {type,title}=editorValues(),started=Date.now(),st=window.AppTime?AppTime.stored(started):null;
+      const data={id,title,type,createdBy:OPERATOR,createdAt:{'.sv':'timestamp'},...(st?{timeCroatia:st.croatia,timeKorea:st.korea}: {})};
       const saved=await request(currentPath(),{method:'PUT',headers:{'if-match':res.etag},body:JSON.stringify(data)});
       if(!sameSession(epoch))return;
-      revision++;setMeta(saved.data);attChecks={};checksKnown=true;markGood();openCheckStream();feedback();
+      revision++;setMeta(saved.data);attChecks={};checksKnown=true;markGood();openCheckStream();feedback('✓ '+title+' 시작 · 28명이 체크할 수 있습니다.');announceStart(saved.data);
     }catch(e){feedback(e.status===412?'다른 기기에서 먼저 시작했습니다. 새 현황을 불러옵니다.':e.message,true);await refresh(false);}
+    finally{adminBusy=false;render();}
+  }
+  async function editCurrent(){
+    if(!isAdmin()||!attCurrent||roundDone())return;
+    if(adminBusy||!navigator.onLine)return;adminBusy=true;feedback();render();const id=attCurrent.id,epoch=authEpoch;
+    try{
+      const res=await request(currentPath(),{headers:{'X-Firebase-ETag':'true'}});if(!sameSession(epoch)||!isAdmin())return;
+      if(res.data?.id!==id)throw Error('출석 회차가 바뀌었습니다. 새 현황을 확인해 주세요.');
+      if(!res.etag)throw Error('서버 상태를 확인하지 못했습니다.');
+      const {type,title}=editorValues(),value={...res.data,type,title};
+      const saved=await request(currentPath(),{method:'PUT',headers:{'if-match':res.etag},body:JSON.stringify(value)});
+      if(!sameSession(epoch))return;revision++;attCurrent=saved.data;known=true;markGood();feedback('✓ 출석 제목을 수정했습니다.');
+    }catch(e){feedback(e.status===412?'다른 기기에서 출석 정보가 변경되었습니다.':e.message,true);await refresh(false);}
     finally{adminBusy=false;render();}
   }
   async function reset(){
@@ -222,7 +250,7 @@
     finally{adminBusy=false;render();}
   }
   async function checkSelf(){
-    if(!currentUser||!attCurrent||selfBusy||checked(currentUser))return;
+    if(!currentUser||!roundAccepting()||selfBusy||checked(currentUser))return;
     const user=currentUser,id=attCurrent.id,epoch=authEpoch;selfBusy=true;feedback();render();
     try{
       if(!navigator.onLine)throw Error('인터넷 연결이 없습니다. 연결 후 다시 체크해 주세요.');
@@ -239,13 +267,13 @@
       }
       const confirmRound=await request(currentPath());if(!sameSession(epoch))return;
       if(confirmRound.data?.id!==id){revision++;setMeta(confirmRound.data);throw Error('확인 중 리셋되었습니다. 새 출석에서 다시 눌러 주세요.');}
-      if(attCurrent?.id===id){revision++;attChecks[user.slot]=saved;checksKnown=true;markGood();feedback();}
+      if(attCurrent?.id===id){revision++;attChecks[user.slot]=saved;checksKnown=true;try{const allChecks=await request(roundPath(id));if(attCurrent?.id===id)attChecks=cleanChecks(allChecks.data)}catch(_){}markGood();feedback(people().filter(checked).length===people().length?'✓ 28명 모두 출석 체크 완료 · 자동 종결되었습니다.':'✓ 출석 체크를 완료했습니다.');}
     }catch(e){
       if(e.status===412){await refresh(false);feedback(checked(user)?'이미 체크되었습니다.':'현황이 바뀌었습니다. 다시 확인해 주세요.',!checked(user));}
       else{feedback(e.message,true);await refresh(false);}
     }finally{selfBusy=false;render();}
   }
-  window.attRefresh=refresh;window.attRender=render;window.attCreateEvent=create;window.attResetCurrent=reset;window.attToggleSelf=checkSelf;window.attStartPolling=begin;
+  window.attRefresh=refresh;window.attRender=render;window.attCreateEvent=create;window.attEditCurrent=editCurrent;window.attResetCurrent=reset;window.attToggleSelf=checkSelf;window.attStartPolling=begin;
   window.AttendanceBoard={get status(){return {mode:connectMode,known,checksKnown,round:attCurrent?.id||null,lastSync}},refresh};
   window.addEventListener('cro-auth-change',()=>{authEpoch++;revision++;closeStreams();attCurrent=null;attChecks={};known=false;checksKnown=false;lastSync=0;failure='';selfBusy=false;feedback();begin();});
   window.addEventListener('cro-route',e=>{if(e.detail?.view==='group'&&e.detail?.sub!=='people'&&currentUser){render();refresh(false);openStreams();}});

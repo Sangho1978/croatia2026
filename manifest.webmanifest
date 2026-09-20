@@ -1,0 +1,11 @@
+{
+  "name": "아드리아의 길 · CROATIA 2026",
+  "short_name": "CROATIA 2026",
+  "id": "./",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4f8fa",
+  "theme_color": "#0b456b",
+  "lang": "ko-KR"
+}

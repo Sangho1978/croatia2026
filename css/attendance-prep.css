@@ -93,3 +93,13 @@ body.mixed-app .prep2-item input{width:21px;height:21px;min-height:21px;padding:
  #attRoster .att2-leader,#attRoster .att2-presenter{font-size:.65rem}
  #attRoster .att2-group[data-att-group="0"] .att2-members{max-width:none}
 }
+
+/* MIX12 attendance categories, edit controls and notifications */
+#attRoundType{display:block;margin-top:2px;color:#637b87;font-size:.72rem;font-weight:800}
+.att-round-editor{display:grid;grid-template-columns:130px minmax(0,1fr) auto;gap:7px;align-items:end;margin:0 0 10px;padding:10px;background:#f5f9fb;border:1px solid #d5e4ea;border-radius:14px}
+.att-round-editor label{display:grid;gap:4px}.att-round-editor label>span{font-size:.7rem;font-weight:850;color:#55717e}.att-round-editor select,.att-round-editor input{width:100%;min-height:44px;border:1px solid #cbdde5;background:#fff;border-radius:11px;padding:8px 10px;color:#183f54;font:inherit;font-size:.88rem}.att-round-editor button{min-height:44px;border:1px solid #cbdde5;background:#fff;color:#245b72;border-radius:11px;padding:8px 10px;font-weight:850}.att-round-editor button:disabled{opacity:.45}
+.att2-role-badges{display:flex;gap:4px;flex-wrap:wrap}.att2-leader,.att2-presenter{display:inline-flex;border-radius:999px;padding:1px 5px;background:#e9f1f4}.att2-presenter{background:#fff0dc}
+.att-notify-row{display:flex;align-items:center;gap:8px;margin:0 0 9px}.att-notify-row button{min-height:38px;border:1px solid #d0e0e6;background:#fff;color:#315b6d;border-radius:11px;padding:7px 10px;font-weight:850}.att-notify-row button.is-on{background:#e4f5eb;color:#167249;border-color:#bfe0cc}.att-notify-row small{font-size:.69rem;color:#6d818a;line-height:1.35}
+.att-announcement{margin:0 0 9px;border-radius:12px;padding:10px 12px;background:#e7f3fb;border:1px solid #c5dfea;color:#1c5873;font-weight:850;line-height:1.45}.att-announcement.done{background:#e4f6eb;border-color:#bddfc9;color:#136d42}.att-announcement.info{background:#f3f5f6;color:#586c77}
+.attendance-global-notice{position:fixed;z-index:1800;left:50%;top:max(76px,calc(env(safe-area-inset-top) + 70px));width:min(520px,calc(100% - 24px));transform:translate(-50%,-18px);opacity:0;pointer-events:none;border-radius:15px;padding:12px 14px;background:#0b5574;color:#fff;font-weight:900;box-shadow:0 12px 34px #0b33474d;transition:.18s ease}.attendance-global-notice.show{transform:translate(-50%,0);opacity:1}.attendance-global-notice.done{background:#18754d}.attendance-global-notice.info{background:#5b6d77}
+@media(max-width:560px){.att-round-editor{grid-template-columns:110px minmax(0,1fr)}.att-round-editor button{grid-column:1/-1}.att-notify-row{align-items:flex-start;flex-direction:column;gap:3px}}
