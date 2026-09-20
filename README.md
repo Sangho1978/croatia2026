@@ -126,3 +126,11 @@ Preview screenshots use mock FX, GPS, and database responses (not live participa
 - 최근 출석체크 명단을 공동경비 참여자로 한 번에 불러오기
 - 자동 얼굴 식별은 사용하지 않음
 - MIX14 공동경비의 추가 저장필드(사용시각·OCR 방식/신뢰도·하나환율·원화추정·현지/한국 저장시각)를 허용하도록 경비 Rules도 갱신했습니다. 기존 전체 Rules를 덮어쓰지 말고 `tools/merge-rules.html`로 한 번 병합해 게시하세요. 자세한 내용은 `FIREBASE_MIX14.md` 참고.
+
+## MIX15 · 영수증 OCR 재설계
+- 사용자 제공 실제 영수증 5장으로 방향·금액·날짜 판독을 재검증했습니다 (`OCR_SAMPLE_VALIDATION.md`).
+- 저장용 300KB 사진이 아니라 촬영 원본에서 OCR용 고화질 이미지를 임시 생성합니다.
+- 자동 회전(0/좌90/우90/180) + 일반 OCR + 적응형 고대비 2차 OCR + 날짜 하단 보정으로 변경했습니다.
+- SUBTOTAL/VAT 대신 IMPORTO PAGATO/ZA PLACILO/SKUPAJ/SUM 같은 최종결제 표지를 우선합니다.
+- Tesseract worker를 재사용해 회전 재판독 때 OCR 엔진을 매번 새로 다운로드하지 않습니다.
+- AI receipt endpoint가 설정되어 있으면 AI 비전을 우선 사용하고, 실패하면 MIX15 로컬 OCR로 자동 전환합니다.

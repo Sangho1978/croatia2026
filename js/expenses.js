@@ -27,7 +27,7 @@
               <label class="receipt-action primary">📷 카메라 촬영<input id="receiptCamera" type="file" accept="image/*" capture="environment"></label>
               <label class="receipt-action">🖼 이미지 선택<input id="receiptFiles" type="file" accept="image/jpeg,image/png,image/webp,image/avif" multiple></label>
             </div>
-            <div id="receiptReadStatus" class="ocr-status">영수증을 올리면 AI 판독을 우선 사용하고, 설정 전에는 기기 OCR로 읽습니다.</div>
+            <div id="receiptReadStatus" class="ocr-status">${window.ReceiptAI?.configured()?'AI 비전 우선 · 실패 시 자동방향 OCR로 전환':'자동방향·고대비 OCR 사용 · AI 서버는 선택 설정'}</div>
             <div id="ocrReview" class="ocr-review" hidden></div>
             <div id="receiptEditor" class="receipt-editor"></div>
             <div class="receipt-review-note">자동인식 값은 저장 전에 직접 확인·수정할 수 있습니다.</div>
@@ -76,7 +76,7 @@
   function setExpenseTab(tab){expenseTab=tab==='ledger'?'ledger':'entry';document.querySelectorAll('[data-expense-tab]').forEach(b=>{const on=b.dataset.expenseTab===expenseTab;b.classList.toggle('active',on);b.setAttribute('aria-selected',String(on))});document.querySelectorAll('[data-expense-pane]').forEach(p=>p.hidden=p.dataset.expensePane!==expenseTab);if(expenseTab==='ledger')renderRecords()}
   function newId(){return 'ex_'+Date.now()+'_'+(crypto.randomUUID?crypto.randomUUID():Math.random().toString(36).slice(2))}
   function formHasValues(){return !!document.getElementById('exMerchant')?.value||!!document.getElementById('exTitle')?.value||!!document.getElementById('exAmount')?.value||receiptItems.length>0}
-  function resetOcr(){ocrResult=null;const r=document.getElementById('ocrReview');if(r){r.hidden=true;r.innerHTML=''}const s=document.getElementById('receiptReadStatus');if(s){s.className='ocr-status';s.textContent='영수증을 올리면 AI 판독을 우선 사용하고, 설정 전에는 기기 OCR로 읽습니다.'}}
+  function resetOcr(){ocrResult=null;const r=document.getElementById('ocrReview');if(r){r.hidden=true;r.innerHTML=''}const s=document.getElementById('receiptReadStatus');if(s){s.className='ocr-status';s.textContent=window.ReceiptAI?.configured()?'AI 비전 우선 · 실패 시 자동방향 OCR로 전환':'자동방향·고대비 OCR 사용 · AI 서버는 선택 설정'}}
   function newForm(){
     document.getElementById('expenseForm').reset();document.getElementById('exDate').value=nowLocalDate();document.getElementById('exPayer').value=currentUser?.name||'';
     editId=null;editEtag=null;original=null;pendingId=newId();receiptItems=[];receiptChanged=false;receiptBatch=null;receiptEpoch++;resetOcr();renderReceiptEditor();selected=new Set(all().map(keyOf));mode='all';
@@ -171,26 +171,26 @@
     box.innerHTML=receiptItems.map((r,i)=>`<figure class="receipt-thumb"><img src="${escape(r.dataUrl)}" alt="영수증 미리보기 ${i+1}"><figcaption>${Math.ceil(r.bytes/1024)} KB <button type="button" data-ocr-receipt="${i}">${window.ReceiptAI?.configured()?'AI 다시 읽기':'자동 읽기'}</button><button type="button" data-local-ocr="${i}">기기 OCR</button> <button type="button" data-remove-receipt="${i}" aria-label="사진 ${i+1} 제거">제거</button></figcaption></figure>`).join('')||'<p class="quiet">선택한 영수증이 없습니다.</p>';
   }
   function renderOcrReview(){
-    const box=document.getElementById('ocrReview');if(!box)return;if(!ocrResult){box.hidden=true;box.innerHTML='';return}box.hidden=false;box.innerHTML=`<span>날짜<b>${escape(ocrResult.date||'확인 필요')}</b></span><span>사용처<b>${escape(ocrResult.merchant||'확인 필요')}</b></span><span>금액<b>${ocrResult.amount!=null?escape((ocrResult.currency==='EUR'?'€':'₩')+ocrResult.amount):'확인 필요'}</b></span><span>시각<b>${escape(ocrResult.time||'확인 필요')}</b></span><span>판독 방식<b>${ocrResult.provider==='ai'?'AI 비전':'기기 OCR'}</b></span><span>판독 품질<b>${ocrResult.confidence?ocrResult.confidence+'%':'확인 필요'}</b></span>`;
+    const box=document.getElementById('ocrReview');if(!box)return;if(!ocrResult){box.hidden=true;box.innerHTML='';return}const rot=ocrResult.provider==='local'&&ocrResult.rotation?(' · 방향 '+(ocrResult.rotation===270?'왼쪽 90°':ocrResult.rotation===90?'오른쪽 90°':ocrResult.rotation+'°')):'';box.hidden=false;box.innerHTML=`<span>날짜<b>${escape(ocrResult.date||'확인 필요')}</b></span><span>사용처<b>${escape(ocrResult.merchant||'확인 필요')}</b></span><span>금액<b>${ocrResult.amount!=null?escape((ocrResult.currency==='EUR'?'€':'₩')+Number(ocrResult.amount).toLocaleString('ko-KR',{minimumFractionDigits:ocrResult.currency==='EUR'?2:0,maximumFractionDigits:2})):'확인 필요'}</b></span><span>시각<b>${escape(ocrResult.time||'확인 필요')}</b></span><span>판독 방식<b>${ocrResult.provider==='ai'?'AI 비전':'자동방향·고대비 OCR'+rot}</b></span><span>판독 품질<b>${ocrResult.quality?ocrResult.quality+'점':(ocrResult.confidence?ocrResult.confidence+'%':'확인 필요')}</b></span>`;
   }
   function markAuto(id,value){const el=document.getElementById(id);if(!el||value==null||value==='')return;el.value=value;el.classList.add('ocr-filled')}
   function applyOcr(r){ocrResult=r;renderOcrReview();if(r.date)markAuto('exDate',r.date);if(r.time)markAuto('exTime',r.time);if(r.merchant)markAuto('exMerchant',r.merchant);if(r.amount!=null)markAuto('exAmount',r.currency==='EUR'?Number(r.amount).toFixed(2):String(Math.round(r.amount)));if(r.currency)markAuto('exCurrency',r.currency);if(r.category)markAuto('exCategory',r.category);if(r.purpose&&!document.getElementById('exTitle').value.trim())markAuto('exTitle',r.purpose);scheduleFxEstimate();saveDraft(false)}
-  async function runOcr(index=0,forceLocal=false){
-    if(ocrBusy||!receiptItems[index])return;const st=document.getElementById('receiptReadStatus');ocrBusy=true;const save=document.getElementById('expenseSave');if(save)save.disabled=true;
+  async function runOcr(index=0,forceLocal=false,sourceOverride=''){
+    if(ocrBusy||!receiptItems[index])return;const st=document.getElementById('receiptReadStatus');ocrBusy=true;const save=document.getElementById('expenseSave');if(save)save.disabled=true;const source=sourceOverride||receiptItems[index].dataUrl;
     try{
       let r=null;
       if(!forceLocal&&window.ReceiptAI?.configured()){
         st.className='ocr-status working';st.textContent='AI 비전으로 영수증 정확 판독 중…';
-        try{r=await ReceiptAI.analyze(receiptItems[index].dataUrl)}catch(e){st.textContent='AI 판독 실패 · 기기 OCR로 자동 전환 중…';}
+        try{r=await ReceiptAI.analyze(source)}catch(e){st.textContent='AI 판독 실패 · 자동방향 기기 OCR로 전환 중…';}
       }
-      if(!r){st.className='ocr-status working';st.textContent=forceLocal?'기기 OCR로 다시 읽는 중…':'기기 OCR로 읽는 중…';r=await ReceiptOCR.recognize(receiptItems[index].dataUrl,p=>{st.textContent='기기 OCR 읽는 중… '+p+'%'})}
+      if(!r){st.className='ocr-status working';st.textContent=forceLocal?'자동방향·고대비 OCR로 다시 읽는 중…':'자동방향·고대비 OCR로 읽는 중…';r=await ReceiptOCR.recognize(source,(p,stage)=>{st.textContent=(stage==='고대비 재판독'?'고대비 재판독 중… ':stage&&stage.startsWith('방향')?'영수증 방향 찾는 중… ':'기기 OCR 읽는 중… ')+p+'%'})}
       applyOcr(r);const count=[r.date,r.merchant,r.amount!=null].filter(Boolean).length;st.className='ocr-status '+(count>=2?'success':'error');st.textContent=count>=2?'✓ '+(r.provider==='ai'?'AI 판독':'기기 OCR')+' 완료 · 자동입력 값을 확인하고 틀리면 수정하세요.':'판독이 부족합니다. 사진을 보면서 날짜·사용처·금액을 직접 입력해 주세요.';
     }catch(e){st.className='ocr-status error';st.textContent='자동인식 실패 · '+e.message+' 직접 입력은 계속 가능합니다.'}
     finally{ocrBusy=false;if(save)save.disabled=!storageReady||receiptBusy;renderReceiptEditor()}
   }
   async function addReceiptFiles(e){
     if(receiptBusy||saveBusy){e.target.value='';return}if(!receiptChanged&&original?.receiptSummary){status('기존 사진을 불러와 편집한 뒤 추가해 주세요.','error');e.target.value='';return}const files=[...e.target.files],seq=++receiptEpoch;e.target.value='';if(receiptItems.length+files.length>3){status('경비 한 건당 사진은 3장까지입니다.','error');return}receiptBusy=true;document.getElementById('expenseSave').disabled=true;
-    try{const processed=[];for(const f of files){status('영수증 사진 압축 중…');processed.push(await ReceiptStore.compress(f));if(seq!==receiptEpoch)return}const firstIndex=receiptItems.length;receiptItems.push(...processed);receiptChanged=true;receiptBatch=ReceiptStore.newBatch();renderReceiptEditor();saveDraft(false);status('영수증을 추가했습니다. 주요정보를 자동으로 읽습니다.');if(files.length)runOcr(firstIndex);}
+    try{const processed=[];let hiRes='';if(files.length&&window.ReceiptOCR?.prepareFile){status('OCR용 고화질 이미지를 준비 중…');try{hiRes=await ReceiptOCR.prepareFile(files[0])}catch(_){hiRes=''}}for(const f of files){status('영수증 사진 압축 중…');processed.push(await ReceiptStore.compress(f));if(seq!==receiptEpoch)return}const firstIndex=receiptItems.length;receiptItems.push(...processed);receiptChanged=true;receiptBatch=ReceiptStore.newBatch();renderReceiptEditor();saveDraft(false);status('영수증을 추가했습니다. 방향을 자동 보정해 주요정보를 읽습니다.');if(files.length)runOcr(firstIndex,false,hiRes||processed[0].dataUrl);}
     catch(err){status(err.message,'error')}finally{receiptBusy=false;const b=document.getElementById('expenseSave');if(b&&!ocrBusy)b.disabled=!storageReady;}
   }
   async function showReceipts(id){
