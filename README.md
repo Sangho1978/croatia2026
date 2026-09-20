@@ -134,3 +134,11 @@ Preview screenshots use mock FX, GPS, and database responses (not live participa
 - SUBTOTAL/VAT 대신 IMPORTO PAGATO/ZA PLACILO/SKUPAJ/SUM 같은 최종결제 표지를 우선합니다.
 - Tesseract worker를 재사용해 회전 재판독 때 OCR 엔진을 매번 새로 다운로드하지 않습니다.
 - AI receipt endpoint가 설정되어 있으면 AI 비전을 우선 사용하고, 실패하면 MIX15 로컬 OCR로 자동 전환합니다.
+
+
+## MIX16 공동경비 조회·영수증 시간 보정
+- 공동경비 장부는 로그인한 28명 모두 조회 가능. 등록·수정은 이상미·한상호만 가능.
+- 영수증 사용시각은 영수증 날짜와 같은 줄/인접 줄의 시간을 우선하고 승인코드·카드단말기 시간 후보를 감점.
+- OCR 화면에는 초가 인식되면 초까지 표시하되 장부 입력은 기존 Firebase 규칙과 호환되는 HH:MM으로 저장.
+- 참석자 표기는 `참석명단`으로 통일.
+- 날짜별 장부의 기본 날짜는 현재 GPS가 한국이면 한국 날짜, 크로아티아/이탈리아면 현지 날짜. 저장 기록 자체는 사용일(date) 기준으로 묶음.

@@ -7,6 +7,7 @@
   // Finance UI gate, not server-verified identity. Staff titles are unchanged.
   const financeNames=new Set(['\ud55c\uc0c1\ud638','\uc774\uc0c1\ubbf8']);
   const canManageFinance=()=>!!currentUser&&financeNames.has(currentUser.name);
+  const canViewFinance=()=>!!currentUser;
   const idOf=u=>u.memberId;
   function escape(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
   function uidFromToken(t){try{return JSON.parse(atob(t.split('.')[1].replace(/-/g,'+').replace(/_/g,'/'))).sub||''}catch(_){return ''}}
@@ -37,8 +38,8 @@
     try{return await authInFlight}finally{authInFlight=null}
   };
   async function api(path,options={}){
-    const financePath=/^(expenses|expenseReceipts)\//.test(path);
-    if(financePath&&!canManageFinance())throw Error("\uacf5\ub3d9\uacbd\ube44\ub294 \uc774\uc0c1\ubbf8\u00b7\ud55c\uc0c1\ud638\ub9cc \uc0ac\uc6a9\ud569\ub2c8\ub2e4.");
+    const financePath=/^(expenses|expenseReceipts)\//.test(path),method=String(options.method||'GET').toUpperCase();
+    if(financePath&&method!=='GET'&&!canManageFinance())throw Error("공동경비 등록·수정은 이상미·한상호만 가능합니다.");
     const tk=await token();
     const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),16000);
     try{
@@ -74,7 +75,6 @@
     document.querySelectorAll('[data-finance-only]').forEach(el=>el.hidden=!canManageFinance());
     const e=document.getElementById('tripRoleText');if(e)e.textContent=currentUser?[(currentUser.group?currentUser.group+'조':'인솔 교수'),currentUser.leader?'조장':'',currentUser.presenter?'발표':'',currentUser.tripRole?'연수 '+currentUser.tripRole:''].filter(Boolean).join(' · '):'';
     const box=document.getElementById('myFirebaseUid');if(box){box.hidden=true;box.textContent=''}
-    if(!canManageFinance()&&window.AppRouter?.current==='expenses')AppRouter.go('today');
     window.dispatchEvent(new CustomEvent('cro-role-ready'));
   }
   async function showIdentity(){
@@ -82,7 +82,7 @@
     try{await token();e.textContent=localStorage.getItem('fb_uid')||'기기 ID 확인 실패'}catch(err){e.textContent=err.message}
   }
   function feedback(el,text,kind=''){if(el){el.className='form-feedback '+kind;el.textContent=text}}
-  window.Integration={isStaff,canManageFinance,idOf,escape,api,showIdentity,renderPeople,personCard,badges,feedback,byName,get build(){return '20260918-MIX01'}};
+  window.Integration={isStaff,canManageFinance,canViewFinance,idOf,escape,api,showIdentity,renderPeople,personCard,badges,feedback,byName,get build(){return '20260918-MIX01'}};
   window.addEventListener('cro-auth-change',applyIdentity);
   document.addEventListener('input',e=>{if(e.target.id==='peopleSearch')renderPeople()});
   document.addEventListener('click',e=>{

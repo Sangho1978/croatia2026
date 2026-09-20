@@ -12,3 +12,6 @@
 .expense-krw-line{margin:6px 0 2px;padding:7px 9px;border-radius:9px;background:#edf8f1;color:#1d6847;font-size:.78rem;font-weight:850}
 .ledger-hero{grid-template-columns:repeat(2,minmax(0,1fr))}
 @media(min-width:650px){.ledger-hero{grid-template-columns:repeat(4,minmax(0,1fr))}}
+
+/* MIX16: shared ledger read-only mode */
+body:not([data-finance-manager="true"]) .expense-pane-entry{display:none!important}.ledger-day-chips button.active{box-shadow:0 0 0 2px rgba(11,107,136,.16)}

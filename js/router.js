@@ -38,7 +38,6 @@
   function showView(view,detail='',options={}){
     [view,detail]=canonical(view,detail);
     if(!views().some(e=>e.id===view))view='today';
-    if(view==='expenses'&&!window.Integration?.canManageFinance())view='today';
     const before=current+'/'+sub;
     positions.set(before,window.scrollY);
     current=view;sub=detail;

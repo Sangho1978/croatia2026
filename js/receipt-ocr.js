@@ -28,10 +28,20 @@
 
   function normalize(text){return String(text||'').replace(/\r/g,'\n').replace(/[\t ]+/g,' ').replace(/\n{2,}/g,'\n').trim()}
   function isoDate(y,m,d){y=+y;if(y<100)y+=2000;m=+m;d=+d;if(y<2024||y>2030||m<1||m>12||d<1||d>31)return'';return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`}
+  function hasReceiptDate(line){return /(20\d{2})\s*[.\/-]\s*\d{1,2}\s*[.\/-]\s*\d{1,2}|\d{1,2}\s*[.\/-]\s*\d{1,2}\s*[.\/-]\s*(?:20\d{2}|\d{2})/.test(line||'')}
   function parseTime(lines){
     const scored=[];
-    lines.forEach((line,i)=>{let m;const re=/(?:vrijeme|time|ora|heure|cas|čas|uhr)?\s*([01]?\d|2[0-3])[:.]([0-5]\d)(?::([0-5]\d))?/ig;while((m=re.exec(line))){let score=6-i*.01;if(/datum|date|ora|time|vrijeme|cas|čas/i.test(line))score+=5;scored.push([score,String(m[1]).padStart(2,'0')+':'+m[2]])}});
-    scored.sort((a,b)=>b[0]-a[0]);return scored[0]?.[1]||'';
+    lines.forEach((line,i)=>{let m;const re=/(?:vrijeme|time|ora|heure|cas|čas|uhr)?\s*([01]?\d|2[0-3])[:.]([0-5]\d)(?::([0-5]\d))?/ig;while((m=re.exec(line))){
+      let score=8-i*.01;
+      if(hasReceiptDate(line))score+=55;
+      if(hasReceiptDate(lines[i-1])||hasReceiptDate(lines[i+1]))score+=28;
+      if(/datum|date|data|ora|time|vrijeme|cas|čas/i.test(line))score+=15;
+      if(/^\s*(?:[01]?\d|2[0-3])[:.]([0-5]\d)(?::[0-5]\d)?\s*$/.test(line))score+=10;
+      if(/authori[sz]|authorization|terminal|receipt#|aid:|card:|mastercard|visa|approval|auth(?:orization)?\s*code/i.test(line))score-=45;
+      const hh=String(m[1]).padStart(2,'0'),mm=m[2],ss=m[3]||'';
+      scored.push([score,hh+':'+mm,ss?hh+':'+mm+':'+ss:hh+':'+mm]);
+    }});
+    scored.sort((a,b)=>b[0]-a[0]);return scored[0]?{value:scored[0][1],raw:scored[0][2],score:scored[0][0]}:{value:'',raw:'',score:-999};
   }
   function parseDate(lines){
     const scored=[];
@@ -90,8 +100,8 @@
   function category(text,merchant){const s=(merchant+' '+text).toLowerCase();if(/konoba|restaurant|restoran|ristorante|trattoria|pizzeria|bistro|caffe|cafe|coffee|bar\b|pekara|bakery|food|meal|lunch|dinner/.test(s))return'식사';if(/taxi|uber|bolt|parking|parkir|gorivo|fuel|petrol|benz|diesel|autobus|bus\b|train|rail|toll|cestarina/.test(s))return'교통';if(/museum|muzej|ticket|vstopnica|ulaz|entry|entrance|tour|excursion|boat|ferry|funicular|zavod za kulturo/.test(s))return'입장·체험';if(/market|shop|store|supermarket|mercator|eurospin|dm\b|muller|pharmacy|ljekarn|souvenir/.test(s))return'공용물품';if(/camping|gasthaus|hotel/.test(s))return'기타';return'기타'}
   function purposeFor(cat,merchant){if(cat==='식사')return'식사';if(cat==='교통')return'교통비';if(cat==='입장·체험')return'입장·체험';if(cat==='간식·음료')return'간식·음료';if(cat==='공용물품')return'공용물품';return merchant?merchant+' 공동경비':'공동경비'}
   function parse(text,confidence=0,meta={}){
-    const n=normalize(text),lines=n.split('\n').map(x=>x.trim()).filter(Boolean),merchant=parseMerchant(lines,n),date=parseDate(lines),time=parseTime(lines),amount=parseAmount(lines);const currency=/€|\bEUR\b/i.test(n)?'EUR':(/₩|\bKRW\b/i.test(n)?'KRW':'EUR');const cat=category(n,merchant);
-    return {provider:'local',merchant,date,time,amount:Number.isFinite(amount)?amount:null,currency,category:cat,purpose:purposeFor(cat,merchant),confidence:Math.round(Number(confidence)||0),rawText:n,rotation:meta.rotation||0,passes:meta.passes||1};
+    const n=normalize(text),lines=n.split('\n').map(x=>x.trim()).filter(Boolean),merchant=parseMerchant(lines,n),date=parseDate(lines),timePick=parseTime(lines),amount=parseAmount(lines);const currency=/€|\bEUR\b/i.test(n)?'EUR':(/₩|\bKRW\b/i.test(n)?'KRW':'EUR');const cat=category(n,merchant);
+    return {provider:'local',merchant,date,time:timePick.value,timeRaw:timePick.raw,timeScore:timePick.score,amount:Number.isFinite(amount)?amount:null,currency,category:cat,purpose:purposeFor(cat,merchant),confidence:Math.round(Number(confidence)||0),rawText:n,rotation:meta.rotation||0,passes:meta.passes||1};
   }
   function quality(r,text){let s=0;if(r.amount!=null)s+=35;if(r.date)s+=28;if(r.merchant)s+=20;if(r.time)s+=5;if(/\b(total|totale|ukupno|skupaj|sum|pagato|pla[čc]ilo|eur)\b/i.test(text||''))s+=8;if((text||'').length>120)s+=4;return Math.min(100,s)}
 
@@ -111,7 +121,7 @@
     x.putImageData(d,0,0);return {url:c.toDataURL(mode==='bw'?'image/png':'image/jpeg',mode==='bw'?undefined:.96),width:w,height:h,rotation};
   }
   async function ocr(worker,image,psm,onProgress,stage){progressCb=p=>onProgress&&onProgress(p,stage);await worker.setParameters({tessedit_pageseg_mode:String(psm),preserve_interword_spaces:'1'});const r=await worker.recognize(image.url);return {text:r?.data?.text||'',confidence:r?.data?.confidence||0}}
-  function mergeResult(a,b){const text=[a?.rawText,b?.rawText].filter(Boolean).join('\n');const conf=Math.max(a?.confidence||0,b?.confidence||0);const r=parse(text,conf,{rotation:a?.rotation??b?.rotation??0,passes:(a?.passes||0)+(b?.passes||0)});if(b?.amount!=null&&(a?.amount==null||Math.abs(b.amount-a.amount)/Math.max(1,b.amount,a.amount)<.05))r.amount=b.amount;else if(r.amount==null)r.amount=a?.amount??b?.amount??null;if(!r.date)r.date=a?.date||b?.date||'';if(!r.time)r.time=a?.time||b?.time||'';if(!r.merchant)r.merchant=a?.merchant||b?.merchant||'';return r}
+  function mergeResult(a,b){const text=[a?.rawText,b?.rawText].filter(Boolean).join('\n');const conf=Math.max(a?.confidence||0,b?.confidence||0);const r=parse(text,conf,{rotation:a?.rotation??b?.rotation??0,passes:(a?.passes||0)+(b?.passes||0)});if(b?.amount!=null&&(a?.amount==null||Math.abs(b.amount-a.amount)/Math.max(1,b.amount,a.amount)<.05))r.amount=b.amount;else if(r.amount==null)r.amount=a?.amount??b?.amount??null;if(!r.date)r.date=a?.date||b?.date||'';const ta=Number(a?.timeScore??-999),tb=Number(b?.timeScore??-999);if(tb>ta+3&&b?.time){r.time=b.time;r.timeRaw=b.timeRaw||b.time;r.timeScore=tb}else if(ta>tb+3&&a?.time){r.time=a.time;r.timeRaw=a.timeRaw||a.time;r.timeScore=ta}else if(!r.time){const t=b?.time?b:a;r.time=t?.time||'';r.timeRaw=t?.timeRaw||t?.time||'';r.timeScore=t?.timeScore??-999}if(!r.merchant)r.merchant=a?.merchant||b?.merchant||'';return r}
   async function recognize(dataUrl,onProgress){
     const worker=await getWorker(p=>onProgress&&onProgress(p,'load'));const rotations=[0,270,90,180];let best=null,bestImage=null,attempt=0;
     for(const rotation of rotations){attempt++;const image=await renderVariant(dataUrl,rotation,'gray');const raw=await ocr(worker,image,6,(p)=>onProgress&&onProgress(Math.round(((attempt-1)+p/100)/Math.min(3,rotations.length)*70),`방향 ${rotation}°`),'orientation');const r=parse(raw.text,raw.confidence,{rotation,passes:1});const q=quality(r,raw.text);if(!best||q>best.q){best={...r,q};bestImage=image}if(q>=86)break;if(attempt>=3&&q>=70)break}
