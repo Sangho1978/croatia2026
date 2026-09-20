@@ -187,7 +187,45 @@
     XlsxLite.download('croatia2026_공동경비_정산_'+nowLocalDate()+'.xlsx',sheets);ledgerNotice='✓ Excel 정산파일을 만들었습니다. · 경비내역/참여자별상세/참여자별정산/명단 4개 시트';renderRecords();
   }
   async function deleteExpense(id){
-    if(deleteBusy)return;try{requireStaff();if(!storageReady)throw Error('공유 장부 연결을 확인해 주세요.');const current=records[id];if(!activeRecord(current))return;const label=`${shortDate(usageDateOf(current))} · ${current.merchant||current.title} · ${money(current.amountMinor,current.currency)}`;if(!confirm(label+'\n\n이 기록을 삭제할까요?\n삭제 후 장부 합계와 Excel 정산에서 제외됩니다.'))return;deleteBusy=true;ledgerNotice='삭제 처리 중…';renderRecords();const got=await Integration.api('expenses/'+TRIP_CODE+'/'+id,{headers:{'X-Firebase-ETag':'true'}});if(!got.data)throw Error('이미 삭제되었거나 기록을 찾지 못했습니다.');const r=got.data,uid=Integration.auth()?.currentUser?.uid;if(!uid)throw Error('Firebase 인증을 확인해 주세요.');const now=Date.now(),clock=timeFields(now),next={...r,deleted:true,deletedAt:{'.sv':'timestamp'},deletedBy:uid,deletedByName:currentUser.name,deletedClock:clock,updatedBy:uid,updatedByName:currentUser.name,updatedAt:{'.sv':'timestamp'},updatedClock:clock,revision:(r.revision||0)+1};const res=await Integration.api('expenses/'+TRIP_CODE+'/'+id,{method:'PUT',headers:{'if-match':got.etag},body:JSON.stringify(next)});records[id]=res.data||next;ledgerNotice='✓ 삭제했습니다. 장부 합계와 정산자료에서 제외됩니다.';renderRecords()}catch(e){ledgerNotice='삭제 실패 · '+e.message;renderRecords()}finally{deleteBusy=false}
+    if(deleteBusy)return;
+    try{
+      requireStaff();
+      if(!storageReady)throw Error('공유 장부 연결을 확인해 주세요.');
+      const current=records[id];
+      if(!activeRecord(current))return;
+      const label=`${shortDate(usageDateOf(current))} · ${current.merchant||current.title} · ${money(current.amountMinor,current.currency)}`;
+      if(!confirm(label+'\n\n이 기록을 삭제할까요?\n삭제 후 장부 합계와 Excel 정산에서 제외됩니다.'))return;
+      deleteBusy=true;
+      ledgerNotice='삭제 처리 중…';
+      renderRecords();
+      const uid=localStorage.getItem('fb_uid')||Integration.auth?.()?.currentUser?.uid;
+      if(!uid)throw Error('Firebase 인증을 확인해 주세요.');
+      const now=Date.now(),clock=timeFields(now);
+      // Legacy expense rows may not match every field in the newest schema.
+      // Patch only the tombstone/audit fields instead of PUT-ing the full old row again.
+      const patch={
+        id:current.id||id,
+        deleted:true,
+        deletedAt:now,
+        deletedBy:uid,
+        deletedByName:currentUser.name,
+        deletedClock:clock,
+        updatedBy:uid,
+        updatedByName:currentUser.name,
+        updatedAt:now,
+        updatedClock:clock,
+        revision:(Number(current.revision)||0)+1
+      };
+      await Integration.api('expenses/'+TRIP_CODE+'/'+id,{method:'PATCH',body:JSON.stringify(patch)});
+      records[id]={...current,...patch};
+      ledgerNotice='✓ 삭제했습니다. 장부 합계와 정산자료에서 제외됩니다.';
+      renderRecords();
+      if(window.AppFeedback?.toast)AppFeedback.toast('공동경비 기록을 삭제했습니다.','success');
+    }catch(e){
+      ledgerNotice='삭제 실패 · '+e.message;
+      renderRecords();
+      if(window.AppFeedback?.toast)AppFeedback.toast('삭제 실패 · '+e.message,'error');
+    }finally{deleteBusy=false}
   }
   async function edit(id){
     try{requireStaff();if(!storageReady)throw Error('공유 저장 연결을 확인해 주세요.');if(formHasValues()&&!confirm('작성 중인 입력 대신 이 공유 기록을 불러올까요?'))return;const r=await Integration.api('expenses/'+TRIP_CODE+'/'+id,{headers:{'X-Firebase-ETag':'true'}});if(!Integration.canManageFinance()||!r.data)return;

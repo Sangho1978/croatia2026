@@ -156,3 +156,10 @@ Preview screenshots use mock FX, GPS, and database responses (not live participa
 - 각 기록에 등록(저장) 시각과 마지막 수정 시각을 현지/한국 기준으로 표시합니다.
 - `Excel 정산파일`은 오프라인에서도 실제 `.xlsx`를 생성하며 4개 시트를 포함합니다: 경비내역, 참여자별상세, 참여자별정산, 참여자명단.
 - 참여자별 분담액과 요약 합계는 Excel 수식과 계산값을 함께 기록합니다.
+
+
+## MIX19 공동경비 삭제 수정
+- 기존 전체 레코드 PUT 삭제표시를 부분 PATCH 방식으로 변경했습니다.
+- 과거 스키마로 저장된 경비도 merchant/OCR/환율 필드 차이 때문에 삭제가 막히지 않도록 Rules의 삭제 분기를 분리했습니다.
+- 삭제는 soft delete이며 날짜별 장부/합계/CSV/Excel 정산에서 제외됩니다.
+- 한상호·이상미만 앱 UI에서 삭제할 수 있습니다.
