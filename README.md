@@ -108,3 +108,12 @@ Preview screenshots use mock FX, GPS, and database responses (not live participa
 - 앱이 완전히 종료·정지된 상태의 진짜 푸시는 현재 정적 GitHub Pages+Realtime Database 구조만으로는 불가하며 Web Push/FCM 발송 백엔드가 필요.
 - 지도 개인 최근시각은 좌표가 한국이면 한국시간, 크로아티아/이탈리아면 해당 현지시간 하나만 표시.
 - 출석 명단에서 변태윤은 조장+발표를 동시에 표시.
+
+## MIX13 공동경비 UX (2026-09-20)
+- 공동경비를 `경비 등록` / `날짜별 장부`로 분리
+- 영수증 촬영/이미지 선택 시 브라우저에서 OCR을 실행해 날짜·사용처·금액·통화·분류를 자동 입력
+- 자동 입력칸은 노란색으로 표시하며 저장 전 사람이 직접 수정 가능
+- OCR 원문은 Firebase에 저장하지 않고, 확인한 필드와 OCR 사용 여부/신뢰도만 경비 기록에 저장
+- 날짜별로 건수·EUR 합계·KRW 합계를 조회하고 10/12~10/19 날짜 탭으로 빠르게 이동
+- 기존 Firebase `expenses` 및 `expenseReceipts` 경로 유지. 기존 Rules 변경 없음
+- OCR은 처음 사용할 때 Tesseract.js 모듈을 외부 CDN에서 불러오므로 인터넷 연결이 필요하며, 실패해도 수동 입력과 영수증 저장은 계속 가능
