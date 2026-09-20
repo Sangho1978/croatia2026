@@ -49,7 +49,7 @@
       return {data,etag:res.headers.get('ETag')};
     }catch(e){if(e.name==='AbortError')throw Error('연결 시간이 초과되었습니다. 입력 내용은 초안으로 보관됩니다.');throw e}finally{clearTimeout(timer)}
   }
-  function badges(u){let b='';if(u.leader)b+='<span class="role-badge group-lead">조장</span>';if(u.presenter&&!u.leader)b+='<span class="role-badge presenter">발표</span>';if(u.tripRole)b+='<span class="role-badge staff">연수 '+escape(u.tripRole)+'</span>';return b}
+  function badges(u){let b='';if(u.leader)b+='<span class="role-badge group-lead">조장</span>';if(u.presenter)b+='<span class="role-badge presenter">발표</span>';if(u.tripRole)b+='<span class="role-badge staff">연수 '+escape(u.tripRole)+'</span>';return b}
   function personCard(u){
     const tel='+82'+u.phone.replace(/\D/g,'').slice(1);
     return `<article class="person-card ${u.leader?'is-leader':''}" data-person="${escape(u.name)}"><div class="person-title"><b>${escape(u.name)}</b>${badges(u)}</div><div class="person-org">${escape(u.org)} · ${escape(u.title)}</div><div class="person-meta">${u.birthYear?u.birthYear+'년생 · 만 '+u.age+'세':'생년·만 나이 미제공'}${u.group===0?' · 인솔 교수':''}</div><div class="person-actions"><a href="tel:${tel}" aria-label="${escape(u.name)}에게 전화">☎ 전화</a><button type="button" data-person-location="${u.slot}">⌖ 위치</button><button type="button" data-person-phone="${escape(u.phone)}">번호 보기</button></div></article>`;
@@ -72,7 +72,7 @@
   function applyIdentity(){
     document.querySelectorAll('[data-staff-only]').forEach(el=>el.hidden=!isStaff());
     document.querySelectorAll('[data-finance-only]').forEach(el=>el.hidden=!canManageFinance());
-    const e=document.getElementById('tripRoleText');if(e)e.textContent=currentUser?[(currentUser.group?currentUser.group+'조':'인솔 교수'),currentUser.leader?'조장':'',currentUser.presenter&&!currentUser.leader?'발표':'',currentUser.tripRole?'연수 '+currentUser.tripRole:''].filter(Boolean).join(' · '):'';
+    const e=document.getElementById('tripRoleText');if(e)e.textContent=currentUser?[(currentUser.group?currentUser.group+'조':'인솔 교수'),currentUser.leader?'조장':'',currentUser.presenter?'발표':'',currentUser.tripRole?'연수 '+currentUser.tripRole:''].filter(Boolean).join(' · '):'';
     const box=document.getElementById('myFirebaseUid');if(box){box.hidden=true;box.textContent=''}
     if(!canManageFinance()&&window.AppRouter?.current==='expenses')AppRouter.go('today');
     window.dispatchEvent(new CustomEvent('cro-role-ready'));

@@ -1,78 +1,86 @@
-/* MIX06: latest published EUR/KRW reference rates, NOT a live trading feed.
- * Sources: frankfurter.dev (ECB) / exchangerate-api.com open access.
- * No API key. Cache only a validated successful response; never invent a rate.
+/* MIX11: Hana Bank EUR/KRW base-rate service.
+ * Priority: optional server endpoint -> public Hana-published market page mirror -> bundled last verified Hana snapshot.
+ * Never relabel ECB/market rates as Hana Bank rates.
+ * The browser checks every 15 minutes while visible; bank publication itself may not change that often.
  */
 (function(){
   'use strict';
-  const KEY='cro.fx.reference.v6', HOUR=3600000, RETRY=300000;
-  const supported=new Set(['ecb-v2','ecb-v1','er-open']);
+  const KEY='cro.fx.hana.v11', REFRESH=15*60*1000, RETRY=2*60*1000;
+  const MIRROR='https://r.jina.ai/https://www.etoday.co.kr/market/exchange-rates?varCurCd=EUR';
+  const LOCAL='data/hana-eur.json';
   let value=null,mode='empty',attempt=0,lastError='',inFlight=null,log=[];
-  const channels=[
-    {id:'ecb-v2',label:'ECB / Frankfurter',url:'https://api.frankfurter.dev/v2/rate/eur/krw?providers=ecb',parse:j=>({rate:j.rate,asOf:j.date,base:j.base,quote:j.quote})},
-    {id:'ecb-v1',label:'ECB / Frankfurter (v1)',url:'https://api.frankfurter.dev/v1/latest?base=EUR&symbols=KRW',parse:j=>({rate:j.rates?.KRW,asOf:j.date,base:j.base,quote:'KRW'})},
-    {id:'er-open',label:'ExchangeRate-API',url:'https://open.er-api.com/v6/latest/EUR',parse:j=>{
-      if(j.result!=='success'||!Number.isFinite(j.time_last_update_unix))throw Error('Invalid provider response');
-      return {rate:j.rates?.KRW,asOf:new Date(j.time_last_update_unix*1000).toISOString().slice(0,10),base:j.base_code,quote:'KRW'};
-    }}
-  ];
+  function num(v){const n=typeof v==='number'?v:Number(String(v??'').replace(/,/g,''));return Number.isFinite(n)?n:null}
   function valid(x){
-    if(!x||typeof x.rate!=='number'||!Number.isFinite(x.rate)||x.rate<=0)return false;
-    if(typeof x.asOf!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(x.asOf))return false;
-    const d=Date.parse(x.asOf+'T00:00:00Z');
-    return Number.isFinite(d)&&new Date(d).toISOString().slice(0,10)===x.asOf&&d<=Date.now()+86400000;
+    const r=num(x?.rate??x?.baseRate);if(!x||r===null||r<900||r>2500)return false;
+    const d=x.asOf||x.date;if(typeof d!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(d))return false;
+    return true;
   }
-  try{const x=JSON.parse(localStorage.getItem(KEY)||'null');if(valid(x)&&supported.has(x.provider)&&Number.isFinite(x.checkedAt)&&x.checkedAt<=Date.now()+60000){value=x;mode='cached'}}catch(_){}
-  function set(id,text){const el=document.getElementById(id);if(el)el.textContent=text;}
-  function time(t){return new Intl.DateTimeFormat('ko-KR',{timeZone:'Europe/Zagreb',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(t)}
-  function ageDays(){return value?Math.floor((Date.now()-Date.parse(value.asOf+'T00:00:00Z'))/86400000):null}
+  function normalize(x,provider,source){
+    if(!x)return null;const r=num(x.rate??x.baseRate),d=x.asOf||x.date;
+    const out={rate:r,baseRate:r,asOf:d,date:d,announcedAt:x.announcedAt||x.time||'',round:num(x.round),checkedAt:Date.now(),provider,source:source||x.source||'하나은행',sourceUrl:x.sourceUrl||''};
+    if(!valid(out))throw Error('하나은행 EUR 매매기준율 응답 형식 확인 필요');return out;
+  }
+  function koreaYear(){return +new Intl.DateTimeFormat('en',{timeZone:'Asia/Seoul',year:'numeric'}).format(new Date())}
+  function textOf(raw){
+    if(!raw)return ''; if(!/[<>]/.test(raw))return raw.replace(/\s+/g,' ').trim();
+    try{const d=new DOMParser().parseFromString(raw,'text/html');d.querySelectorAll('script,style,noscript').forEach(x=>x.remove());return (d.body?.textContent||raw).replace(/\s+/g,' ').trim()}catch(_){return raw.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim()}
+  }
+  function parsePublishedPage(raw){
+    const t=textOf(raw);if(!/하나은행/.test(t)||!/(유로\s*EUR|EUR\s*유로|유럽.*유로)/i.test(t))throw Error('하나은행 EUR 표기를 찾지 못했습니다.');
+    let m=t.match(/유로\s*EUR\s*([\d,]+(?:\.\d+)?)/i)||t.match(/EUR\s*([\d,]+(?:\.\d+)?)/i);
+    if(!m)throw Error('EUR 매매기준율을 찾지 못했습니다.');
+    const rate=num(m[1]);if(rate===null||rate<900||rate>2500)throw Error('EUR 환율 범위를 확인해 주세요.');
+    const stamp=t.match(/(\d{2})\.(\d{2})\s+(\d{2}:\d{2})\s+하나은행\s*고시회차\s*(\d+)\s*회/i);
+    let asOf='',announcedAt='',round=null;
+    if(stamp){const y=koreaYear();asOf=`${y}-${stamp[1]}-${stamp[2]}`;announcedAt=stamp[3];round=+stamp[4]}
+    if(!asOf){const d=t.match(/(20\d{2})[-./](\d{2})[-./](\d{2})/);if(d)asOf=`${d[1]}-${d[2]}-${d[3]}`}
+    if(!asOf)throw Error('하나은행 고시 기준일을 확인하지 못했습니다.');
+    return normalize({rate,asOf,announcedAt,round,sourceUrl:'https://www.etoday.co.kr/market/exchange-rates?varCurCd=EUR'},'hana-public-mirror','하나은행 고시 · 공개페이지 중계');
+  }
+  try{const x=JSON.parse(localStorage.getItem(KEY)||'null');if(valid(x)){value=x;mode='cached'}}catch(_){ }
+  function set(id,text){const el=document.getElementById(id);if(el)el.textContent=text}
+  function localTime(t){return new Intl.DateTimeFormat('ko-KR',{timeZone:'Asia/Seoul',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(new Date(t))}
+  function ageDays(){return value?Math.floor((Date.now()-Date.parse(value.asOf+'T00:00:00+09:00'))/86400000):null}
+  function sourceDetail(){if(!value)return '하나은행 EUR 매매기준율';const r=value.round?` · ${value.round}회`:'';const t=value.announcedAt?` ${value.announcedAt}`:'';return `하나은행 · ${value.asOf.slice(5).replace('-','/')} ${t}${r}`.replace(/\s+/g,' ').trim()}
   function paint(){
     const rate=value?.rate,old=value&&ageDays()>4;
-    set('liveFxMain',rate?'\u20ac1 = \u20a9'+rate.toLocaleString('ko-KR',{minimumFractionDigits:2,maximumFractionDigits:2}):'\ud658\uc728 \uc5f0\uacb0 \ub300\uae30');
-    set('fxUpdated',value?'\uae30\uc900\uc77c '+value.asOf+'\n\uc218\uc2e0 '+time(value.checkedAt):'\uc815\uc0c1 \uc218\uc2e0\uac12 \uc5c6\uc74c');
-    set('fxSource',value?value.source+(value.provider==='er-open'?' \u00b7 \ub300\uccb4 \ucd9c\ucc98':' \u00b7 \uae30\uc900\ud658\uc728'):'\ucd5c\uc2e0 EUR/KRW \uae30\uc900\ud658\uc728');
-    const status=mode==='loading'?'\ucd5c\uc2e0 \uacf5\uc2dc\uac12 \uc870\ud68c \uc911\u2026':mode==='error'?(value?'\uc5f0\uacb0 \uc2e4\ud328 \u00b7 \ub9c8\uc9c0\ub9c9 \uc815\uc0c1 \uc218\uc2e0\uac12 \ud45c\uc2dc. ':'\uc5f0\uacb0 \uc2e4\ud328 \u00b7 \uc784\uc758 \ud658\uc728\uc740 \ud45c\uc2dc\ud558\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4. ')+lastError:mode==='offline'?'\uc624\ud504\ub77c\uc778 \u00b7 '+(value?'\uc800\uc7a5\ub41c \ud658\uc728\uc785\ub2c8\ub2e4.':'\uc800\uc7a5\ub41c \ud658\uc728\uc774 \uc5c6\uc2b5\ub2c8\ub2e4.'):(mode==='cached'?'\uc800\uc7a5\ub41c \ucd5c\uadfc \uacf5\uc2dc\uac12 \u00b7 ':'\uc870\ud68c \uc644\ub8cc \u00b7 ')+(old?'\uae30\uc900\uc77c\uc774 \uc624\ub798\ub418\uc5c8\uc2b5\ub2c8\ub2e4. ':'')+'\ud558\ub8e8 \ub2e8\uc704 \uacf5\uc2dc\uac12\uc785\ub2c8\ub2e4. \ud734\uc77c\uc5d0\ub294 \uac19\uc740 \uac12\uc77c \uc218 \uc788\uc2b5\ub2c8\ub2e4.';
+    set('liveFxMain',rate?`€1 = ₩${rate.toLocaleString('ko-KR',{minimumFractionDigits:2,maximumFractionDigits:2})}`:'하나은행 환율 연결 대기');
+    set('fxUpdated',value?sourceDetail():'하나은행 최신 고시 확인 중');
+    set('fxSource',value?`하나은행 EUR 매매기준율 · ${mode==='snapshot'?'저장 스냅샷':'15분 자동 확인'}`:'하나은행 EUR 매매기준율');
+    let status='';
+    if(mode==='loading')status='하나은행 최신 고시값 확인 중…';
+    else if(mode==='error')status=(value?'연결 실패 · 마지막 하나은행 확인값을 표시합니다. ':'하나은행 환율을 불러오지 못했습니다. ')+lastError;
+    else if(mode==='offline')status='오프라인 · '+(value?'마지막 하나은행 확인값 표시':'저장된 하나은행 환율 없음');
+    else status=(mode==='snapshot'?'내장된 마지막 확인값 · ':'조회 완료 · ')+(old?'기준일이 오래되었습니다. ':'')+'하나은행 매매기준율은 고시 회차에 따라 변경됩니다.';
     set('fxStatus',status);
-    set('fxDiagnostics',log.length?log.map(x=>x.source+': '+x.message).join('\n'):'\uc790\ub3d9 \ud655\uc778 1\uc2dc\uac04 \uac04\uaca9 \u00b7 \uc2e4\ud328 \uc2dc \ubcf4\uc870 \uacbd\ub85c\ub85c \uc804\ud658');
-    const b=document.getElementById('fxRefresh');if(b){b.disabled=mode==='loading';b.textContent=mode==='loading'?'\ud655\uc778 \uc911\u2026':'\ud658\uc728 \uc0c8\ub85c\uace0\uce68'}
-    // All guide conversions share this source; no separate guessed conversion.
+    const checked=value?.checkedAt?localTime(value.checkedAt):'-';
+    set('fxDiagnostics',log.length?log.map(x=>x.source+': '+x.message).join('\n'):`15분 간격 확인 · 마지막 확인 ${checked}`);
+    const b=document.getElementById('fxRefresh');if(b){b.disabled=mode==='loading';b.textContent=mode==='loading'?'확인 중…':'하나은행 환율 새로고침'}
     if(typeof updateGuidePrices==='function')updateGuidePrices(rate??null);
     window.dispatchEvent(new CustomEvent('cro-fx',{detail:state()}));
   }
   function state(){return {value:value?{...value}:null,mode,lastError,attempt,old:!!value&&ageDays()>4,log:log.map(x=>({...x}))}}
-  async function get(channel){
-    const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),6000);
-    try{
-      const r=await fetch(channel.url,{method:'GET',cache:'no-store',credentials:'omit',referrerPolicy:'no-referrer',signal:ctrl.signal});
-      if(!r.ok)throw Error('HTTP '+r.status);
-      const j=await r.json(),v=channel.parse(j);
-      if(!valid(v)||String(v.base).toUpperCase()!=='EUR'||String(v.quote).toUpperCase()!=='KRW')throw Error('Invalid EUR/KRW payload');
-      if(value&&v.asOf<value.asOf)throw Error('Older reference date than saved value');
-      return {...v,checkedAt:Date.now(),provider:channel.id,source:channel.label};
-    }finally{clearTimeout(timer)}
+  async function getJsonEndpoint(url){
+    const c=new AbortController(),timer=setTimeout(()=>c.abort(),8000);try{const r=await fetch(url,{cache:'no-store',credentials:'omit',signal:c.signal});if(!r.ok)throw Error('HTTP '+r.status);return normalize(await r.json(),'hana-endpoint','하나은행 API/중계 endpoint')}finally{clearTimeout(timer)}
   }
+  async function getMirror(){
+    const c=new AbortController(),timer=setTimeout(()=>c.abort(),8000);try{const r=await fetch(MIRROR,{cache:'no-store',credentials:'omit',signal:c.signal});if(!r.ok)throw Error('HTTP '+r.status);return parsePublishedPage(await r.text())}finally{clearTimeout(timer)}
+  }
+  async function getSnapshot(){const r=await fetch(LOCAL+'?v=20260920-MIX11',{cache:'no-store'});if(!r.ok)throw Error('내장 스냅샷 없음');const j=await r.json();return normalize(j,'hana-snapshot','하나은행 고시 · 내장 스냅샷')}
   async function refresh(force=false){
-    if(inFlight)return inFlight;
-    if(!navigator.onLine){mode='offline';paint();return state()}
-    if(document.hidden&&!force)return state();
-    const now=Date.now();
-    if(force&&now-attempt<8000&&mode!=='empty'){return state()}
-    if(!force&&value&&now-value.checkedAt<HOUR&&mode!=='error'&&mode!=='offline'){paint();return state()}
-    if(!force&&mode==='error'&&now-attempt<RETRY)return state();
-    attempt=now;mode='loading';log=[];lastError='';paint();
+    if(inFlight)return inFlight;if(!navigator.onLine){mode='offline';paint();return state()}if(document.hidden&&!force)return state();
+    const now=Date.now();if(force&&now-attempt<7000&&mode!=='empty')return state();if(!force&&value&&now-value.checkedAt<REFRESH&&mode!=='error'&&mode!=='offline'&&mode!=='snapshot'){paint();return state()}if(!force&&mode==='error'&&now-attempt<RETRY)return state();
+    attempt=now;mode='loading';lastError='';log=[];paint();
     inFlight=(async()=>{
-      for(const c of channels){
-        try{const v=await get(c);value=v;mode='ready';log.push({source:c.label,message:'\uc815\uc0c1 \uc218\uc2e0 \u00b7 '+v.asOf});try{localStorage.setItem(KEY,JSON.stringify(v))}catch(_){}paint();return state()}
-        catch(e){log.push({source:c.label,message:e.name==='AbortError'?'\uc751\ub2f5 \uc2dc\uac04 \ucd08\uacfc':e instanceof TypeError?'\ub124\ud2b8\uc6cc\ud06c/CORS \uc5f0\uacb0 \ud655\uc778':e.message||'\uc751\ub2f5 \uc624\ub958'});}
-      }
-      mode='error';lastError='\uc544\ub798 \ucd9c\ucc98\u00b7\uc5f0\uacb0 \ud655\uc778\uc5d0\uc11c \uc0c1\ud0dc\ub97c \ubcfc \uc218 \uc788\uc2b5\ub2c8\ub2e4.';paint();return state();
-    })();
-    try{return await inFlight}finally{inFlight=null}
+      const endpoint=(typeof HANA_FX_ENDPOINT==='string'?HANA_FX_ENDPOINT.trim():'');
+      if(endpoint){try{const v=await getJsonEndpoint(endpoint);value=v;mode='ready';log.push({source:'하나은행 endpoint',message:`정상 · ${sourceDetail()}`});localStorage.setItem(KEY,JSON.stringify(v));paint();return state()}catch(e){log.push({source:'하나은행 endpoint',message:e.name==='AbortError'?'시간 초과':e.message||'오류'})}}
+      try{const v=await getMirror();value=v;mode='ready';log.push({source:'공개페이지 중계',message:`정상 · ${sourceDetail()}`});localStorage.setItem(KEY,JSON.stringify(v));paint();return state()}catch(e){log.push({source:'공개페이지 중계',message:e.name==='AbortError'?'시간 초과':'조회 실패 · '+(e.message||'오류')})}
+      try{const v=await getSnapshot();if(!value||v.asOf>=value.asOf)value=v;mode='snapshot';log.push({source:'내장 스냅샷',message:`사용 · ${sourceDetail()}`});if(value)localStorage.setItem(KEY,JSON.stringify(value));paint();return state()}catch(e){log.push({source:'내장 스냅샷',message:e.message||'오류'})}
+      mode='error';lastError='하나은행 공식/중계 연결 설정을 확인해 주세요.';paint();return state();
+    })();try{return await inFlight}finally{inFlight=null}
   }
-  window.FxService={refresh,get state(){return state()},paint};
+  window.FxService={refresh,get state(){return state()},paint,parsePublishedPage};
   document.addEventListener('click',e=>{if(e.target.closest('#fxRefresh'))refresh(true)});
   document.addEventListener('DOMContentLoaded',()=>{paint();refresh(false);setInterval(()=>{if(!document.hidden)refresh(false)},60000)});
-  document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh(false)});
-  window.addEventListener('online',()=>refresh(false));
-  window.addEventListener('offline',()=>{mode='offline';paint()});
-  window.addEventListener('pageshow',()=>{if(document.readyState==='complete')refresh(false)});
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh(false)});window.addEventListener('online',()=>refresh(false));window.addEventListener('offline',()=>{mode='offline';paint()});window.addEventListener('pageshow',()=>refresh(false));
 })();

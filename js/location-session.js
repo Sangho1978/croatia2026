@@ -133,7 +133,7 @@
       for(const u of list){
         const r=locCache[u.slot],di=distanceInfo(r,u),s=visibleState(u,r),me=u.slot===currentUser?.slot;
         const dist=di.label.replace('\uc774\uc804 \uc704\uce58 \uae30\uc900 ','').replace('\uc624\ucc28\ubc94\uc704 \ub0b4 ','');
-        const meta=rosterMode==='detail'?`${statusOf(r)}${valid(r)?' \u00b7 '+textClock(r.ts)+' ('+ago(r.ts)+') \u00b7 GPS \uc57d '+Math.round(r.accuracy||0)+'m':''}`:s.detail;
+        const meta=rosterMode==='detail'?`${statusOf(r)}${valid(r)?' \u00b7 '+textClock(r.ts)+' ('+ago(r.ts)+') \u00b7 GPS \uc57d '+Math.round(r.accuracy||0)+'m':''}`:(valid(r)?'최근 '+textClock(r.ts):s.detail);
         html+=`<button class="loc5-person ${u.leader?'is-leader':''} ${s.on?'is-on':'is-off'}" type="button" data-location-slot="${u.slot}" onclick="locOpenPerson('${u.slot}')" aria-label="${esc(u.name)}, ${s.label}, ${esc(di.label)}, \uc0c1\uc138\ubcf4\uae30"><span class="loc5-name"><b>${esc(u.name)}</b>${u.leader?'<small>\uc870\uc7a5</small>':''}${me?'<small>\ub098</small>':''}</span><span class="loc5-status">${s.label}</span><span class="distance-value" data-metres="${di.metres??''}" title="${esc(di.label)}">${esc(dist)}</span><span class="loc5-meta">${esc(meta)}</span></button>`;
       }
       html+='</div></section>';

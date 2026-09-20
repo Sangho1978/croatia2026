@@ -205,3 +205,6 @@ body.mixed-app [data-busy="true"]{cursor:progress}
     height:min(72px,calc((100dvh - 44px)/5))!important;min-height:44px!important;flex:0 0 auto!important;
   }
 }
+
+/* MIX11: compact expected-temperature typography */
+body.mixed-app .compact-top .brief-weather strong{letter-spacing:-.08em!important;font-variant-numeric:tabular-nums;font-feature-settings:'tnum' 1;white-space:nowrap}

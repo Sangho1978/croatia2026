@@ -23,13 +23,13 @@
     queued=false;
     const weather=$('liveWeatherMain')?.textContent||'',digits=weather.match(/(-?\d+(?:\.\d+)?)(?:\/(-?\d+(?:\.\d+)?))?\u00b0/);
     const symbol=weather.match(/[\u2600\u2601\u26c8\u{1f324}\u{1f327}\u{1f328}\u{1f32b}]/u)?.[0]||'\u2601';
-    set('briefWeather',digits?symbol+' '+digits[1]+'\u00b0':'\u2601 \ub0a0\uc528');
+    set('briefWeather',digits?symbol+digits[1]+'\u00b0':'\u2601 \ub0a0\uc528');
     set('briefWeatherNote',/\ucc38\uace0|\uc608\uc0c1/.test(weather)?'\uc608\uc0c1\ub0a0\uc528':digits?'\ub0a0\uc528 \uc0c1\uc138':'\ud655\uc778 \uc911');
     const w=document.querySelector('.brief-weather');if(w){w.title=weather;w.setAttribute('aria-label',weather+' \u00b7 \ub0a0\uc528 \uc0c1\uc138')}
     set('briefLocal',$('clockLocal')?.textContent||'--:--');set('briefKorea',$('clockKorea')?.textContent||'--:--');
     const fx=window.FxService?.state,v=fx?.value;
     set('briefFx',v?'\u20a9'+Math.round(v.rate).toLocaleString('ko-KR'):'\u20ac1 \u2014');
-    set('briefFxNote',v?(fx.mode==='error'||fx.mode==='offline'?'\uc800\uc7a5 ':fx.old?'\uc774\uc804 ':'\u20ac1 \u00b7 ')+v.asOf.slice(5).replace('-','/'):'\uc5f0\uacb0 \ub300\uae30');
+    set('briefFxNote',v?'하나 '+v.asOf.slice(5).replace('-','/'):'하나 연결 대기');
     const fxbtn=document.querySelector('.brief-fx');if(fxbtn)fxbtn.title=$('liveFxMain')?.textContent+' \u00b7 '+($('fxUpdated')?.textContent||'');
     const state=window.LocationSession?.state;
     let label='OFF',note='\ub85c\uadf8\uc778 \uc804';

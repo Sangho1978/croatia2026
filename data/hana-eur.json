@@ -1,0 +1,14 @@
+{
+  "currency": "EUR",
+  "unit": 1,
+  "baseRate": 1593.98,
+  "rate": 1593.98,
+  "date": "2026-09-18",
+  "asOf": "2026-09-18",
+  "announcedAt": "21:07",
+  "round": 1335,
+  "source": "하나은행 고시 · 이투데이 공개페이지",
+  "sourceUrl": "https://www.etoday.co.kr/market/exchange-rates?varCurCd=EUR",
+  "verifiedAt": "2026-09-20T05:30:00Z",
+  "note": "2026-09-20 확인 당시 최신 하나은행 EUR 매매기준율. 휴일에는 직전 영업일 값이 유지될 수 있음."
+}

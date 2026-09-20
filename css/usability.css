@@ -35,7 +35,7 @@ body.mixed-app .loc5-person.is-leader{grid-column:1/-1;background:#edf3f6}
 .loc5-status{font-size:.72rem;font-weight:750;color:#78909b;align-self:start}.loc5-person.is-on .loc5-status{color:var(--group);font-weight:950}
 body.mixed-app #locRoster .loc5-person .distance-value{font-size:.8rem;line-height:1.4;grid-column:1/-1;margin:0;color:#385f74;overflow-wrap:anywhere}
 .loc5-meta{grid-column:1/-1;font-size:.69rem;color:#778c96;line-height:1.4;overflow-wrap:anywhere}
-body.mixed-app #locRoster.is-compact .loc5-person:not(.is-leader) .loc5-meta{display:none}
+body.mixed-app #locRoster.is-compact .loc5-person .loc5-meta{display:block;font-size:.64rem;line-height:1.3;color:#718690}
 body.mixed-app #locRoster.is-detail .loc5-members{grid-template-columns:1fr}
 body.mixed-app #locRoster.is-detail .loc5-person{min-height:98px}
 .loc5-group[data-location-group="0"]{grid-column:1/-1}.loc5-group[data-location-group="0"] .loc5-members{grid-template-columns:1fr}

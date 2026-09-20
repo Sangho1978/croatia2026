@@ -534,3 +534,9 @@ body.spa-mode.login-ready > nav.bottom > .app-nav-btn{
   align-self:stretch!important;
   box-sizing:border-box!important;
 }
+
+/* MIX11: denser forecast cards; temperatures stay visually grouped */
+body.mixed-app .hourly-weather,body.mixed-app .day-hourly{gap:4px!important}
+body.mixed-app .hourly-item,body.mixed-app .day-hour{flex-basis:80px!important;padding:8px 5px!important}
+body.mixed-app .hourly-temp,body.mixed-app .day-hour .temp{letter-spacing:-.045em;font-variant-numeric:tabular-nums}
+@media(max-width:430px){body.mixed-app .hourly-item,body.mixed-app .day-hour{flex-basis:76px!important}}
