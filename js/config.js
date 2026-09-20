@@ -5,3 +5,6 @@ const TRIP_CODE='SNU17-CRO-2026-A7K9P4';
 
 // Optional: server-side endpoint returning Hana EUR base rate JSON. Keep secrets out of the browser.
 const HANA_FX_ENDPOINT='';
+
+// Optional secure backend for high-accuracy AI receipt extraction. Never place an OpenAI API key in this browser file.
+const AI_RECEIPT_ENDPOINT='';

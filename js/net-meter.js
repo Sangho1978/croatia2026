@@ -28,7 +28,7 @@
   function changed(){if(!paintQueued){paintQueued=true;queueMicrotask(()=>{paintQueued=false;paint()})}if(!flushTimer)flushTimer=setTimeout(flush,600)}
   window.fetch=async function(input,options){
     let url='';try{url=typeof input==='string'?input:input.url||String(input)}catch(_){}
-    const track=/firebasedatabase\.app|firebaseio\.com|identitytoolkit\.googleapis\.com|securetoken\.googleapis\.com|open-meteo\.com|frankfurter\.(app|dev)|open\.er-api\.com/.test(url);
+    const track=/firebasedatabase\.app|firebaseio\.com|identitytoolkit\.googleapis\.com|securetoken\.googleapis\.com|open-meteo\.com|frankfurter\.(app|dev)|open\.er-api\.com|cloudfunctions\.net|run\.app/.test(url);
     if(track){totals.sent+=bytes(options?.body);totals.requests++;changed()}
     const res=await nativeFetch(input,options);
     if(track){res.clone().arrayBuffer().then(b=>{totals.received+=b.byteLength;changed()}).catch(()=>{})}

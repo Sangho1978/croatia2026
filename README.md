@@ -117,3 +117,12 @@ Preview screenshots use mock FX, GPS, and database responses (not live participa
 - 날짜별로 건수·EUR 합계·KRW 합계를 조회하고 10/12~10/19 날짜 탭으로 빠르게 이동
 - 기존 Firebase `expenses` 및 `expenseReceipts` 경로 유지. 기존 Rules 변경 없음
 - OCR은 처음 사용할 때 Tesseract.js 모듈을 외부 CDN에서 불러오므로 인터넷 연결이 필요하며, 실패해도 수동 입력과 영수증 저장은 계속 가능
+
+
+## MIX14 공동경비 개선
+- 영수증 AI 비전 판독 endpoint 지원 + 기기 OCR fallback
+- 사용일/시각/상호/최종금액/통화/분류 자동 추출 후 수동 수정
+- EUR 지출은 하나은행 매매기준율 기준 원화 환산 추정값을 저장
+- 최근 출석체크 명단을 공동경비 참여자로 한 번에 불러오기
+- 자동 얼굴 식별은 사용하지 않음
+- MIX14 공동경비의 추가 저장필드(사용시각·OCR 방식/신뢰도·하나환율·원화추정·현지/한국 저장시각)를 허용하도록 경비 Rules도 갱신했습니다. 기존 전체 Rules를 덮어쓰지 말고 `tools/merge-rules.html`로 한 번 병합해 게시하세요. 자세한 내용은 `FIREBASE_MIX14.md` 참고.

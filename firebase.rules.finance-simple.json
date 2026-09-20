@@ -402,8 +402,68 @@
               ".validate": false
             }
           },
-          "$other": {
-            ".validate": false
+          "time": {
+            ".validate": "newData.isString() && (newData.val() === '' || newData.val().matches(/^([01][0-9]|2[0-3]):[0-5][0-9]$/))"
+          },
+          "merchant": {
+            ".validate": "newData.isString() && newData.val().length <= 120"
+          },
+          "receiptExtracted": {
+            ".validate": "newData.isBoolean()"
+          },
+          "receiptOcrProvider": {
+            ".validate": "newData.isString() && newData.val().length <= 24"
+          },
+          "receiptOcrConfidence": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100"
+          },
+          "fxRate": {
+            ".validate": "newData.isNumber() && newData.val() >= 500 && newData.val() <= 5000"
+          },
+          "fxRateDate": {
+            ".validate": "newData.isString() && newData.val().matches(/^\\d{4}-\\d{2}-\\d{2}$/)"
+          },
+          "fxExact": {
+            ".validate": "newData.isBoolean()"
+          },
+          "fxBasis": {
+            ".validate": "newData.isString() && newData.val().length <= 160"
+          },
+          "fxSource": {
+            ".validate": "newData.isString() && newData.val().length <= 160"
+          },
+          "estimatedKrw": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000000000000 && newData.val() % 1 === 0"
+          },
+          "createdClock": {
+            ".validate": "newData.hasChildren(['epoch','croatia','korea'])",
+            "epoch": {
+              ".validate": "newData.isNumber() && newData.val() > 0"
+            },
+            "croatia": {
+              ".validate": "newData.isString() && newData.val().length <= 48"
+            },
+            "korea": {
+              ".validate": "newData.isString() && newData.val().length <= 48"
+            },
+            "$other": {
+              ".validate": false
+            }
+          },
+          "updatedClock": {
+            ".validate": "newData.hasChildren(['epoch','croatia','korea'])",
+            "epoch": {
+              ".validate": "newData.isNumber() && newData.val() > 0"
+            },
+            "croatia": {
+              ".validate": "newData.isString() && newData.val().length <= 48"
+            },
+            "korea": {
+              ".validate": "newData.isString() && newData.val().length <= 48"
+            },
+            "$other": {
+              ".validate": false
+            }
           },
           "receiptSummary": {
             ".validate": "newData.hasChildren(['batchId','count','bytes']) && newData.child('count').val() === ((root.child('expenseReceipts').child('SNU17-CRO-2026-A7K9P4').child($entry).child(newData.child('batchId').val()).hasChild('r1')?1:0)+(root.child('expenseReceipts').child('SNU17-CRO-2026-A7K9P4').child($entry).child(newData.child('batchId').val()).hasChild('r2')?1:0)+(root.child('expenseReceipts').child('SNU17-CRO-2026-A7K9P4').child($entry).child(newData.child('batchId').val()).hasChild('r3')?1:0))",
@@ -419,6 +479,9 @@
             "$other": {
               ".validate": false
             }
+          },
+          "$other": {
+            ".validate": false
           }
         }
       }

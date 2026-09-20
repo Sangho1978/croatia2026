@@ -1,0 +1,20 @@
+const {onRequest}=require('firebase-functions/v2/https');
+const {defineSecret}=require('firebase-functions/params');
+const admin=require('firebase-admin');
+if(!admin.apps.length)admin.initializeApp();
+const OPENAI_API_KEY=defineSecret('OPENAI_API_KEY');
+const allowed=new Set(['https://01978.github.io']);
+function outputText(j){for(const item of j.output||[]){for(const c of item.content||[]){if(c.type==='output_text'&&c.text)return c.text}}return ''}
+exports.receiptAi=onRequest({region:'asia-northeast3',cors:true,secrets:[OPENAI_API_KEY],timeoutSeconds:60,memory:'512MiB'},async(req,res)=>{
+  try{
+    const origin=req.get('origin')||'';if(origin&&!allowed.has(origin)&&!/^http:\/\/localhost(?::\d+)?$/.test(origin))return res.status(403).json({error:'허용되지 않은 웹앱 origin입니다.'});
+    if(req.method!=='POST')return res.status(405).json({error:'POST만 지원합니다.'});
+    const auth=(req.get('authorization')||'').match(/^Bearer\s+(.+)$/i);if(!auth)return res.status(401).json({error:'Firebase 로그인이 필요합니다.'});
+    const decoded=await admin.auth().verifyIdToken(auth[1]);
+    const day=new Date().toISOString().slice(0,10),usageRef=admin.database().ref('aiUsage/'+decoded.uid+'/'+day);const tx=await usageRef.transaction(v=>(Number(v)||0)>=50?undefined:(Number(v)||0)+1);if(!tx.committed)return res.status(429).json({error:'오늘 AI 영수증 판독 한도(50회)에 도달했습니다.'});
+    const image=req.body?.image;if(typeof image!=='string'||!/^data:image\/(jpeg|jpg|png|webp);base64,/i.test(image)||image.length>9_000_000)return res.status(400).json({error:'영수증 이미지 형식을 확인해 주세요.'});
+    const schema={type:'object',additionalProperties:false,properties:{merchant:{type:'string'},date:{type:'string'},time:{type:'string'},amount:{type:'number'},currency:{type:'string',enum:['EUR','KRW']},category:{type:'string',enum:['식사','교통','입장·체험','간식·음료','공용물품','기타']},purpose:{type:'string'},country:{type:'string'},confidence:{type:'number'},notes:{type:'string'}},required:['merchant','date','time','amount','currency','category','purpose','country','confidence','notes']};
+    const body={model:process.env.OPENAI_RECEIPT_MODEL||'gpt-5.6-terra',instructions:'You extract structured expense data from travel receipts. The receipt may be Croatian, Italian, English, or Korean. Read the merchant, transaction date and time, FINAL AMOUNT ACTUALLY PAID (prefer TOTAL/UKUPNO/TOTALE/ZA PLATITI, not VAT/subtotal/change), currency, and classify the expense. Return empty strings for unreadable text, amount 0 only if unreadable, confidence 0-100. Do not invent values. Purpose should be a short Korean phrase.',input:[{role:'user',content:[{type:'input_text',text:'이 영수증의 실제 결제 금액과 날짜/시각/상호를 정확히 추출해 주세요. VAT, 소계, 거스름돈보다 최종 결제액을 우선하세요.'},{type:'input_image',image_url:image,detail:'original'}]}],text:{format:{type:'json_schema',name:'receipt',strict:true,schema}},max_output_tokens:800};
+    const r=await fetch('https://api.openai.com/v1/responses',{method:'POST',headers:{'Authorization':'Bearer '+OPENAI_API_KEY.value(),'Content-Type':'application/json'},body:JSON.stringify(body)});const j=await r.json();if(!r.ok)return res.status(502).json({error:j.error?.message||'OpenAI 영수증 판독 실패'});const t=outputText(j);if(!t)return res.status(502).json({error:'AI 판독 결과가 비어 있습니다.'});const receipt=JSON.parse(t);if(!receipt.amount)receipt.amount=null;return res.json({receipt});
+  }catch(e){console.error(e);return res.status(500).json({error:e.message||'영수증 AI 판독 오류'});}
+});

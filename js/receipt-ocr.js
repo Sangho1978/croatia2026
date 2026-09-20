@@ -11,6 +11,9 @@
   }
   function normalize(text){return String(text||'').replace(/\r/g,'\n').replace(/[\t ]+/g,' ').replace(/\n{2,}/g,'\n').trim()}
   function isoDate(y,m,d){y=+y;if(y<100)y+=2000;m=+m;d=+d;if(y<2024||y>2030||m<1||m>12||d<1||d>31)return'';return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`}
+  function parseTime(lines){
+    for(const line of lines){const m=line.match(/(?:vrijeme|time|ora|heure)?\s*([01]?\d|2[0-3])[:.]([0-5]\d)(?::[0-5]\d)?/i);if(m)return String(m[1]).padStart(2,'0')+':'+m[2]}return '';
+  }
   function parseDate(lines){
     const scored=[];
     lines.forEach((line,i)=>{
@@ -58,17 +61,17 @@
   }
   function purposeFor(cat){return ({'식사':'식사','교통':'교통비','입장·체험':'입장·체험','간식·음료':'간식·음료','공용물품':'공용물품'})[cat]||'공동경비'}
   function parse(text,confidence=0){
-    const n=normalize(text),lines=n.split('\n').map(x=>x.trim()).filter(Boolean),merchant=parseMerchant(lines),date=parseDate(lines),amount=parseAmount(lines);
+    const n=normalize(text),lines=n.split('\n').map(x=>x.trim()).filter(Boolean),merchant=parseMerchant(lines),date=parseDate(lines),time=parseTime(lines),amount=parseAmount(lines);
     const currency=/€|\bEUR\b/i.test(n)?'EUR':(/₩|\bKRW\b/i.test(n)?'KRW':'EUR');const cat=category(n,merchant);
-    return {merchant,date,amount:Number.isFinite(amount)?amount:null,currency,category:cat,purpose:purposeFor(cat),confidence:Math.round(Number(confidence)||0),rawText:n};
+    return {provider:'local',merchant,date,time,amount:Number.isFinite(amount)?amount:null,currency,category:cat,purpose:purposeFor(cat),confidence:Math.round(Number(confidence)||0),rawText:n};
   }
   async function imageForOcr(dataUrl){
     const img=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=()=>rej(Error('영수증 이미지를 읽지 못했습니다.'));i.src=dataUrl});
-    const max=1800,ratio=Math.min(1,max/Math.max(img.naturalWidth,img.naturalHeight)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(img.naturalWidth*ratio));c.height=Math.max(1,Math.round(img.naturalHeight*ratio));const x=c.getContext('2d',{willReadFrequently:true});x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(img,0,0,c.width,c.height);return c.toDataURL('image/jpeg',.9);
+    const max=2200,ratio=Math.min(1.35,max/Math.max(img.naturalWidth,img.naturalHeight)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(img.naturalWidth*ratio));c.height=Math.max(1,Math.round(img.naturalHeight*ratio));const x=c.getContext('2d',{willReadFrequently:true});x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.filter='grayscale(1) contrast(1.55) brightness(1.04)';x.drawImage(img,0,0,c.width,c.height);x.filter='none';return c.toDataURL('image/jpeg',.94);
   }
   async function recognize(dataUrl,onProgress){
     const T=await loadScript(),image=await imageForOcr(dataUrl);
-    const r=await T.recognize(image,'eng',{logger:m=>{if(m.status==='recognizing text'&&onProgress)onProgress(Math.max(0,Math.min(100,Math.round((m.progress||0)*100))))}});
+    let r;try{r=await T.recognize(image,'eng+ita+hrv',{logger:m=>{if(m.status==='recognizing text'&&onProgress)onProgress(Math.max(0,Math.min(100,Math.round((m.progress||0)*100))))}})}catch(_){r=await T.recognize(image,'eng',{logger:m=>{if(m.status==='recognizing text'&&onProgress)onProgress(Math.max(0,Math.min(100,Math.round((m.progress||0)*100))))}})}
     return parse(r?.data?.text||'',r?.data?.confidence||0);
   }
   window.ReceiptOCR={recognize,parse,escape:esc};
