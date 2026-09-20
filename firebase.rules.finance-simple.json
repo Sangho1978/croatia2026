@@ -480,6 +480,21 @@
               ".validate": false
             }
           },
+          "deleted": {
+            ".validate": "newData.isBoolean()"
+          },
+          "deletedAt": {
+            ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= now + 60000"
+          },
+          "deletedBy": {
+            ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 128"
+          },
+          "deletedByName": {
+            ".validate": "newData.isString() && (newData.val() === '한상호' || newData.val() === '이상미')"
+          },
+          "deletedClock": {
+            ".validate": "newData.hasChildren(['epoch','croatia','korea']) && newData.child('epoch').isNumber() && newData.child('epoch').val() > 0 && newData.child('croatia').isString() && newData.child('croatia').val().length <= 48 && newData.child('korea').isString() && newData.child('korea').val().length <= 48"
+          },
           "$other": {
             ".validate": false
           }

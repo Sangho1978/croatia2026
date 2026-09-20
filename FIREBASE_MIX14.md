@@ -17,3 +17,9 @@
 
 ## AI 영수증 판독
 AI 영수증 판독은 Firebase Rules가 아니라 별도의 서버 함수가 필요합니다. `AI_RECEIPT_SETUP.md`를 참고하세요. API 키는 GitHub Pages의 JavaScript에 넣으면 안 됩니다.
+
+
+## MIX18 삭제 기능
+- 앱의 `삭제`는 실수 복구를 위해 soft-delete 방식입니다. 원본 레코드는 남지만 장부 합계/조회/Excel 정산에서는 제외됩니다.
+- 최신 `firebase.rules.finance-simple.json`에는 deleted/deletedAt/deletedBy/deletedByName/deletedClock 검증이 포함되어 있습니다.
+- 앞서 제공한 전체 Rules에서 알 수 없는 추가 필드를 허용하는 상태라면 별도 변경 없이 동작할 수 있습니다. 엄격한 `$other:false` 규칙을 쓰는 경우에는 최신 병합 규칙을 다시 적용하세요.
