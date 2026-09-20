@@ -184,3 +184,12 @@ Preview screenshots use mock FX, GPS, and database responses (not live participa
 - DHMZ·HAK·Croatia Civil Protection·Italy Protezione Civile·MIT 파업 일정·FCO 실시간 항공편 공식 링크를 함께 제공합니다.
 - 앱이 열린 동안 1시간마다 갱신하며, 다시 열었을 때 캐시가 1시간 이상 오래되면 즉시 새로 검색합니다. 정적 PWA가 완전히 종료된 동안의 백그라운드 검색은 보장하지 않습니다.
 - Firebase 데이터/Rules 변경 없음. 세부 동작과 공식 링크는 `NEWS_MIX22.md` 참고.
+
+## MIX23 뉴스 UI·연수 일정 선별 개선
+- 뉴스 조회 결과를 `정상-주요뉴스 없음 / 주요기사 있음 / 조회 실패`로 명확히 구분합니다. 조회 실패를 뉴스 없음으로 표시하지 않습니다.
+- 10/12~10/18 실제 방문도시·FCO/DBV/ZAG 공항·이동경로와 재난/교통/파업 키워드를 함께 대조해 연수 일정 관련 기사만 표시합니다.
+- 단순 관광·맛집·호텔·홍보성 기사는 제외하고 HINA/HRT/크로아티아 주요언론, ANSA/Rai/이탈리아 주요언론, Reuters/AP/BBC/Euronews 등을 우선합니다.
+- 기사 카드에 `10/16 자다르·플리트비체`처럼 어느 연수일정과 관련되는지 표시합니다.
+- 공식기관 링크는 기사 목록 아래 `공식기관 참조 링크`로 분리하고 뉴스가 아닌 고정 확인 링크임을 명시했습니다.
+- GDELT 검색을 짧은 지역/주제 쿼리로 나누고, 전면 실패 시 Google News RSS 보조 검색을 시도합니다.
+- Firebase 데이터/Rules 변경 없음. 세부 기준은 `NEWS_MIX23.md` 참고.
