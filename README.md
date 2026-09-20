@@ -142,3 +142,9 @@ Preview screenshots use mock FX, GPS, and database responses (not live participa
 - OCR 화면에는 초가 인식되면 초까지 표시하되 장부 입력은 기존 Firebase 규칙과 호환되는 HH:MM으로 저장.
 - 참석자 표기는 `참석명단`으로 통일.
 - 날짜별 장부의 기본 날짜는 현재 GPS가 한국이면 한국 날짜, 크로아티아/이탈리아면 현지 날짜. 저장 기록 자체는 사용일(date) 기준으로 묶음.
+
+
+## MIX17 공동경비 등록 표시 수정
+- 한상호·이상미 로그인 시 공동경비 `경비 등록` 탭과 입력 패널이 정상 표시되도록 finance-manager 상태 연결 수정.
+- 일반 참가자는 기존대로 날짜별 장부 조회만 표시.
+- Firebase Rules/저장경로/기존 데이터 변경 없음.

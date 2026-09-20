@@ -71,8 +71,10 @@
     box.innerHTML=result||'<div class="empty-card">검색 결과가 없습니다.</div>';
   }
   function applyIdentity(){
+    const financeManager=canManageFinance();
+    document.body.dataset.financeManager=financeManager?'true':'false';
     document.querySelectorAll('[data-staff-only]').forEach(el=>el.hidden=!isStaff());
-    document.querySelectorAll('[data-finance-only]').forEach(el=>el.hidden=!canManageFinance());
+    document.querySelectorAll('[data-finance-only]').forEach(el=>el.hidden=!financeManager);
     const e=document.getElementById('tripRoleText');if(e)e.textContent=currentUser?[(currentUser.group?currentUser.group+'조':'인솔 교수'),currentUser.leader?'조장':'',currentUser.presenter?'발표':'',currentUser.tripRole?'연수 '+currentUser.tripRole:''].filter(Boolean).join(' · '):'';
     const box=document.getElementById('myFirebaseUid');if(box){box.hidden=true;box.textContent=''}
     window.dispatchEvent(new CustomEvent('cro-role-ready'));
