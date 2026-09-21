@@ -6,7 +6,7 @@
       "SNU17-CRO-2026-A7K9P4": {
         ".read": "auth != null",
         "$slot": {
-          ".write": "auth != null && ((newData.val() == null && data.exists() && data.child('uid').val() === auth.uid) || (newData.val() != null && newData.child('uid').val() === auth.uid && (!data.exists() || data.child('uid').val() === auth.uid)))",
+          ".write": "auth != null && (((newData.val() == null && data.exists() && data.child('uid').val() === auth.uid) || (newData.val() != null && newData.child('uid').val() === auth.uid && (!data.exists() || data.child('uid').val() === auth.uid))) || (newData.val() == null && (root.child('locationOwners').child('SNU17-CRO-2026-A7K9P4').child('g4p2').child('uid').val() === auth.uid && root.child('locationOwners').child('SNU17-CRO-2026-A7K9P4').child('g4p2').child('name').val() === '한상호')))",
           ".validate": "newData.val() == null || (newData.hasChildren(['uid','slot','group','name','lat','lng','accuracy','ts']) && newData.child('uid').isString() && newData.child('uid').val() === auth.uid && newData.child('slot').isString() && newData.child('slot').val() === $slot && newData.child('group').isNumber() && newData.child('group').val() >= 0 && newData.child('group').val() <= 4 && newData.child('name').isString() && newData.child('name').val().length >= 1 && newData.child('name').val().length <= 40 && newData.child('lat').isNumber() && newData.child('lat').val() >= -90 && newData.child('lat').val() <= 90 && newData.child('lng').isNumber() && newData.child('lng').val() >= -180 && newData.child('lng').val() <= 180 && newData.child('accuracy').isNumber() && newData.child('accuracy').val() >= 0 && newData.child('accuracy').val() <= 50000 && newData.child('ts').isNumber() && newData.child('ts').val() > 0 && newData.child('ts').val() <= now + 300000)",
           "timeCroatia": {
             ".validate": "newData.isString() && newData.val().length <= 32"
@@ -17,15 +17,15 @@
           "pageState": {
             ".validate": "newData.isString() && newData.val().length <= 20"
           }
-        }
+        },
+        ".write": "auth != null && newData.val() == null && (root.child('locationOwners').child('SNU17-CRO-2026-A7K9P4').child('g4p2').child('uid').val() === auth.uid && root.child('locationOwners').child('SNU17-CRO-2026-A7K9P4').child('g4p2').child('name').val() === '한상호')"
       }
     },
     "locationHistory": {
       "SNU17-CRO-2026-A7K9P4": {
-        ".read": "auth != null",
         "$slot": {
           "$point": {
-            ".write": "auth != null && newData.exists() && $point.matches(/^[0-9]{13}$/) && newData.child('uid').val() === auth.uid && newData.child('slot').val() === $slot && (!data.exists() || data.child('uid').val() === auth.uid)",
+            ".write": "auth != null && newData.exists() && $point.matches(/^[0-9]{13}$/) && newData.child('uid').val() === auth.uid && newData.child('slot').val() === $slot && root.child('locationOwners').child('SNU17-CRO-2026-A7K9P4').child($slot).child('uid').val() === auth.uid && (!data.exists() || data.child('uid').val() === auth.uid)",
             ".validate": "newData.hasChildren(['uid','slot','group','name','lat','lng','accuracy','ts']) && newData.child('uid').isString() && newData.child('uid').val() === auth.uid && newData.child('slot').isString() && newData.child('slot').val() === $slot && newData.child('group').isNumber() && newData.child('group').val() >= 0 && newData.child('group').val() <= 4 && newData.child('name').isString() && newData.child('name').val().length >= 1 && newData.child('name').val().length <= 40 && newData.child('lat').isNumber() && newData.child('lat').val() >= -90 && newData.child('lat').val() <= 90 && newData.child('lng').isNumber() && newData.child('lng').val() >= -180 && newData.child('lng').val() <= 180 && newData.child('accuracy').isNumber() && newData.child('accuracy').val() >= 0 && newData.child('accuracy').val() <= 50000 && newData.child('ts').isNumber() && newData.child('ts').val() > 0 && newData.child('ts').val() <= now + 300000",
             "timeCroatia": {
               ".validate": "newData.isString() && newData.val().length <= 32"
@@ -36,8 +36,10 @@
             "pageState": {
               ".validate": "newData.isString() && newData.val().length <= 20"
             }
-          }
-        }
+          },
+          ".read": "auth != null && root.child('locationOwners').child('SNU17-CRO-2026-A7K9P4').child($slot).child('uid').val() === auth.uid"
+        },
+        ".write": "auth != null && newData.val() == null && (root.child('locationOwners').child('SNU17-CRO-2026-A7K9P4').child('g4p2').child('uid').val() === auth.uid && root.child('locationOwners').child('SNU17-CRO-2026-A7K9P4').child('g4p2').child('name').val() === '한상호')"
       }
     },
     "attendanceCurrent": {
@@ -253,6 +255,23 @@
           ".write": "auth != null && newData.exists() && newData.child('updatedBy').val() === auth.uid && root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === newData.child('updatedByName').val()",
           ".validate": "newData.hasChildren(['title','url','updatedAt','updatedBy','updatedByName']) && newData.child('title').isString() && newData.child('title').val().length >= 1 && newData.child('title').val().length <= 100 && newData.child('url').isString() && newData.child('url').val().beginsWith('https://') && newData.child('url').val().length <= 500 && newData.child('updatedAt').isNumber() && newData.child('updatedAt').val() > 0 && newData.child('updatedAt').val() <= now + 60000 && newData.child('updatedBy').val() === auth.uid && newData.child('updatedByName').isString()"
         }
+      }
+    },
+    "locationOwners": {
+      "SNU17-CRO-2026-A7K9P4": {
+        ".write": "auth != null && newData.val() == null && data.child('g4p2').child('uid').val() === auth.uid && data.child('g4p2').child('name').val() === '한상호'",
+        "$slot": {
+          ".read": "auth != null && data.child('uid').val() === auth.uid",
+          ".write": "auth != null && newData.exists() && newData.child('uid').val() === auth.uid && newData.child('slot').val() === $slot && root.child('locations').child('SNU17-CRO-2026-A7K9P4').child($slot).child('uid').val() === auth.uid && root.child('locations').child('SNU17-CRO-2026-A7K9P4').child($slot).child('name').val() === newData.child('name').val() && (!data.exists() || data.child('uid').val() === auth.uid)",
+          ".validate": "newData.hasChildren(['uid','slot','name']) && newData.child('uid').isString() && newData.child('uid').val() === auth.uid && newData.child('slot').isString() && newData.child('slot').val() === $slot && newData.child('name').isString() && newData.child('name').val().length >= 1 && newData.child('name').val().length <= 40"
+        }
+      }
+    },
+    "locationControl": {
+      "SNU17-CRO-2026-A7K9P4": {
+        ".read": "auth != null",
+        ".write": "auth != null && newData.exists() && (root.child('locationOwners').child('SNU17-CRO-2026-A7K9P4').child('g4p2').child('uid').val() === auth.uid && root.child('locationOwners').child('SNU17-CRO-2026-A7K9P4').child('g4p2').child('name').val() === '한상호') && newData.child('resetByUid').val() === auth.uid && newData.child('resetByName').val() === '한상호'",
+        ".validate": "newData.hasChildren(['resetAt','resetByUid','resetByName']) && newData.child('resetAt').isNumber() && newData.child('resetAt').val() > 0 && newData.child('resetAt').val() <= now + 60000 && newData.child('resetByUid').isString() && newData.child('resetByName').val() === '한상호'"
       }
     }
   }

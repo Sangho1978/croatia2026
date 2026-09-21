@@ -56,6 +56,22 @@
     navigator.geolocation.getCurrentPosition(p=>resolve({lat:+p.coords.latitude.toFixed(5),lng:+p.coords.longitude.toFixed(5),accuracy:Math.round(p.coords.accuracy||0),ts:p.timestamp||Date.now()}),reject,{enableHighAccuracy:high,maximumAge:30000,timeout:15000});
   })}
   async function request(path,options={}){const tk=await token(),ctrl=new AbortController(),tid=setTimeout(()=>ctrl.abort(),12000);try{const r=await fetch(firebaseConfig.databaseURL.replace(/\/$/,'')+'/'+path+'.json?auth='+encodeURIComponent(tk),{...options,headers:{...(options.body?{'Content-Type':'application/json'}:{}),...(options.headers||{})},cache:'no-store',signal:ctrl.signal});const t=await r.text();locCount(new TextEncoder().encode(t).length+(options.body?new TextEncoder().encode(options.body).length:0));if(!r.ok){const e=Error(r.status===401||r.status===403?'\uc704\uce58 Firebase Rules/\uc2ac\ub86f \uc18c\uc720\uad8c\uc744 \ud655\uc778\ud574 \uc8fc\uc138\uc694.':'\uc704\uce58 \uc5f0\uacb0 \uc2e4\ud328 ('+r.status+')');e.status=r.status;throw e}return t&&t!=='null'?JSON.parse(t):null}finally{clearTimeout(tid)}}
+  function applyResetLocal(resetAt,notice='관리자가 전체 위치정보를 초기화했습니다. 다시 공유하려면 직접 시작하세요.'){
+    if(resetAt)localStorage.setItem('loc_reset_seen',String(resetAt));
+    want=false;phase='off';epoch++;message=notice;fix=null;ack=0;locLastWrite=0;
+    clearInterval(timer);timer=null;localStorage.setItem('loc_sharing','0');localStorage.removeItem('loc_lastwrite');
+    if(currentUser)localStorage.setItem('cro.loc.auto.'+currentUser.slot,'0');
+    paint();renderRoster();
+  }
+  async function checkResetControl(){
+    if(!currentUser)return false;
+    try{
+      const c=await request('locationControl/'+TRIP_CODE),resetAt=+(c?.resetAt||0),seen=+(localStorage.getItem('loc_reset_seen')||0);
+      if(resetAt>seen){applyResetLocal(resetAt);return true;}
+    }catch(_){ }
+    return false;
+  }
+
   // These loops belong to the logged-in session, not the location view.
   // document.hidden refers to the browser document; hidden SPA sections do not pause it.
   function ensureSessionLoops(){
@@ -72,6 +88,7 @@
     const n=epoch,u={...currentUser};
     writeJob=(async()=>{
       try{
+        if(await checkResetControl())return;
         phase='locating';message='';paint();const p=await getFix(high);
         if(!same(n,u)||!want)return;if(document.hidden){phase='paused';message='화면 복귀 후 다시 갱신합니다.';return;}fix=p;locLastPos={coords:{latitude:p.lat,longitude:p.lng,accuracy:p.accuracy},timestamp:p.ts};renderRoster();
         await token();if(!same(n,u)||!want)return;
@@ -79,8 +96,10 @@
         phase='sending';paint();
         await request('locations/'+TRIP_CODE+'/'+u.slot,{method:'PUT',body:JSON.stringify(data)});
         if(!same(n,u)||!want)return;
+        // 위치 이력은 slot-UID 소유권을 먼저 고정한 뒤 본인 이력에만 기록한다.
+        await request('locationOwners/'+TRIP_CODE+'/'+u.slot,{method:'PUT',body:JSON.stringify({uid:data.uid,slot:u.slot,name:u.name})});
         ack=now;locLastWrite=now;localStorage.setItem('loc_lastwrite',String(now));locCache[u.slot]=data;phase='on';paint();renderRoster();
-        try{await request('locationHistory/'+TRIP_CODE+'/'+u.slot+'/'+now,{method:'PUT',body:JSON.stringify(data)})}catch(e){if(same(n,u)&&want)message='\ud604\uc7ac\uc704\uce58 \uc800\uc7a5\ub428 \u00b7 \uc774\ub3d9\uc774\ub825 \uc800\uc7a5 \uc2e4\ud328';}
+        try{await request('locationHistory/'+TRIP_CODE+'/'+u.slot+'/'+now,{method:'PUT',body:JSON.stringify(data)})}catch(e){if(same(n,u)&&want)message='현재위치 저장됨 · 내 이동이력 저장 실패';}
       }catch(e){if(same(n,u)&&want){permissionError(e);paint()}}
       finally{writeJob=null;if(same(n,u)){paint();renderRoster();}}
     })();return writeJob;
@@ -107,7 +126,7 @@
   };
   window.locRefreshAll=async function(manual=false){
     if(!currentUser)return;if(refreshJob)return refreshJob;
-    const n=epoch,u={...currentUser};refreshJob=(async()=>{try{const j=await request('locations/'+TRIP_CODE);if(!same(n,u))return;const cache={};Object.entries(j||{}).forEach(([k,v])=>{if(APP_BY_SLOT[k]&&valid(v)&&age(v)<SHOWMAX)cache[k]=v});locCache=cache;readError=false;readAt=Date.now();localStorage.setItem('loc_read',String(readAt));const e=document.getElementById('locBackendState');if(e)e.textContent='Firebase \uc870\ud68c \uc815\uc0c1 \u00b7 '+textClock(readAt);renderRoster()}catch(e){readError=true;const el=document.getElementById('locBackendState');if(el)el.textContent='\uc870\ud68c \uc2e4\ud328 \u00b7 \uc774\uc804 \uc704\uce58\uc77c \uc218 \uc788\uc2b5\ub2c8\ub2e4. '+e.message;if(manual)message=e.message;paint();renderRoster()}finally{refreshJob=null}})();return refreshJob;
+    const n=epoch,u={...currentUser};refreshJob=(async()=>{try{await checkResetControl();if(!same(n,u))return;const j=await request('locations/'+TRIP_CODE);if(!same(n,u))return;const cache={};Object.entries(j||{}).forEach(([k,v])=>{if(APP_BY_SLOT[k]&&valid(v)&&age(v)<SHOWMAX)cache[k]=v});locCache=cache;readError=false;readAt=Date.now();localStorage.setItem('loc_read',String(readAt));const e=document.getElementById('locBackendState');if(e)e.textContent='Firebase 조회 정상 · 24시간 지난 위치는 숨김 · '+textClock(readAt);renderRoster()}catch(e){readError=true;const el=document.getElementById('locBackendState');if(el)el.textContent='조회 실패 · 이전 위치일 수 있습니다. '+e.message;if(manual)message=e.message;paint();renderRoster()}finally{refreshJob=null}})();return refreshJob;
   };
   const previousLogout=window.appLogout;
   window.appLogout=async function(){loggingOut=true;try{return await previousLogout.apply(this,arguments)}finally{loggingOut=false}};
@@ -160,7 +179,7 @@
     const view=e.target.closest('[data-loc-view]');if(view){rosterMode=view.dataset.locView==='detail'?'detail':'compact';localStorage.setItem('cro.location.view.v5',rosterMode);renderRoster();}
     const g=e.target.closest('[data-loc-group]');if(g){const f=g.dataset.locGroup;locSetFilter(f,document.querySelector('#locFilters [data-filter="'+f+'"]'));}
   });
-  window.locOpenPerson=async function(slot){const u=APP_BY_SLOT[slot],r=locCache[slot],box=document.getElementById('locPersonDetail');if(!u||!box)return;const d=distanceInfo(r,u);box.classList.add('show');box.innerHTML=`<div class="loc-simple-head"><h3>${esc(u.name)} \u00b7 ${userGroupText(u)}</h3><button type="button" onclick="this.closest('#locPersonDetail').classList.remove('show')">\ub2eb\uae30</button></div><b>${esc(d.label)}${d.metres!==null&&!Number.isNaN(d.metres)?' \u00b7 \uc9c1\uc120\uac70\ub9ac':''}</b><p>${esc(statusOf(r))}${valid(r)?'<br>'+locationClock(r)+' ('+ago(r.ts)+') \u00b7 GPS \uc57d '+Math.round(r.accuracy||0)+'m':''}</p>${valid(r)?`<div class="actions"><a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${r.lat},${r.lng}">Google \uc9c0\ub3c4</a><button onclick="locLoadHistory('${slot}',true)">\uc774\ub3d9\uc774\ub825</button><a class="btn" href="tel:+82${u.phone.replace(/\D/g,'').slice(1)}">\uc804\ud654</a></div>`:''}<div id="locHistoryList" class="loc-history-list"></div>`;box.scrollIntoView({behavior:'smooth',block:'nearest'});};
+  window.locOpenPerson=async function(slot){const u=APP_BY_SLOT[slot],r=locCache[slot],box=document.getElementById('locPersonDetail');if(!u||!box)return;const d=distanceInfo(r,u),me=slot===currentUser?.slot;box.classList.add('show');let actions='';if(me){actions=`<button class="primary" onclick="locLoadHistory('${slot}',true)">🗺 Google 지도 · 내 24시간 이동이력</button>`}else if(valid(r)){actions=`<a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${r.lat},${r.lng}">Google 지도 · 현재 위치</a>`}box.innerHTML=`<div class="loc-simple-head"><h3>${esc(u.name)} · ${userGroupText(u)}</h3><button type="button" onclick="this.closest('#locPersonDetail').classList.remove('show')">닫기</button></div><b>${esc(d.label)}${d.metres!==null&&!Number.isNaN(d.metres)?' · 직선거리':''}</b><p>${esc(statusOf(r))}${valid(r)?'<br>'+locationClock(r)+' ('+ago(r.ts)+') · GPS 약 '+Math.round(r.accuracy||0)+'m':'<br>최근 24시간 내 공유 위치 없음'}</p>${me?'<p class="small muted">이동이력은 본인만 최근 24시간 범위로 지도에서 확인할 수 있습니다.</p>':''}${actions?`<div class="actions">${actions}</div>`:''}`;box.scrollIntoView({behavior:'smooth',block:'nearest'});};
   function mapLabel(u,r){return esc(u.name)+' \u00b7 '+esc(distanceInfo(r,u).label)}
   function popup(u,r){return `<b>${esc(u.name)} \u00b7 ${u.group?u.group+'\uc870':'\uad50\uc218'}</b><p>${esc(distanceInfo(r,u).label)}<br>${locationClock(r)} (${ago(r.ts)})<br>GPS \uc57d ${Math.round(r.accuracy||0)} m</p>`}
   window.makeGoogleOverlay=function(u,r){class M extends google.maps.OverlayView{onAdd(){const d=document.createElement('div');d.className='g-overlay';d.innerHTML=`<div class="group-marker" style="--group:${locGroupColor(u.group)}"><span class="group-marker-label">${mapLabel(u,r)}</span></div>`;d.onclick=()=>{googleInfo.setContent(popup(u,r));googleInfo.setPosition({lat:r.lat,lng:r.lng});googleInfo.open(mapObj)};this.div=d;this.getPanes().overlayMouseTarget.appendChild(d)}draw(){const p=this.getProjection().fromLatLngToDivPixel(new google.maps.LatLng(r.lat,r.lng));if(this.div){this.div.style.left=p.x+'px';this.div.style.top=p.y+'px'}}onRemove(){this.div?.remove()}}const o=new M();o.setMap(mapObj);return o;};
@@ -206,5 +225,5 @@
     if(e.detail?.view==='location'){renderRoster();locRefreshAll(false)}
   });
   document.addEventListener('DOMContentLoaded',()=>{paint();renderRoster();if(currentUser)changed()});
-  window.LocationSession={paint,resume:resumeVisible,refresh:()=>locRefreshAll(true),distance,info:distanceInfo,get state(){return {want,phase,message,owner:owner?.slot,lastSentAt:ack,lastFix:fix,stopPending:!!retryStop,publishEveryMs:PERIOD,readEveryMs:120000,publisherRunning:!!timer,readerRunning:!!readTimer,scope:'app-wide'}}};
+  window.LocationSession={paint,resume:resumeVisible,refresh:()=>locRefreshAll(true),distance,info:distanceInfo,applyAdminReset:(ts)=>applyResetLocal(ts),get state(){return {want,phase,message,owner:owner?.slot,lastSentAt:ack,lastFix:fix,stopPending:!!retryStop,publishEveryMs:PERIOD,readEveryMs:120000,publisherRunning:!!timer,readerRunning:!!readTimer,scope:'app-wide'}}};
 })();
