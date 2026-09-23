@@ -1,14 +1,14 @@
 
 (function(){
   const OFFICIAL_DAY_SUMMARY={
-    '2026-10-12':'인천 출발 → 로마 도착 → 같은 날 야간 Ryanair로 두브로브니크 이동. 야간편의 정확한 시각은 최종 E-ticket을 우선합니다.',
-    '2026-10-13':'두브로브니크 체류 · 구시가지와 주요 문화유산 중심 관광.',
+    '2026-10-12':'09:35 인천 T1 B카운터 집결 → TW405 12:35 출발 → 로마 19:15 도착 → FR5975 23:30 두브로브니크 이동.',
+    '2026-10-13':'00:50 두브로브니크 도착 → 02:30 호텔 휴식 → 09:00 1일 패스 관광 → 18:00 석식.',
     '2026-10-14':'두브로브니크 자유탐방 후 전용차량으로 두체 이동 · 두체 숙박.',
     '2026-10-15':'두체 → 스플리트 → 트로기르 → 비오그라드. 도시 간 이동은 전용차량 중심.',
-    '2026-10-16':'비오그라드 → 자다르 → 플리트비체 국립공원 → 카를로바츠.',
-    '2026-10-17':'카를로바츠 → 라스토케 → 자그레브 → 공항 → FR8836 로마 이동.',
-    '2026-10-18':'로마 또는 근교 선택 문화시찰 → 로마 FCO → TW406 귀국.',
-    '2026-10-19':'TW406 인천 도착 → 수하물·공용물품 확인 후 귀가.'
+    '2026-10-16':'비오그라드 → 자다르 → 플리트비체 국립공원 → 카를로바크.',
+    '2026-10-17':'카를로바크 → 라스토케 → 자그레브 → FR8836 22:10 출발 → 로마 23:35 도착 → Ergife Palace.',
+    '2026-10-18':'PLAN 1~4 선택 문화시찰 → 16:30 로마공항 이동 → TW406 21:15 귀국.',
+    '2026-10-19':'16:10 TW406 인천 도착 → 수하물·공용물품 확인 후 귀가.'
   };
   const WEATHER_ACTION={
     '2026-10-12':'장거리 비행과 야간 환승일입니다. 기내·공항 냉방에 대비해 얇은 겉옷을 손가방에 두고, 도착 후 사용할 세면·충전물품은 쉽게 꺼낼 수 있게 준비하세요.',
@@ -51,7 +51,7 @@
     const ls=document.getElementById('todayLocationState'); if(ls){const sharing=localStorage.getItem('loc_sharing')==='1'; ls.textContent=sharing?(locLastWrite?`${ago(locLastWrite)} 전송`:'공유 ON'):'공유 OFF';}
     document.getElementById('todayOpsNote').innerHTML=`<b>식사·운영</b> ${d.meal||'항공·도착 일정에 맞춰 운영'}<br><b>복장·날씨</b> ${WEATHER_ACTION[d.date]||''}`;
     if(window.LocationSession)LocationSession.paint();
-    document.getElementById('todayBtns').innerHTML=(d.map?`<a class="btn primary" target="_blank" rel="noopener" href="${d.map}">📍 오늘 동선 지도</a>`:'')+`<a class="btn" href="#schedule">◷ 오늘 상세일정</a><a class="btn" href="#attendance">✓ 출석</a><a class="btn" href="#location">◎ 위치</a>`;
+    document.getElementById('todayBtns').innerHTML=(d.map?`<a class="btn primary" target="_blank" rel="noopener" href="${d.map}">📍 오늘 동선 지도</a>`:'')+`<a class="btn" href="#schedule">◷ 오늘 상세일정</a><a class="btn" href="#guidebook">▦ 필수안내</a><a class="btn" href="#attendance">✓ 출석</a><a class="btn" href="#location">◎ 위치</a>`;
   }
 
   function enhanceSchedulePanels(){
@@ -61,8 +61,8 @@
       const box=document.createElement('div'); box.className='official-schedule-card';
       box.innerHTML=`<span class="tag">공식 일정</span><b> ${d.date.slice(5).replace('-','/')} 기본 운영동선</b><p>${OFFICIAL_DAY_SUMMARY[d.date]||d.route}</p><div class="schedule-separator"><div class="official"><b>공식</b><br>여행사·확정 항공·도시 간 이동 순서</div><div class="recommend"><b>추천</b><br>식사·집결·도보 효율을 고려한 현장 시간표</div></div>`;
       summary.insertAdjacentElement('afterend',box);
-      const rec=p.querySelector('.recommended-flow'); if(rec)rec.innerHTML='<b>추천 운영안</b><br>공식 이동순서는 유지하고, 28명 승하차·식사·화장실·집결시간을 먼저 확보한 뒤 되돌아가는 도보를 줄이는 방향으로 구성했습니다.';
-      const h=[...p.querySelectorAll('.day-main-grid .card h3')].find(x=>x.textContent.includes('추천 일정')); if(h)h.textContent='시간표 · 현장 추천 운영안';
+      const rec=p.querySelector('.recommended-flow'); if(rec)rec.innerHTML='<b>현장 운영 메모</b><br>09/22 소책자의 일정·이동순서를 기본으로 하며, 실제 집결·식사·입장시각은 인솔자와 현지 가이드의 당일 안내를 우선합니다.';
+      const h=[...p.querySelectorAll('.day-main-grid .card h3')].find(x=>x.textContent.includes('추천 일정')); if(h)h.textContent='공식 일정 · 09/22 안내소책자';
       const wbox=p.querySelector('.day-weather-box'); if(wbox&&!p.querySelector('.weather-action-advice')){const a=document.createElement('div');a.className='weather-action-advice';a.innerHTML=`<b>오늘 준비</b><br>${WEATHER_ACTION[d.date]||''}`;wbox.insertAdjacentElement('afterend',a);}
     });
   }
@@ -70,7 +70,7 @@
   function setOnlineState(){const e=document.getElementById('onlineStatusChip');if(!e)return;const on=navigator.onLine;e.textContent=on?'🟢 온라인':'🟠 오프라인 · 저장 일정 이용';e.classList.toggle('online',on);e.classList.toggle('offline',!on);}
 
   function setupMemo(){const m=document.getElementById('fieldMemo');if(!m)return;m.value=localStorage.getItem('cro_field_memo')||'';m.addEventListener('input',()=>localStorage.setItem('cro_field_memo',m.value));}
-  function reorderSections(){const main=document.querySelector('main'); if(!main)return;['today','schedule','location','attendance','guide','study','weatherDetail','route','hotels','team','check','videos','emergency','more'].forEach(id=>{const s=document.getElementById(id);if(s&&s.parentElement===main)main.appendChild(s)});}
+  function reorderSections(){const main=document.querySelector('main'); if(!main)return;['today','schedule','guidebook','location','attendance','guide','study','weatherDetail','route','hotels','team','check','videos','emergency','more'].forEach(id=>{const s=document.getElementById(id);if(s&&s.parentElement===main)main.appendChild(s)});}
   function adminVisibility(){document.querySelectorAll('.tech-only').forEach(x=>x.style.display=(currentUser?.name==='한상호'?'block':'none'));}
 
   function haversine(a,b,c,d){const R=6371000,rad=x=>x*Math.PI/180,dp=rad(c-a),dl=rad(d-b),q=Math.sin(dp/2)**2+Math.cos(rad(a))*Math.cos(rad(c))*Math.sin(dl/2)**2;return 2*R*Math.asin(Math.sqrt(q));}

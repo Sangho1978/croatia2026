@@ -48,7 +48,7 @@
     const tone=label==='ON'?'on':label==='OFF'?(state?.phase==='permission'?'warning':'off'):'warning';
     const glyph=label==='ON'?'\u25cf':label==='OFF'&&tone==='off'?'\u25cb':label==='\ub300\uae30'?'\u2026':'\u26a0';
     set('briefLocation',glyph+' '+label.replace(' !',''));set('briefLocationNote',note);
-    const loc=$('briefLocationLink');if(loc){loc.dataset.state=label==='ON'?'on':'off';loc.dataset.tone=tone;loc.title=$('liveLoc')?.textContent||note;loc.setAttribute('aria-label','\ub0b4 \uc704\uce58 '+label+' '+note+' \u00b7 \uc9c0\ub3c4 \uc5f4\uae30')}
+    const loc=$('briefLocationLink');if(loc){const on=!!state?.want;loc.dataset.state=on?'on':'off';loc.dataset.tone=tone;loc.setAttribute('aria-checked',String(on));loc.disabled=!state?.owner;loc.title=(on?'터치하면 위치공유 OFF':'터치하면 위치공유 ON')+' · 위치 데이터 최근 24시간 보호';loc.setAttribute('aria-label',(on?'위치공유 끄기':'위치공유 켜기')+' · 위치 데이터 최근 24시간 보호');if(!on&&state?.owner)note='터치해서 켜기 · 24h';else if(on)note=(note||'공유 중')+' · 24h';set('briefLocationNote',note)}
     const c=window.AppTraffic?.cumulative,b=c?c.sent+c.received:0;
     set('briefTraffic','\u2195 '+(b>=1048576?(b/1048576).toFixed(1)+'M':(b/1024).toFixed(0)+'K'));
     $('headerToggle')?.setAttribute('title',($('headerToggle').getAttribute('aria-expanded')==='true'?'\uc0c1\ub2e8 \uc811\uae30':'\uc2dc\uac04\u00b7\ud658\uc728\u00b7\ub370\uc774\ud130 \ud3bc\uce58\uae30')+' \u00b7 '+($('trafficTotal')?.textContent||''));

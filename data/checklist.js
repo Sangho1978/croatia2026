@@ -5,7 +5,7 @@ const CHECK_GROUPS=[
     "desc": "",
     "items": [
       [
-        "여권 원본 · 유효기간 및 서명 확인",
+        "여권 원본 · 출발일 기준 유효기간 6개월 이상 · 서명 확인",
         "필수",
         "prep_passport",
         "chk2_0_0"
@@ -15,6 +15,18 @@ const CHECK_GROUPS=[
         "필수",
         "prep_passport-copy",
         "chk2_0_1"
+      ],
+      [
+        "여권 분실 대비 여권용 사진 2~3장",
+        "권장",
+        "prep_passport-photo",
+        ""
+      ],
+      [
+        "10/12 09:35 · 인천공항 T1 3층 B카운터 앞 집결 확인",
+        "필수",
+        "prep_meeting-0935",
+        ""
       ],
       [
         "TW405/TW406 항공권·예약번호 저장",
@@ -32,6 +44,12 @@ const CHECK_GROUPS=[
         "모바일 탑승권 발급 일정 확인 · 발급 후 오프라인 저장",
         "필수",
         "prep_boarding",
+        ""
+      ],
+      [
+        "인천공항 스마트패스 사전등록 여부 확인",
+        "권장",
+        "prep_smartpass",
         ""
       ],
       [
@@ -95,9 +113,21 @@ const CHECK_GROUPS=[
     "desc": "",
     "items": [
       [
-        "티웨이·Ryanair 예약에 포함된 수하물 무게와 크기 확인",
+        "T’way 위탁 23kg 1개 · 기내 10kg / 40×20×55cm 확인",
         "필수",
         "prep_baggage",
+        ""
+      ],
+      [
+        "Ryanair 위탁 20kg 1개 · 기본 개인가방 40×20×25cm 확인",
+        "필수",
+        "prep_ryanair-baggage",
+        ""
+      ],
+      [
+        "Ryanair Priority 이용 시 추가 기내가방 55×40×20cm / 10kg 확인",
+        "해당",
+        "prep_ryanair-priority",
         ""
       ],
       [
@@ -221,10 +251,16 @@ const CHECK_GROUPS=[
         "chk2_6_3"
       ],
       [
-        "3.5mm 이어폰 · 단체 수신기 연결 확인",
+        "개인 3.5mm 이어폰 · 단체 수신기 연결 확인",
         "필수",
         "prep_earphone",
         "chk2_4_4"
+      ],
+      [
+        "수신기 충전단자 최종 확인 · 소책자 p.29 C핀 / p.30 5핀 표기 상충",
+        "확인",
+        "prep_receiver-cable",
+        ""
       ],
       [
         "작은 크로스백/슬링백 준비",

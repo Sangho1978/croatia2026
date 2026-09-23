@@ -208,3 +208,14 @@ body.mixed-app [data-busy="true"]{cursor:progress}
 
 /* MIX11: compact expected-temperature typography */
 body.mixed-app .compact-top .brief-weather strong{letter-spacing:-.08em!important;font-variant-numeric:tabular-nums;font-feature-settings:'tnum' 1;white-space:nowrap}
+
+/* MIX26 · top location is a direct touch switch, not a navigation link */
+body.mixed-app .brief-location{cursor:pointer;transition:background .16s ease,border-color .16s ease,transform .08s ease;touch-action:manipulation}
+body.mixed-app .brief-location[data-state="on"]{background:#e9f8f0!important;border-color:#90cfaa!important;box-shadow:inset 0 0 0 1px #6db98d33}
+body.mixed-app .brief-location[data-state="on"] strong{color:#167a4b!important}
+body.mixed-app .brief-location[data-state="off"] strong{color:#6d7e86!important}
+body.mixed-app .brief-location:active{transform:scale(.97)}
+body.mixed-app .brief-location:disabled{opacity:.72;cursor:not-allowed}
+body.mixed-app #locationHeaderToggle{min-width:92px;font-weight:900;border-radius:999px;touch-action:manipulation}
+body.mixed-app #locationHeaderToggle[data-state="on"]{background:#187a4f;color:#fff;border-color:#187a4f}
+body.mixed-app #locationHeaderToggle[data-state="off"]{background:#f1f5f6;color:#536b76;border-color:#d5e1e6}

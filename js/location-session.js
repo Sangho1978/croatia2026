@@ -4,9 +4,9 @@
  */
 (function(){
   'use strict';
-  const PERIOD=300000, FRESH=300000, LEASE=600000;
+  const PERIOD=300000, FRESH=300000, LEASE=600000, RETAIN=24*60*60*1000, PRUNE_EVERY=60*60*1000;
   let epoch=0,want=false,phase='off',message='',fix=null,ack=0,readAt=0,loggingOut=false;
-  let owner=null,writeJob=null,refreshJob=null,retryStop=null,timer=null,readTimer=null;
+  let owner=null,writeJob=null,refreshJob=null,retryStop=null,timer=null,readTimer=null,pruneJob=null,lastPruneAt=+(localStorage.getItem('cro.loc.prunedAt')||0);
   const stopKey='cro.location.stopPending.v3';
   const esc=s=>Integration.escape(s);
   const valid=r=>!!r&&Number.isFinite(r.lat)&&Number.isFinite(r.lng)&&r.lat>=-90&&r.lat<=90&&r.lng>=-180&&r.lng<=180&&Number.isFinite(r.ts);
@@ -44,7 +44,8 @@
   function paint(){
     const label=stateText(),e=document.getElementById('liveLoc');
     if(e){e.textContent='\ub0b4 \uc704\uce58 '+label;e.dataset.state=want&&ack?'on':'off';e.title=message||'\ub85c\uadf8\uc778 \uc2dc \uc704\uce58\uacf5\uc720 \uc2dc\uc791. \uc9c1\uc811 \ub044\uba74 \uadf8 \uc120\ud0dd\uc744 \uc720\uc9c0\ud569\ub2c8\ub2e4.';e.classList.remove('transmitting','delayed');}
-    const toggle=document.getElementById('locationHeaderToggle');if(toggle){toggle.textContent=want?'\ub044\uae30':'\ucf1c\uae30';toggle.disabled=!currentUser;toggle.setAttribute('aria-label',want?'\uc704\uce58\uacf5\uc720 \ub044\uae30':'\uc704\uce58\uacf5\uc720 \ucf1c\uae30');}
+    const toggle=document.getElementById('locationHeaderToggle');if(toggle){toggle.textContent=want?'위치 ON':'위치 OFF';toggle.disabled=!currentUser;toggle.dataset.state=want?'on':'off';toggle.setAttribute('aria-checked',String(!!want));toggle.setAttribute('aria-label',want?'위치공유 끄기':'위치공유 켜기');}
+    const quick=document.getElementById('briefLocationLink');if(quick){quick.disabled=!currentUser;quick.dataset.state=want?'on':'off';quick.setAttribute('aria-checked',String(!!want));quick.setAttribute('aria-label',want?'위치공유 끄기 · 위치기록 24시간 보호':'위치공유 켜기 · 위치기록 24시간 보호');}
     const state=document.getElementById('locShareStatus');if(state)state.textContent=label+(message?' \u2014 '+message:'');
     const home=document.getElementById('todayLocationState');if(home)home.textContent=label;
     const basis=document.getElementById('locationDistanceBasis');if(basis)basis.textContent=(currentUser?.name||'\ub85c\uadf8\uc778 \uc0ac\uc6a9\uc790')+' \uae30\uc900 \uc9c1\uc120\uac70\ub9ac'+(fix?' \u00b7 '+locationClock(fix)+' \u00b7 GPS \uc57d '+Math.round(fix.accuracy||0)+' m':' \u00b7 \uc704\uce58 \ud5c8\uc6a9 \ud6c4 \uacc4\uc0b0')+'\n\ub3c4\ubcf4\uac70\ub9ac\uac00 \uc544\ub2d9\ub2c8\ub2e4. 5\ubd84 \ucd08\uacfc \uc0c1\ub300 \uc704\uce58\ub294 \uc2dc\uac01\uc744 \ud655\uc778\ud558\uc138\uc694.';
@@ -56,6 +57,71 @@
     navigator.geolocation.getCurrentPosition(p=>resolve({lat:+p.coords.latitude.toFixed(5),lng:+p.coords.longitude.toFixed(5),accuracy:Math.round(p.coords.accuracy||0),ts:p.timestamp||Date.now()}),reject,{enableHighAccuracy:high,maximumAge:30000,timeout:15000});
   })}
   async function request(path,options={}){const tk=await token(),ctrl=new AbortController(),tid=setTimeout(()=>ctrl.abort(),12000);try{const r=await fetch(firebaseConfig.databaseURL.replace(/\/$/,'')+'/'+path+'.json?auth='+encodeURIComponent(tk),{...options,headers:{...(options.body?{'Content-Type':'application/json'}:{}),...(options.headers||{})},cache:'no-store',signal:ctrl.signal});const t=await r.text();locCount(new TextEncoder().encode(t).length+(options.body?new TextEncoder().encode(options.body).length:0));if(!r.ok){const e=Error(r.status===401||r.status===403?'\uc704\uce58 Firebase Rules/\uc2ac\ub86f \uc18c\uc720\uad8c\uc744 \ud655\uc778\ud574 \uc8fc\uc138\uc694.':'\uc704\uce58 \uc5f0\uacb0 \uc2e4\ud328 ('+r.status+')');e.status=r.status;throw e}return t&&t!=='null'?JSON.parse(t):null}finally{clearTimeout(tid)}}
+  async function requestQuery(path,query=''){
+    const tk=await token(),ctrl=new AbortController(),tid=setTimeout(()=>ctrl.abort(),12000);
+    try{
+      const base=firebaseConfig.databaseURL.replace(/\/$/,'');
+      const url=base+'/'+path+'.json?auth='+encodeURIComponent(tk)+(query?'&'+query:'');
+      const r=await fetch(url,{cache:'no-store',signal:ctrl.signal}),t=await r.text();
+      locCount(new TextEncoder().encode(t).length);
+      if(!r.ok){const e=Error(r.status===401||r.status===403?'24시간 자동삭제를 위해 최신 Firebase Rules를 적용해 주세요.':'위치 정리 연결 실패 ('+r.status+')');e.status=r.status;throw e}
+      return t&&t!=='null'?JSON.parse(t):null;
+    }finally{clearTimeout(tid)}
+  }
+  function retentionPaint(textValue,ok=true){
+    const el=document.getElementById('locRetentionStatus');if(!el)return;
+    el.textContent=textValue;el.dataset.state=ok?'ok':'warning';
+  }
+  async function pruneOwnHistory(force=false){
+    if(!currentUser||!navigator.onLine)return false;
+    if(pruneJob)return pruneJob;
+    if(!force&&Date.now()-lastPruneAt<PRUNE_EVERY)return false;
+    const u={...currentUser},uid=localStorage.getItem('fb_uid')||'';
+    if(!uid)return false;
+    pruneJob=(async()=>{
+      let removed=0;
+      try{
+        // A slot becomes readable only after its UID ownership binding exists.
+        // First-time users can safely wait until their first successful location send.
+        let binding=null;
+        try{binding=await request('locationOwners/'+TRIP_CODE+'/'+u.slot)}catch(_){
+          retentionPaint('최근 24시간만 표시 · 첫 위치공유 후 본인 기록 자동정리');
+          lastPruneAt=Date.now();
+          return false;
+        }
+        if(!binding||binding.uid!==uid){
+          retentionPaint('최근 24시간만 표시 · 본인 위치기록 연결 대기');
+          lastPruneAt=Date.now();
+          return false;
+        }
+        const cutoff=Date.now()-RETAIN,cutKey=String(cutoff);
+        // Current-location node is also removed if this user's last fix itself is older than 24h.
+        const current=await request('locations/'+TRIP_CODE+'/'+u.slot);
+        if(current&&current.uid===uid&&Number(current.ts||0)<cutoff){
+          await request('locations/'+TRIP_CODE+'/'+u.slot,{method:'DELETE'});removed++;
+        }
+        // History keys are 13-digit epoch milliseconds. Delete in bounded batches.
+        for(let round=0;round<8;round++){
+          const q='orderBy=%22%24key%22&endAt=%22'+encodeURIComponent(cutKey)+'%22&limitToFirst=400';
+          const old=await requestQuery('locationHistory/'+TRIP_CODE+'/'+u.slot,q);
+          const entries=Object.entries(old||{}).filter(([k,v])=>/^\d{13}$/.test(k)&&v&&v.uid===uid&&Number(v.ts||k)<cutoff);
+          if(!entries.length)break;
+          const patch={};for(const [k] of entries)patch[k]=null;
+          await request('locationHistory/'+TRIP_CODE+'/'+u.slot,{method:'PATCH',body:JSON.stringify(patch)});
+          removed+=entries.length;
+          if(entries.length<400)break;
+        }
+        lastPruneAt=Date.now();localStorage.setItem('cro.loc.prunedAt',String(lastPruneAt));
+        retentionPaint('최근 24시간만 유지 · 본인 기록 자동정리 완료'+(removed?' ('+removed+'건 삭제)':''));
+        return true;
+      }catch(e){
+        retentionPaint('최근 24시간만 표시 · 서버 자동정리 설정을 확인하세요',false);
+        return false;
+      }finally{pruneJob=null}
+    })();
+    return pruneJob;
+  }
+
   function applyResetLocal(resetAt,notice='관리자가 전체 위치정보를 초기화했습니다. 다시 공유하려면 직접 시작하세요.'){
     if(resetAt)localStorage.setItem('loc_reset_seen',String(resetAt));
     want=false;phase='off';epoch++;message=notice;fix=null;ack=0;locLastWrite=0;
@@ -99,7 +165,7 @@
         // 위치 이력은 slot-UID 소유권을 먼저 고정한 뒤 본인 이력에만 기록한다.
         await request('locationOwners/'+TRIP_CODE+'/'+u.slot,{method:'PUT',body:JSON.stringify({uid:data.uid,slot:u.slot,name:u.name})});
         ack=now;locLastWrite=now;localStorage.setItem('loc_lastwrite',String(now));locCache[u.slot]=data;phase='on';paint();renderRoster();
-        try{await request('locationHistory/'+TRIP_CODE+'/'+u.slot+'/'+now,{method:'PUT',body:JSON.stringify(data)})}catch(e){if(same(n,u)&&want)message='현재위치 저장됨 · 내 이동이력 저장 실패';}
+        try{await request('locationHistory/'+TRIP_CODE+'/'+u.slot+'/'+now,{method:'PUT',body:JSON.stringify(data)});void pruneOwnHistory(false)}catch(e){if(same(n,u)&&want)message='현재위치 저장됨 · 내 이동이력 저장 실패';}
       }catch(e){if(same(n,u)&&want){permissionError(e);paint()}}
       finally{writeJob=null;if(same(n,u)){paint();renderRoster();}}
     })();return writeJob;
@@ -112,6 +178,7 @@
     if(u&&!loggingOut)localStorage.setItem('cro.loc.auto.'+u.slot,'0');paint();renderRoster();
     if(writeJob)try{await writeJob}catch(_){}
     await clearRemote(u);
+    void pruneOwnHistory(true);
   };
   window.locStartSharing=async function(){
     if(!currentUser)return;const u=currentUser;
@@ -126,7 +193,20 @@
   };
   window.locRefreshAll=async function(manual=false){
     if(!currentUser)return;if(refreshJob)return refreshJob;
-    const n=epoch,u={...currentUser};refreshJob=(async()=>{try{await checkResetControl();if(!same(n,u))return;const j=await request('locations/'+TRIP_CODE);if(!same(n,u))return;const cache={};Object.entries(j||{}).forEach(([k,v])=>{if(APP_BY_SLOT[k]&&valid(v)&&age(v)<SHOWMAX)cache[k]=v});locCache=cache;readError=false;readAt=Date.now();localStorage.setItem('loc_read',String(readAt));const e=document.getElementById('locBackendState');if(e)e.textContent='Firebase 조회 정상 · 24시간 지난 위치는 숨김 · '+textClock(readAt);renderRoster()}catch(e){readError=true;const el=document.getElementById('locBackendState');if(el)el.textContent='조회 실패 · 이전 위치일 수 있습니다. '+e.message;if(manual)message=e.message;paint();renderRoster()}finally{refreshJob=null}})();return refreshJob;
+    const n=epoch,u={...currentUser};
+    refreshJob=(async()=>{
+      try{
+        await checkResetControl();if(!same(n,u))return;
+        const j=await request('locations/'+TRIP_CODE);if(!same(n,u))return;
+        const cache={};Object.entries(j||{}).forEach(([k,v])=>{if(APP_BY_SLOT[k]&&valid(v)&&age(v)<RETAIN)cache[k]=v});
+        locCache=cache;readError=false;readAt=Date.now();localStorage.setItem('loc_read',String(readAt));
+        const e=document.getElementById('locBackendState');if(e)e.textContent='Firebase 조회 정상 · 최근 24시간만 조회·표시 · '+textClock(readAt);
+        renderRoster();void pruneOwnHistory(false);
+      }catch(e){
+        readError=true;const el=document.getElementById('locBackendState');if(el)el.textContent='조회 실패 · 이전 위치일 수 있습니다. '+e.message;
+        if(manual)message=e.message;paint();renderRoster();
+      }finally{refreshJob=null}
+    })();return refreshJob;
   };
   const previousLogout=window.appLogout;
   window.appLogout=async function(){loggingOut=true;try{return await previousLogout.apply(this,arguments)}finally{loggingOut=false}};
@@ -197,7 +277,7 @@
     if(retryStop)clearRemote(retryStop);
     const preference=localStorage.getItem('cro.loc.auto.'+currentUser.slot);
     if(preference!=='0')setTimeout(()=>{if(currentUser&&owner?.slot===currentUser.slot)locStartSharing()},50);
-    locRefreshAll(false);ensureSessionLoops();
+    locRefreshAll(false);void pruneOwnHistory(true);ensureSessionLoops();
   }
   window.addEventListener('cro-auth-change',changed);
   let lastResumeAt=0;
@@ -211,6 +291,7 @@
     // Request a fresh fix on return only if sharing was already enabled.
     if(want&&phase!=='permission'&&now-ack>45000)tasks.push(send(false));
     if(now-readAt>15000)tasks.push(locRefreshAll(false));
+    if(now-lastPruneAt>PRUNE_EVERY)tasks.push(pruneOwnHistory(false));
     await Promise.allSettled(tasks);
   }
   window.addEventListener('online',resumeVisible);
@@ -218,12 +299,12 @@
   window.addEventListener('focus',resumeVisible);
   document.addEventListener('visibilitychange',()=>{paint();if(!document.hidden)resumeVisible()});
   document.addEventListener('resume',resumeVisible);
-  document.addEventListener('click',e=>{if(e.target.closest('#locationHeaderToggle'))want?locStopSharing():locStartSharing()});
+  document.addEventListener('click',e=>{if(e.target.closest('#locationHeaderToggle,#briefLocationLink')){e.preventDefault();want?locStopSharing():locStartSharing()}});
   window.addEventListener('cro-route',e=>{
     // Keep ON/OFF and the timers alive across today / schedule / group / more.
     ensureSessionLoops();paint();
     if(e.detail?.view==='location'){renderRoster();locRefreshAll(false)}
   });
   document.addEventListener('DOMContentLoaded',()=>{paint();renderRoster();if(currentUser)changed()});
-  window.LocationSession={paint,resume:resumeVisible,refresh:()=>locRefreshAll(true),distance,info:distanceInfo,applyAdminReset:(ts)=>applyResetLocal(ts),get state(){return {want,phase,message,owner:owner?.slot,lastSentAt:ack,lastFix:fix,stopPending:!!retryStop,publishEveryMs:PERIOD,readEveryMs:120000,publisherRunning:!!timer,readerRunning:!!readTimer,scope:'app-wide'}}};
+  window.LocationSession={paint,resume:resumeVisible,refresh:()=>locRefreshAll(true),distance,info:distanceInfo,applyAdminReset:(ts)=>applyResetLocal(ts),get state(){return {want,phase,message,owner:owner?.slot,lastSentAt:ack,lastFix:fix,stopPending:!!retryStop,publishEveryMs:PERIOD,readEveryMs:120000,publisherRunning:!!timer,readerRunning:!!readTimer,scope:'app-wide',retentionMs:RETAIN,lastPruneAt}}};
 })();

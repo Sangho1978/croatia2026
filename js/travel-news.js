@@ -84,7 +84,7 @@
 
   const PLACE_MAP={
     dubrovnik:'두브로브니크',dbv:'두브로브니크 공항',split:'스플리트',trogir:'트로기르',duce:'두체',duće:'두체',zadar:'자다르',plitvice:'플리트비체',biograd:'비오그라드',
-    zagreb:'자그레브',zag:'자그레브 공항',rastoke:'라스토케',karlovac:'카를로바츠',rome:'로마',roma:'로마',fiumicino:'FCO',fco:'FCO',lazio:'라치오',
+    zagreb:'자그레브',zag:'자그레브 공항',rastoke:'라스토케',karlovac:'카를로바크',rome:'로마',roma:'로마',fiumicino:'FCO',fco:'FCO',lazio:'라치오',
     orvieto:'오르비에토',assisi:'아시시',civita:'치비타',dalmatia:'달마티아'
   };
 
