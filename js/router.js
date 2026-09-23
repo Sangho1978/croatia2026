@@ -6,6 +6,7 @@
   const views=()=>[...document.querySelectorAll('main > section.app-view')];
   function canonical(view,detail=''){
     if(view==='map')return ['location',detail];
+    if(view==='guidebook')return ['more',''];
     if(view==='attendance')return ['group','attendance'];
     if(view==='team'||view==='people')return ['group','people'];
     if(view==='group')return ['group',detail==='people'?'people':'attendance'];

@@ -219,3 +219,11 @@ Preview screenshots use mock FX, GPS, and database responses (not live participa
 - 전체 서버 데이터를 24시간 정책으로 자동 정리하려면 `backend/location-retention/` Scheduled Function을 배포해야 합니다. 실행주기 60분 때문에 서버 잔존은 대략 24~25시간입니다.
 - Firebase Rules는 MIX26의 `firebase.rules.json`으로 교체해야 클라이언트의 본인 이력 삭제가 허용됩니다.
 - 소책자 p.29(C핀)과 p.30(5핀)의 수신기 충전단자 표기는 서로 달라 앱에서 임의 수정하지 않고 “최종 확인 필요”로 유지했습니다.
+
+
+## MIX27 · 2026-09-23 · Google Maps 우선 + 필수안내 통합
+- 위치 지도는 Google Maps를 기본 엔진으로 유지합니다. 6.5초 강제 전환을 제거하고 20초까지 기다린 뒤 연결이 지연되면 OpenStreetMap을 임시 표시합니다. Google Maps가 뒤늦게 로드되면 자동 복귀합니다.
+- 위치 화면에 `Google 지도 다시 연결` 버튼을 추가했습니다. API 인증/도메인/네트워크 오류 시에도 사용자가 직접 재시도할 수 있습니다.
+- 별도 `필수안내` 메뉴와 guidebook 전용 JS/CSS/data 파일을 제거했습니다.
+- 09/22 소책자 내용은 기존 화면에 통합했습니다: 확정 일정→`일정`, 수하물/준비물/수신기→`여행준비`, 호텔→`호텔`, 대사관/분실→`긴급·비상`, 화장실→`화장실`, Tax Refund/결제→`먹거리·쇼핑`, EES/ETIAS·시차·전압·버스 타코그래프→`앱·여행 안내`.
+- 기존 `#/guidebook` 링크는 `앱·여행 안내`로 자동 연결됩니다.

@@ -1,7 +1,7 @@
 # FLIGHT SOURCES MIX03 - 보관용 (MIX26에서 대체됨)
 
 > 이 문서는 2026-09-22 안내소책자 확정 전 검토기록입니다. 현재 앱의 항공시각·호텔·일정 기준으로 사용하지 않습니다.
-> 최신 기준은 `data/flight-plan.js`, `data/itinerary.js`, `data/guidebook.js` 및 안내소책자 09/22 버전입니다.
+> 최신 기준은 `data/flight-plan.js`, `data/itinerary.js`, `data/checklist.js` 및 안내소책자 09/22 버전입니다. MIX27부터 별도 필수안내 메뉴는 제거하고 기존 화면에 통합했습니다.
 
 ## MIX26 확정 반영
 - FR5975: 10/12 로마 23:30 -> 10/13 두브로브니크 00:50

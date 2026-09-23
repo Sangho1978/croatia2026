@@ -51,7 +51,7 @@
     const ls=document.getElementById('todayLocationState'); if(ls){const sharing=localStorage.getItem('loc_sharing')==='1'; ls.textContent=sharing?(locLastWrite?`${ago(locLastWrite)} 전송`:'공유 ON'):'공유 OFF';}
     document.getElementById('todayOpsNote').innerHTML=`<b>식사·운영</b> ${d.meal||'항공·도착 일정에 맞춰 운영'}<br><b>복장·날씨</b> ${WEATHER_ACTION[d.date]||''}`;
     if(window.LocationSession)LocationSession.paint();
-    document.getElementById('todayBtns').innerHTML=(d.map?`<a class="btn primary" target="_blank" rel="noopener" href="${d.map}">📍 오늘 동선 지도</a>`:'')+`<a class="btn" href="#schedule">◷ 오늘 상세일정</a><a class="btn" href="#guidebook">▦ 필수안내</a><a class="btn" href="#attendance">✓ 출석</a><a class="btn" href="#location">◎ 위치</a>`;
+    document.getElementById('todayBtns').innerHTML=(d.map?`<a class="btn primary" target="_blank" rel="noopener" href="${d.map}">📍 오늘 동선 지도</a>`:'')+`<a class="btn" href="#schedule">◷ 오늘 상세일정</a><a class="btn" href="#check">✓ 여행준비</a><a class="btn" href="#attendance">✓ 출석</a><a class="btn" href="#location">◎ 위치</a>`;
   }
 
   function enhanceSchedulePanels(){
@@ -70,7 +70,7 @@
   function setOnlineState(){const e=document.getElementById('onlineStatusChip');if(!e)return;const on=navigator.onLine;e.textContent=on?'🟢 온라인':'🟠 오프라인 · 저장 일정 이용';e.classList.toggle('online',on);e.classList.toggle('offline',!on);}
 
   function setupMemo(){const m=document.getElementById('fieldMemo');if(!m)return;m.value=localStorage.getItem('cro_field_memo')||'';m.addEventListener('input',()=>localStorage.setItem('cro_field_memo',m.value));}
-  function reorderSections(){const main=document.querySelector('main'); if(!main)return;['today','schedule','guidebook','location','attendance','guide','study','weatherDetail','route','hotels','team','check','videos','emergency','more'].forEach(id=>{const s=document.getElementById(id);if(s&&s.parentElement===main)main.appendChild(s)});}
+  function reorderSections(){const main=document.querySelector('main'); if(!main)return;['today','schedule','location','attendance','guide','study','weatherDetail','route','hotels','team','check','videos','emergency','more'].forEach(id=>{const s=document.getElementById(id);if(s&&s.parentElement===main)main.appendChild(s)});}
   function adminVisibility(){document.querySelectorAll('.tech-only').forEach(x=>x.style.display=(currentUser?.name==='한상호'?'block':'none'));}
 
   function haversine(a,b,c,d){const R=6371000,rad=x=>x*Math.PI/180,dp=rad(c-a),dl=rad(d-b),q=Math.sin(dp/2)**2+Math.cos(rad(a))*Math.cos(rad(c))*Math.sin(dl/2)**2;return 2*R*Math.asin(Math.sqrt(q));}
