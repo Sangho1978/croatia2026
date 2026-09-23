@@ -152,3 +152,36 @@ button.ux-clicked,a.ux-clicked{filter:brightness(.95);transform:translateY(1px)}
 .booklet-download-help{grid-column:1/-1;color:#6c808a;font-size:.66rem;line-height:1.45}
 .app-sheet-grid a.booklet-menu-link{min-height:80px;text-align:left;border:1px solid #c9dce4;background:#fff;border-radius:17px;padding:12px;display:grid;grid-template-columns:34px 1fr;grid-template-rows:auto auto;column-gap:8px;box-shadow:0 4px 13px rgba(26,61,80,.045);text-decoration:none}.app-sheet-grid a.booklet-menu-link b{grid-row:1/3;font-size:.72rem;align-self:center;width:30px;height:30px;border-radius:9px;background:#174f69;color:#fff;display:flex;align-items:center;justify-content:center}.app-sheet-grid a.booklet-menu-link span{font-weight:900;font-size:1rem;color:#17242d}.app-sheet-grid a.booklet-menu-link small{font-size:.78rem;color:#75858d;margin-top:2px}
 @media(max-width:430px){.booklet-download-actions{grid-template-columns:1fr}.booklet-inline-actions .btn{flex:1 1 145px}.app-sheet-grid a.booklet-menu-link{min-height:76px;padding:10px}}
+
+/* MIX29 · prominent guidebook buttons */
+.booklet-inline-actions{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.14fr);gap:10px;margin:12px 0 16px}
+.booklet-cta{position:relative;display:flex;align-items:center;gap:10px;min-height:68px;padding:11px 13px;border-radius:17px;text-decoration:none;overflow:hidden;transition:transform .12s ease,box-shadow .12s ease,border-color .12s ease;-webkit-tap-highlight-color:transparent}
+.booklet-cta:active{transform:translateY(1px) scale(.995)}
+.booklet-cta-view{border:1px solid #bfd6df;background:linear-gradient(145deg,#ffffff,#f3f9fb);color:#174f69;box-shadow:0 5px 15px rgba(33,79,102,.07)}
+.booklet-cta-download{border:1px solid #0f6077;background:linear-gradient(135deg,#0d5b78 0%,#0d7180 55%,#128478 100%);color:#fff;box-shadow:0 8px 20px rgba(13,91,120,.22)}
+.booklet-cta-icon{flex:0 0 42px;width:42px;height:42px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:1.15rem;font-weight:950}
+.booklet-cta-view .booklet-cta-icon{background:#e6f2f6;color:#174f69}
+.booklet-cta-download .booklet-cta-icon{background:rgba(255,255,255,.17);color:#fff;border:1px solid rgba(255,255,255,.24)}
+.booklet-cta-copy{min-width:0;display:flex;flex-direction:column;gap:2px;line-height:1.2}
+.booklet-cta-copy strong{font-size:.91rem;font-weight:950;letter-spacing:-.015em}
+.booklet-cta-copy small{font-size:.68rem;font-weight:750;opacity:.78;white-space:nowrap}
+.booklet-cta-arrow{margin-left:auto;flex:0 0 auto;font-size:1.25rem;font-weight:900;opacity:.88}
+.booklet-cta-download:before{content:'';position:absolute;right:-22px;top:-34px;width:88px;height:88px;border-radius:50%;background:rgba(255,255,255,.08);pointer-events:none}
+
+.booklet-download-actions .booklet-action-button{display:grid;grid-template-columns:34px 1fr;grid-template-rows:auto auto;column-gap:9px;align-items:center;justify-content:start;min-height:58px;padding:9px 12px;border-radius:14px;text-align:left;text-decoration:none;box-shadow:0 4px 12px rgba(30,74,94,.06)}
+.booklet-download-actions .booklet-action-button>span{grid-row:1/3;width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:#edf5f8;color:#1c5872;font-size:1rem;font-weight:950}
+.booklet-download-actions .booklet-action-button>b{font-size:.82rem;line-height:1.1}
+.booklet-download-actions .booklet-action-button>small{font-size:.65rem;color:#78909b;line-height:1.1;margin-top:2px}
+.booklet-download-actions .booklet-action-button.is-primary{background:linear-gradient(135deg,#174f69,#0d7580);border-color:#174f69;color:#fff;box-shadow:0 7px 17px rgba(23,79,105,.18)}
+.booklet-download-actions .booklet-action-button.is-primary>span{background:rgba(255,255,255,.16);color:#fff}
+.booklet-download-actions .booklet-action-button.is-primary>small{color:rgba(255,255,255,.76)}
+
+.app-sheet-grid a.booklet-menu-link{position:relative;border-color:#a9ccd8;background:linear-gradient(145deg,#f8fcfd,#edf7fa);box-shadow:0 6px 16px rgba(23,79,105,.08)}
+.app-sheet-grid a.booklet-menu-link b{background:linear-gradient(135deg,#174f69,#0d7580);font-size:1.05rem;box-shadow:0 4px 10px rgba(23,79,105,.18)}
+.app-sheet-grid a.booklet-menu-link em{position:absolute;right:10px;top:9px;font-style:normal;font-size:.58rem;font-weight:950;line-height:1;padding:4px 6px;border-radius:999px;background:#174f69;color:#fff;letter-spacing:.02em}
+
+@media(max-width:560px){
+  .booklet-inline-actions{grid-template-columns:1fr}
+  .booklet-cta{min-height:64px}
+  .booklet-cta-copy strong{font-size:.9rem}
+}
