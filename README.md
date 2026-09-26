@@ -303,3 +303,7 @@ Croatia single-UI finalization. See `MIX35_FINAL_CHANGES.md`. Card/visual switch
 
 ## MIX37 FLOW FIX
 일정 요약의 빈 공간을 제거하고, 일정 흐름을 번호가 붙은 라운딩 chip 형태로 바꿔 작은 화면에서도 스크롤 없이 읽도록 정리했습니다.
+
+
+## MIX38 SCHEDULE UI
+공식일정 요약을 휴대폰 2열/Fold 3~4열의 compact sequence로 재구성했습니다.

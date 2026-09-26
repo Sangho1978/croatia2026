@@ -1,0 +1,145 @@
+/* MIX38 — compact official schedule summary. Keeps MIX37 fixes but removes oversized one-step-per-row UI. */
+:root{--m38-navy:#153f5b;--m38-blue:#176eaa;--m38-line:#d6e4ec;--m38-soft:#f5f9fb;--m38-muted:#667b88}
+
+/* Official schedule summary: compact, consistent and easy to scan. */
+#schedule .day-summary{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:10px!important;
+  min-height:0!important;
+  height:auto!important;
+  padding:16px!important;
+  margin:8px 0 12px!important;
+  background:#fff!important;
+  border:1px solid var(--m38-line)!important;
+  border-left:5px solid var(--m38-blue)!important;
+  border-radius:18px!important;
+  overflow:hidden!important;
+  box-shadow:0 7px 20px rgba(24,72,98,.07)!important;
+}
+#schedule .day-summary h3{
+  order:1!important;
+  margin:0!important;
+  padding:0!important;
+  font-size:clamp(21px,5vw,27px)!important;
+  line-height:1.3!important;
+  color:#173b55!important;
+  letter-spacing:-.025em!important;
+  word-break:keep-all!important;
+  overflow-wrap:anywhere!important;
+}
+
+/* The title already states the route. Hide the duplicated ICN -> ... line. */
+#schedule .day-summary>p{display:none!important}
+
+/* Two-column compact sequence on phones; three/four columns on wider screens. */
+#schedule .day-flow{
+  order:2!important;
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:8px!important;
+  width:100%!important;
+  margin:0!important;
+  padding:25px 0 0!important;
+  overflow:visible!important;
+  position:relative!important;
+}
+#schedule .day-flow::before{
+  content:'일정 순서';
+  grid-column:1/-1!important;
+  position:absolute!important;
+  left:0!important;top:0!important;
+  font-size:11px!important;
+  font-weight:900!important;
+  color:var(--m38-muted)!important;
+  letter-spacing:.02em!important;
+}
+#schedule .flow-arrow{display:none!important}
+#schedule .flow-stop{
+  display:block!important;
+  min-width:0!important;
+  width:100%!important;
+  max-width:100%!important;
+  flex:none!important;
+}
+#schedule .flow-pill{
+  width:100%!important;
+  min-height:48px!important;
+  height:auto!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:8px!important;
+  padding:8px 10px!important;
+  border:1px solid #d0e0e8!important;
+  border-radius:14px!important;
+  background:linear-gradient(180deg,#fff,#f6fafc)!important;
+  color:#28516a!important;
+  box-shadow:0 2px 6px rgba(30,75,103,.045)!important;
+  font-size:13px!important;
+  font-weight:850!important;
+  line-height:1.3!important;
+  white-space:normal!important;
+  word-break:keep-all!important;
+  overflow-wrap:anywhere!important;
+}
+#schedule .flow-pill i{
+  flex:0 0 26px!important;
+  width:26px!important;height:26px!important;
+  display:grid!important;place-items:center!important;
+  border-radius:50%!important;
+  background:var(--m38-blue)!important;
+  color:#fff!important;
+  font-style:normal!important;
+  font-size:10.5px!important;
+  font-weight:900!important;
+}
+#schedule .flow-pill>span{min-width:0!important;max-width:100%!important}
+
+/* Detailed-guide action stays clearly button-like but compact. */
+#schedule .day-guide-links{
+  order:3!important;
+  display:flex!important;
+  flex-wrap:wrap!important;
+  gap:7px!important;
+  margin:0!important;
+  padding:0!important;
+  overflow:visible!important;
+}
+#schedule .day-guide-links a{
+  flex:0 1 auto!important;
+  min-height:42px!important;
+  max-width:100%!important;
+  padding:8px 13px!important;
+  border:1px solid #cfe0e8!important;
+  border-radius:12px!important;
+  background:#fff!important;
+  color:#1e5877!important;
+  font-size:12.5px!important;
+  font-weight:900!important;
+  line-height:1.3!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-decoration:none!important;
+  white-space:normal!important;
+  word-break:keep-all!important;
+  overflow-wrap:anywhere!important;
+}
+#schedule .day-summary>.btns{display:none!important}
+
+/* Override MIX37's narrow-screen full-width step rule. */
+@media(max-width:360px){
+  #schedule .day-flow{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important}
+  #schedule .flow-stop{width:100%!important;flex:none!important}
+  #schedule .flow-pill{width:100%!important;min-height:46px!important;border-radius:13px!important;padding:7px 8px!important;font-size:12px!important}
+  #schedule .flow-pill i{flex-basis:24px!important;width:24px!important;height:24px!important}
+  #schedule .day-guide-links a{flex:0 1 auto!important;width:auto!important}
+}
+@media(min-width:600px){
+  #schedule .day-flow{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  #schedule .day-summary{padding:18px!important}
+}
+@media(min-width:900px){
+  #schedule .day-flow{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+}

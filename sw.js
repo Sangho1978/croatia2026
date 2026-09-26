@@ -1,4 +1,4 @@
-const STATIC='croatia-static-v37';
+const STATIC='croatia-static-v38';
 const GUIDE='croatia-guidebook-v1';
 const CORE=[
   "./index.html",
@@ -17,6 +17,7 @@ const CORE=[
   "./css/mix35-final.css",
   "./css/mix36-ui.css",
   "./css/mix37-ui.css",
+  "./css/mix38-ui.css",
   "./css/shop-food.css",
   "./css/travel-news.css",
   "./css/usability.css",
