@@ -1,0 +1,31 @@
+/* MIX42 multi-trip context: root index is the common login gateway. */
+(function(){
+  'use strict';
+  const cat=window.GSPA_TRIP_CATALOG||{defaultTrip:'croatia',trips:[]};
+  const q=new URLSearchParams(location.search);
+  const requested=(q.get('trip')||'').trim();
+  const isPortal=/\/trips\.html$/i.test(location.pathname);
+  const bootstrap=!requested&&!isPortal;
+  const byId=id=>cat.trips.find(t=>t.id===id);
+  const trip=byId(requested)||byId(cat.defaultTrip)||cat.trips[0]||{id:'croatia',timeZone:'Europe/Zagreb',dbCode:'SNU17-CRO-2026-A7K9P4'};
+  window.GSPA_TRIP_BOOTSTRAP=bootstrap;
+  window.GSPA_TRIP=trip;
+  window.GSPA_TRIP_ID=trip.id;
+  window.GSPA_TRIP_TIMEZONE=trip.timeZone||'Europe/Zagreb';
+  window.GSPA_TRIP_STORAGE_PREFIX=trip.storagePrefix||trip.id||'gspa';
+  window.GSPA_TRIP_BOOKLET=trip.booklet||'';
+  window.GSPA_TRIP_BOOKLET_NAME=trip.bookletDownload||'안내책자.pdf';
+  try{if(!bootstrap)localStorage.setItem('gspa.activeTrip',trip.id)}catch(_){ }
+  if(!bootstrap&&trip.id!=='croatia'&&trip.status!=='ready'){
+    const target='trips.html?trip='+encodeURIComponent(trip.id);
+    if(!isPortal)location.replace(target);
+    return;
+  }
+  document.documentElement.dataset.trip=bootstrap?'gateway':trip.id;
+  document.addEventListener('DOMContentLoaded',()=>{
+    document.querySelectorAll('[data-guidebook-action]').forEach(a=>{
+      if(trip.booklet)a.setAttribute('href',trip.booklet);
+      if(a.dataset.guidebookAction==='download')a.setAttribute('download',trip.bookletDownload||'안내책자.pdf');
+    });
+  });
+})();

@@ -311,3 +311,8 @@ Croatia single-UI finalization. See `MIX35_FINAL_CHANGES.md`. Card/visual switch
 
 ## MIX40
 멀티트립 공통엔진 + 튀르키예 1팀 전체 데이터팩 활성화. 자세한 내용은 MIX40_CHANGES.md 참고.
+
+
+## MIX42
+- 통합 로그인 게이트웨이 안정화 및 크로아티아 호텔 이미지 오프라인 캐시 복구.
+- Firebase Rules 구조는 MIX41과 동일.

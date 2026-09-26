@@ -1,4 +1,4 @@
-const STATIC='gspa-static-v41';
+const STATIC='gspa-static-v42';
 const GUIDE='gspa-guidebook-shared-v1';
 const CORE=[
   "./index.html",
@@ -73,6 +73,11 @@ const CORE=[
   "./data/hana-eur.json",
   "./assets/images/embedded_03_15d3ba61ec.jpg",
   "./assets/images/login_three_countries.jpg",
+  "./assets/images/hotel_grand_park.jpg",
+  "./assets/images/hotel_plaza_duce.jpg",
+  "./assets/images/hotel_ilirija.jpg",
+  "./assets/images/hotel_kadoor.jpg",
+  "./assets/images/hotel_ergife.jpg",
   "./assets/images/turkiye1/bosphorus.jpg",
   "./assets/images/turkiye1/cistern.jpg",
   "./assets/images/turkiye1/pamukkale.jpg",

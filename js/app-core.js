@@ -37,7 +37,7 @@ function renderHotelImmigration(){
 }
 function renderHotels(){
   const box=document.getElementById('hotelDirectory'); if(!box||!Array.isArray(window.CRO_HOTELS))return;
-  box.innerHTML=window.CRO_HOTELS.map(h=>`<article class="hotel-detail-card card" id="hotel-${escHotel(h.id)}"><div class="hotel-photo-wrap"><img src="${escHotel(h.image)}" alt="${escHotel(h.name)}" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.zIndex='0'"><div class="hotel-photo-fallback">${escHotel(h.name)}</div></div><div class="hotel-detail-body"><span class="hotel-stay-line">STAY · ${escHotel(h.stayEn||h.stay)}</span><h3>${escHotel(h.name)}</h3><dl class="hotel-essential"><div><dt>STAY</dt><dd>${escHotel(h.stayEn||h.stay)}</dd></div><div><dt>ADDRESS</dt><dd>${escHotel(h.address)}</dd></div><div><dt>PHONE</dt><dd><a href="tel:${escHotel(h.tel)}">${escHotel(h.phone)}</a>${h.secondaryPhone?`<br><small>RESERVATIONS · ${escHotel(h.secondaryPhone.replace(/^예약\/세일즈\s*/,'').replace(/^콜센터\s*/,''))}</small>`:''}</dd></div><div><dt>EMAIL</dt><dd>${escHotel(h.email)}</dd></div></dl><p class="hotel-blurb">${escHotel(h.blurb)}</p><div class="hotel-highlights">${(h.highlights||[]).map(x=>`<span>${escHotel(x)}</span>`).join('')}</div><div class="hotel-buttons"><a class="primary" href="tel:${escHotel(h.tel)}">☎ 전화</a><a href="${escHotel(h.map)}" target="_blank" rel="noopener">📍 지도</a><a href="${escHotel(h.website)}" target="_blank" rel="noopener">공식 사이트</a></div></div></article>`).join('');
+  box.innerHTML=window.CRO_HOTELS.map(h=>`<article class="hotel-detail-card card" id="hotel-${escHotel(h.id)}"><div class="hotel-photo-wrap"><img src="${escHotel(h.image)}?v=20260926-MIX42" alt="${escHotel(h.name)}" loading="lazy" decoding="async" fetchpriority="low" onerror="this.style.display='none';this.nextElementSibling.style.zIndex='0'"><div class="hotel-photo-fallback">${escHotel(h.name)}</div></div><div class="hotel-detail-body"><span class="hotel-stay-line">STAY · ${escHotel(h.stayEn||h.stay)}</span><h3>${escHotel(h.name)}</h3><dl class="hotel-essential"><div><dt>STAY</dt><dd>${escHotel(h.stayEn||h.stay)}</dd></div><div><dt>ADDRESS</dt><dd>${escHotel(h.address)}</dd></div><div><dt>PHONE</dt><dd><a href="tel:${escHotel(h.tel)}">${escHotel(h.phone)}</a>${h.secondaryPhone?`<br><small>RESERVATIONS · ${escHotel(h.secondaryPhone.replace(/^예약\/세일즈\s*/,'').replace(/^콜센터\s*/,''))}</small>`:''}</dd></div><div><dt>EMAIL</dt><dd>${escHotel(h.email)}</dd></div></dl><p class="hotel-blurb">${escHotel(h.blurb)}</p><div class="hotel-highlights">${(h.highlights||[]).map(x=>`<span>${escHotel(x)}</span>`).join('')}</div><div class="hotel-buttons"><a class="primary" href="tel:${escHotel(h.tel)}">☎ 전화</a><a href="${escHotel(h.map)}" target="_blank" rel="noopener">📍 지도</a><a href="${escHotel(h.website)}" target="_blank" rel="noopener">공식 사이트</a></div></div></article>`).join('');
 }
 function renderDays(){
   let tabs=document.getElementById('dayTabs'),wrap=document.getElementById('dayPanels');tabs.innerHTML='';wrap.innerHTML='';
@@ -134,15 +134,41 @@ function appUseAnotherAccount(){
   [LOGIN_NAME_KEY,LOGIN_PASS_KEY,LOGIN_MEMORY_KEY].forEach(k=>localStorage.removeItem(k));
   rememberedLogin=null;paintLoginGate();
 }
+function _loginName(s){return String(s||'').normalize('NFC').replace(/[\s\u200B-\u200D\uFEFF]+/g,'')}
+function _tripLoginKeys(id){return id==='croatia'?{name:'cro_login_name',memory:'cro.login.identity.v5'}:{name:`gspa.${id}.login.name`,memory:`gspa.${id}.login.identity.v1`}}
+function _routeCommonLogin(name,pass,err){
+  if(!window.GSPA_TRIP_BOOTSTRAP)return false;
+  const dir=Array.isArray(window.GSPA_LOGIN_DIRECTORY)?window.GSPA_LOGIN_DIRECTORY:[];
+  const n=_loginName(name);
+  const hit=dir.find(x=>_loginName(x.name)===n&&String(x.pin||'')===String(pass||''));
+  if(!hit){err.textContent='이름과 비밀번호 4자리를 확인해 주세요.';return true;}
+  const cat=window.GSPA_TRIP_CATALOG?.trips||[],target=cat.find(t=>t.id===hit.trip);
+  if(!target||target.status!=='ready'){err.textContent='해당 연수팀은 아직 준비 중입니다.';return true;}
+  if(hit.trip!==TRIP_ID){
+    try{
+      const k=_tripLoginKeys(hit.trip);
+      localStorage.setItem(k.name,hit.name);
+      localStorage.setItem(k.memory,JSON.stringify({name:hit.name,memberId:hit.memberId}));
+      sessionStorage.setItem('gspa.pendingEnter',JSON.stringify({trip:hit.trip,name:hit.name,memberId:hit.memberId}));
+    }catch(_){ }
+    location.replace(target.appUrl||('index.html?trip='+encodeURIComponent(hit.trip)));
+    return true;
+  }
+  return false;
+}
 function appLogin(){
   const err=document.getElementById('loginError');let u;
   if(rememberedLogin){
     u=rememberedAccount();
-    if(!u||u.memberId!==rememberedLogin.memberId){rememberedLogin=null;paintLoginGate();err.textContent='\uc800\uc7a5\ub41c \uacc4\uc815\uc744 \ub2e4\uc2dc \ud655\uc778\ud574 \uc8fc\uc138\uc694.';return;}
+    if(!u||u.memberId!==rememberedLogin.memberId){rememberedLogin=null;paintLoginGate();err.textContent='저장된 계정을 다시 확인해 주세요.';return;}
   }else{
-    const name=(document.getElementById('loginName').value||'').replace(/\s+/g,''),pass=(document.getElementById('loginPass').value||'').trim();
-    document.getElementById('loginName').value=name;u=userByName(name);
-    const expected=(u&&u.pin&&/^\d{4}$/.test(String(u.pin)))?String(u.pin):String(u?.phone||'').replace(/\D/g,'').slice(-4);if(!u||!/^\d{4}$/.test(pass)||!expected||pass!==expected){err.textContent='이름과 비밀번호 4자리를 확인해 주세요.';return;}
+    const name=_loginName(document.getElementById('loginName').value),pass=(document.getElementById('loginPass').value||'').trim();
+    document.getElementById('loginName').value=name;
+    if(!/^\d{4}$/.test(pass)){err.textContent='비밀번호 숫자 4자리를 확인해 주세요.';return;}
+    if(_routeCommonLogin(name,pass,err))return;
+    u=userByName(name);
+    const expected=(u&&u.pin&&/^\d{4}$/.test(String(u.pin)))?String(u.pin):String(u?.phone||'').replace(/\D/g,'').slice(-4);
+    if(!u||!expected||pass!==expected){err.textContent='이름과 비밀번호 4자리를 확인해 주세요.';return;}
   }
   currentUser=u;
   try{localStorage.setItem(LOGIN_NAME_KEY,u.name);localStorage.setItem(LOGIN_MEMORY_KEY,JSON.stringify({name:u.name,memberId:u.memberId}));localStorage.removeItem(LOGIN_PASS_KEY);}catch(_){}
