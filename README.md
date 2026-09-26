@@ -299,3 +299,7 @@ Croatia single-UI finalization. See `MIX35_FINAL_CHANGES.md`. Card/visual switch
 
 ## MIX36 UI FIX
 모바일 일정 overflow/Google Maps badge 깨짐을 수정하고, 모든 날짜별 일정에 lazy-loaded 동선 지도를 통합했습니다. Fold/태블릿 레이아웃과 오프라인 동작은 유지합니다.
+
+
+## MIX37 FLOW FIX
+일정 요약의 빈 공간을 제거하고, 일정 흐름을 번호가 붙은 라운딩 chip 형태로 바꿔 작은 화면에서도 스크롤 없이 읽도록 정리했습니다.

@@ -44,7 +44,7 @@ function renderDays(){
   days.forEach((d,i)=>{
     let b=document.createElement('button');b.className='tab';b.textContent=d.date.slice(5).replace('-','/');b.onclick=()=>selectDay(i);tabs.appendChild(b);
     let p=document.createElement('div');p.className='panel';
-    let flow=(d.flow||[]).map((x,j)=>`${j?'<span class="flow-arrow">›</span>':''}<span class="flow-stop"><span class="flow-pill">${x}</span></span>`).join('');
+    let flow=(d.flow||[]).map((x,j)=>`<span class="flow-stop"><span class="flow-pill"><i aria-hidden="true">${j+1}</i><span>${x}</span></span></span>`).join('');
     let moves=(d.moves||[]).map(m=>`<div class="move-row"><span class="move-mode">${m[0]}</span><span class="move-route">${m[1]}</span><span class="move-time">${m[2]}</span></div>`).join('');
     let gl=(d.guides||[]).map(g=>`<a href="${g[1]}">📖 ${g[0]} 상세가이드</a>`).join('');
     p.innerHTML=`${dayHotelHtml(d.date)}<div class="day-summary"><h3>${d.title}</h3><p><b>이동동선</b> ${d.route}</p><div class="day-flow">${flow}</div><div class="day-guide-links">${gl}</div>${d.map?`<div class="btns"><a class="btn" target="_blank" rel="noopener" href="${d.map}">📍 Google 전체 동선</a></div>`:''}</div><div class="day-weather-box" id="dayWeather-${i}">${expectedHourlyHtml(d)}</div><div class="day-main-grid"><div class="card"><h3>일정</h3><div class="timeline">${d.events.map(e=>`<div class="event"><span class="time">${e[0]}</span>${e[1]}</div>`).join('')}</div>${d.meal?`<div class="meal"><b>식사</b><br>${d.meal}</div>`:''}</div><div class="card"><h3>구간별 이동시간</h3><div class="move-list">${moves}</div></div></div>${dayAttractionHtml(d)}`;
