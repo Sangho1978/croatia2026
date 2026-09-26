@@ -316,3 +316,9 @@ Croatia single-UI finalization. See `MIX35_FINAL_CHANGES.md`. Card/visual switch
 ## MIX42
 - 통합 로그인 게이트웨이 안정화 및 크로아티아 호텔 이미지 오프라인 캐시 복구.
 - Firebase Rules 구조는 MIX41과 동일.
+
+## MIX44 (2026-09-26)
+- 일정/오늘 동선지도: Google Maps 전용 + 오프라인 로컬 동선도 fallback.
+- 위치공유 지도: OpenStreetMap 자동전환 제거.
+- 전체메뉴 `연수팀` 제거.
+- 추천앱/화장실: 크로아티아에서만 표시.
