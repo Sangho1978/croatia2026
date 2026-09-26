@@ -1,9 +1,10 @@
-const STATIC='gspa-static-v40';
+const STATIC='gspa-static-v41';
 const GUIDE='gspa-guidebook-shared-v1';
 const CORE=[
   "./index.html",
   "./trips.html",
   "./platform/trips.js",
+  "./platform/login-directory.js",
   "./js/trip-context.js",
   "./js/trip-data-loader.js",
   "./js/trip-ui.js",

@@ -120,7 +120,13 @@ function paintLoginGate(){
 }
 function appInitLogin(){
   document.body.classList.remove('login-ready');currentUser=null;
-  rememberedLogin=rememberedAccount();paintLoginGate();
+  rememberedLogin=rememberedAccount();
+  let pending=null;try{pending=JSON.parse(sessionStorage.getItem('gspa.pendingEnter')||'null')}catch(_){}
+  if(pending&&pending.trip===TRIP_ID&&rememberedLogin&&pending.name===rememberedLogin.name&&pending.memberId===rememberedLogin.memberId){
+    try{sessionStorage.removeItem('gspa.pendingEnter')}catch(_){}
+    currentUser=rememberedLogin;appEnter();return;
+  }
+  paintLoginGate();
   document.getElementById('loginScreen').classList.remove('hidden');
 }
 function appUseAnotherAccount(){
