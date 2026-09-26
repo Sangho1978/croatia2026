@@ -40,7 +40,7 @@
   }
   function opsRenderToday(){
     const d=operationalDay(),pre=localDate()<'2026-10-12',post=localDate()>'2026-10-19';
-    const mode=document.getElementById('todayMode'); if(mode)mode.textContent=pre?'DEPARTURE PREP':post?'TRIP COMPLETE':'TODAY OPERATIONS';
+    const mode=document.getElementById('todayMode'); if(mode)mode.textContent=pre?'출발 준비':post?'여행 종료':'오늘 여행';
     document.getElementById('todayDate').textContent=(pre?'다가오는 일정 · ':post?'연수 종료 · ':'현지 ')+d.date;
     document.getElementById('todayTitle').textContent=d.title;
     document.getElementById('todayRoute').textContent=d.route;
@@ -49,9 +49,9 @@
     const w=WEATHER_SPOTS[d.date]; const ws=document.getElementById('todayWeatherState'); if(ws)ws.textContent=document.getElementById('liveWeatherMain')?.textContent||(w?`${w.name} ${w.hi}/${w.lo}° 참고`:'도착일');
     const as=document.getElementById('todayAttendanceState'); if(as){const cnt=Object.values(attChecks||{}).filter(x=>x&&x.checked).length; as.textContent=attCurrent?`${cnt}/28 · ${attCurrent.title||attCurrent.type}`:'진행 없음';}
     const ls=document.getElementById('todayLocationState'); if(ls){const sharing=localStorage.getItem('loc_sharing')==='1'; ls.textContent=sharing?(locLastWrite?`${ago(locLastWrite)} 전송`:'공유 ON'):'공유 OFF';}
-    document.getElementById('todayOpsNote').innerHTML=`<b>식사·운영</b> ${d.meal||'항공·도착 일정에 맞춰 운영'}<br><b>복장·날씨</b> ${WEATHER_ACTION[d.date]||''}`;
+    const mealBrief=String(d.meal||'항공·도착 일정에 맞춰 운영').split(/[.!?]/)[0]; const weatherBrief=String(WEATHER_ACTION[d.date]||'').split(/[.!?]/)[0]; document.getElementById('todayOpsNote').innerHTML=`<b>식사</b> ${mealBrief}<br><b>오늘 준비</b> ${weatherBrief}`;
     if(window.LocationSession)LocationSession.paint();
-    document.getElementById('todayBtns').innerHTML=(d.map?`<a class="btn primary" target="_blank" rel="noopener" href="${d.map}">📍 오늘 동선 지도</a>`:'')+`<a class="btn" href="#schedule">◷ 오늘 상세일정</a><a class="btn" href="#check">✓ 여행준비</a><a class="btn" href="#attendance">✓ 출석</a><a class="btn" href="#location">◎ 위치</a>`;
+    document.getElementById('todayBtns').innerHTML=`<a class="btn" href="#schedule">◷ 상세 일정</a><a class="btn" href="#check">✓ 여행 준비</a>`;
   }
 
   function enhanceSchedulePanels(){

@@ -1,0 +1,104 @@
+/* MIX30 - field-first UI: collapsible daily journey map + reduced explanatory copy */
+:root{
+  --mix30-ink:#173047;
+  --mix30-muted:#6b7785;
+  --mix30-line:#e3e9ef;
+  --mix30-surface:#ffffff;
+  --mix30-soft:#f4f7fa;
+  --mix30-blue:#1769aa;
+  --mix30-green:#15735e;
+  --mix30-shadow:0 8px 24px rgba(27,58,84,.08);
+}
+
+/* Keep one obvious location switch in the compact header. The duplicate control remains in DOM for compatibility. */
+.top-details .mix-location-row{display:none!important}
+.top-utility [data-location-help]{display:none!important}
+
+/* Today: map-first, action-first. */
+#today>h2{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+#today{padding-top:8px}
+.today-journey-panel{margin:0 0 12px;border:1px solid #dce5ec;border-radius:18px;background:var(--mix30-surface);box-shadow:var(--mix30-shadow);overflow:hidden}
+.today-journey-panel>summary{list-style:none;display:flex;align-items:center;gap:12px;padding:14px 15px;cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none}
+.today-journey-panel>summary::-webkit-details-marker{display:none}
+.today-journey-icon{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:#eaf3fb;color:var(--mix30-blue);font-size:21px;flex:0 0 auto}
+.today-journey-summary-copy{min-width:0;flex:1}
+.today-journey-summary-copy b{display:block;font-size:16px;color:var(--mix30-ink);line-height:1.25}
+.today-journey-summary-copy small{display:block;margin-top:3px;color:var(--mix30-muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.today-journey-chevron{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:#f1f4f7;color:#607080;font-size:16px;transition:transform .2s ease}
+.today-journey-panel[open] .today-journey-chevron{transform:rotate(180deg)}
+.today-journey-content{border-top:1px solid var(--mix30-line);padding:12px}
+.today-journey-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
+.today-journey-heading small{color:var(--mix30-muted);font-size:11px;font-weight:700}
+.today-journey-heading b{display:block;font-size:17px;line-height:1.3;color:var(--mix30-ink);margin-top:2px}
+.today-journey-map-wrap{position:relative;border-radius:16px;overflow:hidden;background:#eaf0f4;height:220px;border:1px solid #d9e2e9}
+#todayJourneyMap{width:100%;height:100%}
+.today-journey-map-state{position:absolute;left:10px;right:10px;bottom:10px;padding:8px 10px;border-radius:11px;background:rgba(255,255,255,.92);box-shadow:0 3px 12px rgba(31,48,63,.14);font-size:11px;font-weight:700;color:#526171;pointer-events:none}
+.today-journey-map-state:empty{display:none}
+.today-journey-stops{display:flex;gap:7px;overflow-x:auto;padding:10px 1px 3px;scrollbar-width:none}
+.today-journey-stops::-webkit-scrollbar{display:none}
+.today-stop{flex:0 0 auto;display:flex;align-items:center;gap:6px;padding:7px 9px;border-radius:999px;background:#f1f5f8;color:#405263;font-size:11px;font-weight:800;white-space:nowrap}
+.today-stop i{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:var(--mix30-blue);color:#fff;font-style:normal;font-size:10px}
+.today-journey-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.today-journey-actions a{min-height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;text-align:center;text-decoration:none;font-size:13px;font-weight:800;border:1px solid #dbe4eb;background:#fff;color:#34536d}
+.today-journey-actions a.primary{background:#1769aa;color:#fff;border-color:#1769aa}
+
+/* Today cards: reduce duplication and make the first actions obvious. */
+.ops-today-hero{margin-top:0!important;padding:15px!important;border-radius:18px!important;box-shadow:var(--mix30-shadow)!important}
+.ops-kicker{font-size:10px!important;letter-spacing:.08em!important}
+.ops-date{font-size:12px!important}
+.ops-today-hero h3{font-size:20px!important;line-height:1.25!important;margin-top:4px!important}
+.ops-route{margin-top:5px!important;font-size:12px!important;color:#647485!important}
+.ops-flow{margin-top:9px!important}
+.ops-flow span{font-size:11px!important;padding:5px 8px!important}
+.ops-next-card{margin-top:10px!important;border-radius:16px!important;box-shadow:none!important;border:1px solid var(--mix30-line)!important}
+.ops-action-first{grid-template-columns:repeat(3,1fr)!important;gap:8px!important;margin-top:10px!important}
+.ops-action-first a{min-height:48px!important;border-radius:14px!important;font-size:13px!important}
+.ops-action-first a.emergency{background:#fff5f5!important;color:#b6343e!important;border:1px solid #ffd6d8!important}
+.ops-status-grid{display:none!important}
+.ops-brief-card{margin-top:10px!important;padding:14px!important;border-radius:16px!important;box-shadow:none!important;border:1px solid var(--mix30-line)!important}
+.ops-brief-head h3{font-size:15px!important;margin:0!important}
+.ops-brief-head span{font-size:11px!important}
+.ops-note{font-size:12px!important;line-height:1.55!important;margin-top:8px!important}
+.ops-today-btns{display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px!important}
+.ops-today-btns .btn{margin:0!important;min-height:42px!important;display:flex!important;align-items:center!important;justify-content:center!important;font-size:12px!important}
+
+/* Reduce explanatory copy without removing any feature. */
+#schedule>p.small.muted,
+#team>p.quiet,
+#members>p.quiet,
+#emergency>p.quiet,
+.weather-detail-card>.small.muted:last-child,
+.video-head>p,
+.video-tip,
+.news-scope-box>small,
+.source-policy{display:none!important}
+
+.guide-intro{padding:0!important;margin:0 0 10px!important;background:transparent!important;border:0!important;box-shadow:none!important}
+.guide-intro p{display:none!important}
+.guide-intro h3{font-size:15px!important;margin:0!important;color:#526171!important}
+
+/* Menu wording is enough; keep subtitles short and readable. */
+.app-sheet-group{margin-top:14px!important}
+.app-sheet-group h3{font-size:13px!important;margin-bottom:8px!important}
+.app-sheet-grid button small,.app-sheet-grid a small{font-size:10px!important;line-height:1.2!important}
+
+/* Booklet card: action first, less instructional copy. */
+.booklet-download-copy p,.booklet-download-help{display:none!important}
+.booklet-download-copy small{margin-top:4px!important}
+
+/* Location page: privacy notice remains visible but explanatory blocks are compact. */
+.loc-privacy-24h{line-height:1.45!important}
+.runtime-dialog p{font-size:13px!important;line-height:1.55!important}
+.runtime-dialog .runtime-note{font-size:12px!important;line-height:1.5!important}
+.runtime-dialog .runtime-small{display:none!important}
+
+@media (max-width:430px){
+  .today-journey-map-wrap{height:202px}
+  .today-journey-actions{grid-template-columns:1fr}
+  .ops-action-first{gap:6px!important}
+  .ops-action-first a{font-size:12px!important;padding:0 6px!important}
+}
+.location-info-fold{display:none!important}
+.field-tools-intro p{display:none!important}
+.schedule-separator,.recommended-flow{display:none!important}
+#more .ops-definition{display:none!important}

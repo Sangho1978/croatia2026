@@ -1,3 +1,21 @@
+# MIX30 - field-first UI / collapsible daily route map
+
+Base: MIX29. Build: 20260926-MIX30.
+
+- Today screen uses the field-first layout.
+- New top `오늘 여행일정 보기` card is collapsed by default; when opened it shows the daily Google Maps route with numbered stops.
+- Fast actions are reduced to Attendance / Group Location / Emergency.
+- Duplicate status cards and repeated instructional copy are visually removed, while all underlying features and DOM hooks are preserved.
+- Tourist history, attraction details, prices, booking links and map links remain.
+- The compact header keeps one obvious location ON/OFF switch.
+- Location retention remains 24 hours.
+- `앱 · 여행 안내` is renamed to `여행 정보`.
+- Firebase Rules and database structures are unchanged from MIX29.
+
+Deploy the entire ZIP at the existing site root.
+
+---
+
 # MIX07 - contrast, emergency contact, app-wide location
 
 Base archive: croatia2026_mix06_under100_github_pages.zip (54 files).
