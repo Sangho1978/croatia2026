@@ -1,4 +1,4 @@
-const STATIC='croatia-static-v35';
+const STATIC='croatia-static-v36';
 const GUIDE='croatia-guidebook-v1';
 const CORE=[
   "./index.html",
@@ -15,6 +15,7 @@ const CORE=[
   "./css/mix31-ui.css",
   "./css/mix32-ui.css",
   "./css/mix35-final.css",
+  "./css/mix36-ui.css",
   "./css/shop-food.css",
   "./css/travel-news.css",
   "./css/usability.css",
@@ -35,6 +36,7 @@ const CORE=[
   "./js/mix30-ui.js",
   "./js/mix34-offline.js",
   "./js/mix35-final.js",
+  "./js/mix36-ui.js",
   "./js/mobile-ui.js",
   "./js/net-meter.js",
   "./js/ops.js",
@@ -55,6 +57,7 @@ const CORE=[
   "./data/flight-plan.js",
   "./data/hotels.js",
   "./data/itinerary.js",
+  "./data/route-points.js",
   "./data/roster.js",
   "./data/hana-eur.json",
   "./assets/images/embedded_03_15d3ba61ec.jpg"

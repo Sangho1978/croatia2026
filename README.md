@@ -295,3 +295,7 @@ Preview screenshots use mock FX, GPS, and database responses (not live participa
 
 ## MIX35 FINAL (2026-09-26)
 Croatia single-UI finalization. See `MIX35_FINAL_CHANGES.md`. Card/visual switch removed; Fold/tablet responsive and MIX34 offline-first behavior retained.
+
+
+## MIX36 UI FIX
+모바일 일정 overflow/Google Maps badge 깨짐을 수정하고, 모든 날짜별 일정에 lazy-loaded 동선 지도를 통합했습니다. Fold/태블릿 레이아웃과 오프라인 동작은 유지합니다.
