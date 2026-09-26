@@ -1,4 +1,4 @@
-/* MIX42 multi-trip context: root index is the common login gateway. */
+/* MIX43 multi-trip context: root index is the common login gateway. */
 (function(){
   'use strict';
   const cat=window.GSPA_TRIP_CATALOG||{defaultTrip:'croatia',trips:[]};

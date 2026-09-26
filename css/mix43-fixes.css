@@ -1,0 +1,28 @@
+/* MIX43 route-map/booklet/content reliability */
+.route-schematic{height:100%;min-height:260px;background:linear-gradient(180deg,#edf6f8,#f8fbfc);border-radius:18px;overflow:hidden;position:relative}
+.route-schematic svg{width:100%;height:100%;min-height:250px;display:block}
+.route-svg-grid{stroke:#d6e5ea;stroke-width:1;fill:none}.route-svg-line{fill:none;stroke:#1769aa;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}.route-svg-dot{fill:#1678b8;stroke:#fff;stroke-width:4}.route-svg-num{fill:#fff;font-size:14px;font-weight:900}.route-svg-label-bg{fill:rgba(255,255,255,.95);stroke:#d6e2e7}.route-svg-label{fill:#16394d;font-size:13px;font-weight:800}.route-schematic-note{position:absolute;left:10px;right:10px;bottom:8px;background:rgba(255,255,255,.92);border-radius:10px;padding:6px 9px;font-size:11px;font-weight:700;color:#526977;text-align:center}.route-local-empty{display:grid;place-items:center;min-height:220px;color:#687a85}.route-num-icon{background:transparent!important;border:0!important}.route-num-icon span{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:#1678b8;color:#fff;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.25);font-weight:900}.schedule-route-map,.today-journey-map{background:#edf4f6}.leaflet-container{font-family:inherit}.leaflet-tooltip{font-weight:800}
+.guidebook-error{margin-top:8px;padding:8px 10px;border-radius:10px;background:#fff4e5;color:#7d4a00;font-size:12px;font-weight:700}
+.trip-turkiye1 .day-attraction-card{overflow:hidden}.trip-turkiye1 .day-attraction-card .spot-image{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:16px;margin:0 0 12px}.trip-turkiye1 .tour-source-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.trip-turkiye1 .tour-source-row a{display:inline-flex;align-items:center;min-height:38px;padding:7px 10px;border:1px solid #cddde4;border-radius:12px;text-decoration:none;font-weight:800;color:#145a7a;background:#fff}.trip-turkiye1 .tour-note{margin-top:8px;padding:10px 12px;border-radius:12px;background:#f4f8fa;color:#405b69;font-size:.9em;line-height:1.55}.tur-video-grid{display:grid;grid-template-columns:1fr;gap:12px}.tur-video-card{border:1px solid #d9e4e8;border-radius:18px;padding:15px;background:#fff;box-shadow:0 4px 14px rgba(22,57,77,.07)}.tur-video-card .day{display:inline-block;padding:5px 8px;border-radius:999px;background:#e8f3f8;color:#166488;font-size:12px;font-weight:900}.tur-video-card h4{margin:9px 0 5px;font-size:1.08em}.tur-video-card p{margin:0 0 10px;line-height:1.6;color:#455f6c}.tur-video-card .watch{display:flex;gap:8px;flex-wrap:wrap}.tur-video-card .watch a{display:inline-flex;align-items:center;min-height:40px;border-radius:12px;padding:8px 11px;background:#126e9b;color:#fff;text-decoration:none;font-weight:900}.tur-guide-source{font-size:12px;color:#6a7c86;margin-top:9px}.airline-tag{font-weight:900;color:#0f6288}
+@media(min-width:700px){.tur-video-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.trip-turkiye1 .day-attraction-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Türkiye route guide: larger photo-led reading while keeping the field UI compact elsewhere. */
+.trip-turkiye1 .tur-city{margin-top:18px;border-radius:22px;overflow:hidden}
+.trip-turkiye1 .tur-city .city-cover{width:100%;height:auto;aspect-ratio:16/8.5;object-fit:cover;display:block}
+.trip-turkiye1 .tur-city .inside{padding:18px}
+.trip-turkiye1 .tur-city h3{font-size:clamp(1.4rem,4.7vw,2rem);line-height:1.25;margin:5px 0 10px}
+.trip-turkiye1 .tur-city .city-overview{font-size:1rem;line-height:1.72;color:#334d5b}
+.tur-attraction-strip{display:grid;grid-template-columns:1fr;gap:9px;margin-top:14px}
+.tur-attraction-strip>div{padding:12px 13px;border-radius:14px;background:#f2f7f9;border:1px solid #dce8ec}
+.tur-attraction-strip b{display:block;color:#123f58;margin-bottom:4px}.tur-attraction-strip span{display:block;color:#526a77;line-height:1.55;font-size:.92rem}
+.tur-source-btns{margin-top:13px}.tur-source-btns .btn{min-height:43px;border-radius:13px}
+.tur-video-grid{display:grid;grid-template-columns:1fr;gap:14px}
+a.tur-video-card{display:block;padding:0;overflow:hidden;text-decoration:none;color:inherit;border-radius:20px;background:#fff;border:1px solid #d8e3e8;box-shadow:0 6px 18px rgba(20,62,82,.08)}
+a.tur-video-card img{display:block;width:100%;aspect-ratio:16/8.5;object-fit:cover;background:#e7eef1}
+a.tur-video-card>div{padding:15px 16px 17px}
+a.tur-video-card small{display:block;color:#16709c;font-weight:900;letter-spacing:.02em;margin-bottom:5px}
+a.tur-video-card b{display:block;font-size:1.15rem;color:#123d55;margin-bottom:5px}
+a.tur-video-card span{display:block;color:#566c77;line-height:1.55;font-size:.92rem}
+a.tur-video-card:after{content:'▶ 눌러서 영상 보기';display:block;margin:0 16px 16px;background:#126e9b;color:#fff;border-radius:12px;text-align:center;padding:10px 12px;font-weight:900}
+.trip-turkiye1 .day-attraction-card{padding:0 0 15px}.trip-turkiye1 .day-attraction-card>:not(.spot-image){margin-left:15px;margin-right:15px}.trip-turkiye1 .day-attraction-card .spot-image{border-radius:17px 17px 0 0;margin:0 0 14px;aspect-ratio:16/9}.trip-turkiye1 .day-attraction-card h4{font-size:1.25rem;margin-top:0}.trip-turkiye1 .day-attraction-card>p{line-height:1.65;color:#3f5967}
+@media(min-width:700px){.tur-attraction-strip{grid-template-columns:repeat(2,minmax(0,1fr))}.tur-video-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.trip-turkiye1 .tur-city .city-cover{aspect-ratio:21/8}}

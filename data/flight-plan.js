@@ -10,8 +10,8 @@ const SOURCE={
   map:'https://www.adr.it/web/aeroporti-di-roma-en/pax-fco-airport-map',
   times:'https://help.ryanair.com/hc/en-gb/categories/12488813755537-At-the-Airport-On-Board'
 };
-const out={flight:'FR5975',origin:'FCO',destination:'DBV',depart:'2026-10-12T23:30:00+02:00',arrive:'2026-10-13T00:50:00+02:00',minutes:80,terminal:'로마 FCO 도착 후 Terminal 1 Ryanair 카운터 이동 · 소책자 도보 약 10분',confirmed:true,basis:SOURCE.booklet};
-const back={flight:'FR8836',origin:'ZAG',destination:'FCO',depart:'2026-10-17T22:10:00+02:00',arrive:'2026-10-17T23:35:00+02:00',minutes:85,terminal:'자그레브 국제공항 → 로마 FCO · 도착 터미널/게이트는 당일 확인',confirmed:true,basis:SOURCE.booklet};
+const out={airline:'라이언에어',flight:'FR5975',origin:'FCO',destination:'DBV',depart:'2026-10-12T23:30:00+02:00',arrive:'2026-10-13T00:50:00+02:00',minutes:80,terminal:'로마 FCO 도착 후 Terminal 1 Ryanair 카운터 이동 · 소책자 도보 약 10분',confirmed:true,basis:SOURCE.booklet};
+const back={airline:'라이언에어',flight:'FR8836',origin:'ZAG',destination:'FCO',depart:'2026-10-17T22:10:00+02:00',arrive:'2026-10-17T23:35:00+02:00',minutes:85,terminal:'자그레브 국제공항 → 로마 FCO · 도착 터미널/게이트는 당일 확인',confirmed:true,basis:SOURCE.booklet};
 const exact={
  '2026-10-12':['2026-10-12T09:35:00+09:00','2026-10-12T12:35:00+09:00','2026-10-12T19:15:00+02:00','2026-10-12T23:30:00+02:00'],
  '2026-10-13':['2026-10-13T00:50:00+02:00','2026-10-13T02:00:00+02:00','2026-10-13T02:30:00+02:00','2026-10-13T07:00:00+02:00','2026-10-13T09:00:00+02:00','2026-10-13T18:00:00+02:00',null],

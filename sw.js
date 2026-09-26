@@ -1,5 +1,5 @@
-const STATIC='gspa-static-v42';
-const GUIDE='gspa-guidebook-shared-v1';
+const STATIC='gspa-static-v43';
+const GUIDE='gspa-guidebook-shared-v2';
 const CORE=[
   "./index.html",
   "./trips.html",
@@ -8,8 +8,10 @@ const CORE=[
   "./js/trip-context.js",
   "./js/trip-data-loader.js",
   "./js/trip-ui.js",
+  "./js/route-map-engine.js",
   "./trips/turkiye1/data.js",
   "./css/mix40-multitrip.css",
+  "./css/mix43-fixes.css",
   "./manifest.webmanifest",
   "./css/action-first.css",
   "./css/app.css",
@@ -97,7 +99,8 @@ self.addEventListener('activate',e=>e.waitUntil((async()=>{const ks=await caches
 self.addEventListener('fetch',e=>{
   const req=e.request;if(req.method!=='GET')return;
   const url=new URL(req.url);if(url.origin!==self.location.origin)return;
-  const isGuide=/\/docs\/[^/]*안내책자\.pdf$/u.test(decodeURIComponent(url.pathname));
+  const decoded=decodeURIComponent(url.pathname);
+  const isGuide=/\/docs\/(?:croatia_guidebook|turkiye1_guidebook)\.pdf$/i.test(decoded)||/\/docs\/[^/]*안내책자\.pdf$/u.test(decoded);
   e.respondWith((async()=>{
     const cache=await caches.open(isGuide?GUIDE:STATIC);
     const hit=await cache.match(req,{ignoreSearch:true});if(hit)return hit;

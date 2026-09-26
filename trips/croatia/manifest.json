@@ -11,5 +11,5 @@
     "flightPlan": "../../data/flight-plan.js",
     "checklist": "../../data/checklist.js"
   },
-  "booklet": "../../docs/크로아티아_안내책자.pdf"
+  "booklet": "../../docs/croatia_guidebook.pdf"
 }

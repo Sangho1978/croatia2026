@@ -1,5 +1,5 @@
 {
-  "version": "20260926-MIX40",
+  "version": "20260926-MIX43",
   "defaultTrip": "croatia",
   "trips": [
     {
@@ -14,7 +14,7 @@
       "timeZone": "Europe/Zagreb",
       "currency": "EUR",
       "dbCode": "SNU17-CRO-2026-A7K9P4",
-      "booklet": "docs/크로아티아_안내책자.pdf",
+      "booklet": "docs/croatia_guidebook.pdf",
       "bookletDownload": "크로아티아_안내책자.pdf",
       "appUrl": "index.html?trip=croatia",
       "storagePrefix": "cro",
@@ -32,7 +32,7 @@
       "timeZone": "Europe/Istanbul",
       "currency": "TRY",
       "dbCode": "SNU17-TURKIYE1-2026",
-      "booklet": "docs/튀르키예1팀_안내책자.pdf",
+      "booklet": "docs/turkiye1_guidebook.pdf",
       "bookletDownload": "튀르키예1팀_안내책자.pdf",
       "appUrl": "index.html?trip=turkiye1",
       "storagePrefix": "turkiye1",

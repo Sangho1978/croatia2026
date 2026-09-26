@@ -1,2 +1,32 @@
-/* MIX39 dynamic guidebook cache */
-(function(){'use strict';const trip=window.GSPA_TRIP||{};const PDF=trip.booklet||'docs/크로아티아_안내책자.pdf';const CACHE='gspa-guidebook-'+(trip.id||'croatia')+'-v1';const NAME=trip.bookletDownload||'안내책자.pdf';const abs=()=>new URL(PDF,location.href).href;async function cache(){return 'caches'in window?caches.open(CACHE):null}async function cached(){try{const c=await cache();return c?await c.match(abs()):null}catch(_){return null}}async function getPdf(){let r=await cached();if(r)return {response:r,local:true};if(navigator.onLine===false)throw Error('OFFLINE_NO_CACHE');r=await fetch(PDF,{cache:'default'});if(!r.ok)throw Error('PDF '+r.status);try{const c=await cache();if(c)await c.put(abs(),r.clone())}catch(_){ }return {response:r,local:false}}function state(t){const e=document.getElementById('guidebookCacheState');if(e)e.textContent=t}async function paint(){state(await cached()?'✓ 이 기기에 저장됨 · 이후 데이터 없이 열기':'첫 사용 시 1회 저장 · 이후 저장본 우선')}function busy(v){document.querySelectorAll('[data-guidebook-action]').forEach(x=>x.classList.toggle('guidebook-busy',v))}async function view(ev){ev.preventDefault();const p=window.open('about:blank','_blank');busy(true);try{const {response,local}=await getPdf();const u=URL.createObjectURL(await response.blob());state(local?'✓ 저장본 열기':'✓ 저장 완료 · 이후 저장본 사용');if(p)p.location.href=u;else location.href=u;setTimeout(()=>URL.revokeObjectURL(u),180000)}catch(e){if(p)p.close();if(navigator.onLine===false||e.message==='OFFLINE_NO_CACHE'){state('오프라인 · 저장된 소책자가 없습니다. Wi-Fi에서 한 번 열어 주세요.');window.showAppToast?.('소책자 저장본이 없습니다.')}else location.href=PDF}finally{busy(false)}}async function download(ev){ev.preventDefault();busy(true);try{const {response,local}=await getPdf();const u=URL.createObjectURL(await response.blob());const a=document.createElement('a');a.href=u;a.download=NAME;document.body.appendChild(a);a.click();a.remove();state(local?'✓ 저장본에서 다운로드':'✓ 저장 완료 · 이후 저장본 사용');setTimeout(()=>URL.revokeObjectURL(u),180000)}catch(e){if(navigator.onLine===false||e.message==='OFFLINE_NO_CACHE'){state('오프라인 · 저장된 소책자가 없습니다.');window.showAppToast?.('인터넷 연결이 필요합니다.')}else location.href=PDF}finally{busy(false)}}document.addEventListener('click',e=>{const a=e.target.closest('[data-guidebook-action]');if(!a)return;(a.dataset.guidebookAction==='download'?download:view)(e)});document.addEventListener('DOMContentLoaded',paint);window.addEventListener('pageshow',paint)})();
+/* MIX43 guidebook: native PDF links first, service-worker cache first thereafter.
+ * Online clicks are never blocked by JavaScript. Offline clicks use Cache Storage.
+ */
+(function(){
+  'use strict';
+  const trip=window.GSPA_TRIP||{};
+  const PDF=trip.booklet||'docs/croatia_guidebook.pdf';
+  const NAME=trip.bookletDownload||'안내책자.pdf';
+  const abs=()=>new URL(PDF,location.href).href;
+  function state(t,err=false){const e=document.getElementById('guidebookCacheState');if(e){e.textContent=t;e.classList.toggle('guidebook-error',!!err)}}
+  async function cached(){if(!('caches'in window))return null;try{return await caches.match(abs(),{ignoreSearch:true})}catch(_){return null}}
+  async function paint(){state(await cached()?'✓ 이 기기에 저장됨 · 오프라인 사용 가능':'처음 열 때 저장 · 이후 저장본 우선')}
+  async function offlineOpen(a,action){
+    const r=await cached();
+    if(!r){state('오프라인 · 저장된 소책자가 없습니다. Wi‑Fi에서 한 번 열어 주세요.',true);window.showAppToast?.('소책자 저장본이 없습니다.');return}
+    const u=URL.createObjectURL(await r.blob());
+    if(action==='download'){
+      const x=document.createElement('a');x.href=u;x.download=NAME;document.body.appendChild(x);x.click();x.remove();
+    }else location.href=u;
+    setTimeout(()=>URL.revokeObjectURL(u),180000);
+  }
+  document.addEventListener('click',e=>{
+    const a=e.target.closest('[data-guidebook-action]');if(!a)return;
+    a.href=PDF;
+    if(a.dataset.guidebookAction==='download')a.download=NAME;
+    if(navigator.onLine===false){e.preventDefault();offlineOpen(a,a.dataset.guidebookAction);return}
+    state('소책자 여는 중 · 완료 후 오프라인에서도 사용 가능');
+    setTimeout(paint,2500);
+  });
+  document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('[data-guidebook-action]').forEach(a=>{a.href=PDF;if(a.dataset.guidebookAction==='download')a.download=NAME});paint()});
+  window.addEventListener('pageshow',paint);
+})();
