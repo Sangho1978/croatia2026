@@ -26,3 +26,8 @@ a.tur-video-card span{display:block;color:#566c77;line-height:1.55;font-size:.92
 a.tur-video-card:after{content:'▶ 눌러서 영상 보기';display:block;margin:0 16px 16px;background:#126e9b;color:#fff;border-radius:12px;text-align:center;padding:10px 12px;font-weight:900}
 .trip-turkiye1 .day-attraction-card{padding:0 0 15px}.trip-turkiye1 .day-attraction-card>:not(.spot-image){margin-left:15px;margin-right:15px}.trip-turkiye1 .day-attraction-card .spot-image{border-radius:17px 17px 0 0;margin:0 0 14px;aspect-ratio:16/9}.trip-turkiye1 .day-attraction-card h4{font-size:1.25rem;margin-top:0}.trip-turkiye1 .day-attraction-card>p{line-height:1.65;color:#3f5967}
 @media(min-width:700px){.tur-attraction-strip{grid-template-columns:repeat(2,minmax(0,1fr))}.tur-video-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.trip-turkiye1 .tur-city .city-cover{aspect-ratio:21/8}}
+
+/* MIX45 Google->OSM fallback marker */
+.gspa-route-osm-icon{background:transparent!important;border:0!important}
+.gspa-route-osm-icon span{display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:#1769aa;color:#fff;font-weight:900;font-size:14px;border:2px solid #fff;box-shadow:0 2px 7px rgba(0,0,0,.28)}
+.leaflet-container{font-family:inherit}

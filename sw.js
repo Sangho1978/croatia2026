@@ -1,4 +1,4 @@
-const STATIC='gspa-static-v44';
+const STATIC='gspa-static-v45';
 const GUIDE='gspa-guidebook-shared-v2';
 const CORE=[
   "./index.html",
@@ -37,6 +37,7 @@ const CORE=[
   "./js/attendance.js",
   "./js/compact-header.js",
   "./js/config.js",
+  "./js/map-provider.js",
   "./js/expense-fx.js",
   "./js/expenses.js",
   "./js/field-tools.js",

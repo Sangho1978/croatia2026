@@ -322,3 +322,10 @@ Croatia single-UI finalization. See `MIX35_FINAL_CHANGES.md`. Card/visual switch
 - 위치공유 지도: OpenStreetMap 자동전환 제거.
 - 전체메뉴 `연수팀` 제거.
 - 추천앱/화장실: 크로아티아에서만 표시.
+
+## MIX45 지도 엔진
+- Google Maps를 항상 1순위로 사용합니다.
+- Google Maps 인증/리퍼러/결제/네트워크 오류 시 OpenStreetMap으로 임시 전환합니다.
+- OpenStreetMap 표시 중에는 저빈도 자동 재시도로 Google Maps 정상화를 확인하고 성공하면 Google Maps로 복귀합니다.
+- 오프라인에서는 외부 지도 요청 대신 로컬 동선도를 사용합니다.
+- Google Maps 로더는 `js/map-provider.js` 한 곳으로 통합했습니다.
