@@ -1,0 +1,164 @@
+/* MIX35 FINAL — one operational UI, clear information hierarchy, Fold/tablet responsive. */
+:root{
+  --m35-navy:#123a56;--m35-blue:#1769aa;--m35-teal:#147a72;--m35-green:#25765f;
+  --m35-amber:#a66b12;--m35-red:#b93e48;--m35-ink:#1c2f3e;--m35-muted:#6a7985;
+  --m35-line:#dce6eb;--m35-soft:#f4f8fa;--m35-card:#fff;--m35-shadow:0 7px 22px rgba(27,61,82,.075);
+}
+html,body{max-width:100%;overflow-x:hidden!important;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body.mixed-app{background:#f3f7f9;color:var(--m35-ink)}
+body.mixed-app main{width:100%;max-width:1180px!important;margin-inline:auto}
+main,.app-view,.card,.panel,.grid>*,.app-sheet,.top-inner,.hotel-detail-card,.day-hotel-card,.ops-today-hero,.ops-next-card{min-width:0;max-width:100%}
+img,video,iframe,canvas,svg{max-width:100%;height:auto}
+a,button,p,li,dd,dt,address,small,strong,b,span,.event,.move-row,.ops-note,.ops-route{overflow-wrap:anywhere;word-break:keep-all}
+
+/* One consistent section system: travel, operations, safety, information. */
+body.spa-mode .app-view.app-view-active{position:relative;padding-top:10px}
+.app-view[data-zone]::before{content:attr(data-zone-label);display:inline-flex;align-items:center;min-height:24px;margin:0 0 7px;padding:4px 9px;border-radius:999px;font-size:10px;font-weight:950;letter-spacing:.09em;color:#fff;background:var(--m35-blue)}
+.app-view[data-zone="operations"]::before{background:var(--m35-teal)}
+.app-view[data-zone="safety"]::before{background:var(--m35-red)}
+.app-view[data-zone="info"]::before{background:#657785}
+.app-view[data-zone]>.app-subbar:first-child{margin-top:-1px}
+.app-view[data-zone]>h2,.app-view[data-zone]>.mix-view-heading h2{color:var(--m35-ink);letter-spacing:-.035em}
+.app-view[data-zone="travel"]>h2{border-left:5px solid var(--m35-blue);padding-left:10px}
+.app-view[data-zone="operations"]>h2,.app-view[data-zone="operations"]>.mix-view-heading h2{border-left:5px solid var(--m35-teal);padding-left:10px}
+.app-view[data-zone="safety"]>h2{border-left:5px solid var(--m35-red);padding-left:10px}
+.app-view[data-zone="info"]>h2{border-left:5px solid #657785;padding-left:10px}
+
+/* TODAY — map -> current plan -> next -> hotel/actions -> note. */
+#today{padding-top:4px!important}
+#today::before{display:none}
+#today>h2{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important}
+#today .today-journey-panel{border:1px solid #cfe0e8!important;background:#fff!important;box-shadow:var(--m35-shadow)!important;border-radius:18px!important}
+#today .today-journey-panel>summary{background:linear-gradient(90deg,#f7fbfd,#eef6fa)}
+#today .today-journey-icon{background:#dceef8!important;color:#0d5d8d!important}
+#today .today-booklet-row{margin:9px 0 12px!important}
+#today .today-booklet-row a{min-height:52px!important;font-size:14px!important;border-radius:15px!important}
+#today .ops-today-hero{background:linear-gradient(135deg,#143d5b 0%,#176b7a 100%)!important;border:0!important;border-radius:19px!important;padding:18px!important;box-shadow:0 9px 24px rgba(19,62,89,.17)!important;color:#fff!important}
+#today .ops-today-hero .ops-kicker,#today .ops-today-hero .ops-date,#today .ops-today-hero h3,#today .ops-today-hero .ops-route{color:#fff!important}
+#today .ops-today-hero .ops-kicker{opacity:.78;letter-spacing:.08em;font-size:10px!important}
+#today .ops-today-hero h3{font-size:clamp(22px,5.5vw,30px)!important;line-height:1.2!important;margin:5px 0 7px!important}
+#today .ops-flow .flow-pill{background:rgba(255,255,255,.14)!important;color:#fff!important;border-color:rgba(255,255,255,.25)!important}
+#today .ops-flow .flow-arrow{color:#d9eef3!important}
+#today .ops-next-card{background:#fff!important;border:1px solid #d8e5ea!important;border-left:5px solid var(--m35-teal)!important;border-radius:17px!important;padding:15px!important;box-shadow:var(--m35-shadow)!important}
+#today .ops-next-card::before{display:none!important}
+#today .ops-next-card .ops-label{color:var(--m35-teal)!important;font-weight:950!important}
+#today .ops-next-card b{color:var(--m35-navy)!important}
+#today .ops-next-main strong{font-size:16px!important;color:#233c4b!important}
+#today .ui-feature-grid{display:block;margin:0 0 11px}
+#today .today-stay-strip{border:1px solid #eadfca!important;background:#fffaf0!important;border-radius:16px!important;box-shadow:none!important;margin:0 0 9px!important;padding:11px 13px!important}
+#today .today-stay-strip .stay-icon{background:#f4e5c8!important;color:#8c5c18!important}
+#today .today-stay-strip .stay-copy small{color:#88602c!important}
+#today .ops-action-first{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;margin:0!important}
+#today .ops-action-first a{min-height:54px!important;border-radius:15px!important;font-size:13px!important;box-shadow:none!important}
+#today .ops-action-first a:nth-child(1){background:#0f6286!important;color:#fff!important}
+#today .ops-action-first a:nth-child(2){background:#eaf6f4!important;color:#17655c!important;border:1px solid #cce5df!important}
+#today .ops-action-first a:nth-child(3){background:#fff2f3!important;color:#a92f39!important;border:1px solid #f0cdd0!important}
+#today .ops-status-grid{display:none!important}
+#today .ops-brief-card{border:1px solid #e6e3db!important;border-left:5px solid var(--m35-amber)!important;border-radius:17px!important;box-shadow:var(--m35-shadow)!important;background:#fffefb!important}
+#today .ops-brief-head h3{color:#4b3e29!important}
+
+/* Schedule: clearly separated day identity / stay / weather / timeline / attractions. */
+#schedule #dayTabs{display:flex!important;gap:7px!important;overflow-x:auto!important;scrollbar-width:none;padding:2px 0 10px!important;scroll-snap-type:x proximity}
+#schedule #dayTabs::-webkit-scrollbar{display:none}
+#schedule #dayTabs .tab{flex:0 0 auto;scroll-snap-align:start;border-radius:999px!important;padding:9px 13px!important;background:#fff!important;border:1px solid #dbe5ea!important}
+#schedule #dayTabs .tab.active{background:var(--m35-navy)!important;color:#fff!important;border-color:var(--m35-navy)!important}
+#schedule .panel.active{display:block}
+#schedule .day-hotel-card{border:1px solid #e5dcc9!important;border-left:5px solid var(--m35-amber)!important;background:#fffaf1!important;border-radius:17px!important;box-shadow:none!important}
+#schedule .day-summary{border:1px solid #d7e4ea!important;border-left:5px solid var(--m35-blue)!important;background:#fff!important;border-radius:17px!important;box-shadow:var(--m35-shadow)!important}
+#schedule .day-summary h3{color:#173b55!important;font-size:21px!important}
+#schedule .day-weather-box{border:1px solid #d9e8e3!important;border-left:5px solid var(--m35-teal)!important;border-radius:17px!important;background:#fbfefd!important}
+#schedule .day-main-grid>.card:first-child{border-top:4px solid var(--m35-blue)!important}
+#schedule .day-main-grid>.card:last-child{border-top:4px solid #7a8d9a!important}
+#schedule .day-attraction-title{margin-top:20px!important;padding-top:14px;border-top:1px solid #dfe6ea;color:#173b55!important}
+#schedule .day-attraction-card{border:1px solid #dbe6eb!important;border-radius:17px!important;box-shadow:0 5px 16px rgba(34,66,85,.055)!important;background:#fff!important}
+#schedule .day-attraction-card h4{color:#184a67!important}
+
+/* Guide: generous reading, but still operational rather than magazine/card mode. */
+#guide .city-guide{border:1px solid #dce6eb!important;border-radius:18px!important;overflow:hidden!important;box-shadow:var(--m35-shadow)!important;background:#fff!important}
+#guide .city-cover{height:clamp(210px,46vw,330px)!important;object-fit:cover!important}
+#guide .city-guide .inside{padding:17px!important}
+#guide .city-guide h3{font-size:clamp(22px,5vw,29px)!important;letter-spacing:-.035em!important}
+#guide .city-overview{font-size:15px!important;line-height:1.8!important;color:#425663!important}
+#guide .attraction{border:1px solid #e0e8ec!important;border-radius:15px!important;background:#fbfdfe!important}
+#guide .attraction h4{color:#194b67!important}
+
+/* Hotel view: English essentials remain easy to show at reception/immigration if needed. */
+#hotels .hotel-directory{gap:14px!important}
+#hotels .hotel-detail-card{border:1px solid #dce5ea!important;border-radius:18px!important;box-shadow:var(--m35-shadow)!important;background:#fff!important}
+#hotels .hotel-photo-wrap{background:#e8eef1!important}
+#hotels .hotel-stay-line{color:#8d621f!important;background:#fff5df!important;border-radius:999px;padding:5px 8px;display:inline-flex!important}
+#hotels .hotel-essential{padding:10px 0;border-top:1px solid #eef1f3;border-bottom:1px solid #eef1f3}
+#hotels .hotel-essential dt{color:#6f7a82!important}
+#hotels .hotel-essential dd{color:#243d4d!important}
+
+/* Operational forms and lists use stronger grouping on large screens. */
+#group .group-tabs,#location .location-heading,#expenses .mix-view-heading,#photos .mix-view-heading,#members .mix-view-heading{border-bottom:1px solid #dce6ea;padding-bottom:9px}
+#emergency .emergency6-priority{border:2px solid #efd2d4!important;background:#fff8f8!important}
+
+/* OFFLINE state is visible only where network is actually needed. */
+.offline-map-placeholder{min-height:210px;padding:26px 18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;background:linear-gradient(135deg,#eef2f3,#e6ebef);color:#536170;border-radius:16px}
+.offline-map-placeholder b{font-size:16px;color:#263746}.offline-map-placeholder span{font-size:13px;line-height:1.6}.offline-map-placeholder.compact{min-height:180px;border-radius:0}
+html[data-offline="true"] #briefWeatherNote::after{content:' · 오프라인'}
+
+/* Phones: no horizontal leaks; keep three quick actions usable. */
+@media(max-width:430px){
+  body.spa-mode main{padding-left:11px!important;padding-right:11px!important}
+  #today .ops-action-first{gap:6px!important}
+  #today .ops-action-first a{font-size:12px!important;padding-inline:5px!important}
+  #schedule .day-attraction-grid,#guide .attraction-list{grid-template-columns:1fr!important}
+}
+@media(max-width:350px){#today .ops-action-first{grid-template-columns:1fr!important}#today .ops-action-first a{min-height:48px!important}}
+
+/* Fold / compact tablets: actually use the width rather than stretching one mobile column. */
+@media(min-width:600px) and (max-width:920px){
+  body.spa-mode main{max-width:900px!important;padding-left:18px!important;padding-right:18px!important}
+  body.spa-mode main>.app-view{max-width:900px!important}
+  #today{display:grid!important;grid-template-columns:minmax(0,1.25fr) minmax(260px,.75fr);gap:12px;align-items:start}
+  #today>.today-journey-panel,#today>.today-booklet-row,#today>#todayNewsAlert,#today>.ui-feature-grid,#today>.ops-brief-card{grid-column:1/-1}
+  #today>.ops-today-hero{grid-column:1}
+  #today>.ops-next-card{grid-column:2;margin:0!important;align-self:stretch;display:flex;flex-direction:column;justify-content:center}
+  #today .ui-feature-grid{display:grid;grid-template-columns:minmax(220px,1.25fr) minmax(0,2fr);gap:10px;align-items:stretch}
+  #today .today-stay-strip{margin:0!important;min-height:64px}
+  #today .ops-action-first{height:100%}
+  #today .ops-action-first a{min-height:64px!important}
+  #schedule .panel.active{display:grid!important;grid-template-columns:minmax(0,1.25fr) minmax(260px,.75fr);gap:12px;align-items:start}
+  #schedule .day-summary{grid-column:1;grid-row:1}
+  #schedule .day-hotel-card{grid-column:2;grid-row:1}
+  #schedule .flight-detail-card{grid-column:1/-1}
+  #schedule .day-weather-box{grid-column:1/-1}
+  #schedule .day-main-grid{grid-column:1/-1;grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  #schedule .day-attraction-title,#schedule .day-attraction-grid{grid-column:1/-1}
+  #schedule .day-attraction-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  #guide .attraction-list{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  #hotels .hotel-directory{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  #hotels .hotel-photo-wrap{height:205px!important}
+  #team .team-grid,#members #directoryRoster{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  #location .map-workspace:has(.mapbox.show){display:grid!important;grid-template-columns:minmax(0,1.18fr) minmax(300px,.82fr)!important;gap:12px}
+}
+
+/* Large tablets / desktop: balanced two-column operational canvas. */
+@media(min-width:921px){
+  body.spa-mode main{max-width:1180px!important;padding-left:24px!important;padding-right:24px!important}
+  body.spa-mode main>.app-view{max-width:1120px!important}
+  #today{display:grid!important;grid-template-columns:minmax(0,1.45fr) minmax(320px,.75fr);gap:14px;align-items:start}
+  #today>.today-journey-panel,#today>.today-booklet-row,#today>#todayNewsAlert,#today>.ui-feature-grid,#today>.ops-brief-card{grid-column:1/-1}
+  #today>.ops-today-hero{grid-column:1}
+  #today>.ops-next-card{grid-column:2;align-self:stretch;display:flex;flex-direction:column;justify-content:center;margin:0!important}
+  #today .ui-feature-grid{display:grid;grid-template-columns:minmax(260px,1fr) minmax(0,2.3fr);gap:12px}
+  #today .today-stay-strip{margin:0!important}
+  #schedule .panel.active{display:grid!important;grid-template-columns:minmax(0,1.35fr) minmax(300px,.65fr);gap:14px;align-items:start}
+  #schedule .day-summary{grid-column:1;grid-row:1}
+  #schedule .day-hotel-card{grid-column:2;grid-row:1}
+  #schedule .flight-detail-card,#schedule .day-weather-box,#schedule .day-main-grid,#schedule .day-attraction-title,#schedule .day-attraction-grid{grid-column:1/-1}
+  #schedule .day-main-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  #schedule .day-attraction-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:14px!important}
+  #guide .city-guide .inside{padding:20px 22px!important}
+  #guide .attraction-list{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}
+  #hotels .hotel-directory{grid-template-columns:1fr!important}
+  #hotels .hotel-detail-card{display:grid!important;grid-template-columns:minmax(300px,.82fr) minmax(0,1.18fr);align-items:stretch}
+  #hotels .hotel-photo-wrap{height:100%!important;min-height:330px!important}
+  #hotels .hotel-detail-body{padding:22px!important}
+  #location .map-workspace:has(.mapbox.show){grid-template-columns:minmax(0,1.35fr) minmax(340px,.65fr)!important}
+}
+
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation-duration:.001ms!important;transition-duration:.001ms!important}}

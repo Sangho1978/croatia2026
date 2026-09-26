@@ -291,3 +291,7 @@ Preview screenshots use mock FX, GPS, and database responses (not live participa
 - 외부 웹 링크는 오프라인에서 빈 화면으로 이동하지 않고 인터넷 연결 필요 토스트 표시.
 - 좁은 화면/Fold의 가로 넘침 방지 CSS 보강.
 - Firebase Rules와 데이터 구조는 변경하지 않음.
+
+
+## MIX35 FINAL (2026-09-26)
+Croatia single-UI finalization. See `MIX35_FINAL_CHANGES.md`. Card/visual switch removed; Fold/tablet responsive and MIX34 offline-first behavior retained.
