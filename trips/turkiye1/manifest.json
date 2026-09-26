@@ -1,0 +1,79 @@
+{
+  "id": "turkiye1",
+  "engine": "gspa-field-v1",
+  "ready": true,
+  "seeded": true,
+  "name": "튀르키예 1팀",
+  "period": "2026-10-19~2026-10-27",
+  "timeZone": "Europe/Istanbul",
+  "currency": "TRY",
+  "dbCode": "SNU17-TURKIYE1-2026",
+  "booklet": "../../docs/튀르키예1팀_안내책자.pdf",
+  "teamImage": "../../docs/튀르키예1팀_조편성.png",
+  "meeting": {
+    "date": "2026-10-19",
+    "time": "20:55",
+    "place": "인천국제공항 제1여객터미널 3층 H카운터 앞"
+  },
+  "flights": [
+    {
+      "date": "2026-10-19",
+      "flight": "EK323",
+      "route": "ICN → DXB",
+      "time": "23:55 → 04:25(+1)"
+    },
+    {
+      "date": "2026-10-21",
+      "flight": "TK2412",
+      "route": "IST → AYT",
+      "time": "09:40 → 11:05"
+    },
+    {
+      "date": "2026-10-26",
+      "flight": "EK122",
+      "route": "IST → DXB",
+      "time": "20:05 → 01:20(+1)"
+    },
+    {
+      "date": "2026-10-27",
+      "flight": "EK322",
+      "route": "DXB → ICN",
+      "time": "03:30 → 16:50"
+    }
+  ],
+  "hotels": [
+    "HAMPTON BY HILTON ARNAVUTKOY",
+    "RAMADA PLAZA BY WYNDHAM ANTALYA",
+    "ADEMPIRA TERMAL & SPA",
+    "DOUBLETREE BY HILTON MANISA",
+    "SHERATON ISTANBUL CITY CENTER"
+  ],
+  "rosterFile": "roster.json",
+  "login": {
+    "defaultRule": "phone-last4",
+    "specialPins": {
+      "정호용": "5619"
+    }
+  },
+  "notes": "튀르키예 1팀 전체 일정·호텔·관광·명단 데이터팩 활성화. 정호용 교수 PIN은 5619.",
+  "status": "ready",
+  "attendanceOperator": "남상모",
+  "locationAdmin": "남상모",
+  "financeManagers": [
+    "남상모",
+    "김수연"
+  ],
+  "memberCount": 27,
+  "peerCount": 26,
+  "groupCount": 3,
+  "roles": {
+    "팀장": "남상모",
+    "총무": "김수연",
+    "1조 조장": "강명봉",
+    "2조 조장": "김현교",
+    "3조 조장": "배황철"
+  },
+  "specialPins": {
+    "정호용": "5619"
+  }
+}

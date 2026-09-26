@@ -1,0 +1,15 @@
+{
+  "id": "turkiye2",
+  "engine": "gspa-field-v1",
+  "ready": false,
+  "seeded": false,
+  "name": "튀르키예 2팀",
+  "timeZone": "Europe/Istanbul",
+  "currency": "TRY",
+  "status": "awaiting_data",
+  "required": [
+    "안내책자 PDF",
+    "조편성/명단",
+    "항공·호텔 일정"
+  ]
+}

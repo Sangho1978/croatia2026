@@ -307,3 +307,7 @@ Croatia single-UI finalization. See `MIX35_FINAL_CHANGES.md`. Card/visual switch
 
 ## MIX38 SCHEDULE UI
 공식일정 요약을 휴대폰 2열/Fold 3~4열의 compact sequence로 재구성했습니다.
+
+
+## MIX40
+멀티트립 공통엔진 + 튀르키예 1팀 전체 데이터팩 활성화. 자세한 내용은 MIX40_CHANGES.md 참고.

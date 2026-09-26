@@ -8,15 +8,15 @@
 
   function operationalDay(){
     const d=(typeof localDate==='function'?localDate():new Date().toISOString().slice(0,10));
-    if(d<'2026-10-12') return days[0];
-    if(d>'2026-10-19') return days[days.length-1];
+    if(d<days[0].date) return days[0];
+    if(d>days[days.length-1].date) return days[days.length-1];
     return days.find(x=>x.date===d)||days[0];
   }
 
   function dayLabel(d){
     const now=(typeof localDate==='function'?localDate():new Date().toISOString().slice(0,10));
-    if(now<'2026-10-12') return '첫날 여행일정 보기';
-    if(now>'2026-10-19') return '마지막 여행일정 보기';
+    if(now<days[0].date) return '첫날 여행일정 보기';
+    if(now>days[days.length-1].date) return '마지막 여행일정 보기';
     return '오늘 여행일정 보기';
   }
 

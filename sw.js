@@ -1,7 +1,14 @@
-const STATIC='croatia-static-v38';
-const GUIDE='croatia-guidebook-v1';
+const STATIC='gspa-static-v40';
+const GUIDE='gspa-guidebook-shared-v1';
 const CORE=[
   "./index.html",
+  "./trips.html",
+  "./platform/trips.js",
+  "./js/trip-context.js",
+  "./js/trip-data-loader.js",
+  "./js/trip-ui.js",
+  "./trips/turkiye1/data.js",
+  "./css/mix40-multitrip.css",
   "./manifest.webmanifest",
   "./css/action-first.css",
   "./css/app.css",
@@ -63,14 +70,28 @@ const CORE=[
   "./data/route-points.js",
   "./data/roster.js",
   "./data/hana-eur.json",
-  "./assets/images/embedded_03_15d3ba61ec.jpg"
+  "./assets/images/embedded_03_15d3ba61ec.jpg",
+  "./assets/images/login_three_countries.jpg",
+  "./assets/images/turkiye1/bosphorus.jpg",
+  "./assets/images/turkiye1/cistern.jpg",
+  "./assets/images/turkiye1/pamukkale.jpg",
+  "./assets/images/turkiye1/ephesus.jpg",
+  "./assets/images/turkiye1/bursa.jpg",
+  "./assets/images/turkiye1/antalya_cruise.jpg",
+  "./assets/images/turkiye1/istanbul_core.jpg",
+  "./assets/images/turkiye1/pierre_loti.jpg",
+  "./assets/images/turkiye1/hotel_hampton.jpg",
+  "./assets/images/turkiye1/hotel_ramada.jpg",
+  "./assets/images/turkiye1/hotel_adempira.jpg",
+  "./assets/images/turkiye1/hotel_doubletree.jpg",
+  "./assets/images/turkiye1/hotel_sheraton.jpg"
 ];
 self.addEventListener('install',e=>e.waitUntil((async()=>{const c=await caches.open(STATIC);for(const u of CORE){try{await c.add(new Request(u,{cache:'default'}))}catch(_){}}await self.skipWaiting()})()));
-self.addEventListener('activate',e=>e.waitUntil((async()=>{const ks=await caches.keys();await Promise.all(ks.filter(k=>k.startsWith('croatia-static-')&&k!==STATIC).map(k=>caches.delete(k)));await self.clients.claim()})()));
+self.addEventListener('activate',e=>e.waitUntil((async()=>{const ks=await caches.keys();await Promise.all(ks.filter(k=>(k.startsWith('croatia-static-')||k.startsWith('gspa-static-'))&&k!==STATIC).map(k=>caches.delete(k)));await self.clients.claim()})()));
 self.addEventListener('fetch',e=>{
   const req=e.request;if(req.method!=='GET')return;
   const url=new URL(req.url);if(url.origin!==self.location.origin)return;
-  const isGuide=url.pathname.endsWith('/docs/croatia_guidebook_20260922.pdf');
+  const isGuide=/\/docs\/[^/]*안내책자\.pdf$/u.test(decodeURIComponent(url.pathname));
   e.respondWith((async()=>{
     const cache=await caches.open(isGuide?GUIDE:STATIC);
     const hit=await cache.match(req,{ignoreSearch:true});if(hit)return hit;

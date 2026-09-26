@@ -1,0 +1,15 @@
+{
+  "id": "italy-north",
+  "engine": "gspa-field-v1",
+  "ready": false,
+  "seeded": false,
+  "name": "이탈리아 북부",
+  "timeZone": "Europe/Rome",
+  "currency": "EUR",
+  "status": "awaiting_data",
+  "required": [
+    "안내책자 PDF",
+    "조편성/명단",
+    "항공·호텔 일정"
+  ]
+}

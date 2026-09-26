@@ -5,6 +5,16 @@
  */
 (function(){
   'use strict';
+
+  if((window.TRIP_CURRENCY||window.GSPA_TRIP?.currency)==='TRY'){
+    const KEY='gspa.fx.try.v1', REFRESH=60*60*1000; let value=null,mode='snapshot',lastError='',inFlight=null;
+    const snapshot={rate:28.44,asOf:'2026-09-01',checkedAt:0,source:'튀르키예 1팀 안내책자 기준'};
+    try{value=JSON.parse(localStorage.getItem(KEY)||'null')}catch(_){value=null} if(!value||!Number.isFinite(+value.rate))value={...snapshot};
+    const set=(id,t)=>{const e=document.getElementById(id);if(e)e.textContent=t};
+    function paint(){const r=+value.rate;set('liveFxMain',`₺1 = ₩${r.toLocaleString('ko-KR',{maximumFractionDigits:2})}`);set('fxUpdated',`${String(value.asOf||'').slice(5).replace('-','/')} · ${mode==='ready'?'시장 참고':'안내책자 기준'}`);set('fxSource',mode==='ready'?'TRY/KRW 시장 참고환율 · 1시간 확인':'튀르키예 1팀 안내책자 TRY 참고환율');set('fxStatus',mode==='offline'?'오프라인 · 마지막 저장 환율 표시':mode==='ready'?'시장 참고환율입니다. 실제 카드·ATM 적용환율은 다를 수 있습니다.':'안내책자 기준 참고값입니다. 인터넷 연결 시 시장 참고환율을 확인합니다.');set('briefFx',`₺ ${r.toLocaleString('ko-KR',{maximumFractionDigits:2})}`);set('briefFxNote',mode==='ready'?'시장 참고':`기준 ${String(value.asOf).slice(5).replace('-','/')}`);}
+    async function refresh(force=false){if(inFlight)return inFlight;if(navigator.onLine===false){mode='offline';paint();return {value,mode,lastError}};if(!force&&value.checkedAt&&Date.now()-value.checkedAt<REFRESH){paint();return {value,mode,lastError}};inFlight=(async()=>{try{const c=new AbortController(),tm=setTimeout(()=>c.abort(),7000);let resp;try{resp=await fetch('https://api.frankfurter.app/latest?from=TRY&to=KRW',{cache:'no-store',signal:c.signal})}finally{clearTimeout(tm)}if(!resp.ok)throw Error('HTTP '+resp.status);const j=await resp.json(),r=Number(j?.rates?.KRW);if(!Number.isFinite(r)||r<10||r>100)throw Error('환율 응답 확인 필요');value={rate:r,asOf:j.date||new Date().toISOString().slice(0,10),checkedAt:Date.now(),source:'Frankfurter/ECB reference'};mode='ready';localStorage.setItem(KEY,JSON.stringify(value));}catch(e){lastError=e.message||'연결 실패';mode=value?.checkedAt?'cached':'snapshot';}paint();return {value,mode,lastError};})();try{return await inFlight}finally{inFlight=null}}
+    window.FxService={refresh,get state(){return {value:{...value},mode,lastError}},paint}; document.addEventListener('click',e=>{if(e.target.closest('#fxRefresh'))refresh(true)});document.addEventListener('DOMContentLoaded',()=>{paint();refresh(false)});window.addEventListener('online',()=>refresh(false));window.addEventListener('offline',()=>{mode='offline';paint()}); return;
+  }
   const KEY='cro.fx.hana.v11', REFRESH=60*60*1000, RETRY=2*60*1000;
   const MIRROR='https://r.jina.ai/https://www.etoday.co.kr/market/exchange-rates?varCurCd=EUR';
   const LOCAL='data/hana-eur.json';

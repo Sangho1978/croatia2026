@@ -1,6 +1,6 @@
 // Itinerary, attraction cards and weather coordinates.
 // Official operation order and exact times below follow the 2026-09-22 guide booklet.
-const days=[
+var days=[
 {date:'2026-10-12',title:'인천 → 로마 → 두브로브니크',route:'ICN → FCO → FR5975 → DBV → Grand Hotel Park',flow:['인천공항 T1','TW405','로마 FCO','FR5975','두브로브니크','Grand Hotel Park'],events:[['09:35','인천국제공항 제1터미널 3층 B카운터 앞 집결'],['12:35','TW405 인천 출발'],['19:15','로마 FCO 도착 · 입국수속·짐 찾기 후 T1 이동'],['23:30','FR5975 로마 출발 → 두브로브니크']],moves:[['✈ 항공','ICN → FCO','TW405 · 12:35 → 19:15 · 약 13시간 40분'],['🚶 터미널','FCO 도착 후 → Terminal 1 Ryanair 카운터','소책자 도보 약 10분'],['✈ 항공','FCO → DBV','FR5975 · 23:30 → 익일 00:50']],meal:'소책자 09/22 기준 · 석식은 기내식 표기. 환승 중 실제 식사·수속 순서는 인솔자와 항공사 당일 안내를 우선합니다.',map:'https://www.google.com/maps/dir/?api=1&origin=Fiumicino+Airport&destination=Grand+Hotel+Park+Dubrovnik&waypoints=Dubrovnik+Airport',guides:[['두브로브니크','#city-dubrovnik']]},
 {date:'2026-10-13',title:'두브로브니크 1일 패스 집중관광',route:'DBV → Grand Hotel Park → 두브로브니크 구시가지 · 성벽 · 스르지산 · 유람선',flow:['DBV 도착','호텔 휴식','조식','구시가지','성벽','스르지산','유람선'],events:[['00:50','두브로브니크 국제공항 도착'],['02:00','입국수속·짐 찾기 후 호텔 이동 · 약 30분'],['02:30','Grand Hotel Park 도착 · 체크인·휴식'],['07:00~10:00','호텔 조식'],['09:00','두브로브니크 시내 관광 시작 · 1일 패스'],['18:00','석식'],['석식 후','호텔 투숙 · 자유시간']],moves:[['🚌 차량','DBV 공항 → Grand Hotel Park','약 30분 · 소책자'],['🚶 도보','구시가지 핵심 명소','프란체스코 수도원 · 렉터궁전 · 대성당 · 성벽'],['🚡 케이블카','구시가지 → 스르지산 전망대','정상 탑승 포함'],['⛵ 유람선','두브로브니크 해상 조망','아드리아해 낭만 유람선']],meal:'조: 호텔식 · 중: 현지식 · 석: 호텔식. 세부 집결시각은 현지 가이드 안내를 우선합니다.',map:'https://www.google.com/maps/dir/?api=1&origin=Grand+Hotel+Park+Dubrovnik&destination=Dubrovnik+Cable+Car&waypoints=Pile+Gate+Dubrovnik%7CFranciscan+Monastery+Dubrovnik%7CRector%27s+Palace+Dubrovnik%7CDubrovnik+City+Walls%7COld+Port+Dubrovnik',guides:[['두브로브니크','#city-dubrovnik']]},
 {date:'2026-10-14',title:'두브로브니크 자유탐방 → 두체',route:'Grand Hotel Park → 두브로브니크 자유탐방 → Hotel Plaža Duće',flow:['호텔 조식','두브로브니크 자유탐방','자유식','두체 이동','석식','Hotel Plaža Duće'],events:[['07:00','호텔 조식 후'],['오전~오후','두브로브니크 자유탐방'],['15:00','소책자 시간표 표기 · 두체 방향 호텔 이동 · 약 3시간'],['18:00','석식'],['석식 후','호텔 투숙 · 자유시간']],moves:[['🚶 도보','두브로브니크 자유탐방','구시가지 중심 · 개인 컨디션 고려'],['🚌 차량','Dubrovnik → Duće','약 3시간 · 소책자']],meal:'조: 호텔식 · 중: 자유식 · 석: 호텔식. 15:00 표기는 소책자 시간표 기준이며 현장 집결 안내를 우선합니다.',map:'https://www.google.com/maps/dir/?api=1&origin=Grand+Hotel+Park+Dubrovnik&destination=Hotel+Plaza+Duce+Croatia&waypoints=Dubrovnik+Old+Town',guides:[['두브로브니크','#city-dubrovnik']]},
@@ -10,7 +10,7 @@ const days=[
 {date:'2026-10-18',title:'로마 · 선택 문화시찰 → 귀국',route:'Ergife Palace → 선택 PLAN 1~4 → FCO → TW406',flow:['Ergife Palace','선택 문화시찰','자유식','16:30 공항 이동','FCO','TW406'],events:[['07:00','호텔 조식 후'],['선택','PLAN 1 오르비에토 · 차량+가이드 · 편도 약 1시간 40분'],['선택','PLAN 2 아시시 · 차량+가이드 · 편도 약 2시간 30분'],['선택','PLAN 3 치비타 디 바뇨레조 · 차량+가이드 · 편도 약 1시간 40분'],['선택','PLAN 4 가이드와 문화 시찰·쇼핑 · Only 가이드'],['16:30','로마 FCO 이동'],['21:15','TW406 로마 출발 · 기내숙박']],moves:[['🚌/🚶','로마 또는 근교 선택 문화시찰','선택 PLAN에 따라 이동'],['🚌 차량','로마/근교 → FCO','16:30 공항 이동 표기'],['✈ 항공','FCO → ICN','TW406 · 21:15 → 익일 16:10']],meal:'조: 호텔식 · 중: 자유식 · 석: 기내식. 소책자에는 PLAN 1~4 중 선택 가능으로 표기되어 있습니다.',map:'https://www.google.com/maps/dir/?api=1&origin=Ergife+Palace+Hotel+Rome&destination=Fiumicino+Airport',guides:[['로마','#city-rome'],['오르비에토','#city-orvieto'],['아시시','#city-assisi'],['치비타','#city-civita']]},
 {date:'2026-10-19',title:'인천 도착',route:'FCO → ICN',flow:['로마','TW406','인천','수하물','귀가'],events:[['16:10','인천국제공항 도착'],['도착 후','수하물·공용물품 확인 후 귀가']],moves:[['✈ 항공','FCO → ICN','TW406 · 약 11시간 55분 · 소책자']],meal:'',map:'',guides:[]}
 ];
-const DAY_ATTRACTIONS={
+var DAY_ATTRACTIONS={
 '2026-10-12':[],
 '2026-10-13':[
  {n:'프란체스코 수도원',a:'#city-dubrovnik',t:'25~30분',p:'중세 라구사의 종교·교육·보건 기능을 보여주는 장소입니다.',m:'회랑 기둥 조각, 오래된 약국, 스트라둔과 연결되는 수도원 입구.',price:'Dubrovnik Pass 포함 범위 확인',book:'https://www.dubrovnikpass.com/'},
@@ -43,7 +43,7 @@ const DAY_ATTRACTIONS={
  {n:'아시시',a:'#city-assisi',t:'약 4시간+이동',p:'성 프란치스코의 성지이자 중세 움브리아의 대표 도시입니다.',m:'성 프란치스코 상·하부성당, 묘, 프레스코, Santa Chiara.',price:'대성당 기본 무료',book:'https://www.visit-assisi.it/en/'}],
 '2026-10-19':[]
 };
-const WEATHER_SPOTS={
+var WEATHER_SPOTS={
  '2026-10-12':{name:'로마',lat:41.9028,lon:12.4964,hi:23,lo:13},
  '2026-10-13':{name:'두브로브니크',lat:42.6507,lon:18.0944,hi:20,lo:13},
  '2026-10-14':{name:'두브로브니크·두체',lat:43.4420,lon:16.6680,hi:20,lo:12},

@@ -1,0 +1,15 @@
+{
+  "id": "croatia",
+  "engine": "gspa-field-v1",
+  "ready": true,
+  "dataVersion": "MIX38",
+  "modules": {
+    "roster": "../../data/roster.js",
+    "itinerary": "../../data/itinerary.js",
+    "routePoints": "../../data/route-points.js",
+    "hotels": "../../data/hotels.js",
+    "flightPlan": "../../data/flight-plan.js",
+    "checklist": "../../data/checklist.js"
+  },
+  "booklet": "../../docs/크로아티아_안내책자.pdf"
+}

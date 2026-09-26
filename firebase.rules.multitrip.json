@@ -1,0 +1,530 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "locations": {
+      "SNU17-CRO-2026-A7K9P4": {
+        ".read": "auth != null",
+        "$slot": {
+          ".write": "auth != null && (((newData.val() == null && data.exists() && data.child('uid').val() === auth.uid) || (newData.val() != null && newData.child('uid').val() === auth.uid && (!data.exists() || data.child('uid').val() === auth.uid))) || (newData.val() == null && (root.child('locationOwners').child('SNU17-CRO-2026-A7K9P4').child('g4p2').child('uid').val() === auth.uid && root.child('locationOwners').child('SNU17-CRO-2026-A7K9P4').child('g4p2').child('name').val() === '한상호')))",
+          ".validate": "newData.val() == null || (newData.hasChildren(['uid','slot','group','name','lat','lng','accuracy','ts']) && newData.child('uid').isString() && newData.child('uid').val() === auth.uid && newData.child('slot').isString() && newData.child('slot').val() === $slot && newData.child('group').isNumber() && newData.child('group').val() >= 0 && newData.child('group').val() <= 4 && newData.child('name').isString() && newData.child('name').val().length >= 1 && newData.child('name').val().length <= 40 && newData.child('lat').isNumber() && newData.child('lat').val() >= -90 && newData.child('lat').val() <= 90 && newData.child('lng').isNumber() && newData.child('lng').val() >= -180 && newData.child('lng').val() <= 180 && newData.child('accuracy').isNumber() && newData.child('accuracy').val() >= 0 && newData.child('accuracy').val() <= 50000 && newData.child('ts').isNumber() && newData.child('ts').val() > 0 && newData.child('ts').val() <= now + 300000)",
+          "timeCroatia": {
+            ".validate": "newData.isString() && newData.val().length <= 32"
+          },
+          "timeKorea": {
+            ".validate": "newData.isString() && newData.val().length <= 32"
+          },
+          "pageState": {
+            ".validate": "newData.isString() && newData.val().length <= 20"
+          }
+        },
+        ".write": "auth != null && newData.val() == null && (root.child('locationOwners').child('SNU17-CRO-2026-A7K9P4').child('g4p2').child('uid').val() === auth.uid && root.child('locationOwners').child('SNU17-CRO-2026-A7K9P4').child('g4p2').child('name').val() === '한상호')"
+      },
+      "SNU17-TURKIYE1-2026": {
+        ".read": "auth != null",
+        "$slot": {
+          ".write": "auth != null && (((newData.val() == null && data.exists() && data.child('uid').val() === auth.uid) || (newData.val() != null && newData.child('uid').val() === auth.uid && (!data.exists() || data.child('uid').val() === auth.uid))) || (newData.val() == null && (root.child('locationOwners').child('SNU17-TURKIYE1-2026').child('g4p2').child('uid').val() === auth.uid && root.child('locationOwners').child('SNU17-TURKIYE1-2026').child('g4p2').child('name').val() === '남상모')))",
+          ".validate": "newData.val() == null || (newData.hasChildren(['uid','slot','group','name','lat','lng','accuracy','ts']) && newData.child('uid').isString() && newData.child('uid').val() === auth.uid && newData.child('slot').isString() && newData.child('slot').val() === $slot && newData.child('group').isNumber() && newData.child('group').val() >= 0 && newData.child('group').val() <= 4 && newData.child('name').isString() && newData.child('name').val().length >= 1 && newData.child('name').val().length <= 40 && newData.child('lat').isNumber() && newData.child('lat').val() >= -90 && newData.child('lat').val() <= 90 && newData.child('lng').isNumber() && newData.child('lng').val() >= -180 && newData.child('lng').val() <= 180 && newData.child('accuracy').isNumber() && newData.child('accuracy').val() >= 0 && newData.child('accuracy').val() <= 50000 && newData.child('ts').isNumber() && newData.child('ts').val() > 0 && newData.child('ts').val() <= now + 300000)",
+          "timeCroatia": {
+            ".validate": "newData.isString() && newData.val().length <= 32"
+          },
+          "timeKorea": {
+            ".validate": "newData.isString() && newData.val().length <= 32"
+          },
+          "pageState": {
+            ".validate": "newData.isString() && newData.val().length <= 20"
+          }
+        },
+        ".write": "auth != null && newData.val() == null && (root.child('locationOwners').child('SNU17-TURKIYE1-2026').child('g4p2').child('uid').val() === auth.uid && root.child('locationOwners').child('SNU17-TURKIYE1-2026').child('g4p2').child('name').val() === '남상모')"
+      }
+    },
+    "locationHistory": {
+      "SNU17-CRO-2026-A7K9P4": {
+        "$slot": {
+          "$point": {
+            ".write": "auth != null && ((newData.exists() && $point.matches(/^[0-9]{13}$/) && newData.child('uid').val() === auth.uid && newData.child('slot').val() === $slot && root.child('locationOwners').child('SNU17-CRO-2026-A7K9P4').child($slot).child('uid').val() === auth.uid && (!data.exists() || data.child('uid').val() === auth.uid)) || (newData.val() == null && data.exists() && data.child('uid').val() === auth.uid && root.child('locationOwners').child('SNU17-CRO-2026-A7K9P4').child($slot).child('uid').val() === auth.uid))",
+            ".validate": "newData.val() == null || (newData.hasChildren(['uid','slot','group','name','lat','lng','accuracy','ts']) && newData.child('uid').isString() && newData.child('uid').val() === auth.uid && newData.child('slot').isString() && newData.child('slot').val() === $slot && newData.child('group').isNumber() && newData.child('group').val() >= 0 && newData.child('group').val() <= 4 && newData.child('name').isString() && newData.child('name').val().length >= 1 && newData.child('name').val().length <= 40 && newData.child('lat').isNumber() && newData.child('lat').val() >= -90 && newData.child('lat').val() <= 90 && newData.child('lng').isNumber() && newData.child('lng').val() >= -180 && newData.child('lng').val() <= 180 && newData.child('accuracy').isNumber() && newData.child('accuracy').val() >= 0 && newData.child('accuracy').val() <= 50000 && newData.child('ts').isNumber() && newData.child('ts').val() > 0 && newData.child('ts').val() <= now + 300000)",
+            "timeCroatia": {
+              ".validate": "newData.isString() && newData.val().length <= 32"
+            },
+            "timeKorea": {
+              ".validate": "newData.isString() && newData.val().length <= 32"
+            },
+            "pageState": {
+              ".validate": "newData.isString() && newData.val().length <= 20"
+            }
+          },
+          ".read": "auth != null && root.child('locationOwners').child('SNU17-CRO-2026-A7K9P4').child($slot).child('uid').val() === auth.uid"
+        },
+        ".write": "auth != null && newData.val() == null && (root.child('locationOwners').child('SNU17-CRO-2026-A7K9P4').child('g4p2').child('uid').val() === auth.uid && root.child('locationOwners').child('SNU17-CRO-2026-A7K9P4').child('g4p2').child('name').val() === '한상호')"
+      },
+      "SNU17-TURKIYE1-2026": {
+        "$slot": {
+          "$point": {
+            ".write": "auth != null && ((newData.exists() && $point.matches(/^[0-9]{13}$/) && newData.child('uid').val() === auth.uid && newData.child('slot').val() === $slot && root.child('locationOwners').child('SNU17-TURKIYE1-2026').child($slot).child('uid').val() === auth.uid && (!data.exists() || data.child('uid').val() === auth.uid)) || (newData.val() == null && data.exists() && data.child('uid').val() === auth.uid && root.child('locationOwners').child('SNU17-TURKIYE1-2026').child($slot).child('uid').val() === auth.uid))",
+            ".validate": "newData.val() == null || (newData.hasChildren(['uid','slot','group','name','lat','lng','accuracy','ts']) && newData.child('uid').isString() && newData.child('uid').val() === auth.uid && newData.child('slot').isString() && newData.child('slot').val() === $slot && newData.child('group').isNumber() && newData.child('group').val() >= 0 && newData.child('group').val() <= 4 && newData.child('name').isString() && newData.child('name').val().length >= 1 && newData.child('name').val().length <= 40 && newData.child('lat').isNumber() && newData.child('lat').val() >= -90 && newData.child('lat').val() <= 90 && newData.child('lng').isNumber() && newData.child('lng').val() >= -180 && newData.child('lng').val() <= 180 && newData.child('accuracy').isNumber() && newData.child('accuracy').val() >= 0 && newData.child('accuracy').val() <= 50000 && newData.child('ts').isNumber() && newData.child('ts').val() > 0 && newData.child('ts').val() <= now + 300000)",
+            "timeCroatia": {
+              ".validate": "newData.isString() && newData.val().length <= 32"
+            },
+            "timeKorea": {
+              ".validate": "newData.isString() && newData.val().length <= 32"
+            },
+            "pageState": {
+              ".validate": "newData.isString() && newData.val().length <= 20"
+            }
+          },
+          ".read": "auth != null && root.child('locationOwners').child('SNU17-TURKIYE1-2026').child($slot).child('uid').val() === auth.uid"
+        },
+        ".write": "auth != null && newData.val() == null && (root.child('locationOwners').child('SNU17-TURKIYE1-2026').child('g4p2').child('uid').val() === auth.uid && root.child('locationOwners').child('SNU17-TURKIYE1-2026').child('g4p2').child('name').val() === '남상모')"
+      }
+    },
+    "attendanceCurrent": {
+      "SNU17-CRO-2026-A7K9P4": {
+        ".read": "auth != null",
+        ".write": "auth != null && (newData.val() == null || newData.child('createdBy').val() === '한상호')",
+        ".validate": "newData.val() == null || (newData.hasChildren(['id','title','type','createdBy','createdAt']) && newData.child('id').isString() && newData.child('id').val().length <= 100 && newData.child('title').isString() && newData.child('title').val().length >= 1 && newData.child('title').val().length <= 120 && newData.child('type').isString() && (newData.child('type').val() === '버스탑승' || newData.child('type').val() === '장소집결' || newData.child('type').val() === '식사' || newData.child('type').val() === '기타') && newData.child('createdBy').val() === '한상호' && newData.child('createdAt').isNumber() && newData.child('createdAt').val() > 0 && newData.child('createdAt').val() <= now + 60000)",
+        "timeCroatia": {
+          ".validate": "newData.isString() && newData.val().length <= 32"
+        },
+        "timeKorea": {
+          ".validate": "newData.isString() && newData.val().length <= 32"
+        }
+      },
+      "SNU17-TURKIYE1-2026": {
+        ".read": "auth != null",
+        ".write": "auth != null && (newData.val() == null || newData.child('createdBy').val() === '남상모')",
+        ".validate": "newData.val() == null || (newData.hasChildren(['id','title','type','createdBy','createdAt']) && newData.child('id').isString() && newData.child('id').val().length <= 100 && newData.child('title').isString() && newData.child('title').val().length >= 1 && newData.child('title').val().length <= 120 && newData.child('type').isString() && (newData.child('type').val() === '버스탑승' || newData.child('type').val() === '장소집결' || newData.child('type').val() === '식사' || newData.child('type').val() === '기타') && newData.child('createdBy').val() === '남상모' && newData.child('createdAt').isNumber() && newData.child('createdAt').val() > 0 && newData.child('createdAt').val() <= now + 60000)",
+        "timeCroatia": {
+          ".validate": "newData.isString() && newData.val().length <= 32"
+        },
+        "timeKorea": {
+          ".validate": "newData.isString() && newData.val().length <= 32"
+        }
+      }
+    },
+    "attendance": {
+      "SNU17-CRO-2026-A7K9P4": {
+        ".read": "auth != null",
+        "$event": {
+          "$slot": {
+            ".write": "auth != null && newData.exists() && newData.child('uid').val() === auth.uid && newData.child('slot').val() === $slot && (!data.exists() || data.child('uid').val() === auth.uid)",
+            ".validate": "newData.hasChildren(['uid','slot','name','group','checked','ts']) && newData.child('uid').isString() && newData.child('uid').val() === auth.uid && newData.child('slot').isString() && newData.child('slot').val() === $slot && newData.child('name').isString() && newData.child('name').val().length >= 1 && newData.child('name').val().length <= 40 && newData.child('group').isNumber() && newData.child('group').val() >= 0 && newData.child('group').val() <= 4 && newData.child('checked').val() === true && newData.child('ts').isNumber() && newData.child('ts').val() > 0 && newData.child('ts').val() <= now + 60000",
+            "timeCroatia": {
+              ".validate": "newData.isString() && newData.val().length <= 32"
+            },
+            "timeKorea": {
+              ".validate": "newData.isString() && newData.val().length <= 32"
+            }
+          }
+        }
+      },
+      "SNU17-TURKIYE1-2026": {
+        ".read": "auth != null",
+        "$event": {
+          "$slot": {
+            ".write": "auth != null && newData.exists() && newData.child('uid').val() === auth.uid && newData.child('slot').val() === $slot && (!data.exists() || data.child('uid').val() === auth.uid)",
+            ".validate": "newData.hasChildren(['uid','slot','name','group','checked','ts']) && newData.child('uid').isString() && newData.child('uid').val() === auth.uid && newData.child('slot').isString() && newData.child('slot').val() === $slot && newData.child('name').isString() && newData.child('name').val().length >= 1 && newData.child('name').val().length <= 40 && newData.child('group').isNumber() && newData.child('group').val() >= 0 && newData.child('group').val() <= 4 && newData.child('checked').val() === true && newData.child('ts').isNumber() && newData.child('ts').val() > 0 && newData.child('ts').val() <= now + 60000",
+            "timeCroatia": {
+              ".validate": "newData.isString() && newData.val().length <= 32"
+            },
+            "timeKorea": {
+              ".validate": "newData.isString() && newData.val().length <= 32"
+            }
+          }
+        }
+      }
+    },
+    "expenses": {
+      "SNU17-CRO-2026-A7K9P4": {
+        ".read": "auth != null",
+        ".indexOn": [
+          "date",
+          "updatedAt"
+        ],
+        "$entry": {
+          ".write": "(auth != null && data.exists() && data.child('deleted').val() !== true && newData.exists() && newData.child('deleted').val() === true && newData.child('deletedBy').val() === auth.uid && newData.child('updatedBy').val() === auth.uid && newData.child('deletedByName').val() === newData.child('updatedByName').val() && (newData.child('updatedByName').val() === '한상호' || newData.child('updatedByName').val() === '이상미') && newData.child('revision').isNumber() && (!data.child('revision').isNumber() || newData.child('revision').val() === data.child('revision').val() + 1)) || (auth != null && newData.exists() && newData.child('updatedBy').val() === auth.uid && (newData.child('updatedByName').val() === '한상호' || newData.child('updatedByName').val() === '이상미') && ((!data.exists() && newData.child('createdBy').val() === auth.uid && newData.child('createdByName').val() === newData.child('updatedByName').val() && newData.child('revision').val() === 1) || (data.exists() && newData.child('createdBy').val() === data.child('createdBy').val() && newData.child('createdByName').val() === data.child('createdByName').val() && newData.child('createdAt').val() === data.child('createdAt').val() && newData.child('revision').val() === data.child('revision').val() + 1)))",
+          ".validate": "(newData.child('deleted').val() === true && newData.child('id').val() === $entry && newData.child('deletedAt').isNumber() && newData.child('deletedAt').val() > 0 && newData.child('deletedAt').val() <= now + 300000 && newData.child('deletedBy').isString() && newData.child('deletedBy').val() === auth.uid && newData.child('deletedByName').isString() && (newData.child('deletedByName').val() === '한상호' || newData.child('deletedByName').val() === '이상미') && newData.child('updatedBy').val() === auth.uid && newData.child('updatedByName').val() === newData.child('deletedByName').val() && newData.child('updatedAt').isNumber() && newData.child('updatedAt').val() > 0 && newData.child('revision').isNumber()) || (newData.hasChildren(['id','date','merchant','title','category','currency','amountMinor','selectionMode','participants','participantCount','createdBy','createdByName','createdAt','updatedBy','updatedByName','updatedAt','revision']) && newData.child('id').val() === $entry)",
+          "id": {
+            ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 120"
+          },
+          "date": {
+            ".validate": "newData.isString() && newData.val().matches(/^\\d{4}-\\d{2}-\\d{2}$/)"
+          },
+          "time": {
+            ".validate": "newData.isString() && (newData.val() === '' || newData.val().matches(/^([01]\\d|2[0-3]):[0-5]\\d$/))"
+          },
+          "merchant": {
+            ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 100"
+          },
+          "title": {
+            ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 120"
+          },
+          "category": {
+            ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 40"
+          },
+          "payerName": {
+            ".validate": "newData.isString() && newData.val().length <= 60"
+          },
+          "memo": {
+            ".validate": "newData.isString() && newData.val().length <= 1000"
+          },
+          "currency": {
+            ".validate": "newData.val() === 'EUR' || newData.val() === 'KRW'"
+          },
+          "selectionMode": {
+            ".validate": "newData.val() === 'all' || newData.val() === 'selected'"
+          },
+          "amountMinor": {
+            ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= 1000000000000 && newData.val() % 1 === 0"
+          },
+          "participantCount": {
+            ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 28 && newData.val() % 1 === 0 && (newData.child('selectionMode').val() !== 'all' || newData.val() === 28)"
+          },
+          "participants": {
+            "$member": {
+              ".validate": "$member.matches(/^m([1-9]|1[0-9]|2[0-8])$/) && newData.hasChildren(['name','group']) && newData.child('name').isString() && newData.child('name').val().length >= 1 && newData.child('name').val().length <= 40 && newData.child('group').isNumber() && newData.child('group').val() >= 0 && newData.child('group').val() <= 4"
+            }
+          },
+          "createdBy": {
+            ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 128"
+          },
+          "createdByName": {
+            ".validate": "newData.isString() && (newData.val() === '한상호' || newData.val() === '이상미')"
+          },
+          "createdAt": {
+            ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= now + 60000"
+          },
+          "createdClock": {
+            ".validate": "newData.hasChildren(['epoch','croatia','korea']) && newData.child('epoch').isNumber() && newData.child('epoch').val() > 0 && newData.child('croatia').isString() && newData.child('croatia').val().length <= 32 && newData.child('korea').isString() && newData.child('korea').val().length <= 32"
+          },
+          "updatedBy": {
+            ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 128"
+          },
+          "updatedByName": {
+            ".validate": "newData.isString() && (newData.val() === '한상호' || newData.val() === '이상미')"
+          },
+          "updatedAt": {
+            ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= now + 60000"
+          },
+          "updatedClock": {
+            ".validate": "newData.hasChildren(['epoch','croatia','korea']) && newData.child('epoch').isNumber() && newData.child('epoch').val() > 0 && newData.child('croatia').isString() && newData.child('croatia').val().length <= 32 && newData.child('korea').isString() && newData.child('korea').val().length <= 32"
+          },
+          "revision": {
+            ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() % 1 === 0"
+          },
+          "receiptExtracted": {
+            ".validate": "newData.isBoolean()"
+          },
+          "receiptOcrProvider": {
+            ".validate": "newData.isString() && (newData.val() === '' || newData.val() === 'ai' || newData.val() === 'local')"
+          },
+          "receiptOcrConfidence": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100"
+          },
+          "fxRate": {
+            ".validate": "newData.isNumber() && newData.val() >= 900 && newData.val() <= 2500"
+          },
+          "fxRateDate": {
+            ".validate": "newData.isString() && newData.val().matches(/^\\d{4}-\\d{2}-\\d{2}$/)"
+          },
+          "fxExact": {
+            ".validate": "newData.isBoolean()"
+          },
+          "fxBasis": {
+            ".validate": "newData.isString() && newData.val().length <= 120"
+          },
+          "fxSource": {
+            ".validate": "newData.isString() && newData.val().length <= 80"
+          },
+          "estimatedKrw": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 1000000000000 && newData.val() % 1 === 0"
+          },
+          "receiptSummary": {
+            ".validate": "newData.hasChildren(['batchId','count','bytes']) && newData.child('batchId').isString() && newData.child('batchId').val().matches(/^rb_[a-zA-Z0-9_-]{1,80}$/) && newData.child('count').isNumber() && newData.child('count').val() >= 1 && newData.child('count').val() <= 3 && newData.child('bytes').isNumber() && newData.child('bytes').val() >= 1 && newData.child('bytes').val() <= 921600"
+          },
+          "deleted": {
+            ".validate": "newData.isBoolean()"
+          },
+          "deletedAt": {
+            ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= now + 60000"
+          },
+          "deletedBy": {
+            ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 128"
+          },
+          "deletedByName": {
+            ".validate": "newData.isString() && (newData.val() === '한상호' || newData.val() === '이상미')"
+          },
+          "deletedClock": {
+            ".validate": "newData.hasChildren(['epoch','croatia','korea']) && newData.child('epoch').isNumber() && newData.child('epoch').val() > 0 && newData.child('croatia').isString() && newData.child('croatia').val().length <= 48 && newData.child('korea').isString() && newData.child('korea').val().length <= 48"
+          }
+        }
+      },
+      "SNU17-TURKIYE1-2026": {
+        ".read": "auth != null",
+        ".indexOn": [
+          "date",
+          "updatedAt"
+        ],
+        "$entry": {
+          ".write": "(auth != null && data.exists() && data.child('deleted').val() !== true && newData.exists() && newData.child('deleted').val() === true && newData.child('deletedBy').val() === auth.uid && newData.child('updatedBy').val() === auth.uid && newData.child('deletedByName').val() === newData.child('updatedByName').val() && (newData.child('updatedByName').val() === '남상모' || newData.child('updatedByName').val() === '김수연') && newData.child('revision').isNumber() && (!data.child('revision').isNumber() || newData.child('revision').val() === data.child('revision').val() + 1)) || (auth != null && newData.exists() && newData.child('updatedBy').val() === auth.uid && (newData.child('updatedByName').val() === '남상모' || newData.child('updatedByName').val() === '김수연') && ((!data.exists() && newData.child('createdBy').val() === auth.uid && newData.child('createdByName').val() === newData.child('updatedByName').val() && newData.child('revision').val() === 1) || (data.exists() && newData.child('createdBy').val() === data.child('createdBy').val() && newData.child('createdByName').val() === data.child('createdByName').val() && newData.child('createdAt').val() === data.child('createdAt').val() && newData.child('revision').val() === data.child('revision').val() + 1)))",
+          ".validate": "(newData.child('deleted').val() === true && newData.child('id').val() === $entry && newData.child('deletedAt').isNumber() && newData.child('deletedAt').val() > 0 && newData.child('deletedAt').val() <= now + 300000 && newData.child('deletedBy').isString() && newData.child('deletedBy').val() === auth.uid && newData.child('deletedByName').isString() && (newData.child('deletedByName').val() === '남상모' || newData.child('deletedByName').val() === '김수연') && newData.child('updatedBy').val() === auth.uid && newData.child('updatedByName').val() === newData.child('deletedByName').val() && newData.child('updatedAt').isNumber() && newData.child('updatedAt').val() > 0 && newData.child('revision').isNumber()) || (newData.hasChildren(['id','date','merchant','title','category','currency','amountMinor','selectionMode','participants','participantCount','createdBy','createdByName','createdAt','updatedBy','updatedByName','updatedAt','revision']) && newData.child('id').val() === $entry)",
+          "id": {
+            ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 120"
+          },
+          "date": {
+            ".validate": "newData.isString() && newData.val().matches(/^\\d{4}-\\d{2}-\\d{2}$/)"
+          },
+          "time": {
+            ".validate": "newData.isString() && (newData.val() === '' || newData.val().matches(/^([01]\\d|2[0-3]):[0-5]\\d$/))"
+          },
+          "merchant": {
+            ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 100"
+          },
+          "title": {
+            ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 120"
+          },
+          "category": {
+            ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 40"
+          },
+          "payerName": {
+            ".validate": "newData.isString() && newData.val().length <= 60"
+          },
+          "memo": {
+            ".validate": "newData.isString() && newData.val().length <= 1000"
+          },
+          "currency": {
+            ".validate": "newData.val() === 'TRY' || newData.val() === 'KRW'"
+          },
+          "selectionMode": {
+            ".validate": "newData.val() === 'all' || newData.val() === 'selected'"
+          },
+          "amountMinor": {
+            ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= 1000000000000 && newData.val() % 1 === 0"
+          },
+          "participantCount": {
+            ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 27 && newData.val() % 1 === 0 && (newData.child('selectionMode').val() !== 'all' || newData.val() === 27)"
+          },
+          "participants": {
+            "$member": {
+              ".validate": "$member.matches(/^m([1-9]|1[0-9]|2[0-8])$/) && newData.hasChildren(['name','group']) && newData.child('name').isString() && newData.child('name').val().length >= 1 && newData.child('name').val().length <= 40 && newData.child('group').isNumber() && newData.child('group').val() >= 0 && newData.child('group').val() <= 4"
+            }
+          },
+          "createdBy": {
+            ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 128"
+          },
+          "createdByName": {
+            ".validate": "newData.isString() && (newData.val() === '남상모' || newData.val() === '김수연')"
+          },
+          "createdAt": {
+            ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= now + 60000"
+          },
+          "createdClock": {
+            ".validate": "newData.hasChildren(['epoch','croatia','korea']) && newData.child('epoch').isNumber() && newData.child('epoch').val() > 0 && newData.child('croatia').isString() && newData.child('croatia').val().length <= 32 && newData.child('korea').isString() && newData.child('korea').val().length <= 32"
+          },
+          "updatedBy": {
+            ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 128"
+          },
+          "updatedByName": {
+            ".validate": "newData.isString() && (newData.val() === '남상모' || newData.val() === '김수연')"
+          },
+          "updatedAt": {
+            ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= now + 60000"
+          },
+          "updatedClock": {
+            ".validate": "newData.hasChildren(['epoch','croatia','korea']) && newData.child('epoch').isNumber() && newData.child('epoch').val() > 0 && newData.child('croatia').isString() && newData.child('croatia').val().length <= 32 && newData.child('korea').isString() && newData.child('korea').val().length <= 32"
+          },
+          "revision": {
+            ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() % 1 === 0"
+          },
+          "receiptExtracted": {
+            ".validate": "newData.isBoolean()"
+          },
+          "receiptOcrProvider": {
+            ".validate": "newData.isString() && (newData.val() === '' || newData.val() === 'ai' || newData.val() === 'local')"
+          },
+          "receiptOcrConfidence": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 100"
+          },
+          "fxRate": {
+            ".validate": "newData.isNumber() && newData.val() >= 900 && newData.val() <= 2500"
+          },
+          "fxRateDate": {
+            ".validate": "newData.isString() && newData.val().matches(/^\\d{4}-\\d{2}-\\d{2}$/)"
+          },
+          "fxExact": {
+            ".validate": "newData.isBoolean()"
+          },
+          "fxBasis": {
+            ".validate": "newData.isString() && newData.val().length <= 120"
+          },
+          "fxSource": {
+            ".validate": "newData.isString() && newData.val().length <= 80"
+          },
+          "estimatedKrw": {
+            ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 1000000000000 && newData.val() % 1 === 0"
+          },
+          "receiptSummary": {
+            ".validate": "newData.hasChildren(['batchId','count','bytes']) && newData.child('batchId').isString() && newData.child('batchId').val().matches(/^rb_[a-zA-Z0-9_-]{1,80}$/) && newData.child('count').isNumber() && newData.child('count').val() >= 1 && newData.child('count').val() <= 3 && newData.child('bytes').isNumber() && newData.child('bytes').val() >= 1 && newData.child('bytes').val() <= 921600"
+          },
+          "deleted": {
+            ".validate": "newData.isBoolean()"
+          },
+          "deletedAt": {
+            ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= now + 60000"
+          },
+          "deletedBy": {
+            ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 128"
+          },
+          "deletedByName": {
+            ".validate": "newData.isString() && (newData.val() === '남상모' || newData.val() === '김수연')"
+          },
+          "deletedClock": {
+            ".validate": "newData.hasChildren(['epoch','croatia','korea']) && newData.child('epoch').isNumber() && newData.child('epoch').val() > 0 && newData.child('croatia').isString() && newData.child('croatia').val().length <= 48 && newData.child('korea').isString() && newData.child('korea').val().length <= 48"
+          }
+        }
+      }
+    },
+    "expenseReceipts": {
+      "SNU17-CRO-2026-A7K9P4": {
+        "$entry": {
+          ".read": "auth != null",
+          "$batch": {
+            ".validate": "$batch.matches(/^rb_[a-zA-Z0-9_-]{1,80}$/)",
+            "$photo": {
+              ".write": "auth != null && $photo.matches(/^r[123]$/) && newData.exists() && newData.child('uid').val() === auth.uid && (newData.child('uploadedBy').val() === '한상호' || newData.child('uploadedBy').val() === '이상미') && (!data.exists() || data.child('uid').val() === auth.uid)",
+              ".validate": "newData.hasChildren(['uid','uploadedBy','uploadedAt','fileName','mime','bytes','width','height','dataUrl'])",
+              "uid": {
+                ".validate": "newData.isString() && newData.val() === auth.uid"
+              },
+              "uploadedBy": {
+                ".validate": "newData.isString() && (newData.val() === '한상호' || newData.val() === '이상미')"
+              },
+              "uploadedAt": {
+                ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= now + 60000"
+              },
+              "fileName": {
+                ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 100"
+              },
+              "mime": {
+                ".validate": "newData.val() === 'image/jpeg'"
+              },
+              "bytes": {
+                ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 307200"
+              },
+              "width": {
+                ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 2400"
+              },
+              "height": {
+                ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 2400"
+              },
+              "dataUrl": {
+                ".validate": "newData.isString() && newData.val().length <= 409623 && newData.val().beginsWith('data:image/jpeg;base64,')"
+              }
+            }
+          }
+        }
+      },
+      "SNU17-TURKIYE1-2026": {
+        "$entry": {
+          ".read": "auth != null",
+          "$batch": {
+            ".validate": "$batch.matches(/^rb_[a-zA-Z0-9_-]{1,80}$/)",
+            "$photo": {
+              ".write": "auth != null && $photo.matches(/^r[123]$/) && newData.exists() && newData.child('uid').val() === auth.uid && (newData.child('uploadedBy').val() === '남상모' || newData.child('uploadedBy').val() === '김수연') && (!data.exists() || data.child('uid').val() === auth.uid)",
+              ".validate": "newData.hasChildren(['uid','uploadedBy','uploadedAt','fileName','mime','bytes','width','height','dataUrl'])",
+              "uid": {
+                ".validate": "newData.isString() && newData.val() === auth.uid"
+              },
+              "uploadedBy": {
+                ".validate": "newData.isString() && (newData.val() === '남상모' || newData.val() === '김수연')"
+              },
+              "uploadedAt": {
+                ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= now + 60000"
+              },
+              "fileName": {
+                ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 100"
+              },
+              "mime": {
+                ".validate": "newData.val() === 'image/jpeg'"
+              },
+              "bytes": {
+                ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 307200"
+              },
+              "width": {
+                ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 2400"
+              },
+              "height": {
+                ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 2400"
+              },
+              "dataUrl": {
+                ".validate": "newData.isString() && newData.val().length <= 409623 && newData.val().beginsWith('data:image/jpeg;base64,')"
+              }
+            }
+          }
+        }
+      }
+    },
+    "financeManagers": {
+      "SNU17-CRO-2026-A7K9P4": {
+        "$uid": {
+          ".read": "auth != null && auth.uid === $uid",
+          ".write": false,
+          ".validate": "newData.isString() && (newData.val() === '위재복' || newData.val() === '한상호' || newData.val() === '장현웅' || newData.val() === '이상미')"
+        }
+      },
+      "SNU17-TURKIYE1-2026": {
+        "$uid": {
+          ".read": "auth != null && auth.uid === $uid",
+          ".write": false,
+          ".validate": "newData.isString() && (newData.val() === '위재복' || newData.val() === '남상모' || newData.val() === '장현웅' || newData.val() === '김수연')"
+        }
+      }
+    },
+    "photoAlbums": {
+      "SNU17-CRO-2026-A7K9P4": {
+        "shared": {
+          ".read": "auth != null",
+          ".write": "auth != null && newData.exists() && newData.child('updatedBy').val() === auth.uid && root.child('financeManagers').child('SNU17-CRO-2026-A7K9P4').child(auth.uid).val() === newData.child('updatedByName').val()",
+          ".validate": "newData.hasChildren(['title','url','updatedAt','updatedBy','updatedByName']) && newData.child('title').isString() && newData.child('title').val().length >= 1 && newData.child('title').val().length <= 100 && newData.child('url').isString() && newData.child('url').val().beginsWith('https://') && newData.child('url').val().length <= 500 && newData.child('updatedAt').isNumber() && newData.child('updatedAt').val() > 0 && newData.child('updatedAt').val() <= now + 60000 && newData.child('updatedBy').val() === auth.uid && newData.child('updatedByName').isString()"
+        }
+      },
+      "SNU17-TURKIYE1-2026": {
+        "shared": {
+          ".read": "auth != null",
+          ".write": "auth != null && newData.exists() && newData.child('updatedBy').val() === auth.uid && root.child('financeManagers').child('SNU17-TURKIYE1-2026').child(auth.uid).val() === newData.child('updatedByName').val()",
+          ".validate": "newData.hasChildren(['title','url','updatedAt','updatedBy','updatedByName']) && newData.child('title').isString() && newData.child('title').val().length >= 1 && newData.child('title').val().length <= 100 && newData.child('url').isString() && newData.child('url').val().beginsWith('https://') && newData.child('url').val().length <= 500 && newData.child('updatedAt').isNumber() && newData.child('updatedAt').val() > 0 && newData.child('updatedAt').val() <= now + 60000 && newData.child('updatedBy').val() === auth.uid && newData.child('updatedByName').isString()"
+        }
+      }
+    },
+    "locationOwners": {
+      "SNU17-CRO-2026-A7K9P4": {
+        ".write": "auth != null && newData.val() == null && data.child('g4p2').child('uid').val() === auth.uid && data.child('g4p2').child('name').val() === '한상호'",
+        "$slot": {
+          ".read": "auth != null && data.child('uid').val() === auth.uid",
+          ".write": "auth != null && newData.exists() && newData.child('uid').val() === auth.uid && newData.child('slot').val() === $slot && root.child('locations').child('SNU17-CRO-2026-A7K9P4').child($slot).child('uid').val() === auth.uid && root.child('locations').child('SNU17-CRO-2026-A7K9P4').child($slot).child('name').val() === newData.child('name').val() && (!data.exists() || data.child('uid').val() === auth.uid)",
+          ".validate": "newData.hasChildren(['uid','slot','name']) && newData.child('uid').isString() && newData.child('uid').val() === auth.uid && newData.child('slot').isString() && newData.child('slot').val() === $slot && newData.child('name').isString() && newData.child('name').val().length >= 1 && newData.child('name').val().length <= 40"
+        }
+      },
+      "SNU17-TURKIYE1-2026": {
+        ".write": "auth != null && newData.val() == null && data.child('g4p2').child('uid').val() === auth.uid && data.child('g4p2').child('name').val() === '남상모'",
+        "$slot": {
+          ".read": "auth != null && data.child('uid').val() === auth.uid",
+          ".write": "auth != null && newData.exists() && newData.child('uid').val() === auth.uid && newData.child('slot').val() === $slot && root.child('locations').child('SNU17-TURKIYE1-2026').child($slot).child('uid').val() === auth.uid && root.child('locations').child('SNU17-TURKIYE1-2026').child($slot).child('name').val() === newData.child('name').val() && (!data.exists() || data.child('uid').val() === auth.uid)",
+          ".validate": "newData.hasChildren(['uid','slot','name']) && newData.child('uid').isString() && newData.child('uid').val() === auth.uid && newData.child('slot').isString() && newData.child('slot').val() === $slot && newData.child('name').isString() && newData.child('name').val().length >= 1 && newData.child('name').val().length <= 40"
+        }
+      }
+    },
+    "locationControl": {
+      "SNU17-CRO-2026-A7K9P4": {
+        ".read": "auth != null",
+        ".write": "auth != null && newData.exists() && (root.child('locationOwners').child('SNU17-CRO-2026-A7K9P4').child('g4p2').child('uid').val() === auth.uid && root.child('locationOwners').child('SNU17-CRO-2026-A7K9P4').child('g4p2').child('name').val() === '한상호') && newData.child('resetByUid').val() === auth.uid && newData.child('resetByName').val() === '한상호'",
+        ".validate": "newData.hasChildren(['resetAt','resetByUid','resetByName']) && newData.child('resetAt').isNumber() && newData.child('resetAt').val() > 0 && newData.child('resetAt').val() <= now + 60000 && newData.child('resetByUid').isString() && newData.child('resetByName').val() === '한상호'"
+      },
+      "SNU17-TURKIYE1-2026": {
+        ".read": "auth != null",
+        ".write": "auth != null && newData.exists() && (root.child('locationOwners').child('SNU17-TURKIYE1-2026').child('g4p2').child('uid').val() === auth.uid && root.child('locationOwners').child('SNU17-TURKIYE1-2026').child('g4p2').child('name').val() === '남상모') && newData.child('resetByUid').val() === auth.uid && newData.child('resetByName').val() === '남상모'",
+        ".validate": "newData.hasChildren(['resetAt','resetByUid','resetByName']) && newData.child('resetAt').isNumber() && newData.child('resetAt').val() > 0 && newData.child('resetAt').val() <= now + 60000 && newData.child('resetByUid').isString() && newData.child('resetByName').val() === '남상모'"
+      }
+    }
+  }
+}

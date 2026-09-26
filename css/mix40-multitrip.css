@@ -1,0 +1,7 @@
+/* MIX40 multi-trip login + Türkiye */
+.login-screen.multi-country-login{background:linear-gradient(180deg,rgba(4,26,43,.30),rgba(4,26,43,.74)),url('../assets/images/login_three_countries.jpg') center/cover no-repeat fixed!important}
+.login-screen.multi-country-login .login-panel{background:rgba(255,255,255,.94);backdrop-filter:blur(10px)}
+.login-screen.multi-country-login #loginTitle{font-size:clamp(31px,7vw,48px);line-height:1.08}.login-screen.multi-country-login #loginTitle span{color:#0b6c78}.login-course b{display:inline-block;color:#a33a21}
+html[data-trip="turkiye1"] body{--trip-accent:#b3202a;--trip-deep:#8b1520}html[data-trip="turkiye1"] .mix-brand b{color:#8b1520}
+.tur-route-hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:16px;background:#fff;border:1px solid #dce6eb;border-radius:20px;padding:14px}.tur-route-hero img{width:100%;height:260px;object-fit:cover;border-radius:16px}.tur-route-hero b{font-size:20px;line-height:1.65}.tur-route-hero p{color:#627786;line-height:1.6}
+@media(max-width:680px){.tur-route-hero{grid-template-columns:1fr}.tur-route-hero img{height:210px}}

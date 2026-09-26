@@ -5,7 +5,7 @@
   const staff=new Set(Object.keys(STAFF_ROLES));
   const isStaff=()=>!!currentUser&&staff.has(currentUser.name);
   // Finance UI gate, not server-verified identity. Staff titles are unchanged.
-  const financeNames=new Set(['\ud55c\uc0c1\ud638','\uc774\uc0c1\ubbf8']);
+  const financeNames=new Set(window.GSPA_TRIP?.financeManagers||['한상호','이상미']);
   const canManageFinance=()=>!!currentUser&&financeNames.has(currentUser.name);
   const canViewFinance=()=>!!currentUser;
   const idOf=u=>u.memberId;
@@ -41,7 +41,7 @@
   async function api(path,options={}){
     if(navigator.onLine===false)throw Error('오프라인 · 공유 데이터 조회·저장은 인터넷 연결이 필요합니다.');
     const financePath=/^(expenses|expenseReceipts)\//.test(path),method=String(options.method||'GET').toUpperCase();
-    if(financePath&&method!=='GET'&&!canManageFinance())throw Error("공동경비 등록·수정은 이상미·한상호만 가능합니다.");
+    if(financePath&&method!=='GET'&&!canManageFinance())throw Error('공동경비 등록·수정은 '+[...financeNames].join('·')+'만 가능합니다.');
     const tk=await token();
     const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),16000);
     try{
@@ -54,16 +54,16 @@
   }
   function badges(u){let b='';if(u.leader)b+='<span class="role-badge group-lead">조장</span>';if(u.presenter)b+='<span class="role-badge presenter">발표</span>';if(u.tripRole)b+='<span class="role-badge staff">연수 '+escape(u.tripRole)+'</span>';return b}
   function personCard(u){
-    const tel='+82'+u.phone.replace(/\D/g,'').slice(1);
-    return `<article class="person-card ${u.leader?'is-leader':''}" data-person="${escape(u.name)}"><div class="person-title"><b>${escape(u.name)}</b>${badges(u)}</div><div class="person-org">${escape(u.org)} · ${escape(u.title)}</div><div class="person-meta">${u.birthYear?u.birthYear+'년생 · 만 '+u.age+'세':'생년·만 나이 미제공'}${u.group===0?' · 인솔 교수':''}</div><div class="person-actions"><a href="tel:${tel}" aria-label="${escape(u.name)}에게 전화">☎ 전화</a><button type="button" data-person-location="${u.slot}">⌖ 위치</button><button type="button" data-person-phone="${escape(u.phone)}">번호 보기</button></div></article>`;
+    const digits=String(u.phone||'').replace(/\D/g,'');const tel=digits?('+82'+digits.slice(1)):'';
+    return `<article class="person-card ${u.leader?'is-leader':''}" data-person="${escape(u.name)}"><div class="person-title"><b>${escape(u.name)}</b>${badges(u)}</div><div class="person-org">${escape(u.org)} · ${escape(u.title)}</div><div class="person-meta">${u.birthYear?u.birthYear+'년생 · 만 '+u.age+'세':'생년·만 나이 미제공'}${u.group===0?' · 인솔 교수':''}</div><div class="person-actions">${tel?`<a href="tel:${tel}" aria-label="${escape(u.name)}에게 전화">☎ 전화</a>`:''}<button type="button" data-person-location="${u.slot}">⌖ 위치</button>${u.phone?`<button type="button" data-person-phone="${escape(u.phone)}">번호 보기</button>`:''}</div></article>`;
   }
   function renderPeople(){
     const box=document.getElementById('peopleRoster');if(!box)return;
     const q=(document.getElementById('peopleSearch')?.value||'').replace(/\s/g,'').toLowerCase();
-    document.getElementById('tripStaff').innerHTML='<strong>연수 운영진</strong><br>팀장 위재복 · 부팀장 한상호 / 장현웅 · 총무 이상미';
-    document.getElementById('peopleFilters').innerHTML=[['all','전체'],['1','1조'],['2','2조'],['3','3조'],['4','4조'],['0','교수']].map(([f,label])=>`<button type="button" data-people-filter="${f}" class="${filter===f?'active':''}" aria-pressed="${filter===f}">${label}</button>`).join('');
+    document.getElementById('tripStaff').innerHTML='<strong>연수 운영진</strong><br>'+Object.entries(STAFF_ROLES).map(([n,r])=>r+' '+n).join(' · ');
+    document.getElementById('peopleFilters').innerHTML=[['all','전체'],...[...new Set(TEAM_MEMBERS.filter(u=>u.group>0).map(u=>String(u.group)))].sort().map(g=>[g,g+'조']),['0','교수']].map(([f,label])=>`<button type="button" data-people-filter="${f}" class="${filter===f?'active':''}" aria-pressed="${filter===f}">${label}</button>`).join('');
     let result='';
-    for(const g of [1,2,3,4,0]){
+    for(const g of [...new Set(TEAM_MEMBERS.map(u=>u.group))].filter(g=>g!==0).sort((a,b)=>a-b).concat(TEAM_MEMBERS.some(u=>u.group===0)?[0]:[])){
       if(filter!=='all'&&filter!==String(g))continue;
       const members=TEAM_MEMBERS.filter(u=>u.group===g&&(!q||(u.name+u.org+u.title+u.tripRole).replace(/\s/g,'').toLowerCase().includes(q))).sort((a,b)=>a.groupOrder-b.groupOrder);
       if(!members.length)continue;

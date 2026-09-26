@@ -143,3 +143,7 @@
 @media(min-width:900px){
   #schedule .day-flow{grid-template-columns:repeat(4,minmax(0,1fr))!important}
 }
+
+/* MIX39 multi-trip portal */
+.mix-trip-switch{display:inline-grid;place-items:center;min-width:42px;min-height:42px;border:1px solid #c9dbe5;border-radius:14px;background:#fff;color:#0b5b83;text-decoration:none;font-size:20px;font-weight:900}
+@media(max-width:420px){.mix-trip-switch{min-width:38px;min-height:38px}}

@@ -10,7 +10,7 @@
     team:['TEAM','조별 구성·연락처를 한눈에'],
     videos:['VIDEO','이동 전 짧게 보는 사전답사'],
     location:['LIVE LOCATION','조별·개인별 최근 위치 확인'],
-    attendance:['CHECK-IN','28명 실시간 집결·탑승 확인'],
+    attendance:['CHECK-IN',(typeof TEAM_MEMBERS!=='undefined'?TEAM_MEMBERS.length:28)+'명 실시간 집결·탑승 확인'],
     check:['PREPARATION','출발 전 챙길 것과 준비할 것']
   };
   function buildHeaders(){

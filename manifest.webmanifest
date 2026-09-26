@@ -1,8 +1,8 @@
 {
-  "name": "아드리아의 길 · 크로아티아 연수",
-  "short_name": "크로아티아 연수",
-  "id": "./",
-  "start_url": "./index.html",
+  "name": "서울대 GSPA 17기 국외연수",
+  "short_name": "GSPA 국외연수",
+  "id": "./gspa-travel-2026",
+  "start_url": "./trips.html",
   "scope": "./",
   "display": "standalone",
   "background_color": "#f4f8fa",

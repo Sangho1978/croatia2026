@@ -1,5 +1,5 @@
 // MIX02: departure preparation only. Stable keys + exact-text legacy migration.
-const CHECK_GROUPS=[
+var CHECK_GROUPS=[
   {
     "title": "여권 · 예약 · 보험",
     "desc": "",

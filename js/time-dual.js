@@ -1,7 +1,7 @@
 /* MIX09: one canonical formatter for Croatia + Korea timestamps. No network access. */
 (function(){
   'use strict';
-  const CRO='Europe/Zagreb', KOR='Asia/Seoul';
+  const CRO=(window.GSPA_TRIP_TIMEZONE||window.GSPA_TRIP_TIMEZONE||'Europe/Zagreb'), KOR='Asia/Seoul';
   const cache=new Map();
   function parts(ts,zone){
     const key=zone+'|long';
