@@ -5,7 +5,7 @@
  */
 (function(){
   'use strict';
-  const KEY='cro.fx.hana.v11', REFRESH=15*60*1000, RETRY=2*60*1000;
+  const KEY='cro.fx.hana.v11', REFRESH=60*60*1000, RETRY=2*60*1000;
   const MIRROR='https://r.jina.ai/https://www.etoday.co.kr/market/exchange-rates?varCurCd=EUR';
   const LOCAL='data/hana-eur.json';
   let value=null,mode='empty',attempt=0,lastError='',inFlight=null,log=[];
@@ -46,7 +46,7 @@
     const rate=value?.rate,old=value&&ageDays()>4;
     set('liveFxMain',rate?`€1 = ₩${rate.toLocaleString('ko-KR',{minimumFractionDigits:2,maximumFractionDigits:2})}`:'하나은행 환율 연결 대기');
     set('fxUpdated',value?sourceDetail():'하나은행 최신 고시 확인 중');
-    set('fxSource',value?`하나은행 EUR 매매기준율 · ${mode==='snapshot'?'저장 스냅샷':'15분 자동 확인'}`:'하나은행 EUR 매매기준율');
+    set('fxSource',value?`하나은행 EUR 매매기준율 · ${mode==='snapshot'?'저장 스냅샷':'1시간 자동 확인'}`:'하나은행 EUR 매매기준율');
     let status='';
     if(mode==='loading')status='하나은행 최신 고시값 확인 중…';
     else if(mode==='error')status=(value?'연결 실패 · 마지막 하나은행 확인값을 표시합니다. ':'하나은행 환율을 불러오지 못했습니다. ')+lastError;
@@ -54,7 +54,7 @@
     else status=(mode==='snapshot'?'내장된 마지막 확인값 · ':'조회 완료 · ')+(old?'기준일이 오래되었습니다. ':'')+'하나은행 매매기준율은 고시 회차에 따라 변경됩니다.';
     set('fxStatus',status);
     const checked=value?.checkedAt?localTime(value.checkedAt):'-';
-    set('fxDiagnostics',log.length?log.map(x=>x.source+': '+x.message).join('\n'):`15분 간격 확인 · 마지막 확인 ${checked}`);
+    set('fxDiagnostics',log.length?log.map(x=>x.source+': '+x.message).join('\n'):`1시간 간격 확인 · 마지막 확인 ${checked}`);
     const b=document.getElementById('fxRefresh');if(b){b.disabled=mode==='loading';b.textContent=mode==='loading'?'확인 중…':'하나은행 환율 새로고침'}
     if(typeof updateGuidePrices==='function')updateGuidePrices(rate??null);
     window.dispatchEvent(new CustomEvent('cro-fx',{detail:state()}));

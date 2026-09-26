@@ -1,0 +1,76 @@
+/* MIX33: dual UI modes + low-data friendly visual mode. */
+:root{--mix33-ink:#172033;--mix33-warm:#f6f3ee;--mix33-card:#fff;--mix33-shadow:0 10px 28px rgba(24,37,52,.11);--mix33-hero-image:url('../assets/images/embedded_03_15d3ba61ec.jpg')}
+
+/* Icon-only switch at the upper-right of the app header. */
+body.mixed-app>.compact-top{position:sticky!important}
+.ui-mode-switch{position:absolute;right:max(7px,env(safe-area-inset-right));top:7px;z-index:12;width:38px;height:38px;min-width:38px;min-height:38px;padding:8px;border:1px solid #c5d7df;border-radius:12px;background:rgba(255,255,255,.96);color:#234f68;box-shadow:0 3px 10px rgba(20,56,77,.12);display:flex;align-items:center;justify-content:center;touch-action:manipulation}
+.ui-mode-switch svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8}
+.ui-mode-switch:active{transform:scale(.95)}
+html[data-ui-mode="visual"] .ui-mode-switch{background:#17324a;color:#fff;border-color:#17324a}
+/* Give the existing last header cell a little room so the switch never covers its text. */
+body.mixed-app .top-brief{padding-right:44px!important}
+@media(max-width:370px){.ui-mode-switch{width:34px;height:34px;min-width:34px;min-height:34px;right:5px;top:9px;padding:7px}body.mixed-app .top-brief{padding-right:39px!important}}
+
+/* Field mode is exactly the current operational layout. */
+.ui-feature-grid{display:contents}
+
+/* Card/visual mode: same DOM and same functions, only presentation/order changes. */
+html[data-ui-mode="visual"] body.mixed-app{background:var(--mix33-warm)}
+html[data-ui-mode="visual"] #today{display:flex;flex-direction:column;padding-top:0!important}
+html[data-ui-mode="visual"] #today>h2{display:none}
+html[data-ui-mode="visual"] #today .ops-today-hero{order:1;min-height:240px;margin:0 -2px 12px!important;padding:110px 18px 18px!important;border:0!important;border-radius:0 0 24px 24px!important;background-image:linear-gradient(to bottom,rgba(13,28,43,.08),rgba(13,28,43,.80)),var(--mix33-hero-image)!important;background-position:center 45%!important;background-size:cover!important;background-repeat:no-repeat!important;box-shadow:var(--mix33-shadow)!important;color:#fff;position:relative;overflow:hidden}
+html[data-ui-mode="visual"] #today .ops-kicker,html[data-ui-mode="visual"] #today .ops-date,html[data-ui-mode="visual"] #today .ops-today-hero h3,html[data-ui-mode="visual"] #today .ops-route{color:#fff!important;text-shadow:0 1px 10px rgba(0,0,0,.35)}
+html[data-ui-mode="visual"] #today .ops-date{font-size:12px!important;opacity:.92}
+html[data-ui-mode="visual"] #today .ops-today-hero h3{font-size:29px!important;line-height:1.08!important;margin:6px 0 5px!important;max-width:94%}
+html[data-ui-mode="visual"] #today .ops-route{font-size:12px!important;opacity:.94;max-width:94%}
+html[data-ui-mode="visual"] #today .ops-flow{display:none!important}
+html[data-ui-mode="visual"] #today .today-booklet-row{order:2;margin:0 0 12px!important}
+html[data-ui-mode="visual"] #today .ops-next-card{order:3;background:#1f2937!important;border:0!important;color:#fff!important;border-radius:20px!important;padding:16px!important;box-shadow:var(--mix33-shadow)!important;margin:0 0 12px!important}
+html[data-ui-mode="visual"] #today .ops-next-card::before{display:none!important}
+html[data-ui-mode="visual"] #today .ops-next-card .ops-label,html[data-ui-mode="visual"] #today .ops-next-card small{color:#cbd5e1!important}
+html[data-ui-mode="visual"] #today .ops-next-card b,html[data-ui-mode="visual"] #today .ops-next-card strong{color:#fff!important}
+html[data-ui-mode="visual"] #today .ui-feature-grid{order:4;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:0 0 12px}
+html[data-ui-mode="visual"] #today .ui-feature-grid .ops-action-first{display:contents!important}
+html[data-ui-mode="visual"] #today .ui-feature-grid .today-stay-strip,html[data-ui-mode="visual"] #today .ui-feature-grid .ops-action-first a{min-height:108px!important;margin:0!important;border-radius:19px!important;background:#fff!important;border:1px solid #ece8e1!important;box-shadow:var(--mix33-shadow)!important;color:var(--mix33-ink)!important;text-decoration:none!important;padding:15px!important;display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:flex-start!important;text-align:left!important;gap:6px!important}
+html[data-ui-mode="visual"] #today .ui-feature-grid .today-stay-strip .stay-icon{width:34px;height:34px;border-radius:11px;background:#eef4fb;color:#1769aa;margin-bottom:2px}
+html[data-ui-mode="visual"] #today .ui-feature-grid .today-stay-strip .stay-copy small{font-size:10px!important;color:#78818d!important;letter-spacing:.04em}
+html[data-ui-mode="visual"] #today .ui-feature-grid .today-stay-strip .stay-copy b{font-size:13px!important;color:#263549!important}
+html[data-ui-mode="visual"] #today .ui-feature-grid .today-stay-strip .stay-arrow{display:none}
+html[data-ui-mode="visual"] #today .ui-feature-grid .ops-action-first a{font-size:14px!important;font-weight:900!important;justify-content:flex-end!important}
+html[data-ui-mode="visual"] #today .ui-feature-grid .ops-action-first a::before{display:block;font-size:25px;line-height:1;margin-bottom:auto}
+html[data-ui-mode="visual"] #today .ui-feature-grid .ops-action-first a:nth-child(1)::before{content:'✓';color:#1769aa}
+html[data-ui-mode="visual"] #today .ui-feature-grid .ops-action-first a:nth-child(2)::before{content:'⌖';color:#1769aa}
+html[data-ui-mode="visual"] #today .ui-feature-grid .ops-action-first a:nth-child(3)::before{content:'!';color:#c4474e}
+html[data-ui-mode="visual"] #today .ui-feature-grid .ops-action-first a:nth-child(3){background:#fffafa!important;color:#a53640!important}
+html[data-ui-mode="visual"] #today .today-journey-panel{order:5;margin-top:0!important;border:0!important;border-radius:20px!important;box-shadow:var(--mix33-shadow)!important}
+html[data-ui-mode="visual"] #today #todayNewsAlert{order:6}
+html[data-ui-mode="visual"] #today .ops-status-grid{order:7}
+html[data-ui-mode="visual"] #today .ops-brief-card{order:8;border:0!important;border-radius:20px!important;box-shadow:var(--mix33-shadow)!important;background:#fff!important}
+
+/* Visual mode tourism: image first, roomy text, one clear reading flow. */
+html[data-ui-mode="visual"] #guide .guide-intro{margin-bottom:16px}
+html[data-ui-mode="visual"] #guide .city-guide{margin:18px 0 28px!important;border:0!important;border-radius:24px!important;box-shadow:0 12px 34px rgba(35,45,58,.12)!important;background:#fff!important;overflow:hidden}
+html[data-ui-mode="visual"] #guide .city-cover{width:100%!important;height:clamp(245px,62vw,430px)!important;object-fit:cover!important;display:block}
+html[data-ui-mode="visual"] #guide .city-guide .inside{padding:20px 18px 22px!important}
+html[data-ui-mode="visual"] #guide .city-kicker{font-size:11px!important;letter-spacing:.12em!important;margin-bottom:6px}
+html[data-ui-mode="visual"] #guide .city-guide h3{font-size:clamp(22px,5.8vw,30px)!important;line-height:1.25!important;margin:4px 0 12px!important;color:#172033!important}
+html[data-ui-mode="visual"] #guide .city-overview{font-size:16px!important;line-height:1.88!important;color:#384756!important;margin:0 0 16px!important}
+html[data-ui-mode="visual"] #guide .read-more>summary{min-height:50px!important;border-radius:14px!important;padding:12px 14px!important;font-size:14px!important}
+html[data-ui-mode="visual"] #guide .attraction-list{grid-template-columns:1fr!important;gap:14px!important}
+html[data-ui-mode="visual"] #guide .attraction{padding:16px!important;border-radius:16px!important}
+html[data-ui-mode="visual"] #guide .attraction h4{font-size:18px!important;margin-bottom:8px!important}
+html[data-ui-mode="visual"] #guide .attraction p,html[data-ui-mode="visual"] #guide .attraction .see,html[data-ui-mode="visual"] #guide .attraction .price{font-size:14px!important;line-height:1.75!important}
+html[data-ui-mode="visual"] #schedule .day-attraction-card{border-radius:20px!important;padding:17px!important}
+html[data-ui-mode="visual"] #schedule .day-attraction-card h4{font-size:19px!important}
+html[data-ui-mode="visual"] #schedule .day-attraction-card p,html[data-ui-mode="visual"] #schedule .day-attraction-card .must-see{font-size:14px!important;line-height:1.75!important}
+
+/* Guidebook cache state is intentionally compact. */
+.booklet-cache-state{font-size:11px;color:#6b7884;margin-top:8px;overflow-wrap:anywhere}
+.guidebook-busy{opacity:.7;pointer-events:none}
+
+/* Extra guards for long strings / Fold / landscape. */
+html,body{overflow-x:hidden!important}
+body *{min-width:0}
+pre,code{white-space:pre-wrap;overflow-wrap:anywhere}
+.hotel-essential dd,.hotel-detail-body,.booklet-download-copy,.today-journey-actions,.ops-route,.city-overview{overflow-wrap:anywhere;word-break:break-word}
+@media(max-width:360px){html[data-ui-mode="visual"] #today .ui-feature-grid{grid-template-columns:1fr!important}html[data-ui-mode="visual"] #today .ui-feature-grid .today-stay-strip,html[data-ui-mode="visual"] #today .ui-feature-grid .ops-action-first a{min-height:82px!important}html[data-ui-mode="visual"] #today .ops-today-hero{min-height:220px;padding-top:100px!important}}

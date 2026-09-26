@@ -13,7 +13,7 @@
     const local=document.getElementById('attAnnouncement');if(local){local.hidden=false;local.className='att-announcement '+kind;local.textContent=text;}
     if(navigator.vibrate)try{navigator.vibrate(kind==='done'?[100,60,100]:[80])}catch(_){}
   }
-  async function ensureSW(){if(!('serviceWorker'in navigator)||!window.isSecureContext)return null;try{reg=reg||await navigator.serviceWorker.register('./sw.js?v=20260920-MIX12',{scope:'./'});return reg}catch(_){return null}}
+  async function ensureSW(){if(!('serviceWorker'in navigator)||!window.isSecureContext)return null;try{reg=reg||await navigator.serviceWorker.register('./sw.js',{scope:'./'});return reg}catch(_){return null}}
   async function system(title,body,tag){if(!('Notification'in window)||Notification.permission!=='granted')return false;const r=await ensureSW();if(!r)return false;try{await r.showNotification(title,{body,tag,renotify:true,data:{url:'./#group'},badge:'',silent:false});return true}catch(_){return false}}
   async function enable(){
     const help=document.getElementById('attNotifyHelp');

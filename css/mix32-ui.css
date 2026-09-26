@@ -1,0 +1,55 @@
+/* MIX32 common: larger booklet actions, English hotel essentials, overflow/zoom resilience */
+
+/* Let users zoom when a small browser or an unusual device layout needs it. */
+html,body{max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+main,.app-view,.card,.panel,.grid>*,.app-sheet,.top-inner,.today-journey-panel,.ops-today-hero,.ops-next-card,.ops-brief-card,.hotel-directory,.hotel-detail-card,.hotel-detail-body,.day-hotel-card{min-width:0;max-width:100%}
+img,video,iframe,canvas,svg{max-width:100%}
+input,select,textarea,button,a{max-width:100%}
+p,li,dd,address,.small,.quiet,.ops-note,.hotel-blurb,.hotel-essential dd,.day-hotel-card p,.today-journey-summary-copy,.ops-next-main,.app-sheet-grid span,.app-sheet-grid small{overflow-wrap:anywhere;word-break:keep-all}
+.hotel-essential dd,.hotel-detail-body a,.hotel-detail-body small{word-break:break-word}
+
+/* Today: guidebook actions stay in one row, but are large enough to tap. */
+.today-booklet-row{
+  display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:8px!important;
+  margin:8px 0 12px!important;font-size:13px!important;font-weight:900!important;white-space:normal!important;
+}
+.today-booklet-row>span{display:none!important}
+.today-booklet-row a{
+  min-width:0;min-height:48px;padding:10px 8px!important;border:1px solid #d9e3ea;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;text-align:center;background:#fff;color:#31566e!important;
+  box-shadow:0 4px 12px rgba(35,66,90,.05);line-height:1.25;text-decoration:none!important;
+}
+.today-booklet-row a:last-child{background:#1769aa;color:#fff!important;border-color:#1769aa}
+
+/* The selected schedule no longer repeats guidebook actions. */
+#schedule .booklet-inline-actions{display:none!important}
+
+/* Hotel directory doubles as the practical accommodation record. */
+.hotel-immigration-card{display:none!important}
+#hotels>h2{letter-spacing:.01em}
+.hotel-stay-line{white-space:normal!important}
+.hotel-essential div{grid-template-columns:68px minmax(0,1fr)!important}
+.hotel-essential dt{font-size:10px!important;letter-spacing:.03em;text-transform:uppercase;color:#60717f!important}
+.hotel-essential dd{font-size:11px!important;line-height:1.5!important}
+.hotel-source-note{display:none!important}
+.day-hotel-head small{text-transform:uppercase;letter-spacing:.04em}
+.day-hotel-head .stay-badge{white-space:normal!important;text-align:right}
+.day-hotel-card p{font-size:11px!important;line-height:1.5!important}
+.today-stay-strip .stay-copy b{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;line-height:1.25}
+
+/* Narrow screens: never allow a long English address/e-mail or action label to push the page sideways. */
+@media(max-width:430px){
+  .today-booklet-row{gap:6px!important}
+  .today-booklet-row a{font-size:12px!important;padding:9px 6px!important}
+  .hotel-essential div{grid-template-columns:60px minmax(0,1fr)!important;gap:6px!important}
+  .hotel-buttons{grid-template-columns:1fr 1fr!important}
+  .hotel-buttons a:last-child{grid-column:1/-1}
+  .day-hotel-head{align-items:flex-start!important;flex-direction:column!important}
+  .day-hotel-head .stay-badge{text-align:left!important}
+  .today-journey-summary-copy small{white-space:normal!important;overflow:visible!important;text-overflow:clip!important}
+}
+@media(max-width:350px){
+  .today-booklet-row a{font-size:11px!important}
+  .ops-action-first{grid-template-columns:1fr!important}
+  .ops-today-btns{grid-template-columns:1fr!important}
+}

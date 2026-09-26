@@ -359,14 +359,12 @@
       if(e.target.closest('[data-news-modal-close]'))closeStartup(true);
       if(e.target.closest('[data-news-modal-open]')){closeStartup(true);window.AppRouter?.go('news');}
     });
-    window.addEventListener('cro-auth-change',()=>{setTimeout(()=>{refresh(false);translateVisible([...importantItems(),...items].slice(0,12)).then(()=>renderStartupAlert(true));},250);});
+    window.addEventListener('cro-auth-change',()=>{renderAll();renderStartupAlert(false);});
     window.addEventListener('cro-route',e=>{if(e.detail?.view==='news'){renderAll();officialRender();renderScope();refresh(false);translateVisible(filtered().slice(0,12));}});
-    window.addEventListener('online',()=>refresh(false));
-    document.addEventListener('visibilitychange',()=>{if(!document.hidden&&Date.now()-lastUpdated>=REFRESH_MS)refresh(false);});
-    clearInterval(timer);timer=setInterval(()=>{if(!document.hidden)refresh(false);},REFRESH_MS);
-    if(typeof currentUser!=='undefined'&&currentUser)setTimeout(()=>{refresh(false);translateVisible([...importantItems(),...filtered()].slice(0,12)).then(()=>renderStartupAlert(true));},400);
-    else if(!lastUpdated||Date.now()-lastUpdated>=REFRESH_MS)setTimeout(()=>refresh(false),1000);
-    else{renderStartupAlert(false);translateVisible(filtered().slice(0,8));}
+    window.addEventListener('online',()=>renderAll());
+    document.addEventListener('visibilitychange',()=>{if(!document.hidden)renderAll();});
+    clearInterval(timer);timer=null;
+    renderAll();renderStartupAlert(false);
   }
 
   document.addEventListener('DOMContentLoaded',install);

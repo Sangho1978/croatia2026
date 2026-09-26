@@ -264,3 +264,11 @@ Preview screenshots use mock FX, GPS, and database responses (not live participa
 - 5개 호텔 주소·연락처·특징을 공식 홈페이지 기준으로 재확인.
 - Ergife Palace 외관 사진을 안내소책자 원본에서 로컬 이미지로 포함.
 - Firebase 데이터/Rules 변경 없음.
+
+
+## MIX32A (2026-09-26)
+호텔 정보 카드 통합, 안내소책자 버튼/일정 중복 정리, 모바일 overflow/zoom 보완.
+
+
+## MIX33 (2026-09-26)
+두 UI 통합 스위치, 해외 저데이터 cache-first, 안내소책자 local-first 캐시를 적용했습니다.

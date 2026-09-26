@@ -3,7 +3,7 @@ window.CRO_HOTELS=[
   {
     id:'grand-hotel-park',
     name:'Grand Hotel Park Dubrovnik',
-    stay:'10/12–10/14 · 2박',
+    stay:'10/12–10/14 · 2박', stayEn:'Oct 12–14 · 2 nights',
     nights:['2026-10-12','2026-10-13'],
     address:'Mata Vodopića 2, 20000 Dubrovnik, Croatia',
     phone:'+385 20 434 444', tel:'+38520434444',
@@ -18,7 +18,7 @@ window.CRO_HOTELS=[
   {
     id:'hotel-plaza-duce',
     name:'Hotel Plaža Duće',
-    stay:'10/14–10/15 · 1박',
+    stay:'10/14–10/15 · 1박', stayEn:'Oct 14–15 · 1 night',
     nights:['2026-10-14'],
     address:'Luka III, Poljička cesta 79, Duće, 21315 Dugi Rat, Croatia',
     phone:'+385 21 783 350', tel:'+38521783350',
@@ -33,7 +33,7 @@ window.CRO_HOTELS=[
   {
     id:'hotel-ilirija',
     name:'Hotel Ilirija',
-    stay:'10/15–10/16 · 1박',
+    stay:'10/15–10/16 · 1박', stayEn:'Oct 15–16 · 1 night',
     nights:['2026-10-15'],
     address:'Tina Ujevića 9, 23210 Biograd na Moru, Croatia',
     phone:'+385 23 396 555', tel:'+38523396555',
@@ -49,7 +49,7 @@ window.CRO_HOTELS=[
   {
     id:'aminess-kadoor',
     name:'Aminess Kadoor Hotel',
-    stay:'10/16–10/17 · 1박',
+    stay:'10/16–10/17 · 1박', stayEn:'Oct 16–17 · 1 night',
     nights:['2026-10-16'],
     address:'Ul. Vladimira Nazora 4, 47000 Karlovac, Croatia',
     phone:'+385 91 645 4000', tel:'+385916454000',
@@ -65,7 +65,7 @@ window.CRO_HOTELS=[
   {
     id:'ergife-palace',
     name:'Ergife Palace Hotel & Conference Center',
-    stay:'10/17–10/18 · 1박',
+    stay:'10/17–10/18 · 1박', stayEn:'Oct 17–18 · 1 night',
     nights:['2026-10-17'],
     address:'Largo Lorenzo Mossa 8, 00165 Rome, Italy',
     phone:'+39 06 66441', tel:'+390666441',
