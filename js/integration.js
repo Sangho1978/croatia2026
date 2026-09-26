@@ -22,6 +22,7 @@
   }
   // Avoid parallel anonymous signups assigning two different device UIDs.
   window.token=async function(){
+    if(navigator.onLine===false)throw Error('오프라인 · 이 기능은 인터넷 연결이 필요합니다.');
     const old=localStorage.getItem('fb_tok'),exp=+(localStorage.getItem('fb_exp')||0);
     if(old&&Date.now()<exp){if(!localStorage.getItem('fb_uid')){const u=uidFromToken(old);if(u)localStorage.setItem('fb_uid',u)}return old}
     if(authInFlight)return authInFlight;
@@ -38,6 +39,7 @@
     try{return await authInFlight}finally{authInFlight=null}
   };
   async function api(path,options={}){
+    if(navigator.onLine===false)throw Error('오프라인 · 공유 데이터 조회·저장은 인터넷 연결이 필요합니다.');
     const financePath=/^(expenses|expenseReceipts)\//.test(path),method=String(options.method||'GET').toUpperCase();
     if(financePath&&method!=='GET'&&!canManageFinance())throw Error("공동경비 등록·수정은 이상미·한상호만 가능합니다.");
     const tk=await token();

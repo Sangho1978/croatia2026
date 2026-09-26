@@ -117,6 +117,7 @@
   }
 
   function ensureMap(){
+    if(navigator.onLine===false&&!window.google?.maps){setState('오프라인 · 지도는 인터넷 연결이 필요합니다.');const box=document.getElementById('todayJourneyMap');if(box)box.innerHTML='<div class="offline-map-placeholder compact"><b>지도 연결 필요</b><span>아래 이동지점과 상세 일정은 오프라인에서도 볼 수 있습니다.</span></div>';return;}
     if(renderMap())return;
     try{ if(typeof locLoadGoogleMap==='function') locLoadGoogleMap(); }catch(_){ }
     clearInterval(mapPoll);

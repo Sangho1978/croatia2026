@@ -8,7 +8,7 @@
   async function cached(){try{const c=await cache();return c?await c.match(abs()):null}catch(_){return null}}
   async function getPdf(){
     let r=await cached(); if(r)return {response:r,local:true};
-    r=await fetch(PDF,{cache:'default'}); if(!r.ok)throw Error('PDF '+r.status);
+    if(navigator.onLine===false)throw Error('OFFLINE_NO_CACHE'); r=await fetch(PDF,{cache:'default'}); if(!r.ok)throw Error('PDF '+r.status);
     try{const c=await cache();if(c)await c.put(abs(),r.clone())}catch(_){ }
     return {response:r,local:false};
   }
@@ -18,13 +18,13 @@
   async function view(ev){
     ev.preventDefault();const popup=window.open('about:blank','_blank');busy(true);
     try{const {response,local}=await getPdf();const blob=await response.blob();const u=URL.createObjectURL(blob);state(local?'✓ 저장본 열기':'✓ 저장 완료 · 이후 저장본 사용');if(popup)popup.location.href=u;else location.href=u;setTimeout(()=>URL.revokeObjectURL(u),180000)}
-    catch(e){if(popup)popup.close();location.href=PDF;state('온라인 PDF 열기')}
+    catch(e){if(popup)popup.close();if(navigator.onLine===false||e.message==='OFFLINE_NO_CACHE'){state('오프라인 · 이 기기에 저장된 소책자가 없습니다. Wi-Fi에서 한 번 열어 주세요.');window.showAppToast?.('소책자 저장본이 없습니다. 인터넷 연결 후 한 번 열어 주세요.');}else{location.href=PDF;state('온라인 PDF 열기')}}
     finally{busy(false)}
   }
   async function download(ev){
     ev.preventDefault();busy(true);
     try{const {response,local}=await getPdf();const blob=await response.blob();const u=URL.createObjectURL(blob);const a=document.createElement('a');a.href=u;a.download=NAME;document.body.appendChild(a);a.click();a.remove();state(local?'✓ 저장본에서 다운로드':'✓ 저장 완료 · 이후 저장본 사용');setTimeout(()=>URL.revokeObjectURL(u),180000)}
-    catch(e){location.href=PDF;state('온라인 PDF 열기')}
+    catch(e){if(navigator.onLine===false||e.message==='OFFLINE_NO_CACHE'){state('오프라인 · 이 기기에 저장된 소책자가 없습니다. Wi-Fi에서 한 번 받아 주세요.');window.showAppToast?.('소책자 저장본이 없습니다. 인터넷 연결이 필요합니다.');}else{location.href=PDF;state('온라인 PDF 열기')}}
     finally{busy(false)}
   }
   document.addEventListener('click',e=>{const a=e.target.closest('[data-guidebook-action]');if(!a)return;(a.dataset.guidebookAction==='download'?download:view)(e)});

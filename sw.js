@@ -1,6 +1,67 @@
-const STATIC='croatia-static-v33';
+const STATIC='croatia-static-v34';
 const GUIDE='croatia-guidebook-v1';
-self.addEventListener('install',()=>self.skipWaiting());
+const CORE=[
+  "./index.html",
+  "./manifest.webmanifest",
+  "./css/action-first.css",
+  "./css/app.css",
+  "./css/attendance-prep.css",
+  "./css/compact-header.css",
+  "./css/expense-ledger.css",
+  "./css/field-tools.css",
+  "./css/integration.css",
+  "./css/mix03.css",
+  "./css/mix30-ui.css",
+  "./css/mix31-ui.css",
+  "./css/mix32-ui.css",
+  "./css/mix33-ui.css",
+  "./css/mix34-ui.css",
+  "./css/shop-food.css",
+  "./css/travel-news.css",
+  "./css/usability.css",
+  "./js/app-core.js",
+  "./js/attendance-notify.js",
+  "./js/attendance.js",
+  "./js/compact-header.js",
+  "./js/config.js",
+  "./js/expense-fx.js",
+  "./js/expenses.js",
+  "./js/field-tools.js",
+  "./js/flight-details.js",
+  "./js/fx-service.js",
+  "./js/guidebook-cache.js",
+  "./js/integration.js",
+  "./js/location-session.js",
+  "./js/low-data.js",
+  "./js/mix30-ui.js",
+  "./js/mix34-offline.js",
+  "./js/mix34-visual.js",
+  "./js/mobile-ui.js",
+  "./js/net-meter.js",
+  "./js/ops.js",
+  "./js/photos.js",
+  "./js/preparation.js",
+  "./js/receipt-ai.js",
+  "./js/receipt-ocr.js",
+  "./js/receipt-store.js",
+  "./js/router.js",
+  "./js/runtime-support.js",
+  "./js/shop-food.js",
+  "./js/time-dual.js",
+  "./js/travel-news.js",
+  "./js/ui-mode.js",
+  "./js/usability.js",
+  "./js/videos.js",
+  "./js/xlsx-lite.js",
+  "./data/checklist.js",
+  "./data/flight-plan.js",
+  "./data/hotels.js",
+  "./data/itinerary.js",
+  "./data/roster.js",
+  "./data/hana-eur.json",
+  "./assets/images/embedded_03_15d3ba61ec.jpg"
+];
+self.addEventListener('install',e=>e.waitUntil((async()=>{const c=await caches.open(STATIC);for(const u of CORE){try{await c.add(new Request(u,{cache:'default'}))}catch(_){}}await self.skipWaiting()})()));
 self.addEventListener('activate',e=>e.waitUntil((async()=>{const ks=await caches.keys();await Promise.all(ks.filter(k=>k.startsWith('croatia-static-')&&k!==STATIC).map(k=>caches.delete(k)));await self.clients.claim()})()));
 self.addEventListener('fetch',e=>{
   const req=e.request;if(req.method!=='GET')return;
@@ -8,9 +69,10 @@ self.addEventListener('fetch',e=>{
   const isGuide=url.pathname.endsWith('/docs/croatia_guidebook_20260922.pdf');
   e.respondWith((async()=>{
     const cache=await caches.open(isGuide?GUIDE:STATIC);
-    const hit=await cache.match(req,{ignoreSearch:false});if(hit)return hit;
+    const hit=await cache.match(req,{ignoreSearch:true});if(hit)return hit;
     try{const res=await fetch(req);if(res&&res.ok){try{await cache.put(req,res.clone())}catch(_){}}return res}catch(err){
-      if(req.mode==='navigate'){const indexHit=await cache.match(new URL('./index.html',self.registration.scope).href);if(indexHit)return indexHit}
+      if(req.mode==='navigate'){const indexHit=await cache.match('./index.html',{ignoreSearch:true});if(indexHit)return indexHit}
+      if(req.destination==='image')return new Response('',{status:204,statusText:'Offline image not cached'});
       throw err;
     }
   })());

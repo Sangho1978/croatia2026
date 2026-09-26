@@ -1,4 +1,4 @@
-/* MIX33 low-data bootstrap. Same-origin files are cached on first actual use. */
+/* MIX34 low-data + offline bootstrap. Same-origin files are cached on first actual use. */
 (function(){
   try{localStorage.setItem('cro.data.saver','1')}catch(_){}
   document.documentElement.dataset.dataSaver='on';

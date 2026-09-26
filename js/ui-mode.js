@@ -1,4 +1,4 @@
-/* MIX33 dual UI modes. Presentation only; all functions/data are shared. */
+/* MIX34 dual UI modes. Presentation only; all functions/data are shared. */
 (function(){
   const KEY='cro.ui.mode';
   const HERO={
@@ -17,7 +17,7 @@
   function icon(m){return m==='visual'?'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>':'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>'}
   function paint(){const b=document.getElementById('uiModeToggle');if(!b)return;const m=mode();b.innerHTML=icon(m);b.setAttribute('aria-label',m==='visual'?'현장 운영형 화면으로 전환':'카드형 화면으로 전환');b.title=m==='visual'?'현장 운영형':'카드형';hero()}
   function set(m){m=m==='visual'?'visual':'field';document.documentElement.dataset.uiMode=m;try{localStorage.setItem(KEY,m)}catch(_){}paint();window.dispatchEvent(new CustomEvent('cro-ui-mode',{detail:{mode:m}}));}
-  function init(){paint();document.getElementById('uiModeToggle')?.addEventListener('click',()=>{set(mode()==='visual'?'field':'visual');try{window.showAppToast?.(mode()==='visual'?'카드형 화면':'현장 운영형 화면')}catch(_){}});setInterval(hero,60000)}
+  function init(){paint();document.getElementById('uiModeToggle')?.addEventListener('click',()=>{set(mode()==='visual'?'field':'visual');try{window.showAppToast?.(mode()==='visual'?'카드형 · 여행 보기':'기존형 · 현장 운영')}catch(_){}});setInterval(hero,60000)}
   document.addEventListener('DOMContentLoaded',init);
   window.CroUIMode={get mode(){return mode()},set};
 })();

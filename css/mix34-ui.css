@@ -1,0 +1,86 @@
+/* MIX34 — visual mode is deliberately spacious; field mode stays unchanged. */
+:root{--mix34-ink:#142132;--mix34-warm:#f4f0e8;--mix34-blue:#0d5678;--mix34-green:#0f766e}
+.offline-map-placeholder{min-height:210px;padding:26px 18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;background:linear-gradient(135deg,#eef2f3,#e6ebef);color:#536170;border-radius:16px}
+.offline-map-placeholder b{font-size:16px;color:#263746}.offline-map-placeholder span{font-size:13px;line-height:1.6}.offline-map-placeholder.compact{min-height:180px;border-radius:0}
+html[data-offline="true"] #briefWeatherNote::after{content:' · 오프라인'}
+
+/* FIELD MODE: intentionally no layout changes here. */
+
+/* VISUAL MODE — schedule becomes a destination story, not the field-mode grid. */
+html[data-ui-mode="visual"] #schedule{padding:0 0 34px!important;background:var(--mix34-warm)!important;max-width:none!important}
+html[data-ui-mode="visual"] #schedule>h2{padding:18px 18px 8px!important;margin:0!important;font-size:24px!important}
+html[data-ui-mode="visual"] #schedule #dayTabs{padding:6px 16px 12px!important;margin:0!important;display:flex!important;gap:8px!important;overflow-x:auto!important;scrollbar-width:none}
+html[data-ui-mode="visual"] #schedule #dayTabs::-webkit-scrollbar{display:none}
+html[data-ui-mode="visual"] #schedule #dayTabs .tab{flex:0 0 auto!important;border-radius:999px!important;padding:10px 15px!important;background:#fff!important;border:1px solid #e4ded4!important;box-shadow:none!important}
+html[data-ui-mode="visual"] #schedule #dayTabs .tab.active{background:#17324a!important;color:#fff!important;border-color:#17324a!important}
+html[data-ui-mode="visual"] #schedule .panel{padding:0!important;margin:0!important;background:transparent!important}
+html[data-ui-mode="visual"] #schedule .panel.active{display:flex!important;flex-direction:column!important;gap:18px!important}
+html[data-ui-mode="visual"] #schedule .day-summary{order:1;position:relative!important;min-height:clamp(330px,70vw,520px)!important;margin:0!important;padding:190px 20px 24px!important;border:0!important;border-radius:0 0 30px 30px!important;overflow:hidden!important;color:#fff!important;background-color:#32485a!important;background-image:linear-gradient(to bottom,rgba(8,18,29,.04),rgba(8,18,29,.82)),var(--visual-day-image)!important;background-size:cover!important;background-position:center!important;box-shadow:0 16px 34px rgba(30,42,55,.15)!important}
+html[data-ui-mode="visual"] #schedule .day-summary>*{position:relative;z-index:1}
+html[data-ui-mode="visual"] #schedule .visual-day-eyebrow{display:flex!important;flex-direction:column;gap:4px;margin-bottom:10px;text-shadow:0 2px 14px rgba(0,0,0,.42)}
+html[data-ui-mode="visual"] #schedule .visual-day-eyebrow span{font-size:13px;font-weight:900;letter-spacing:.12em}
+html[data-ui-mode="visual"] #schedule .visual-day-eyebrow b{font-size:12px;opacity:.92}
+html[data-ui-mode="visual"] #schedule .day-summary h3{font-size:clamp(28px,7.4vw,40px)!important;line-height:1.12!important;color:#fff!important;margin:0 0 10px!important;text-shadow:0 2px 16px rgba(0,0,0,.46)}
+html[data-ui-mode="visual"] #schedule .day-summary>p{font-size:15px!important;line-height:1.65!important;color:#fff!important;margin:0 0 12px!important;text-shadow:0 1px 8px rgba(0,0,0,.4)}
+html[data-ui-mode="visual"] #schedule .day-flow{display:flex!important;gap:6px!important;overflow-x:auto!important;flex-wrap:nowrap!important;padding:4px 0 8px!important;scrollbar-width:none}
+html[data-ui-mode="visual"] #schedule .day-flow::-webkit-scrollbar{display:none}
+html[data-ui-mode="visual"] #schedule .flow-pill{white-space:nowrap!important;background:rgba(255,255,255,.16)!important;color:#fff!important;border:1px solid rgba(255,255,255,.25)!important;backdrop-filter:blur(6px)!important}
+html[data-ui-mode="visual"] #schedule .flow-arrow{color:#fff!important}
+html[data-ui-mode="visual"] #schedule .day-guide-links{display:none!important}
+html[data-ui-mode="visual"] #schedule .day-summary .btns{margin-top:8px!important}
+html[data-ui-mode="visual"] #schedule .day-summary .btn{background:rgba(255,255,255,.92)!important;color:#17324a!important;border:0!important}
+html[data-ui-mode="visual"] #schedule .day-hotel-card{order:2;margin:0 16px!important;border:0!important;border-radius:22px!important;box-shadow:0 10px 28px rgba(38,44,49,.1)!important;padding:18px!important;background:#fff!important}
+html[data-ui-mode="visual"] #schedule .day-weather-box{order:3;margin:0 16px!important;border-radius:20px!important;overflow:hidden!important;background:#fff!important;box-shadow:0 8px 22px rgba(38,44,49,.08)!important;padding:14px!important}
+html[data-ui-mode="visual"] #schedule .day-main-grid{order:4!important;display:flex!important;flex-direction:column!important;gap:16px!important;margin:0 16px!important}
+html[data-ui-mode="visual"] #schedule .day-main-grid>.card{border:0!important;border-radius:24px!important;box-shadow:0 10px 28px rgba(38,44,49,.09)!important;padding:20px!important;background:#fff!important}
+html[data-ui-mode="visual"] #schedule .day-main-grid>.card h3{font-size:22px!important;margin:0 0 16px!important}
+html[data-ui-mode="visual"] #schedule .timeline .event{display:grid!important;grid-template-columns:64px minmax(0,1fr)!important;gap:12px!important;padding:16px 0!important;border-bottom:1px solid #e9ecef!important;font-size:16px!important;line-height:1.65!important}
+html[data-ui-mode="visual"] #schedule .timeline .event:last-child{border-bottom:0!important}
+html[data-ui-mode="visual"] #schedule .timeline .time{font-size:14px!important;font-weight:900!important;color:#0d5678!important;background:#eef6f8!important;border-radius:999px!important;height:max-content!important;padding:7px 8px!important;text-align:center!important;position:static!important}
+html[data-ui-mode="visual"] #schedule .move-row{grid-template-columns:64px 1fr auto!important;padding:13px 0!important;font-size:14px!important}
+html[data-ui-mode="visual"] #schedule .day-attraction-title{order:5;margin:8px 18px -2px!important;font-size:25px!important;letter-spacing:-.03em}
+html[data-ui-mode="visual"] #schedule .day-attraction-grid{order:6;display:flex!important;flex-direction:column!important;gap:22px!important;margin:0 16px!important}
+html[data-ui-mode="visual"] #schedule .day-attraction-card{padding:0 0 20px!important;border:0!important;border-radius:26px!important;overflow:hidden!important;background:#fff!important;box-shadow:0 12px 32px rgba(38,44,49,.11)!important}
+html[data-ui-mode="visual"] #schedule .visual-attraction-photo{display:block!important;position:relative;height:clamp(220px,58vw,390px)!important;background:#dfe6e8;overflow:hidden}
+html[data-ui-mode="visual"] #schedule .visual-attraction-photo img{width:100%!important;height:100%!important;object-fit:cover!important;display:block!important}
+html[data-ui-mode="visual"] #schedule .visual-attraction-photo span{position:absolute;left:16px;bottom:14px;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:rgba(15,35,50,.82);color:#fff;font-size:14px;font-weight:900;backdrop-filter:blur(6px)}
+html[data-ui-mode="visual"] #schedule .day-attraction-card>h4,html[data-ui-mode="visual"] #schedule .day-attraction-card>p,html[data-ui-mode="visual"] #schedule .day-attraction-card>.spot-meta,html[data-ui-mode="visual"] #schedule .day-attraction-card>.must-see,html[data-ui-mode="visual"] #schedule .day-attraction-card>.inline-attraction-detail,html[data-ui-mode="visual"] #schedule .day-attraction-card>.btns{margin-left:20px!important;margin-right:20px!important}
+html[data-ui-mode="visual"] #schedule .day-attraction-card>h4{font-size:24px!important;line-height:1.25!important;margin-top:20px!important;margin-bottom:10px!important;color:var(--mix34-ink)!important}
+html[data-ui-mode="visual"] #schedule .day-attraction-card>p{font-size:16px!important;line-height:1.85!important;color:#40505f!important}
+html[data-ui-mode="visual"] #schedule .day-attraction-card>.must-see{font-size:15px!important;line-height:1.8!important;background:#f5f7f7!important;border-radius:16px!important;padding:15px!important;margin-top:14px!important}
+html[data-ui-mode="visual"] #schedule .spot-meta{font-size:13px!important;gap:8px!important;flex-wrap:wrap!important}
+
+/* VISUAL MODE — guide reads like a long-form travel magazine. */
+html[data-ui-mode="visual"] #guide{padding:0 0 40px!important;background:var(--mix34-warm)!important;max-width:none!important}
+html[data-ui-mode="visual"] #guide>.app-subbar{margin:0 14px 8px!important}
+html[data-ui-mode="visual"] #guide>h2{padding:18px 18px 0!important;margin:0!important;font-size:28px!important;letter-spacing:-.04em}
+html[data-ui-mode="visual"] #guide>.guide-intro{padding:0 18px 8px!important;margin:0!important}
+html[data-ui-mode="visual"] #guide>.guide-intro h3{font-size:14px!important;color:#6c746f!important;font-weight:700!important}
+html[data-ui-mode="visual"] #guide .history-card{margin:12px 16px 34px!important;border:0!important;border-radius:24px!important;background:#fff!important;box-shadow:0 9px 26px rgba(38,44,49,.08)!important}
+html[data-ui-mode="visual"] #guide .city-guide{margin:0 0 46px!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:transparent!important;overflow:visible!important}
+html[data-ui-mode="visual"] #guide .city-cover{height:clamp(300px,78vw,560px)!important;border-radius:0!important;object-fit:cover!important;background:#d9e0df!important}
+html[data-ui-mode="visual"] #guide .city-guide .inside{padding:24px 20px 0!important}
+html[data-ui-mode="visual"] #guide .city-kicker{font-size:12px!important;letter-spacing:.14em!important;color:#0f766e!important;font-weight:900!important}
+html[data-ui-mode="visual"] #guide .city-guide h3{font-size:clamp(27px,7vw,38px)!important;line-height:1.18!important;letter-spacing:-.045em!important;margin:7px 0 16px!important;color:#172033!important}
+html[data-ui-mode="visual"] #guide .city-overview{font-size:17px!important;line-height:1.95!important;color:#344554!important;margin:0 0 22px!important}
+html[data-ui-mode="visual"] #guide .city-guide>.inside>details.read-more>summary{display:none!important}
+html[data-ui-mode="visual"] #guide .city-guide>.inside>details.read-more{display:block!important;border:0!important;background:transparent!important;padding:0!important}
+html[data-ui-mode="visual"] #guide .city-guide>.inside>details.read-more>p{font-size:16px!important;line-height:1.95!important;color:#43505b!important;margin:0 0 24px!important}
+html[data-ui-mode="visual"] #guide .attraction-list{display:flex!important;flex-direction:column!important;gap:14px!important}
+html[data-ui-mode="visual"] #guide .attraction{border:0!important;border-top:1px solid #dedfdc!important;border-radius:0!important;padding:24px 0 16px!important;background:transparent!important;box-shadow:none!important}
+html[data-ui-mode="visual"] #guide .attraction h4{font-size:23px!important;line-height:1.3!important;margin:0 0 10px!important;color:#182838!important}
+html[data-ui-mode="visual"] #guide .attraction p,html[data-ui-mode="visual"] #guide .attraction .see,html[data-ui-mode="visual"] #guide .attraction .price{font-size:15px!important;line-height:1.9!important;color:#43505b!important}
+html[data-ui-mode="visual"] #guide .attraction .see{padding:15px 16px!important;border-radius:16px!important;background:#fff!important;margin:12px 0!important}
+html[data-ui-mode="visual"] #guide .city-route-tip{margin-top:24px!important;padding:18px!important;border-radius:18px!important;font-size:15px!important;line-height:1.8!important;background:#e9efec!important}
+html[data-ui-mode="visual"] #guide .btns{gap:8px!important;flex-wrap:wrap!important}
+
+/* In visual mode hotels also breathe more, while field mode remains the compact operational layout. */
+html[data-ui-mode="visual"] #hotels .hotel-detail-card{border-radius:26px!important;overflow:hidden!important;box-shadow:0 12px 34px rgba(34,43,52,.11)!important;margin-bottom:26px!important}
+html[data-ui-mode="visual"] #hotels .hotel-photo-wrap{height:clamp(240px,60vw,420px)!important}
+html[data-ui-mode="visual"] #hotels .hotel-detail-body{padding:20px!important}
+
+/* Robust overflow on very narrow/Fold screens. */
+html,body{max-width:100%;overflow-x:hidden!important}
+main,section,.panel,.card,.day-summary,.city-guide,.hotel-detail-card{max-width:100%!important}
+a,button,p,dd,dt,span,strong,b,address,.event,.move-route{overflow-wrap:anywhere;word-break:keep-all}
+@media(max-width:360px){html[data-ui-mode="visual"] #schedule .day-summary{padding-left:16px!important;padding-right:16px!important}html[data-ui-mode="visual"] #schedule .day-attraction-grid,html[data-ui-mode="visual"] #schedule .day-main-grid,html[data-ui-mode="visual"] #schedule .day-weather-box,html[data-ui-mode="visual"] #schedule .day-hotel-card{margin-left:10px!important;margin-right:10px!important}html[data-ui-mode="visual"] #guide .city-guide .inside{padding-left:16px!important;padding-right:16px!important}}

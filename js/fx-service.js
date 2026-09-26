@@ -68,7 +68,7 @@
   }
   async function getSnapshot(){const r=await fetch(LOCAL+'?v=20260920-MIX11',{cache:'no-store'});if(!r.ok)throw Error('내장 스냅샷 없음');const j=await r.json();return normalize(j,'hana-snapshot','하나은행 고시 · 내장 스냅샷')}
   async function refresh(force=false){
-    if(inFlight)return inFlight;if(!navigator.onLine){mode='offline';paint();return state()}if(document.hidden&&!force)return state();
+    if(inFlight)return inFlight;if(!navigator.onLine){if(!value){try{const v=await getSnapshot();value=v;try{localStorage.setItem(KEY,JSON.stringify(v))}catch(_){}}catch(_){}}mode='offline';paint();return state()}if(document.hidden&&!force)return state();
     const now=Date.now();if(force&&now-attempt<7000&&mode!=='empty')return state();if(!force&&value&&now-value.checkedAt<REFRESH&&mode!=='error'&&mode!=='offline'&&mode!=='snapshot'){paint();return state()}if(!force&&mode==='error'&&now-attempt<RETRY)return state();
     attempt=now;mode='loading';lastError='';log=[];paint();
     inFlight=(async()=>{
