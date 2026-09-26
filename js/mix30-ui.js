@@ -1,4 +1,4 @@
-/* MIX30 UI helpers: collapsible daily journey map + compact home interactions. */
+/* MIX31 UI helpers: collapsible daily journey map + compact home interactions. */
 (function(){
   const ROUTE_POINTS={
     '2026-10-12':[
@@ -71,8 +71,8 @@
     const stops=document.getElementById('todayJourneyStops');
     const link=document.getElementById('todayJourneyGoogleLink');
     if(label)label.textContent=dayLabel(d);
-    if(meta)meta.textContent=`${d.date.slice(5).replace('-','/')} · ${d.title}`;
-    if(date)date.textContent=d.date;
+    if(meta)meta.textContent=d.route||d.title;
+    if(date)date.textContent=d.date.slice(5).replace('-','/');
     if(title)title.textContent=d.title;
     if(link){
       link.href=d.map||'#schedule';

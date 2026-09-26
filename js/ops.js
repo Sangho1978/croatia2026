@@ -10,6 +10,70 @@
     '2026-10-18':'PLAN 1~4 선택 문화시찰 → 16:30 로마공항 이동 → TW406 21:15 귀국.',
     '2026-10-19':'16:10 TW406 인천 도착 → 수하물·공용물품 확인 후 귀가.'
   };
+  // Major next-step timeline. Exact booklet times are marked exact; untimed visits use clearly-labeled operating estimates.
+  const LIVE_AGENDA={
+    '2026-10-12':[
+      ['2026-10-12T09:35:00+09:00','인천공항 T1 B카운터 집결',false],
+      ['2026-10-12T12:35:00+09:00','TW405 인천 출발',false],
+      ['2026-10-12T19:15:00+02:00','로마 FCO 도착',false],
+      ['2026-10-12T23:30:00+02:00','FR5975 로마 출발',false]
+    ],
+    '2026-10-13':[
+      ['2026-10-13T00:50:00+02:00','두브로브니크 공항 도착',false],
+      ['2026-10-13T02:30:00+02:00','Grand Hotel Park 도착·휴식',false],
+      ['2026-10-13T07:00:00+02:00','호텔 조식',false],
+      ['2026-10-13T09:00:00+02:00','두브로브니크 1일 패스 관광 시작',false],
+      ['2026-10-13T12:30:00+02:00','중식',true],
+      ['2026-10-13T14:00:00+02:00','성벽·스르지산·유람선 일정',true],
+      ['2026-10-13T18:00:00+02:00','석식',false]
+    ],
+    '2026-10-14':[
+      ['2026-10-14T07:00:00+02:00','호텔 조식',false],
+      ['2026-10-14T09:00:00+02:00','두브로브니크 자유탐방',true],
+      ['2026-10-14T12:30:00+02:00','자유식',true],
+      ['2026-10-14T15:00:00+02:00','두체 방향 호텔 이동',false],
+      ['2026-10-14T18:00:00+02:00','석식',false]
+    ],
+    '2026-10-15':[
+      ['2026-10-15T07:00:00+02:00','호텔 조식',false],
+      ['2026-10-15T07:45:00+02:00','스플리트 이동',true],
+      ['2026-10-15T08:15:00+02:00','스플리트 핵심관광',true],
+      ['2026-10-15T11:30:00+02:00','트로기르 이동',true],
+      ['2026-10-15T12:10:00+02:00','트로기르 구시가지 관광',true],
+      ['2026-10-15T14:00:00+02:00','비오그라드 나 모루 이동',true],
+      ['2026-10-15T18:00:00+02:00','석식',false]
+    ],
+    '2026-10-16':[
+      ['2026-10-16T07:00:00+02:00','호텔 조식',false],
+      ['2026-10-16T07:30:00+02:00','자다르 이동',true],
+      ['2026-10-16T08:10:00+02:00','자다르 관광',true],
+      ['2026-10-16T09:30:00+02:00','플리트비체 이동',true],
+      ['2026-10-16T12:00:00+02:00','중식',true],
+      ['2026-10-16T12:45:00+02:00','플리트비체 국립공원 관람',true],
+      ['2026-10-16T16:00:00+02:00','카를로바크 이동',true],
+      ['2026-10-16T18:00:00+02:00','석식',false]
+    ],
+    '2026-10-17':[
+      ['2026-10-17T07:00:00+02:00','호텔 조식',false],
+      ['2026-10-17T08:00:00+02:00','라스토케 이동',true],
+      ['2026-10-17T08:45:00+02:00','라스토케 관광',true],
+      ['2026-10-17T10:00:00+02:00','자그레브 이동',true],
+      ['2026-10-17T11:30:00+02:00','자그레브 관광·자유시간',true],
+      ['2026-10-17T19:30:00+02:00','자그레브 공항 이동·수속',true],
+      ['2026-10-17T22:10:00+02:00','FR8836 자그레브 출발',false],
+      ['2026-10-17T23:35:00+02:00','로마 FCO 도착',false]
+    ],
+    '2026-10-18':[
+      ['2026-10-18T07:00:00+02:00','호텔 조식',false],
+      ['2026-10-18T08:30:00+02:00','선택 문화시찰 시작',true],
+      ['2026-10-18T12:30:00+02:00','자유식',true],
+      ['2026-10-18T16:30:00+02:00','로마 FCO 이동',false],
+      ['2026-10-18T21:15:00+02:00','TW406 로마 출발',false]
+    ],
+    '2026-10-19':[
+      ['2026-10-19T16:10:00+09:00','인천국제공항 도착',false]
+    ]
+  };
   const WEATHER_ACTION={
     '2026-10-12':'장거리 비행과 야간 환승일입니다. 기내·공항 냉방에 대비해 얇은 겉옷을 손가방에 두고, 도착 후 사용할 세면·충전물품은 쉽게 꺼낼 수 있게 준비하세요.',
     '2026-10-13':'두브로브니크 성벽과 스르지산은 바람과 햇빛 노출이 큽니다. 바람막이·모자·선글라스·물, 계단에 편한 신발을 권장합니다.',
@@ -29,23 +93,51 @@
   function operationalDay(){
     const d=localDate(); if(d<'2026-10-12') return days[0]; if(d>'2026-10-19') return days[days.length-1]; return days.find(x=>x.date===d)||days[0];
   }
+  function shortDateLabel(date){
+    const dt=new Date(date+'T12:00:00Z');
+    const wd=['일','월','화','수','목','금','토'][dt.getUTCDay()];
+    return `${date.slice(5).replace('-','/')}(${wd})`;
+  }
+  function countdownText(ms,approx=false){
+    if(ms<=0)return'곧 시작';
+    const mins=Math.ceil(ms/60000),prefix=approx?'약 ':'';
+    if(mins>=1440){const d=Math.floor(mins/1440),h=Math.floor((mins%1440)/60);return `${prefix}${d}일${h?` ${h}시간`:''} 후`;}
+    if(mins>=60)return `${prefix}${Math.floor(mins/60)}시간 ${mins%60}분 후`;
+    return `${prefix}${mins}분 후`;
+  }
   function nextEventFor(d){
-    if(window.FlightPlan&&d.eventInstants)return FlightPlan.next(d);
-    const today=localDate();
-    if(today<d.date) return {time:d.events?.[0]?.[0]||'',label:d.events?.[0]?.[1]||d.title,count:`여행 시작 D-${Math.max(0,daysDiff(d.date,today))}`};
-    if(today>d.date) return {time:'완료',label:'해당 날짜 일정이 종료되었습니다.',count:''};
-    const nm=nowCroParts(),cur=nm.h*60+nm.m;
-    for(const e of d.events||[]){ const m=String(e[0]).match(/(\d{1,2}):(\d{2})/); if(!m) continue; const em=+m[1]*60 + +m[2]; if(em>=cur){const diff=em-cur;return {time:m[1].padStart(2,'0')+':'+m[2],label:e[1],count:diff<60?`${diff}분 후`: `${Math.floor(diff/60)}시간 ${diff%60}분 후`};} }
-    return {time:'오늘',label:'예정된 주요 일정은 마무리 단계입니다.',count:'호텔·개인물품을 확인하세요'};
+    const now=Date.now();
+    const all=[];
+    Object.entries(LIVE_AGENDA).forEach(([date,items])=>items.forEach(([iso,label,approx])=>{
+      const t=Date.parse(iso); if(Number.isFinite(t)) all.push({date,iso,label,approx,t});
+    }));
+    all.sort((a,b)=>a.t-b.t);
+    const e=all.find(x=>x.t>=now);
+    if(e){
+      const zone=e.iso.includes('+09:00')?'Asia/Seoul':'Europe/Zagreb';
+      const time=new Intl.DateTimeFormat('ko-KR',{timeZone:zone,hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date(e.t));
+      const dayPrefix=e.date!==d.date?shortDateLabel(e.date)+' · ':'';
+      return {time:(e.approx?'약 ':'')+time,label:dayPrefix+e.label,count:countdownText(e.t-now,e.approx),approx:e.approx};
+    }
+    const first=all[0],last=all[all.length-1];
+    if(first&&now<first.t)return {time:'09:35',label:'10/12(월) · 인천공항 T1 B카운터 집결',count:countdownText(first.t-now,false),approx:false};
+    if(last&&now>last.t)return {time:'완료',label:'전체 공식 일정이 종료되었습니다.',count:'수하물·공용물품을 확인하세요',approx:false};
+    return {time:'--:--',label:'다음 일정을 확인 중입니다.',count:'',approx:false};
+  }
+  function paintTodayStay(d){
+    const strip=document.getElementById('todayStayStrip'),name=document.getElementById('todayStayName'); if(!strip||!name)return;
+    const h=window.CRO_HOTEL_BY_DATE?.[d.date];
+    if(!h){strip.hidden=true;return;}
+    name.textContent=h.name; strip.hidden=false;
   }
   function opsRenderToday(){
     const d=operationalDay(),pre=localDate()<'2026-10-12',post=localDate()>'2026-10-19';
     const mode=document.getElementById('todayMode'); if(mode)mode.textContent=pre?'출발 준비':post?'여행 종료':'오늘 여행';
-    document.getElementById('todayDate').textContent=(pre?'다가오는 일정 · ':post?'연수 종료 · ':'현지 ')+d.date;
+    document.getElementById('todayDate').textContent=(pre?'다가오는 일정 · ':post?'연수 종료 · ':'')+shortDateLabel(d.date)+' · '+(days.indexOf(d)+1)+'일차';
     document.getElementById('todayTitle').textContent=d.title;
     document.getElementById('todayRoute').textContent=d.route;
     const flow=document.getElementById('todayFlow'); if(flow)flow.innerHTML=(d.flow||[]).map((x,i)=>`${i?'<i>›</i>':''}<span>${x}</span>`).join('');
-    const nx=nextEventFor(d); document.getElementById('todayNextTime').textContent=nx.time; document.getElementById('todayNextLabel').textContent=nx.label; document.getElementById('todayCountdown').textContent=nx.count;
+    const nx=nextEventFor(d); document.getElementById('todayNextTime').textContent=nx.time; document.getElementById('todayNextLabel').textContent=nx.label; document.getElementById('todayCountdown').innerHTML=`${nx.count}${nx.approx?' <span class="ops-next-live">예상</span>':''}`; paintTodayStay(d);
     const w=WEATHER_SPOTS[d.date]; const ws=document.getElementById('todayWeatherState'); if(ws)ws.textContent=document.getElementById('liveWeatherMain')?.textContent||(w?`${w.name} ${w.hi}/${w.lo}° 참고`:'도착일');
     const as=document.getElementById('todayAttendanceState'); if(as){const cnt=Object.values(attChecks||{}).filter(x=>x&&x.checked).length; as.textContent=attCurrent?`${cnt}/28 · ${attCurrent.title||attCurrent.type}`:'진행 없음';}
     const ls=document.getElementById('todayLocationState'); if(ls){const sharing=localStorage.getItem('loc_sharing')==='1'; ls.textContent=sharing?(locLastWrite?`${ago(locLastWrite)} 전송`:'공유 ON'):'공유 OFF';}
@@ -56,14 +148,11 @@
 
   function enhanceSchedulePanels(){
     document.querySelectorAll('#dayPanels .panel').forEach((p,i)=>{
-      if(p.querySelector('.official-schedule-card')) return; const d=days[i];
-      const summary=p.querySelector('.day-summary'); if(!summary)return;
-      const box=document.createElement('div'); box.className='official-schedule-card';
-      box.innerHTML=`<span class="tag">공식 일정</span><b> ${d.date.slice(5).replace('-','/')} 기본 운영동선</b><p>${OFFICIAL_DAY_SUMMARY[d.date]||d.route}</p><div class="schedule-separator"><div class="official"><b>공식</b><br>여행사·확정 항공·도시 간 이동 순서</div><div class="recommend"><b>추천</b><br>식사·집결·도보 효율을 고려한 현장 시간표</div></div>`;
-      summary.insertAdjacentElement('afterend',box);
-      const rec=p.querySelector('.recommended-flow'); if(rec)rec.innerHTML='<b>현장 운영 메모</b><br>09/22 소책자의 일정·이동순서를 기본으로 하며, 실제 집결·식사·입장시각은 인솔자와 현지 가이드의 당일 안내를 우선합니다.';
-      const h=[...p.querySelectorAll('.day-main-grid .card h3')].find(x=>x.textContent.includes('추천 일정')); if(h)h.textContent='공식 일정 · 09/22 안내소책자';
-      const wbox=p.querySelector('.day-weather-box'); if(wbox&&!p.querySelector('.weather-action-advice')){const a=document.createElement('div');a.className='weather-action-advice';a.innerHTML=`<b>오늘 준비</b><br>${WEATHER_ACTION[d.date]||''}`;wbox.insertAdjacentElement('afterend',a);}
+      const d=days[i];
+      const wbox=p.querySelector('.day-weather-box');
+      if(wbox&&!p.querySelector('.weather-action-advice')){
+        const a=document.createElement('div');a.className='weather-action-advice';a.innerHTML=`<b>오늘 준비</b><br>${WEATHER_ACTION[d.date]||''}`;wbox.insertAdjacentElement('afterend',a);
+      }
     });
   }
 
@@ -96,6 +185,6 @@
   document.addEventListener('DOMContentLoaded',()=>{
     reorderSections(); enhanceSchedulePanels(); setupMemo(); setOnlineState(); adminVisibility(); opsRenderToday(); opsRenderMeetingDistance();
     window.addEventListener('online',setOnlineState);window.addEventListener('offline',setOnlineState);
-    setInterval(opsRenderToday,60000);
+    setInterval(opsRenderToday,30000);
   });
 })();

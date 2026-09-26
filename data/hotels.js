@@ -1,0 +1,81 @@
+/* MIX31 hotel directory. Contact details/features verified against each hotel's official site on 2026-09-26. */
+window.CRO_HOTELS=[
+  {
+    id:'grand-hotel-park',
+    name:'Grand Hotel Park Dubrovnik',
+    stay:'10/12–10/14 · 2박',
+    nights:['2026-10-12','2026-10-13'],
+    address:'Mata Vodopića 2, 20000 Dubrovnik, Croatia',
+    phone:'+385 20 434 444', tel:'+38520434444',
+    email:'reception@grandhotel-park.hr',
+    website:'https://www.grandhotel-park.hr/',
+    map:'https://www.google.com/maps/search/?api=1&query=Grand+Hotel+Park+Dubrovnik',
+    image:'assets/images/hotel_grand_park.jpg',
+    blurb:'라파드 만 산책로와 해변 가까이에 있는 4성급 호텔. 공식 사이트는 244개 객실, 실내·야외 수영장, 피트니스, 무료 Wi-Fi와 주차 등을 주요 시설로 안내합니다.',
+    highlights:['라파드 산책로·해변 인접','244개 객실','실내·야외 수영장','피트니스 · 무료 Wi-Fi · 주차'],
+    source:'공식 홈페이지'
+  },
+  {
+    id:'hotel-plaza-duce',
+    name:'Hotel Plaža Duće',
+    stay:'10/14–10/15 · 1박',
+    nights:['2026-10-14'],
+    address:'Luka III, Poljička cesta 79, Duće, 21315 Dugi Rat, Croatia',
+    phone:'+385 21 783 350', tel:'+38521783350',
+    email:'salesduce@hotelplaza.hr',
+    website:'https://www.hotelplaza.hr/en/hotel-duce/',
+    map:'https://www.google.com/maps/search/?api=1&query=Hotel+Plaza+Duce+Croatia',
+    image:'assets/images/hotel_plaza_duce.jpg',
+    blurb:'아드리아해와 브라치섬 전망을 강조하는 4성급 호텔. 공식 사이트는 103개 객실, 실내·야외 수영장과 자쿠지, 사우나·스파, 레스토랑과 해변 바를 운영한다고 안내합니다.',
+    highlights:['아드리아해·브라치섬 전망','103개 객실','실내·야외 수영장 · 자쿠지','웰니스 · 사우나 · 해변 바'],
+    source:'공식 홈페이지'
+  },
+  {
+    id:'hotel-ilirija',
+    name:'Hotel Ilirija',
+    stay:'10/15–10/16 · 1박',
+    nights:['2026-10-15'],
+    address:'Tina Ujevića 9, 23210 Biograd na Moru, Croatia',
+    phone:'+385 23 396 555', tel:'+38523396555',
+    secondaryPhone:'예약/세일즈 +385 23 383 556',
+    email:'hotel-ilirija@ilirijabiograd.com',
+    website:'https://ilirijabiograd.com/en/hotel-ilirija',
+    map:'https://www.google.com/maps/search/?api=1&query=Hotel+Ilirija+Biograd+na+Moru',
+    image:'assets/images/hotel_ilirija.jpg',
+    blurb:'비오그라드 해변 산책로 바로 앞의 리조트 호텔. 공식 사이트는 현대식 뷔페·아라카르트 레스토랑, 테라스 바, 리조트 해변, 마리나와 바다 전망 실내 인피니티 풀을 주요 특징으로 소개합니다.',
+    highlights:['해변 산책로 바로 앞','바다 전망 실내 인피니티 풀','리조트 해변 · 마리나','뷔페 · 아라카르트 · 테라스 바'],
+    source:'공식 홈페이지'
+  },
+  {
+    id:'aminess-kadoor',
+    name:'Aminess Kadoor Hotel',
+    stay:'10/16–10/17 · 1박',
+    nights:['2026-10-16'],
+    address:'Ul. Vladimira Nazora 4, 47000 Karlovac, Croatia',
+    phone:'+385 91 645 4000', tel:'+385916454000',
+    secondaryPhone:'콜센터 +385 52 858 600',
+    email:'reservations@aminess.com',
+    website:'https://www.aminess.com/en/accommodation/hotels-and-resorts/karlovac/aminess-kadoor-hotel/',
+    map:'https://www.google.com/maps/search/?api=1&query=Aminess+Kadoor+Hotel+Karlovac',
+    image:'assets/images/hotel_kadoor.jpg',
+    blurb:'카를로바크 도심과 네 개의 강에 가까운 소규모 부티크형 호텔. 공식 사이트는 목재·벽돌을 살린 러스틱 분위기, Kadoor 레스토랑, 정원 테라스, 전용주차장을 특징으로 소개합니다.',
+    highlights:['도심·강변 접근성','러스틱 부티크 분위기','Restaurant Kadoor','정원 테라스 · 전용주차장'],
+    source:'공식 홈페이지'
+  },
+  {
+    id:'ergife-palace',
+    name:'Ergife Palace Hotel & Conference Center',
+    stay:'10/17–10/18 · 1박',
+    nights:['2026-10-17'],
+    address:'Largo Lorenzo Mossa 8, 00165 Rome, Italy',
+    phone:'+39 06 66441', tel:'+390666441',
+    email:'ergife.booking@ergife.com',
+    website:'https://www.ergifepalacehotel.com/en/index',
+    map:'https://www.google.com/maps/search/?api=1&query=Ergife+Palace+Hotel+Rome',
+    image:'assets/images/hotel_ergife.jpg',
+    blurb:'로마 아우렐리아 지역의 대형 4성급 호텔. 공식 사이트는 704개 객실, 30개가 넘는 모듈형 회의실, 레스토랑·바·피트니스와 대형 야외 수영장을 대표 시설로 안내합니다.',
+    highlights:['704개 객실','30개+ 모듈형 회의실','대형 야외 수영장 · 자쿠지','레스토랑 · 바 · 피트니스'],
+    source:'공식 홈페이지'
+  }
+];
+window.CRO_HOTEL_BY_DATE=Object.fromEntries(window.CRO_HOTELS.flatMap(h=>h.nights.map(d=>[d,h])));
