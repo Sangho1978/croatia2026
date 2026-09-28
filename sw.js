@@ -1,4 +1,4 @@
-const STATIC='gspa-static-v47';
+const STATIC='gspa-static-v49';
 const GUIDE='gspa-guidebook-shared-v2';
 const CORE=[
   "./index.html",
@@ -15,6 +15,16 @@ const CORE=[
   "./css/mix43-fixes.css",
   "./css/photo-plan.css",
   "./manifest.webmanifest",
+  "./manifest-croatia.webmanifest",
+  "./manifest-turkiye1.webmanifest",
+  "./manifest-turkiye2.webmanifest",
+  "./manifest-italy-north.webmanifest",
+  "./css/pwa-install.css",
+  "./js/pwa-install.js",
+  "./assets/icons/gspa-192.png",
+  "./assets/icons/gspa-512.png",
+  "./assets/icons/turkiye1-192.png",
+  "./assets/icons/turkiye1-512.png",
   "./css/action-first.css",
   "./css/app.css",
   "./css/attendance-prep.css",

@@ -343,3 +343,13 @@ Croatia single-UI finalization. See `MIX35_FINAL_CHANGES.md`. Card/visual switch
 - 나머지 팀원: 본인 조만 열람
 - 핵심 3컷 + 예시 구도 이미지 방식으로 간결화
 - 사진 가이드 체크상태는 로컬 저장, Firebase 변경 없음
+
+
+## MIX48
+튀르키예 1팀 출석관리자(남상모·김수정)와 튀르키예 전용 홈 화면 설치 기능을 추가했습니다. 김수정의 출석 시작/리셋을 실제 Firebase에서 허용하려면 `firebase.rules.multitrip.MIX48.json`을 배포해야 합니다.
+
+## MIX49 (2026-09-28)
+- 모든 연수팀에 공통 홈 화면 바로가기/PWA 설치 기능을 적용했습니다.
+- 크로아티아·튀르키예1·튀르키예2·이탈리아북부 팀별 manifest를 분리하고, 공통 포털도 설치할 수 있게 했습니다.
+- 튀르키예 1팀 공동경비 관리자를 남상모·김수연·김수정으로 확장했습니다.
+- 김수정 공동경비 권한 적용을 위해 `firebase.rules.multitrip.MIX49.json` 게시가 필요합니다.

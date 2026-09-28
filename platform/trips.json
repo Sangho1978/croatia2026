@@ -1,5 +1,5 @@
 {
-  "version": "20260926-MIX43",
+  "version": "20260928-MIX49",
   "defaultTrip": "croatia",
   "trips": [
     {
@@ -41,11 +41,16 @@
       "locationAdmin": "남상모",
       "financeManagers": [
         "남상모",
-        "김수연"
+        "김수연",
+        "김수정"
       ],
       "memberCount": 27,
       "peerCount": 26,
-      "groupCount": 3
+      "groupCount": 3,
+      "attendanceAdmins": [
+        "남상모",
+        "김수정"
+      ]
     },
     {
       "id": "turkiye2",

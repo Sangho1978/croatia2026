@@ -1,14 +1,14 @@
 {
-  "name": "서울대 GSPA 17기 하반기 국외연수",
-  "short_name": "GSPA 국외연수",
-  "id": "./gspa-travel-2026",
-  "start_url": "./index.html",
+  "name": "크로아티아·로마 국외연수 · GSPA 17기",
+  "short_name": "크로아티아",
+  "id": "./gspa-croatia-2026",
+  "start_url": "./index.html?trip=croatia",
   "scope": "./",
   "display": "standalone",
   "background_color": "#f4f8fa",
   "theme_color": "#0b456b",
   "lang": "ko-KR",
-  "description": "서울대학교 행정대학원 공공리더십 17기 하반기 국외연수",
+  "description": "서울대학교 행정대학원 공공리더십 17기 크로아티아·로마 국외연수",
   "icons": [
     {
       "src": "assets/icons/gspa-192.png",

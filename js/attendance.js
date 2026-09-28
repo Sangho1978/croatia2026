@@ -1,14 +1,14 @@
 /* MIX12: categorized rounds, editable title, auto-complete at 28/28, leader+presenter badges. Based on MIX02: one current round, 28 fixed identities, leader-first group board.
  * Existing attendanceCurrent/<trip> and attendance/<trip>/<event>/<slot> paths are unchanged.
  * Firebase REST SSE: https://firebase.google.com/docs/reference/rest/database#section-streaming
- * Start/reset remain limited to the original operator (Han) in the client UI.
- * Existing server-side access rules are intentionally not weakened or replaced here.
+ * Start/reset are limited to trip-configured attendance administrators in the client UI.
+ * Firebase Rules must include the same administrator names for server-side writes.
  */
 (function(){
   'use strict';
-  const OPERATOR=(window.GSPA_TRIP?.attendanceOperator||'한상호'), order=[...new Set(APP_USERS.map(u=>u.group))].filter(g=>g!==0).sort((a,b)=>a-b).concat(APP_USERS.some(u=>u.group===0)?[0]:[]), encoder=new TextEncoder();
+  const OPERATOR=(window.GSPA_TRIP?.attendanceOperator||'한상호'), ADMINS=[...new Set(window.GSPA_TRIP?.attendanceAdmins||[OPERATOR])], ADMIN_LABEL=ADMINS.join(' · '), order=[...new Set(APP_USERS.map(u=>u.group))].filter(g=>g!==0).sort((a,b)=>a-b).concat(APP_USERS.some(u=>u.group===0)?[0]:[]), encoder=new TextEncoder();
   const people=()=>APP_USERS;
-  const isAdmin=()=>currentUser?.name===OPERATOR;
+  const isAdmin=()=>!!currentUser&&ADMINS.includes(currentUser.name);
   const sameSession=e=>e===authEpoch&&!!currentUser;
   let authEpoch=0,revision=0,refreshTask=null,adminBusy=false,selfBusy=false;
   let known=false,checksKnown=false,lastSync=0,lastPoll=0,lastRetry=0,lastVerify=0;
@@ -197,7 +197,7 @@
     },5000);
   }
   async function create(){
-    if(!isAdmin()){feedback('출석 시작·리셋은 '+OPERATOR+'만 사용할 수 있습니다.',true);return}
+    if(!isAdmin()){feedback('출석 시작·리셋은 '+ADMIN_LABEL+'만 사용할 수 있습니다.',true);return}
     if(adminBusy)return;if(!navigator.onLine){feedback('인터넷 연결 후 시작해 주세요.',true);return}
     adminBusy=true;feedback();render();const epoch=authEpoch;
     try{
@@ -211,7 +211,7 @@
       if(!res.etag)throw Error('서버 상태를 확인하지 못했습니다. 다시 시도해 주세요.');
       const random=new Uint32Array(1);crypto.getRandomValues(random);const id=String(Date.now())+'-'+random[0].toString(36);
       const {type,title}=editorValues(),started=Date.now(),st=window.AppTime?AppTime.stored(started):null;
-      const data={id,title,type,createdBy:OPERATOR,createdAt:{'.sv':'timestamp'},...(st?{timeCroatia:st.croatia,timeKorea:st.korea}: {})};
+      const data={id,title,type,createdBy:currentUser.name,createdAt:{'.sv':'timestamp'},...(st?{timeCroatia:st.croatia,timeKorea:st.korea}: {})};
       const saved=await request(currentPath(),{method:'PUT',headers:{'if-match':res.etag},body:JSON.stringify(data)});
       if(!sameSession(epoch))return;
       revision++;setMeta(saved.data);attChecks={};checksKnown=true;markGood();openCheckStream();feedback('✓ '+title+' 시작 · '+APP_USERS.length+'명이 체크할 수 있습니다.');announceStart(saved.data);
@@ -232,7 +232,7 @@
     finally{adminBusy=false;render();}
   }
   async function reset(){
-    if(!isAdmin()){feedback('시작·리셋은 담당자인 '+OPERATOR+'만 사용할 수 있습니다.',true);return}
+    if(!isAdmin()){feedback('출석 시작·리셋은 '+ADMIN_LABEL+'만 사용할 수 있습니다.',true);return}
     if(adminBusy||!attCurrent)return;
     if(!confirm('현재 출석을 리셋할까요?\n'+APP_USERS.length+'명이 미체크 대기 상태로 돌아갑니다.\n다시 확인하려면 시작을 누르세요. 이전 기록은 보존됩니다.'))return;
     adminBusy=true;feedback();render();const id=attCurrent.id,epoch=authEpoch;
