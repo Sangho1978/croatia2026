@@ -1,8 +1,9 @@
-/* MIX46 · Croatia overseas-training report field photo plan.
+/* MIX47 · Croatia overseas-training report field photo plan.
  * Basis: attached 4-part result-report outline. Croatia-only.
  */
 window.CRO_REPORT_PHOTO_PLAN={
   source:'크로아티아 국외연수 4개조 발표자료개요',
+  adminViewers:['한상호','나종민'],
   corePlaces:['두브로브니크','스플리트','플리트비체','자그레브'],
   common:{
     title:'같은 장소, 다른 질문',
@@ -43,6 +44,7 @@ window.CRO_REPORT_PHOTO_PLAN={
   days:{
     '2026-10-13':{
       place:'두브로브니크',core:true,label:'핵심 촬영 ① · 두브로브니크',
+      example:{image:'assets/images/photo-guide/dubrovnik_walk.jpg',caption:'예시 · Pile Gate/성벽 입구처럼 보행 흐름과 혼잡이 함께 보이게'},
       common:'구시가지 전경 1장 + 조별 증거사진. 공항 도착 장면은 새벽이므로 이동 중 안전을 우선하고 가능한 범위에서만 기록합니다.',
       groups:{
         1:{count:'3장 이상',shots:['DBV 공항 도착동선·버스 탑승/하차 위치','Pile Gate·구시가 입구의 보행 흐름','성벽 입구·골목의 대기열/혼잡'],memo:'공항→호텔/도심 시간, 하차 위치, 대기시간'},
@@ -53,6 +55,7 @@ window.CRO_REPORT_PHOTO_PLAN={
     },
     '2026-10-14':{
       place:'두브로브니크',core:false,label:'두브로브니크 보강 촬영',
+      example:{image:'assets/images/photo-guide/dubrovnik_walk.jpg',caption:'예시 · 전경보다 사람의 흐름·입구·안내가 보이는 구도'},
       common:'전날 미확보 장면을 보충하는 날입니다. 아래 사진은 10/13 두브로브니크 목표 수량에 포함해 관리하세요.',
       groups:{
         1:{count:'보강 2장',shots:['Old Port/구시가 출입구 안내체계','캐리어·관광객·시민 보행이 겹치는 장면'],memo:'마지막 1km·보행 편의 보강'},
@@ -63,6 +66,7 @@ window.CRO_REPORT_PHOTO_PLAN={
     },
     '2026-10-15':{
       place:'스플리트',core:true,label:'핵심 촬영 ② · 스플리트',
+      example:{image:'assets/images/photo-guide/split_hub.jpg',caption:'예시 · 항만·버스·보행이 한 프레임에 들어오는 복합거점 구도'},
       common:'항만·버스터미널·리바·구시가지가 이어지는 “이동→소비” 흐름이 한 프레임에 보이도록 촬영하세요. 트로기르는 보강촬영으로 활용합니다.',
       groups:{
         1:{count:'3장 이상',shots:['항만/버스터미널 복합거점','터미널→리바→디오클레티아누스 궁전 보행 연결','수하물·버스·택시·보행이 만나는 환승 장면'],memo:'항만→구시가 도보시간, 안내판 언어'},
@@ -74,6 +78,7 @@ window.CRO_REPORT_PHOTO_PLAN={
     },
     '2026-10-16':{
       place:'플리트비체',core:true,label:'핵심 촬영 ③ · 플리트비체',
+      example:{image:'assets/images/photo-guide/plitvice_shuttle.jpg',caption:'예시 · 셔틀·대기열·안내판·보행로가 함께 보이는 운영 장면'},
       common:'풍경 전경 1장은 반드시 확보하되, 보고서 핵심은 입구·예약·셔틀·보행데크·안전·굿즈처럼 “수용력 관리”가 보이는 사진입니다. 자다르는 보강촬영입니다.',
       groups:{
         1:{count:'3장 이상',shots:['입구·셔틀/버스 하차','입장 대기열·코스 선택 안내','보행데크·보트/셔틀 이동 흐름'],memo:'입장대기, 코스 안내, 혼잡지점'},
@@ -85,6 +90,7 @@ window.CRO_REPORT_PHOTO_PLAN={
     },
     '2026-10-17':{
       place:'자그레브',core:true,label:'핵심 촬영 ④ · 자그레브',
+      example:{image:'assets/images/photo-guide/zagreb_tram.jpg',caption:'예시 · 트램과 정류장, 시민·관광객 이용 장면을 함께 기록'},
       common:'반 옐라치치 광장·트램·시장·도심 생활공간을 연결해 “시민과 관광객이 함께 쓰는 도시”를 기록하세요. 라스토케는 보강촬영입니다.',
       groups:{
         1:{count:'3장 이상',shots:['트램·정류장/노선도','승차권 구매·실시간 도착정보','중앙도심 보행·환승 장면'],memo:'승차권 구매, 실시간 정보, 환승 편의'},
