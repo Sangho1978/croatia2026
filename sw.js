@@ -1,4 +1,4 @@
-const STATIC='gspa-static-v45';
+const STATIC='gspa-static-v46';
 const GUIDE='gspa-guidebook-shared-v2';
 const CORE=[
   "./index.html",
@@ -13,6 +13,7 @@ const CORE=[
   "./trips/turkiye1/data.js",
   "./css/mix40-multitrip.css",
   "./css/mix43-fixes.css",
+  "./css/photo-plan.css",
   "./manifest.webmanifest",
   "./css/action-first.css",
   "./css/app.css",
@@ -56,6 +57,7 @@ const CORE=[
   "./js/net-meter.js",
   "./js/ops.js",
   "./js/photos.js",
+  "./js/photo-plan.js",
   "./js/preparation.js",
   "./js/receipt-ai.js",
   "./js/receipt-ocr.js",
@@ -69,6 +71,7 @@ const CORE=[
   "./js/videos.js",
   "./js/xlsx-lite.js",
   "./data/checklist.js",
+  "./data/photo-plan.js",
   "./data/flight-plan.js",
   "./data/hotels.js",
   "./data/itinerary.js",
