@@ -359,3 +359,6 @@ Croatia single-UI finalization. See `MIX35_FINAL_CHANGES.md`. Card/visual switch
 - 위치 슬롯의 stale anonymous Firebase UID 자동 재연결 지원.
 - 체크완료/미체크 요약 터치 시 즉시 명단 표시.
 - `firebase.rules.multitrip.MIX50.json` 게시 필요.
+
+## MIX51 — 인앱 브라우저 홈 화면 설치 안내
+카카오톡에서 링크를 연 경우 카카오톡 내장 브라우저를 자동 감지해 외부 브라우저에서 여는 방법을 안내합니다. Android는 Chrome/Samsung Internet, iPhone/iPad는 Safari 기준 안내를 표시하며, 현재 팀 주소를 한 번에 복사할 수 있습니다. 공통 포털과 모든 팀에 동일 적용됩니다.
