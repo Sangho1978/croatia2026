@@ -1,4 +1,4 @@
-/* MIX02 scoped UI. Weather bar, five-tab navigation, people and finance remain unchanged. */
+/* MIX50 scoped UI. Weather bar, five-tab navigation, people and finance remain unchanged. */
 body.mixed-app [hidden]{display:none!important}
 body.mixed-app #group>.mix-view-heading{display:flex;gap:9px;align-items:baseline;margin:0 0 9px}
 body.mixed-app #group>.mix-view-heading small{display:none}
@@ -103,3 +103,24 @@ body.mixed-app .prep2-item input{width:21px;height:21px;min-height:21px;padding:
 .att-announcement{margin:0 0 9px;border-radius:12px;padding:10px 12px;background:#e7f3fb;border:1px solid #c5dfea;color:#1c5873;font-weight:850;line-height:1.45}.att-announcement.done{background:#e4f6eb;border-color:#bddfc9;color:#136d42}.att-announcement.info{background:#f3f5f6;color:#586c77}
 .attendance-global-notice{position:fixed;z-index:1800;left:50%;top:max(76px,calc(env(safe-area-inset-top) + 70px));width:min(520px,calc(100% - 24px));transform:translate(-50%,-18px);opacity:0;pointer-events:none;border-radius:15px;padding:12px 14px;background:#0b5574;color:#fff;font-weight:900;box-shadow:0 12px 34px #0b33474d;transition:.18s ease}.attendance-global-notice.show{transform:translate(-50%,0);opacity:1}.attendance-global-notice.done{background:#18754d}.attendance-global-notice.info{background:#5b6d77}
 @media(max-width:560px){.att-round-editor{grid-template-columns:110px minmax(0,1fr)}.att-round-editor button{grid-column:1/-1}.att-notify-row{align-items:flex-start;flex-direction:column;gap:3px}}
+
+
+/* MIX50: tap 체크완료/미체크 totals to open an immediate member list. */
+.att2-totals>[data-att-list]{position:relative;cursor:pointer;touch-action:manipulation;padding-right:30px;transition:transform .12s ease,box-shadow .12s ease}
+.att2-totals>[data-att-list]::after{content:'›';position:absolute;right:10px;top:50%;transform:translateY(-52%);font-size:1.35rem;font-weight:900;color:#67818d}
+.att2-totals>[data-att-list]:active{transform:scale(.985)}
+.att2-totals>[data-att-list]:focus-visible{outline:3px solid #5aa6ca;outline-offset:2px}
+.att2-totals span small{display:block;margin-top:1px;font-size:.6rem;font-weight:750;color:#71858f;white-space:nowrap}
+.att2-missing-notice{cursor:pointer;touch-action:manipulation}
+.att-status-dialog{width:min(560px,calc(100% - 24px));max-height:min(76dvh,720px);border:0;border-radius:22px;padding:0;overflow:hidden;background:#f7fafb;color:#173f55;box-shadow:0 22px 70px #102f4266}
+.att-status-dialog::backdrop{background:#0b223766;backdrop-filter:blur(2px)}
+.att-status-dialog-head{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 17px 13px;background:#fff;border-bottom:1px solid #dce7eb}
+.att-status-dialog-head h3{margin:1px 0 0;font-size:1.24rem;color:#123f59}.att-status-dialog-head small{display:block;color:#6c828d;font-size:.74rem;font-weight:750;line-height:1.4}
+.att-status-dialog-head button{width:42px;height:42px;border:1px solid #d6e2e7;border-radius:13px;background:#fff;color:#345c6f;font-size:1.25rem;font-weight:900}
+.att-status-dialog-body{padding:12px 12px 4px;overflow:auto;max-height:calc(76dvh - 125px)}
+.att-status-group{margin:0 0 10px;border:1px solid #d8e5ea;background:#fff;border-radius:15px;overflow:hidden}
+.att-status-group header{display:flex;justify-content:space-between;align-items:center;padding:9px 12px;background:#edf4f7;color:#194c65}.att-status-group header b{font-size:.92rem}.att-status-group header span{font-size:.72rem;font-weight:800;color:#607a87}
+.att-status-members{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:#edf2f4}.att-status-person{min-width:0;padding:10px 11px;background:#fff;display:flex;justify-content:space-between;align-items:center;gap:8px}.att-status-person b{font-size:.95rem;white-space:nowrap}.att-status-person small{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#728791;font-size:.68rem;text-align:right}
+.att-status-empty{padding:30px 18px;text-align:center;color:#627985;line-height:1.6;background:#fff;border:1px solid #dbe7eb;border-radius:15px}
+.att-status-dialog[data-mode="done"] .att-status-group header{background:#e5f5eb;color:#167047}.att-status-dialog[data-mode="missing"] .att-status-group header{background:#f2f4f5;color:#526b78}
+@media(max-width:430px){.att-status-dialog{margin:auto 12px max(12px,env(safe-area-inset-bottom));width:calc(100% - 24px);max-height:78dvh}.att-status-dialog-body{max-height:calc(78dvh - 125px)}.att-status-members{grid-template-columns:1fr}.att2-totals>[data-att-list]{padding-right:25px}.att2-totals>[data-att-list]::after{right:7px}}

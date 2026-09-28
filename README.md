@@ -353,3 +353,9 @@ Croatia single-UI finalization. See `MIX35_FINAL_CHANGES.md`. Card/visual switch
 - 크로아티아·튀르키예1·튀르키예2·이탈리아북부 팀별 manifest를 분리하고, 공통 포털도 설치할 수 있게 했습니다.
 - 튀르키예 1팀 공동경비 관리자를 남상모·김수연·김수정으로 확장했습니다.
 - 김수정 공동경비 권한 적용을 위해 `firebase.rules.multitrip.MIX49.json` 게시가 필요합니다.
+
+
+## MIX50 (2026-09-28)
+- 위치 슬롯의 stale anonymous Firebase UID 자동 재연결 지원.
+- 체크완료/미체크 요약 터치 시 즉시 명단 표시.
+- `firebase.rules.multitrip.MIX50.json` 게시 필요.

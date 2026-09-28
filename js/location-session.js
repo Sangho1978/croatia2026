@@ -1,4 +1,4 @@
-/* MIX07. App-wide session (not tied to any route). Based on MIX03. Per-login location session, explicit OFF, group colour and distance.
+/* MIX50. App-wide session (not tied to any route). Based on MIX03. Per-login location session, explicit OFF, group colour and distance.
  * Uses the original member slots; does not reinterpret slot names as groups.
  * A visible web page can refresh every five minutes, not guarantee background GPS.
  */
@@ -56,7 +56,7 @@
     if(!window.isSecureContext||!navigator.geolocation){const e=Error('HTTPS \uc8fc\uc18c\ub97c \uc678\ubd80 \ube0c\ub77c\uc6b0\uc800\uc5d0\uc11c \uc5f4\uc5b4 \uc8fc\uc138\uc694.');e.code=1;reject(e);return;}
     navigator.geolocation.getCurrentPosition(p=>resolve({lat:+p.coords.latitude.toFixed(5),lng:+p.coords.longitude.toFixed(5),accuracy:Math.round(p.coords.accuracy||0),ts:p.timestamp||Date.now()}),reject,{enableHighAccuracy:high,maximumAge:30000,timeout:15000});
   })}
-  async function request(path,options={}){const tk=await token(),ctrl=new AbortController(),tid=setTimeout(()=>ctrl.abort(),12000);try{const r=await fetch(firebaseConfig.databaseURL.replace(/\/$/,'')+'/'+path+'.json?auth='+encodeURIComponent(tk),{...options,headers:{...(options.body?{'Content-Type':'application/json'}:{}),...(options.headers||{})},cache:'no-store',signal:ctrl.signal});const t=await r.text();locCount(new TextEncoder().encode(t).length+(options.body?new TextEncoder().encode(options.body).length:0));if(!r.ok){const e=Error(r.status===401||r.status===403?'\uc704\uce58 Firebase Rules/\uc2ac\ub86f \uc18c\uc720\uad8c\uc744 \ud655\uc778\ud574 \uc8fc\uc138\uc694.':'\uc704\uce58 \uc5f0\uacb0 \uc2e4\ud328 ('+r.status+')');e.status=r.status;throw e}return t&&t!=='null'?JSON.parse(t):null}finally{clearTimeout(tid)}}
+  async function request(path,options={}){const tk=await token(),ctrl=new AbortController(),tid=setTimeout(()=>ctrl.abort(),12000);try{const r=await fetch(firebaseConfig.databaseURL.replace(/\/$/,'')+'/'+path+'.json?auth='+encodeURIComponent(tk),{...options,headers:{...(options.body?{'Content-Type':'application/json'}:{}),...(options.headers||{})},cache:'no-store',signal:ctrl.signal});const t=await r.text();locCount(new TextEncoder().encode(t).length+(options.body?new TextEncoder().encode(options.body).length:0));if(!r.ok){let msg='\uc704\uce58 \uc5f0\uacb0 \uc2e4\ud328 ('+r.status+')';if(r.status===401)msg='Firebase \uc778\uc99d\uc774 \ub9cc\ub8cc\ub418\uc5c8\uc2b5\ub2c8\ub2e4. \uc7a0\uc2dc \ud6c4 \ub2e4\uc2dc \uc2dc\ub3c4\ud574 \uc8fc\uc138\uc694.';if(r.status===403){const isLocation=/^(locations|locationOwners|locationHistory)\//.test(path);msg=isLocation?'\uc774 \uae30\uae30\uc758 Firebase \uc778\uc99d ID\uac00 \uc774\uc804 \uc704\uce58 \uc2ac\ub86f\uacfc \ub2ec\ub77c\uc84c\uc2b5\ub2c8\ub2e4. MIX50 Firebase Rules\ub97c \uc801\uc6a9\ud558\uba74 \uac19\uc740 \uc774\ub984\u00b7\uc2ac\ub86f\uc73c\ub85c \uc790\ub3d9 \ubcf5\uad6c\ub429\ub2c8\ub2e4.':'Firebase \uc811\uadfc \uad8c\ud55c\uc744 \ud655\uc778\ud574 \uc8fc\uc138\uc694.';}const e=Error(msg);e.status=r.status;e.path=path;throw e}return t&&t!=='null'?JSON.parse(t):null}finally{clearTimeout(tid)}}
   async function requestQuery(path,query=''){
     const tk=await token(),ctrl=new AbortController(),tid=setTimeout(()=>ctrl.abort(),12000);
     try{
@@ -104,7 +104,7 @@
         for(let round=0;round<8;round++){
           const q='orderBy=%22%24key%22&endAt=%22'+encodeURIComponent(cutKey)+'%22&limitToFirst=400';
           const old=await requestQuery('locationHistory/'+TRIP_CODE+'/'+u.slot,q);
-          const entries=Object.entries(old||{}).filter(([k,v])=>/^\d{13}$/.test(k)&&v&&v.uid===uid&&Number(v.ts||k)<cutoff);
+          const entries=Object.entries(old||{}).filter(([k,v])=>/^\d{13}$/.test(k)&&v&&Number(v.ts||k)<cutoff&&(v.uid===uid||(v.slot===u.slot&&v.name===u.name)));
           if(!entries.length)break;
           const patch={};for(const [k] of entries)patch[k]=null;
           await request('locationHistory/'+TRIP_CODE+'/'+u.slot,{method:'PATCH',body:JSON.stringify(patch)});
@@ -160,6 +160,7 @@
         await token();if(!same(n,u)||!want)return;
         const now=Date.now(),clock=window.AppTime?AppTime.stored(now):null,data={uid:localStorage.getItem('fb_uid'),slot:u.slot,group:u.group,name:u.name,lat:p.lat,lng:p.lng,accuracy:p.accuracy,ts:now,pageState:'foreground',...(clock?{timeCroatia:clock.croatia,timeKorea:clock.korea}: {})};
         phase='sending';paint();
+        // MIX50 Rules allow the same named member to reclaim this fixed slot when a browser/PWA creates a new anonymous Firebase UID.
         await request('locations/'+TRIP_CODE+'/'+u.slot,{method:'PUT',body:JSON.stringify(data)});
         if(!same(n,u)||!want)return;
         // 위치 이력은 slot-UID 소유권을 먼저 고정한 뒤 본인 이력에만 기록한다.

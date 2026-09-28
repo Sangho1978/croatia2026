@@ -1,4 +1,4 @@
-/* MIX12: categorized rounds, editable title, auto-complete at 28/28, leader+presenter badges. Based on MIX02: one current round, 28 fixed identities, leader-first group board.
+/* MIX50: categorized rounds, editable title, auto-complete at 28/28, leader+presenter badges. Based on MIX02: one current round, 28 fixed identities, leader-first group board.
  * Existing attendanceCurrent/<trip> and attendance/<trip>/<event>/<slot> paths are unchanged.
  * Firebase REST SSE: https://firebase.google.com/docs/reference/rest/database#section-streaming
  * Start/reset are limited to trip-configured attendance administrators in the client UI.
@@ -96,6 +96,31 @@
       }
     }
     if(complete)announceComplete(attCurrent);
+  }
+  function statusDialog(){return document.getElementById('attStatusDialog')}
+  function statusMembers(mode){
+    if(!attCurrent||!checksKnown)return [];
+    return people().filter(u=>mode==='done'?checked(u):!checked(u));
+  }
+  function openStatusList(mode='missing'){
+    const dlg=statusDialog(),title=document.getElementById('attStatusDialogTitle'),sub=document.getElementById('attStatusDialogSub'),body=document.getElementById('attStatusDialogBody');
+    if(!dlg||!title||!body)return;
+    const label=mode==='done'?'체크완료':'미체크',list=statusMembers(mode);
+    title.textContent=attCurrent?label+' '+list.length+'명':label+' 명단';
+    if(sub)sub.textContent=attCurrent?(attCurrent.title||'출석 확인'):'현재 진행 중인 출석이 없습니다.';
+    if(!attCurrent)body.innerHTML='<div class="att-status-empty">출석 시작 후 체크완료·미체크 명단을 바로 확인할 수 있습니다.</div>';
+    else if(!checksKnown)body.innerHTML='<div class="att-status-empty">최신 출석 현황을 불러오는 중입니다.</div>';
+    else if(!list.length)body.innerHTML='<div class="att-status-empty">'+(mode==='done'?'아직 체크완료 인원이 없습니다.':'✓ 미체크 인원이 없습니다.')+'</div>';
+    else body.innerHTML=order.map(g=>{const members=sorted(g).filter(u=>mode==='done'?checked(u):!checked(u));if(!members.length)return '';return '<section class="att-status-group"><header><b>'+(g?g+'조':'인솔 교수')+'</b><span>'+members.length+'명</span></header><div class="att-status-members">'+members.map(u=>'<div class="att-status-person"><b>'+esc(u.name)+'</b>'+(mode==='done'?'<small>'+shortTime(attChecks[u.slot]?.ts)+'</small>':'<small>'+esc(u.org||'')+'</small>')+'</div>').join('')+'</div></section>';}).join('');
+    dlg.dataset.mode=mode;
+    try{if(typeof dlg.showModal==='function'&&!dlg.open)dlg.showModal();else dlg.setAttribute('open','')}catch(_){dlg.setAttribute('open','')}
+  }
+  function closeStatusList(){const dlg=statusDialog();if(!dlg)return;try{if(typeof dlg.close==='function'&&dlg.open)dlg.close();else dlg.removeAttribute('open')}catch(_){dlg.removeAttribute('open')}}
+  function wireStatusList(){
+    document.querySelectorAll('[data-att-list]').forEach(el=>{if(el.dataset.attListWired)return;el.dataset.attListWired='1';const run=()=>openStatusList(el.dataset.attList||'missing');el.addEventListener('click',run);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();run()}})});
+    const notice=document.getElementById('attMissingNotice');if(notice&&!notice.dataset.attListWired){notice.dataset.attListWired='1';notice.addEventListener('click',()=>{if(attCurrent)openStatusList('missing')})}
+    document.querySelectorAll('[data-att-status-close]').forEach(el=>{if(!el.dataset.closeWired){el.dataset.closeWired='1';el.addEventListener('click',closeStatusList)}});
+    const dlg=statusDialog();if(dlg&&!dlg.dataset.backdropWired){dlg.dataset.backdropWired='1';dlg.addEventListener('click',e=>{if(e.target===dlg)closeStatusList()})}
   }
   function markGood(){failure='';lastSync=Date.now();setMode();render();notify()}
   function markError(e){failure=e?.message||'연결 실패';setMode();render()}
@@ -273,7 +298,7 @@
       else{feedback(e.message,true);await refresh(false);}
     }finally{selfBusy=false;render();}
   }
-  window.attRefresh=refresh;window.attRender=render;window.attCreateEvent=create;window.attEditCurrent=editCurrent;window.attResetCurrent=reset;window.attToggleSelf=checkSelf;window.attStartPolling=begin;
+  window.attRefresh=refresh;window.attRender=render;window.attCreateEvent=create;window.attEditCurrent=editCurrent;window.attResetCurrent=reset;window.attToggleSelf=checkSelf;window.attStartPolling=begin;window.attShowStatusList=openStatusList;window.attCloseStatusList=closeStatusList;wireStatusList();
   window.AttendanceBoard={get status(){return {mode:connectMode,known,checksKnown,round:attCurrent?.id||null,lastSync}},refresh};
   window.addEventListener('cro-auth-change',()=>{authEpoch++;revision++;closeStreams();attCurrent=null;attChecks={};known=false;checksKnown=false;lastSync=0;failure='';selfBusy=false;feedback();begin();});
   window.addEventListener('cro-route',e=>{if(e.detail?.view==='group'&&e.detail?.sub!=='people'&&currentUser){render();refresh(false);openStreams();}});
