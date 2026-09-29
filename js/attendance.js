@@ -1,4 +1,4 @@
-/* MIX50: categorized rounds, editable title, auto-complete at 28/28, leader+presenter badges. Based on MIX02: one current round, 28 fixed identities, leader-first group board.
+/* MIX52: categorized rounds, editable title, auto-complete at 28/28, leader+presenter badges. Based on MIX02: one current round, 28 fixed identities, leader-first group board.
  * Existing attendanceCurrent/<trip> and attendance/<trip>/<event>/<slot> paths are unchanged.
  * Firebase REST SSE: https://firebase.google.com/docs/reference/rest/database#section-streaming
  * Start/reset are limited to trip-configured attendance administrators in the client UI.
@@ -6,9 +6,9 @@
  */
 (function(){
   'use strict';
-  const OPERATOR=(window.GSPA_TRIP?.attendanceOperator||'한상호'), ADMINS=[...new Set(window.GSPA_TRIP?.attendanceAdmins||[OPERATOR])], ADMIN_LABEL=ADMINS.join(' · '), order=[...new Set(APP_USERS.map(u=>u.group))].filter(g=>g!==0).sort((a,b)=>a-b).concat(APP_USERS.some(u=>u.group===0)?[0]:[]), encoder=new TextEncoder();
+  const POLICY=window.GSPA_AttendancePolicy||{admins:[window.GSPA_TRIP?.attendanceOperator||'한상호'],label:window.GSPA_TRIP?.attendanceOperator||'한상호',isAdmin:u=>!!u&&u.name===(window.GSPA_TRIP?.attendanceOperator||'한상호')}, ADMINS=POLICY.admins, ADMIN_LABEL=POLICY.label, order=[...new Set(APP_USERS.map(u=>u.group))].filter(g=>g!==0).sort((a,b)=>a-b).concat(APP_USERS.some(u=>u.group===0)?[0]:[]), encoder=new TextEncoder();
   const people=()=>APP_USERS;
-  const isAdmin=()=>!!currentUser&&ADMINS.includes(currentUser.name);
+  const isAdmin=()=>POLICY.isAdmin(currentUser);
   const sameSession=e=>e===authEpoch&&!!currentUser;
   let authEpoch=0,revision=0,refreshTask=null,adminBusy=false,selfBusy=false;
   let known=false,checksKnown=false,lastSync=0,lastPoll=0,lastRetry=0,lastVerify=0;
@@ -96,6 +96,7 @@
       }
     }
     if(complete)announceComplete(attCurrent);
+    wireStatusList();
   }
   function statusDialog(){return document.getElementById('attStatusDialog')}
   function statusMembers(mode){
@@ -111,13 +112,13 @@
     if(!attCurrent)body.innerHTML='<div class="att-status-empty">출석 시작 후 체크완료·미체크 명단을 바로 확인할 수 있습니다.</div>';
     else if(!checksKnown)body.innerHTML='<div class="att-status-empty">최신 출석 현황을 불러오는 중입니다.</div>';
     else if(!list.length)body.innerHTML='<div class="att-status-empty">'+(mode==='done'?'아직 체크완료 인원이 없습니다.':'✓ 미체크 인원이 없습니다.')+'</div>';
-    else body.innerHTML=order.map(g=>{const members=sorted(g).filter(u=>mode==='done'?checked(u):!checked(u));if(!members.length)return '';return '<section class="att-status-group"><header><b>'+(g?g+'조':'인솔 교수')+'</b><span>'+members.length+'명</span></header><div class="att-status-members">'+members.map(u=>'<div class="att-status-person"><b>'+esc(u.name)+'</b>'+(mode==='done'?'<small>'+shortTime(attChecks[u.slot]?.ts)+'</small>':'<small>'+esc(u.org||'')+'</small>')+'</div>').join('')+'</div></section>';}).join('');
+    else body.innerHTML=order.map(g=>{const members=sorted(g).filter(u=>mode==='done'?checked(u):!checked(u));if(!members.length)return '';return '<section class="att-status-group"><header><b>'+(g?g+'조':'인솔 교수')+'</b><span>'+members.length+'명</span></header><div class="att-status-members">'+members.map(u=>'<div class="att-status-person"><b>'+esc(u.name)+'</b><small>'+esc(u.org||'')+(mode==='done'&&shortTime(attChecks[u.slot]?.ts)?' · '+shortTime(attChecks[u.slot]?.ts):'')+'</small></div>').join('')+'</div></section>';}).join('');
     dlg.dataset.mode=mode;
     try{if(typeof dlg.showModal==='function'&&!dlg.open)dlg.showModal();else dlg.setAttribute('open','')}catch(_){dlg.setAttribute('open','')}
   }
   function closeStatusList(){const dlg=statusDialog();if(!dlg)return;try{if(typeof dlg.close==='function'&&dlg.open)dlg.close();else dlg.removeAttribute('open')}catch(_){dlg.removeAttribute('open')}}
   function wireStatusList(){
-    document.querySelectorAll('[data-att-list]').forEach(el=>{if(el.dataset.attListWired)return;el.dataset.attListWired='1';const run=()=>openStatusList(el.dataset.attList||'missing');el.addEventListener('click',run);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();run()}})});
+    document.querySelectorAll('[data-att-list]').forEach(el=>{if(el.dataset.attListWired)return;el.dataset.attListWired='1';const run=()=>openStatusList(el.dataset.attList||'missing');el.addEventListener('click',run);if(el.tagName!=='BUTTON')el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();run()}})});
     const notice=document.getElementById('attMissingNotice');if(notice&&!notice.dataset.attListWired){notice.dataset.attListWired='1';notice.addEventListener('click',()=>{if(attCurrent)openStatusList('missing')})}
     document.querySelectorAll('[data-att-status-close]').forEach(el=>{if(!el.dataset.closeWired){el.dataset.closeWired='1';el.addEventListener('click',closeStatusList)}});
     const dlg=statusDialog();if(dlg&&!dlg.dataset.backdropWired){dlg.dataset.backdropWired='1';dlg.addEventListener('click',e=>{if(e.target===dlg)closeStatusList()})}
@@ -270,7 +271,7 @@
       if(!res.etag)throw Error('서버 상태를 확인하지 못했습니다.');
       await request(currentPath(),{method:'DELETE',headers:{'if-match':res.etag}});
       if(!sameSession(epoch))return;
-      revision++;setMeta(null);markGood();feedback();
+      revision++;setMeta(null);markGood();feedback('✓ 출석을 리셋했습니다. 새 출석을 시작해 주세요.');
     }catch(e){feedback(e.status===412?'다른 기기에서 출석이 변경되어 리셋하지 않았습니다.':e.message,true);await refresh(false);}
     finally{adminBusy=false;render();}
   }

@@ -362,3 +362,7 @@ Croatia single-UI finalization. See `MIX35_FINAL_CHANGES.md`. Card/visual switch
 
 ## MIX51 — 인앱 브라우저 홈 화면 설치 안내
 카카오톡에서 링크를 연 경우 카카오톡 내장 브라우저를 자동 감지해 외부 브라우저에서 여는 방법을 안내합니다. Android는 Chrome/Samsung Internet, iPhone/iPad는 Safari 기준 안내를 표시하며, 현재 팀 주소를 한 번에 복사할 수 있습니다. 공통 포털과 모든 팀에 동일 적용됩니다.
+
+
+## MIX52
+튀르키예 1팀 출석 관리자(남상모·김수정)와 체크완료/미체크 명단 터치 조회를 공통 attendance policy로 통합했습니다.

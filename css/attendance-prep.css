@@ -11,7 +11,7 @@ body.mixed-app .group-tabs button{min-height:44px}
 .att2-state{font-size:.78rem;font-weight:800;background:#e7eef2;color:#55717e;border-radius:999px;padding:4px 10px}
 .att2-state.is-open{background:#e4eff9;color:#226192}.att2-state.is-complete{background:#d5f0df;color:#146b43}
 .att2-totals{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:0 0 10px}
-.att2-totals>div{background:#fff;border:1px solid #dce6ea;border-radius:16px;padding:9px 10px;display:flex;align-items:center;justify-content:space-between;gap:4px;box-shadow:0 2px 9px #163d5106}
+.att2-totals>div,.att2-totals>button{background:#fff;border:1px solid #dce6ea;border-radius:16px;padding:9px 10px;display:flex;align-items:center;justify-content:space-between;gap:4px;box-shadow:0 2px 9px #163d5106;font:inherit;color:inherit;text-align:left;min-width:0}
 .att2-totals span{font-size:.8rem;font-weight:750;color:#526b79}.att2-totals b{font-size:1.64rem;line-height:1.2;color:#173d56}
 .att2-totals .is-done{background:#eaf8ef;border-color:#c2e4ce}.att2-totals .is-done b{color:#127644}.att2-totals .is-missing{background:#f4f6f7}
 .att2-actions{display:flex;gap:8px;align-items:stretch;margin-bottom:9px}
@@ -72,8 +72,8 @@ body.mixed-app .prep2-item input{width:21px;height:21px;min-height:21px;padding:
 .prep2-tag:empty{display:none}
 .prep2-save-note{font-size:.8rem;color:#778c96;margin-top:8px}
 .prep2-all-done{border-radius:16px;padding:16px;background:#e5f5eb;color:#1b7347;font-weight:800}
-@media(max-width:370px){#attRoster.att2-board{grid-template-columns:1fr}#attRoster .att2-members{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}#attRoster .att2-person{margin:0}#attRoster .att2-person.is-leader{grid-column:1/-1}.att2-actions{flex-wrap:wrap}#attendance #attMyBtn{flex-basis:100%}#attendance .att2-admin{margin-left:auto}.att2-totals>div{flex-direction:column;gap:0;padding:8px 4px}}
-@media(min-width:650px){#attRoster.att2-board{gap:13px}.att2-person{min-height:48px;padding:8px 11px;gap:8px}.att2-person-name{flex-direction:row;align-items:center;gap:5px}.att2-person-name>b{font-size:1.08rem}.att2-leader,.att2-presenter{font-size:.69rem}.att2-person-state strong{font-size:.8rem}.att2-person-state time{font-size:.75rem}.att2-group>header{padding:11px 13px}.att2-group-count{font-size:.8rem}.att2-totals{gap:10px}.att2-totals>div{padding:12px 16px}.att2-totals span{font-size:.94rem}.att2-totals b{font-size:1.8rem}#checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:16px;align-items:start}#prepAllDone{grid-column:1/-1}}
+@media(max-width:370px){#attRoster.att2-board{grid-template-columns:1fr}#attRoster .att2-members{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}#attRoster .att2-person{margin:0}#attRoster .att2-person.is-leader{grid-column:1/-1}.att2-actions{flex-wrap:wrap}#attendance #attMyBtn{flex-basis:100%}#attendance .att2-admin{margin-left:auto}.att2-totals>div,.att2-totals>button{flex-direction:column;gap:0;padding:8px 4px}}
+@media(min-width:650px){#attRoster.att2-board{gap:13px}.att2-person{min-height:48px;padding:8px 11px;gap:8px}.att2-person-name{flex-direction:row;align-items:center;gap:5px}.att2-person-name>b{font-size:1.08rem}.att2-leader,.att2-presenter{font-size:.69rem}.att2-person-state strong{font-size:.8rem}.att2-person-state time{font-size:.75rem}.att2-group>header{padding:11px 13px}.att2-group-count{font-size:.8rem}.att2-totals{gap:10px}.att2-totals>div,.att2-totals>button{padding:12px 16px}.att2-totals span{font-size:.94rem}.att2-totals b{font-size:1.8rem}#checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:16px;align-items:start}#prepAllDone{grid-column:1/-1}}
 @media(min-width:1250px){#attRoster.att2-board{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(prefers-reduced-motion:reduce){.att2-person{transition:none}}
 /* Immediate per-group overview; wide displays use compact names within each group. */
@@ -124,3 +124,7 @@ body.mixed-app .prep2-item input{width:21px;height:21px;min-height:21px;padding:
 .att-status-empty{padding:30px 18px;text-align:center;color:#627985;line-height:1.6;background:#fff;border:1px solid #dbe7eb;border-radius:15px}
 .att-status-dialog[data-mode="done"] .att-status-group header{background:#e5f5eb;color:#167047}.att-status-dialog[data-mode="missing"] .att-status-group header{background:#f2f4f5;color:#526b78}
 @media(max-width:430px){.att-status-dialog{margin:auto 12px max(12px,env(safe-area-inset-bottom));width:calc(100% - 24px);max-height:78dvh}.att-status-dialog-body{max-height:calc(78dvh - 125px)}.att-status-members{grid-template-columns:1fr}.att2-totals>[data-att-list]{padding-right:25px}.att2-totals>[data-att-list]::after{right:7px}}
+
+/* MIX52: checked/missing are explicit touch targets on every trip. */
+.att2-totals>button[data-att-list]{appearance:none;-webkit-appearance:none;width:100%}
+@media(hover:hover){.att2-totals>button[data-att-list]:hover{box-shadow:0 5px 16px #173f5518;transform:translateY(-1px)}}

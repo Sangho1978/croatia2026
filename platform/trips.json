@@ -1,5 +1,5 @@
 {
-  "version": "20260928-MIX50",
+  "version": "20260929-MIX52",
   "defaultTrip": "croatia",
   "trips": [
     {
@@ -18,7 +18,11 @@
       "bookletDownload": "크로아티아_안내책자.pdf",
       "appUrl": "index.html?trip=croatia",
       "storagePrefix": "cro",
-      "description": "크로아티아 + 로마 현장 연수 앱"
+      "description": "크로아티아 + 로마 현장 연수 앱",
+      "attendanceOperator": "한상호",
+      "attendanceAdmins": [
+        "한상호"
+      ]
     },
     {
       "id": "turkiye1",
@@ -36,7 +40,7 @@
       "bookletDownload": "튀르키예1팀_안내책자.pdf",
       "appUrl": "index.html?trip=turkiye1",
       "storagePrefix": "turkiye1",
-      "description": "튀르키예 서부 6박 9일 · 전체 기능 활성화",
+      "description": "튀르키예 서부 6박 9일 · 크로아티아와 동일 출석 UI/기능",
       "attendanceOperator": "남상모",
       "locationAdmin": "남상모",
       "financeManagers": [

@@ -150,7 +150,7 @@
 
   function setupMemo(){const m=document.getElementById('fieldMemo');if(!m)return;m.value=localStorage.getItem((window.GSPA_TRIP_STORAGE_PREFIX||'cro')+'_field_memo')||'';m.addEventListener('input',()=>localStorage.setItem((window.GSPA_TRIP_STORAGE_PREFIX||'cro')+'_field_memo',m.value));}
   function reorderSections(){const main=document.querySelector('main'); if(!main)return;['today','schedule','location','attendance','guide','study','weatherDetail','route','hotels','team','check','videos','emergency','more'].forEach(id=>{const s=document.getElementById(id);if(s&&s.parentElement===main)main.appendChild(s)});}
-  function adminVisibility(){const a=[...new Set(window.GSPA_TRIP?.attendanceAdmins||[window.GSPA_TRIP?.attendanceOperator||'한상호'])];document.querySelectorAll('.tech-only').forEach(x=>x.style.display=(currentUser&&a.includes(currentUser.name)?'block':'none'));}
+  function adminVisibility(){const ok=window.GSPA_AttendancePolicy?window.GSPA_AttendancePolicy.isAdmin(currentUser):[...new Set(window.GSPA_TRIP?.attendanceAdmins||[window.GSPA_TRIP?.attendanceOperator||'한상호'])].includes(currentUser?.name);document.querySelectorAll('.tech-only').forEach(x=>x.style.display=ok?'block':'none');}
 
   function haversine(a,b,c,d){const R=6371000,rad=x=>x*Math.PI/180,dp=rad(c-a),dl=rad(d-b),q=Math.sin(dp/2)**2+Math.cos(rad(a))*Math.cos(rad(c))*Math.sin(dl/2)**2;return 2*R*Math.asin(Math.sqrt(q));}
   function opsRenderMeetingDistance(){

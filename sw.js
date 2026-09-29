@@ -1,4 +1,4 @@
-const STATIC='gspa-static-v51';
+const STATIC='gspa-static-v52';
 const GUIDE='gspa-guidebook-shared-v2';
 const CORE=[
   "./index.html",
@@ -7,6 +7,7 @@ const CORE=[
   "./platform/login-directory.js",
   "./js/trip-context.js",
   "./js/trip-data-loader.js",
+  "./js/attendance-policy.js",
   "./js/trip-ui.js",
   "./js/trip-visibility.js",
   "./js/route-map-engine.js",
