@@ -4,6 +4,7 @@
     today:['TODAY','오늘 필요한 정보부터 빠르게'],
     weatherDetail:['WEATHER','시간대별 기온·강수·바람 확인'],
     route:['JOURNEY','전체 이동 흐름을 먼저 파악'],
+    flights:['FLIGHT · E-TICKET','내 예약번호·항공권·좌석과 PDF 확인'],
     schedule:['ITINERARY','날짜 선택 후 동선부터 관광지까지 한 흐름'],
     guide:['GUIDE','역사와 도시 이야기를 현장에서 읽기'],
     hotels:['STAY','숙박지 위치와 기본 정보'],

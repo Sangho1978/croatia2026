@@ -92,8 +92,8 @@
       },
       "SNU17-TURKIYE1-2026": {
         ".read": "auth != null",
-        ".write": "auth != null && (newData.val() == null || newData.child('createdBy').val() === '남상모' || newData.child('createdBy').val() === '김수정')",
-        ".validate": "newData.val() == null || (newData.hasChildren(['id','title','type','createdBy','createdAt']) && newData.child('id').isString() && newData.child('id').val().length <= 100 && newData.child('title').isString() && newData.child('title').val().length >= 1 && newData.child('title').val().length <= 120 && newData.child('type').isString() && (newData.child('type').val() === '버스탑승' || newData.child('type').val() === '장소집결' || newData.child('type').val() === '식사' || newData.child('type').val() === '기타') && newData.child('createdBy').isString() && (newData.child('createdBy').val() === '남상모' || newData.child('createdBy').val() === '김수정') && newData.child('createdAt').isNumber() && newData.child('createdAt').val() > 0 && newData.child('createdAt').val() <= now + 60000)",
+        ".write": "auth != null && (newData.val() == null || newData.child('createdBy').val() === '남상모' || newData.child('createdBy').val() === '김수정' || newData.child('createdBy').val() === '김수연')",
+        ".validate": "newData.val() == null || (newData.hasChildren(['id','title','type','createdBy','createdAt']) && newData.child('id').isString() && newData.child('id').val().length <= 100 && newData.child('title').isString() && newData.child('title').val().length >= 1 && newData.child('title').val().length <= 120 && newData.child('type').isString() && (newData.child('type').val() === '버스탑승' || newData.child('type').val() === '장소집결' || newData.child('type').val() === '식사' || newData.child('type').val() === '기타') && newData.child('createdBy').isString() && (newData.child('createdBy').val() === '남상모' || newData.child('createdBy').val() === '김수정' || newData.child('createdBy').val() === '김수연') && newData.child('createdAt').isNumber() && newData.child('createdAt').val() > 0 && newData.child('createdAt').val() <= now + 60000)",
         "timeCroatia": {
           ".validate": "newData.isString() && newData.val().length <= 32"
         },
