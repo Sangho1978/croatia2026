@@ -1,8 +1,8 @@
 {
-  "version": "20261001-MIX54",
-  "scope": "croatia-personal-only",
+  "version": "20261001-MIX55",
+  "scope": "croatia-personal-trinity-ryanair",
   "memberCount": 27,
-  "sourceNote": "개인 E-ticket 영문명과 Ryanair 단체예약 영문명을 대조해 연결",
+  "sourceNote": "트리니티항공 개인 E-ticket 영문명과 Ryanair 단체 예약 확인서 영문명을 대조해 연결",
   "members": [
     {
       "memberId": "m1",
@@ -20,14 +20,18 @@
           "flight": "TW405",
           "date": "2026-10-12",
           "route": "ICN T1 → FCO T3",
-          "time": "12:35 → 19:15"
+          "time": "12:35 → 19:15",
+          "carrier": "트리니티항공"
         },
         "return": {
           "flight": "TW406",
           "date": "2026-10-18",
           "route": "FCO T3 → ICN T1",
-          "time": "21:15 → 10/19 16:10"
-        }
+          "time": "21:15 → 10/19 16:10",
+          "carrier": "트리니티항공"
+        },
+        "carrier": "트리니티항공",
+        "carrierEn": "TRINITY AIRWAYS"
       },
       "ryanair": {
         "outbound": {
@@ -37,7 +41,8 @@
           "time": "23:30 → 10/13 00:50",
           "reservation": "HZL66P",
           "seat": "12A",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         },
         "return": {
           "flight": "FR8836",
@@ -46,7 +51,8 @@
           "time": "22:10 → 23:35",
           "reservation": "EU3DNY",
           "seat": "26A",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         }
       }
     },
@@ -66,14 +72,18 @@
           "flight": "TW405",
           "date": "2026-10-12",
           "route": "ICN T1 → FCO T3",
-          "time": "12:35 → 19:15"
+          "time": "12:35 → 19:15",
+          "carrier": "트리니티항공"
         },
         "return": {
           "flight": "TW406",
           "date": "2026-10-18",
           "route": "FCO T3 → ICN T1",
-          "time": "21:15 → 10/19 16:10"
-        }
+          "time": "21:15 → 10/19 16:10",
+          "carrier": "트리니티항공"
+        },
+        "carrier": "트리니티항공",
+        "carrierEn": "TRINITY AIRWAYS"
       },
       "ryanair": {
         "outbound": {
@@ -83,7 +93,8 @@
           "time": "23:30 → 10/13 00:50",
           "reservation": "HZL66P",
           "seat": "12B",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         },
         "return": {
           "flight": "FR8836",
@@ -92,7 +103,8 @@
           "time": "22:10 → 23:35",
           "reservation": "EU3DNY",
           "seat": "26B",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         }
       }
     },
@@ -112,14 +124,18 @@
           "flight": "TW405",
           "date": "2026-10-12",
           "route": "ICN T1 → FCO T3",
-          "time": "12:35 → 19:15"
+          "time": "12:35 → 19:15",
+          "carrier": "트리니티항공"
         },
         "return": {
           "flight": "TW406",
           "date": "2026-10-18",
           "route": "FCO T3 → ICN T1",
-          "time": "21:15 → 10/19 16:10"
-        }
+          "time": "21:15 → 10/19 16:10",
+          "carrier": "트리니티항공"
+        },
+        "carrier": "트리니티항공",
+        "carrierEn": "TRINITY AIRWAYS"
       },
       "ryanair": {
         "outbound": {
@@ -129,7 +145,8 @@
           "time": "23:30 → 10/13 00:50",
           "reservation": "HZL66P",
           "seat": "12C",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         },
         "return": {
           "flight": "FR8836",
@@ -138,7 +155,8 @@
           "time": "22:10 → 23:35",
           "reservation": "EU3DNY",
           "seat": "26C",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         }
       }
     },
@@ -158,14 +176,18 @@
           "flight": "TW405",
           "date": "2026-10-12",
           "route": "ICN T1 → FCO T3",
-          "time": "12:35 → 19:15"
+          "time": "12:35 → 19:15",
+          "carrier": "트리니티항공"
         },
         "return": {
           "flight": "TW406",
           "date": "2026-10-18",
           "route": "FCO T3 → ICN T1",
-          "time": "21:15 → 10/19 16:10"
-        }
+          "time": "21:15 → 10/19 16:10",
+          "carrier": "트리니티항공"
+        },
+        "carrier": "트리니티항공",
+        "carrierEn": "TRINITY AIRWAYS"
       },
       "ryanair": {
         "outbound": {
@@ -175,7 +197,8 @@
           "time": "23:30 → 10/13 00:50",
           "reservation": "HZL66P",
           "seat": "12D",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         },
         "return": {
           "flight": "FR8836",
@@ -184,7 +207,8 @@
           "time": "22:10 → 23:35",
           "reservation": "EU3DNY",
           "seat": "26D",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         }
       }
     },
@@ -204,14 +228,18 @@
           "flight": "TW405",
           "date": "2026-10-12",
           "route": "ICN T1 → FCO T3",
-          "time": "12:35 → 19:15"
+          "time": "12:35 → 19:15",
+          "carrier": "트리니티항공"
         },
         "return": {
           "flight": "TW406",
           "date": "2026-10-18",
           "route": "FCO T3 → ICN T1",
-          "time": "21:15 → 10/19 16:10"
-        }
+          "time": "21:15 → 10/19 16:10",
+          "carrier": "트리니티항공"
+        },
+        "carrier": "트리니티항공",
+        "carrierEn": "TRINITY AIRWAYS"
       },
       "ryanair": {
         "outbound": {
@@ -221,7 +249,8 @@
           "time": "23:30 → 10/13 00:50",
           "reservation": "HZL66P",
           "seat": "12E",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         },
         "return": {
           "flight": "FR8836",
@@ -230,7 +259,8 @@
           "time": "22:10 → 23:35",
           "reservation": "EU3DNY",
           "seat": "26E",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         }
       }
     },
@@ -250,14 +280,18 @@
           "flight": "TW405",
           "date": "2026-10-12",
           "route": "ICN T1 → FCO T3",
-          "time": "12:35 → 19:15"
+          "time": "12:35 → 19:15",
+          "carrier": "트리니티항공"
         },
         "return": {
           "flight": "TW406",
           "date": "2026-10-18",
           "route": "FCO T3 → ICN T1",
-          "time": "21:15 → 10/19 16:10"
-        }
+          "time": "21:15 → 10/19 16:10",
+          "carrier": "트리니티항공"
+        },
+        "carrier": "트리니티항공",
+        "carrierEn": "TRINITY AIRWAYS"
       },
       "ryanair": {
         "outbound": {
@@ -267,7 +301,8 @@
           "time": "23:30 → 10/13 00:50",
           "reservation": "HZL66P",
           "seat": "11F",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         },
         "return": {
           "flight": "FR8836",
@@ -276,7 +311,8 @@
           "time": "22:10 → 23:35",
           "reservation": "EU3DNY",
           "seat": "25F",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         }
       }
     },
@@ -296,14 +332,18 @@
           "flight": "TW405",
           "date": "2026-10-12",
           "route": "ICN T1 → FCO T3",
-          "time": "12:35 → 19:15"
+          "time": "12:35 → 19:15",
+          "carrier": "트리니티항공"
         },
         "return": {
           "flight": "TW406",
           "date": "2026-10-18",
           "route": "FCO T3 → ICN T1",
-          "time": "21:15 → 10/19 16:10"
-        }
+          "time": "21:15 → 10/19 16:10",
+          "carrier": "트리니티항공"
+        },
+        "carrier": "트리니티항공",
+        "carrierEn": "TRINITY AIRWAYS"
       },
       "ryanair": {
         "outbound": {
@@ -313,7 +353,8 @@
           "time": "23:30 → 10/13 00:50",
           "reservation": "HZL66P",
           "seat": "11E",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         },
         "return": {
           "flight": "FR8836",
@@ -322,7 +363,8 @@
           "time": "22:10 → 23:35",
           "reservation": "EU3DNY",
           "seat": "25E",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         }
       }
     },
@@ -342,14 +384,18 @@
           "flight": "TW405",
           "date": "2026-10-12",
           "route": "ICN T1 → FCO T3",
-          "time": "12:35 → 19:15"
+          "time": "12:35 → 19:15",
+          "carrier": "트리니티항공"
         },
         "return": {
           "flight": "TW406",
           "date": "2026-10-18",
           "route": "FCO T3 → ICN T1",
-          "time": "21:15 → 10/19 16:10"
-        }
+          "time": "21:15 → 10/19 16:10",
+          "carrier": "트리니티항공"
+        },
+        "carrier": "트리니티항공",
+        "carrierEn": "TRINITY AIRWAYS"
       },
       "ryanair": {
         "outbound": {
@@ -359,7 +405,8 @@
           "time": "23:30 → 10/13 00:50",
           "reservation": "HZL66P",
           "seat": "11D",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         },
         "return": {
           "flight": "FR8836",
@@ -368,7 +415,8 @@
           "time": "22:10 → 23:35",
           "reservation": "EU3DNY",
           "seat": "25D",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         }
       }
     },
@@ -388,14 +436,18 @@
           "flight": "TW405",
           "date": "2026-10-12",
           "route": "ICN T1 → FCO T3",
-          "time": "12:35 → 19:15"
+          "time": "12:35 → 19:15",
+          "carrier": "트리니티항공"
         },
         "return": {
           "flight": "TW406",
           "date": "2026-10-18",
           "route": "FCO T3 → ICN T1",
-          "time": "21:15 → 10/19 16:10"
-        }
+          "time": "21:15 → 10/19 16:10",
+          "carrier": "트리니티항공"
+        },
+        "carrier": "트리니티항공",
+        "carrierEn": "TRINITY AIRWAYS"
       },
       "ryanair": {
         "outbound": {
@@ -405,7 +457,8 @@
           "time": "23:30 → 10/13 00:50",
           "reservation": "HZL66P",
           "seat": "11C",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         },
         "return": {
           "flight": "FR8836",
@@ -414,7 +467,8 @@
           "time": "22:10 → 23:35",
           "reservation": "EU3DNY",
           "seat": "25C",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         }
       }
     },
@@ -434,14 +488,18 @@
           "flight": "TW405",
           "date": "2026-10-12",
           "route": "ICN T1 → FCO T3",
-          "time": "12:35 → 19:15"
+          "time": "12:35 → 19:15",
+          "carrier": "트리니티항공"
         },
         "return": {
           "flight": "TW406",
           "date": "2026-10-18",
           "route": "FCO T3 → ICN T1",
-          "time": "21:15 → 10/19 16:10"
-        }
+          "time": "21:15 → 10/19 16:10",
+          "carrier": "트리니티항공"
+        },
+        "carrier": "트리니티항공",
+        "carrierEn": "TRINITY AIRWAYS"
       },
       "ryanair": {
         "outbound": {
@@ -451,7 +509,8 @@
           "time": "23:30 → 10/13 00:50",
           "reservation": "HZL66P",
           "seat": "11B",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         },
         "return": {
           "flight": "FR8836",
@@ -460,7 +519,8 @@
           "time": "22:10 → 23:35",
           "reservation": "EU3DNY",
           "seat": "25B",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         }
       }
     },
@@ -480,14 +540,18 @@
           "flight": "TW405",
           "date": "2026-10-12",
           "route": "ICN T1 → FCO T3",
-          "time": "12:35 → 19:15"
+          "time": "12:35 → 19:15",
+          "carrier": "트리니티항공"
         },
         "return": {
           "flight": "TW406",
           "date": "2026-10-18",
           "route": "FCO T3 → ICN T1",
-          "time": "21:15 → 10/19 16:10"
-        }
+          "time": "21:15 → 10/19 16:10",
+          "carrier": "트리니티항공"
+        },
+        "carrier": "트리니티항공",
+        "carrierEn": "TRINITY AIRWAYS"
       },
       "ryanair": {
         "outbound": {
@@ -497,7 +561,8 @@
           "time": "23:30 → 10/13 00:50",
           "reservation": "HZL66P",
           "seat": "11A",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         },
         "return": {
           "flight": "FR8836",
@@ -506,7 +571,8 @@
           "time": "22:10 → 23:35",
           "reservation": "EU3DNY",
           "seat": "25A",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         }
       }
     },
@@ -526,14 +592,18 @@
           "flight": "TW405",
           "date": "2026-10-12",
           "route": "ICN T1 → FCO T3",
-          "time": "12:35 → 19:15"
+          "time": "12:35 → 19:15",
+          "carrier": "트리니티항공"
         },
         "return": {
           "flight": "TW406",
           "date": "2026-10-18",
           "route": "FCO T3 → ICN T1",
-          "time": "21:15 → 10/19 16:10"
-        }
+          "time": "21:15 → 10/19 16:10",
+          "carrier": "트리니티항공"
+        },
+        "carrier": "트리니티항공",
+        "carrierEn": "TRINITY AIRWAYS"
       },
       "ryanair": {
         "outbound": {
@@ -543,7 +613,8 @@
           "time": "23:30 → 10/13 00:50",
           "reservation": "HZL66P",
           "seat": "10A",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         },
         "return": {
           "flight": "FR8836",
@@ -552,7 +623,8 @@
           "time": "22:10 → 23:35",
           "reservation": "EU3DNY",
           "seat": "24A",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         }
       }
     },
@@ -572,14 +644,18 @@
           "flight": "TW405",
           "date": "2026-10-12",
           "route": "ICN T1 → FCO T3",
-          "time": "12:35 → 19:15"
+          "time": "12:35 → 19:15",
+          "carrier": "트리니티항공"
         },
         "return": {
           "flight": "TW406",
           "date": "2026-10-18",
           "route": "FCO T3 → ICN T1",
-          "time": "21:15 → 10/19 16:10"
-        }
+          "time": "21:15 → 10/19 16:10",
+          "carrier": "트리니티항공"
+        },
+        "carrier": "트리니티항공",
+        "carrierEn": "TRINITY AIRWAYS"
       },
       "ryanair": {
         "outbound": {
@@ -589,7 +665,8 @@
           "time": "23:30 → 10/13 00:50",
           "reservation": "HZL66P",
           "seat": "10B",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         },
         "return": {
           "flight": "FR8836",
@@ -598,7 +675,8 @@
           "time": "22:10 → 23:35",
           "reservation": "EU3DNY",
           "seat": "24B",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         }
       }
     },
@@ -618,14 +696,18 @@
           "flight": "TW405",
           "date": "2026-10-12",
           "route": "ICN T1 → FCO T3",
-          "time": "12:35 → 19:15"
+          "time": "12:35 → 19:15",
+          "carrier": "트리니티항공"
         },
         "return": {
           "flight": "TW406",
           "date": "2026-10-18",
           "route": "FCO T3 → ICN T1",
-          "time": "21:15 → 10/19 16:10"
-        }
+          "time": "21:15 → 10/19 16:10",
+          "carrier": "트리니티항공"
+        },
+        "carrier": "트리니티항공",
+        "carrierEn": "TRINITY AIRWAYS"
       },
       "ryanair": {
         "outbound": {
@@ -635,7 +717,8 @@
           "time": "23:30 → 10/13 00:50",
           "reservation": "HZL66P",
           "seat": "12F",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         },
         "return": {
           "flight": "FR8836",
@@ -644,7 +727,8 @@
           "time": "22:10 → 23:35",
           "reservation": "EU3DNY",
           "seat": "26F",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         }
       }
     },
@@ -664,14 +748,18 @@
           "flight": "TW405",
           "date": "2026-10-12",
           "route": "ICN T1 → FCO T3",
-          "time": "12:35 → 19:15"
+          "time": "12:35 → 19:15",
+          "carrier": "트리니티항공"
         },
         "return": {
           "flight": "TW406",
           "date": "2026-10-18",
           "route": "FCO T3 → ICN T1",
-          "time": "21:15 → 10/19 16:10"
-        }
+          "time": "21:15 → 10/19 16:10",
+          "carrier": "트리니티항공"
+        },
+        "carrier": "트리니티항공",
+        "carrierEn": "TRINITY AIRWAYS"
       },
       "ryanair": {
         "outbound": {
@@ -681,7 +769,8 @@
           "time": "23:30 → 10/13 00:50",
           "reservation": "HZL66P",
           "seat": "10C",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         },
         "return": {
           "flight": "FR8836",
@@ -690,7 +779,8 @@
           "time": "22:10 → 23:35",
           "reservation": "EU3DNY",
           "seat": "24C",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         }
       }
     },
@@ -710,14 +800,18 @@
           "flight": "TW405",
           "date": "2026-10-12",
           "route": "ICN T1 → FCO T3",
-          "time": "12:35 → 19:15"
+          "time": "12:35 → 19:15",
+          "carrier": "트리니티항공"
         },
         "return": {
           "flight": "TW406",
           "date": "2026-10-18",
           "route": "FCO T3 → ICN T1",
-          "time": "21:15 → 10/19 16:10"
-        }
+          "time": "21:15 → 10/19 16:10",
+          "carrier": "트리니티항공"
+        },
+        "carrier": "트리니티항공",
+        "carrierEn": "TRINITY AIRWAYS"
       },
       "ryanair": {
         "outbound": {
@@ -727,7 +821,8 @@
           "time": "23:30 → 10/13 00:50",
           "reservation": "HZL66P",
           "seat": "10E",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         },
         "return": {
           "flight": "FR8836",
@@ -736,7 +831,8 @@
           "time": "22:10 → 23:35",
           "reservation": "EU3DNY",
           "seat": "24E",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         }
       }
     },
@@ -756,14 +852,18 @@
           "flight": "TW405",
           "date": "2026-10-12",
           "route": "ICN T1 → FCO T3",
-          "time": "12:35 → 19:15"
+          "time": "12:35 → 19:15",
+          "carrier": "트리니티항공"
         },
         "return": {
           "flight": "TW406",
           "date": "2026-10-18",
           "route": "FCO T3 → ICN T1",
-          "time": "21:15 → 10/19 16:10"
-        }
+          "time": "21:15 → 10/19 16:10",
+          "carrier": "트리니티항공"
+        },
+        "carrier": "트리니티항공",
+        "carrierEn": "TRINITY AIRWAYS"
       },
       "ryanair": {
         "outbound": {
@@ -773,7 +873,8 @@
           "time": "23:30 → 10/13 00:50",
           "reservation": "HZL66P",
           "seat": "10F",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         },
         "return": {
           "flight": "FR8836",
@@ -782,7 +883,8 @@
           "time": "22:10 → 23:35",
           "reservation": "EU3DNY",
           "seat": "24F",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         }
       }
     },
@@ -802,14 +904,18 @@
           "flight": "TW405",
           "date": "2026-10-12",
           "route": "ICN T1 → FCO T3",
-          "time": "12:35 → 19:15"
+          "time": "12:35 → 19:15",
+          "carrier": "트리니티항공"
         },
         "return": {
           "flight": "TW406",
           "date": "2026-10-18",
           "route": "FCO T3 → ICN T1",
-          "time": "21:15 → 10/19 16:10"
-        }
+          "time": "21:15 → 10/19 16:10",
+          "carrier": "트리니티항공"
+        },
+        "carrier": "트리니티항공",
+        "carrierEn": "TRINITY AIRWAYS"
       },
       "ryanair": {
         "outbound": {
@@ -819,7 +925,8 @@
           "time": "23:30 → 10/13 00:50",
           "reservation": "HZL66P",
           "seat": "10D",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         },
         "return": {
           "flight": "FR8836",
@@ -828,7 +935,8 @@
           "time": "22:10 → 23:35",
           "reservation": "EU3DNY",
           "seat": "24D",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         }
       }
     },
@@ -848,14 +956,18 @@
           "flight": "TW405",
           "date": "2026-10-12",
           "route": "ICN T1 → FCO T3",
-          "time": "12:35 → 19:15"
+          "time": "12:35 → 19:15",
+          "carrier": "트리니티항공"
         },
         "return": {
           "flight": "TW406",
           "date": "2026-10-18",
           "route": "FCO T3 → ICN T1",
-          "time": "21:15 → 10/19 16:10"
-        }
+          "time": "21:15 → 10/19 16:10",
+          "carrier": "트리니티항공"
+        },
+        "carrier": "트리니티항공",
+        "carrierEn": "TRINITY AIRWAYS"
       },
       "ryanair": {
         "outbound": {
@@ -865,7 +977,8 @@
           "time": "23:30 → 10/13 00:50",
           "reservation": "HZL66P",
           "seat": "09E",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         },
         "return": {
           "flight": "FR8836",
@@ -874,7 +987,8 @@
           "time": "22:10 → 23:35",
           "reservation": "EU3DNY",
           "seat": "23E",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         }
       }
     },
@@ -894,14 +1008,18 @@
           "flight": "TW405",
           "date": "2026-10-12",
           "route": "ICN T1 → FCO T3",
-          "time": "12:35 → 19:15"
+          "time": "12:35 → 19:15",
+          "carrier": "트리니티항공"
         },
         "return": {
           "flight": "TW406",
           "date": "2026-10-18",
           "route": "FCO T3 → ICN T1",
-          "time": "21:15 → 10/19 16:10"
-        }
+          "time": "21:15 → 10/19 16:10",
+          "carrier": "트리니티항공"
+        },
+        "carrier": "트리니티항공",
+        "carrierEn": "TRINITY AIRWAYS"
       },
       "ryanair": {
         "outbound": {
@@ -911,7 +1029,8 @@
           "time": "23:30 → 10/13 00:50",
           "reservation": "HZL66P",
           "seat": "09F",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         },
         "return": {
           "flight": "FR8836",
@@ -920,7 +1039,8 @@
           "time": "22:10 → 23:35",
           "reservation": "EU3DNY",
           "seat": "23F",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         }
       }
     },
@@ -940,14 +1060,18 @@
           "flight": "TW405",
           "date": "2026-10-12",
           "route": "ICN T1 → FCO T3",
-          "time": "12:35 → 19:15"
+          "time": "12:35 → 19:15",
+          "carrier": "트리니티항공"
         },
         "return": {
           "flight": "TW406",
           "date": "2026-10-18",
           "route": "FCO T3 → ICN T1",
-          "time": "21:15 → 10/19 16:10"
-        }
+          "time": "21:15 → 10/19 16:10",
+          "carrier": "트리니티항공"
+        },
+        "carrier": "트리니티항공",
+        "carrierEn": "TRINITY AIRWAYS"
       },
       "ryanair": {
         "outbound": {
@@ -957,7 +1081,8 @@
           "time": "23:30 → 10/13 00:50",
           "reservation": "HZL66P",
           "seat": "09D",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         },
         "return": {
           "flight": "FR8836",
@@ -966,7 +1091,8 @@
           "time": "22:10 → 23:35",
           "reservation": "EU3DNY",
           "seat": "23D",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         }
       }
     },
@@ -986,14 +1112,18 @@
           "flight": "TW405",
           "date": "2026-10-12",
           "route": "ICN T1 → FCO T3",
-          "time": "12:35 → 19:15"
+          "time": "12:35 → 19:15",
+          "carrier": "트리니티항공"
         },
         "return": {
           "flight": "TW406",
           "date": "2026-10-18",
           "route": "FCO T3 → ICN T1",
-          "time": "21:15 → 10/19 16:10"
-        }
+          "time": "21:15 → 10/19 16:10",
+          "carrier": "트리니티항공"
+        },
+        "carrier": "트리니티항공",
+        "carrierEn": "TRINITY AIRWAYS"
       },
       "ryanair": {
         "outbound": {
@@ -1003,7 +1133,8 @@
           "time": "23:30 → 10/13 00:50",
           "reservation": "HZL66P",
           "seat": "09C",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         },
         "return": {
           "flight": "FR8836",
@@ -1012,7 +1143,8 @@
           "time": "22:10 → 23:35",
           "reservation": "EU3DNY",
           "seat": "23C",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         }
       }
     },
@@ -1032,14 +1164,18 @@
           "flight": "TW405",
           "date": "2026-10-12",
           "route": "ICN T1 → FCO T3",
-          "time": "12:35 → 19:15"
+          "time": "12:35 → 19:15",
+          "carrier": "트리니티항공"
         },
         "return": {
           "flight": "TW406",
           "date": "2026-10-18",
           "route": "FCO T3 → ICN T1",
-          "time": "21:15 → 10/19 16:10"
-        }
+          "time": "21:15 → 10/19 16:10",
+          "carrier": "트리니티항공"
+        },
+        "carrier": "트리니티항공",
+        "carrierEn": "TRINITY AIRWAYS"
       },
       "ryanair": {
         "outbound": {
@@ -1049,7 +1185,8 @@
           "time": "23:30 → 10/13 00:50",
           "reservation": "HZL66P",
           "seat": "09B",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         },
         "return": {
           "flight": "FR8836",
@@ -1058,7 +1195,8 @@
           "time": "22:10 → 23:35",
           "reservation": "EU3DNY",
           "seat": "23B",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         }
       }
     },
@@ -1078,14 +1216,18 @@
           "flight": "TW405",
           "date": "2026-10-12",
           "route": "ICN T1 → FCO T3",
-          "time": "12:35 → 19:15"
+          "time": "12:35 → 19:15",
+          "carrier": "트리니티항공"
         },
         "return": {
           "flight": "TW406",
           "date": "2026-10-18",
           "route": "FCO T3 → ICN T1",
-          "time": "21:15 → 10/19 16:10"
-        }
+          "time": "21:15 → 10/19 16:10",
+          "carrier": "트리니티항공"
+        },
+        "carrier": "트리니티항공",
+        "carrierEn": "TRINITY AIRWAYS"
       },
       "ryanair": {
         "outbound": {
@@ -1095,7 +1237,8 @@
           "time": "23:30 → 10/13 00:50",
           "reservation": "HZL66P",
           "seat": "08A",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         },
         "return": {
           "flight": "FR8836",
@@ -1104,7 +1247,8 @@
           "time": "22:10 → 23:35",
           "reservation": "EU3DNY",
           "seat": "22A",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         }
       }
     },
@@ -1124,14 +1268,18 @@
           "flight": "TW405",
           "date": "2026-10-12",
           "route": "ICN T1 → FCO T3",
-          "time": "12:35 → 19:15"
+          "time": "12:35 → 19:15",
+          "carrier": "트리니티항공"
         },
         "return": {
           "flight": "TW406",
           "date": "2026-10-18",
           "route": "FCO T3 → ICN T1",
-          "time": "21:15 → 10/19 16:10"
-        }
+          "time": "21:15 → 10/19 16:10",
+          "carrier": "트리니티항공"
+        },
+        "carrier": "트리니티항공",
+        "carrierEn": "TRINITY AIRWAYS"
       },
       "ryanair": {
         "outbound": {
@@ -1141,7 +1289,8 @@
           "time": "23:30 → 10/13 00:50",
           "reservation": "HZL66P",
           "seat": "09A",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         },
         "return": {
           "flight": "FR8836",
@@ -1150,7 +1299,8 @@
           "time": "22:10 → 23:35",
           "reservation": "EU3DNY",
           "seat": "23A",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         }
       }
     },
@@ -1170,14 +1320,18 @@
           "flight": "TW405",
           "date": "2026-10-12",
           "route": "ICN T1 → FCO T3",
-          "time": "12:35 → 19:15"
+          "time": "12:35 → 19:15",
+          "carrier": "트리니티항공"
         },
         "return": {
           "flight": "TW406",
           "date": "2026-10-18",
           "route": "FCO T3 → ICN T1",
-          "time": "21:15 → 10/19 16:10"
-        }
+          "time": "21:15 → 10/19 16:10",
+          "carrier": "트리니티항공"
+        },
+        "carrier": "트리니티항공",
+        "carrierEn": "TRINITY AIRWAYS"
       },
       "ryanair": {
         "outbound": {
@@ -1187,7 +1341,8 @@
           "time": "23:30 → 10/13 00:50",
           "reservation": "X4QBYJ",
           "seat": "08B",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         },
         "return": {
           "flight": "FR8836",
@@ -1196,7 +1351,8 @@
           "time": "22:10 → 23:35",
           "reservation": "H49V2T",
           "seat": "22B",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         }
       }
     },
@@ -1216,14 +1372,18 @@
           "flight": "TW405",
           "date": "2026-10-12",
           "route": "ICN T1 → FCO T3",
-          "time": "12:35 → 19:15"
+          "time": "12:35 → 19:15",
+          "carrier": "트리니티항공"
         },
         "return": {
           "flight": "TW406",
           "date": "2026-10-18",
           "route": "FCO T3 → ICN T1",
-          "time": "21:15 → 10/19 16:10"
-        }
+          "time": "21:15 → 10/19 16:10",
+          "carrier": "트리니티항공"
+        },
+        "carrier": "트리니티항공",
+        "carrierEn": "TRINITY AIRWAYS"
       },
       "ryanair": {
         "outbound": {
@@ -1233,7 +1393,8 @@
           "time": "23:30 → 10/13 00:50",
           "reservation": "X4QBYJ",
           "seat": "08C",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         },
         "return": {
           "flight": "FR8836",
@@ -1242,24 +1403,33 @@
           "time": "22:10 → 23:35",
           "reservation": "H49V2T",
           "seat": "22C",
-          "checkedBag": "20KG"
+          "checkedBag": "20KG",
+          "carrier": "Ryanair"
         }
       }
     }
   ],
   "twaySeatReminder": {
-    "ruleLabel": "출발 24시간 전 좌석지정 확인",
+    "ruleLabel": "출발 24시간 전 사전 좌석지정 확인",
     "outbound": {
       "flight": "TW405",
       "depart": "2026-10-12T12:35:00+09:00",
       "availableFrom": "2026-10-11T12:35:00+09:00",
-      "display": "10/11 12:35 (한국시간)"
+      "display": "10/11 12:35 (한국시간)",
+      "carrier": "트리니티항공"
     },
     "return": {
       "flight": "TW406",
       "depart": "2026-10-18T21:15:00+02:00",
       "availableFrom": "2026-10-17T21:15:00+02:00",
-      "display": "10/17 21:15 (로마 현지시간)"
+      "display": "10/17 21:15 (로마 현지시간)",
+      "carrier": "트리니티항공"
     }
+  },
+  "ryanairGroupDocument": {
+    "path": "docs/etickets/ryanair_group_reservation.pdf",
+    "label": "Ryanair 단체 예약 확인서",
+    "downloadName": "Ryanair_Croatia_Group_Reservation.pdf",
+    "note": "FR5975·FR8836 팀 전체 탑승객과 좌석이 포함된 단체 발행 자료"
   }
 }

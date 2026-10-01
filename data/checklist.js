@@ -29,7 +29,7 @@ var CHECK_GROUPS=[
         ""
       ],
       [
-        "티웨이항공 TW405/TW406 항공권·예약번호 저장",
+        "트리니티항공 TW405/TW406 E-ticket·예약번호 저장",
         "필수",
         "prep_flights",
         "chk2_0_2"
