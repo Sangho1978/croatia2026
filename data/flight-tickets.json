@@ -1,5 +1,5 @@
 {
-  "version": "20261001-MIX55",
+  "version": "20261001-MIX56",
   "scope": "croatia-personal-trinity-ryanair",
   "memberCount": 27,
   "sourceNote": "트리니티항공 개인 E-ticket 영문명과 Ryanair 단체 예약 확인서 영문명을 대조해 연결",
@@ -1415,14 +1415,14 @@
       "flight": "TW405",
       "depart": "2026-10-12T12:35:00+09:00",
       "availableFrom": "2026-10-11T12:35:00+09:00",
-      "display": "10/11 12:35 (한국시간)",
+      "display": "10/11 12:35 · 인천 현지시간",
       "carrier": "트리니티항공"
     },
     "return": {
       "flight": "TW406",
       "depart": "2026-10-18T21:15:00+02:00",
       "availableFrom": "2026-10-17T21:15:00+02:00",
-      "display": "10/17 21:15 (로마 현지시간)",
+      "display": "10/17 21:15 · 로마 현지시간",
       "carrier": "트리니티항공"
     }
   },
