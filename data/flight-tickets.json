@@ -1,9 +1,8 @@
 {
-  "version": "20261001-MIX53",
-  "scope": "croatia-peers-only",
+  "version": "20261001-MIX54",
+  "scope": "croatia-personal-only",
   "memberCount": 27,
   "sourceNote": "개인 E-ticket 영문명과 Ryanair 단체예약 영문명을 대조해 연결",
-  "ryanairGroupPdf": "docs/etickets/ryanair_group_reservation.pdf",
   "members": [
     {
       "memberId": "m1",
@@ -1247,5 +1246,20 @@
         }
       }
     }
-  ]
+  ],
+  "twaySeatReminder": {
+    "ruleLabel": "출발 24시간 전 좌석지정 확인",
+    "outbound": {
+      "flight": "TW405",
+      "depart": "2026-10-12T12:35:00+09:00",
+      "availableFrom": "2026-10-11T12:35:00+09:00",
+      "display": "10/11 12:35 (한국시간)"
+    },
+    "return": {
+      "flight": "TW406",
+      "depart": "2026-10-18T21:15:00+02:00",
+      "availableFrom": "2026-10-17T21:15:00+02:00",
+      "display": "10/17 21:15 (로마 현지시간)"
+    }
+  }
 }

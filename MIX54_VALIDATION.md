@@ -1,0 +1,52 @@
+# MIX54 validation
+
+- PASS - flight member count (27)
+- PASS - scope personal-only (croatia-personal-only)
+- PASS - group pdf pointer removed
+- PASS - tway outbound reminder
+- PASS - tway return reminder
+- PASS - team-wide seat table removed
+- PASS - group reservation link removed
+- PASS - personal schedule function
+- PASS - schedule date 2026-10-12
+- PASS - schedule date 2026-10-17
+- PASS - schedule date 2026-10-18
+- PASS - generic flight detail file removed
+- PASS - generic flight detail script removed
+- PASS - MIX54 asset refs
+- PASS - SW cache v54
+- PASS - E-tickets not pre-cached
+- PASS - group PDF physically removed
+- PASS - 27 personal Tway PDFs (27)
+- PASS - Turkiye leader preserved 이진형
+- PASS - Turkiye leader preserved 황인환
+- PASS - Turkiye leader preserved 배황철
+- PASS - Turkiye attendance admins preserved
+- PASS - ticket exists m1 (docs/etickets/m1_tway_eticket.pdf)
+- PASS - ticket exists m2 (docs/etickets/m2_tway_eticket.pdf)
+- PASS - ticket exists m3 (docs/etickets/m3_tway_eticket.pdf)
+- PASS - ticket exists m4 (docs/etickets/m4_tway_eticket.pdf)
+- PASS - ticket exists m5 (docs/etickets/m5_tway_eticket.pdf)
+- PASS - ticket exists m6 (docs/etickets/m6_tway_eticket.pdf)
+- PASS - ticket exists m7 (docs/etickets/m7_tway_eticket.pdf)
+- PASS - ticket exists m8 (docs/etickets/m8_tway_eticket.pdf)
+- PASS - ticket exists m9 (docs/etickets/m9_tway_eticket.pdf)
+- PASS - ticket exists m10 (docs/etickets/m10_tway_eticket.pdf)
+- PASS - ticket exists m11 (docs/etickets/m11_tway_eticket.pdf)
+- PASS - ticket exists m12 (docs/etickets/m12_tway_eticket.pdf)
+- PASS - ticket exists m13 (docs/etickets/m13_tway_eticket.pdf)
+- PASS - ticket exists m14 (docs/etickets/m14_tway_eticket.pdf)
+- PASS - ticket exists m15 (docs/etickets/m15_tway_eticket.pdf)
+- PASS - ticket exists m16 (docs/etickets/m16_tway_eticket.pdf)
+- PASS - ticket exists m17 (docs/etickets/m17_tway_eticket.pdf)
+- PASS - ticket exists m18 (docs/etickets/m18_tway_eticket.pdf)
+- PASS - ticket exists m19 (docs/etickets/m19_tway_eticket.pdf)
+- PASS - ticket exists m20 (docs/etickets/m20_tway_eticket.pdf)
+- PASS - ticket exists m21 (docs/etickets/m21_tway_eticket.pdf)
+- PASS - ticket exists m22 (docs/etickets/m22_tway_eticket.pdf)
+- PASS - ticket exists m23 (docs/etickets/m23_tway_eticket.pdf)
+- PASS - ticket exists m24 (docs/etickets/m24_tway_eticket.pdf)
+- PASS - ticket exists m25 (docs/etickets/m25_tway_eticket.pdf)
+- PASS - ticket exists m26 (docs/etickets/m26_tway_eticket.pdf)
+- PASS - ticket exists m27 (docs/etickets/m27_tway_eticket.pdf)
+- PASS - all members reservation/ticket
