@@ -2,7 +2,7 @@
 (function(){
   'use strict';
   const zones={
-    travel:['today','schedule','guide','hotels','weatherDetail','route','toilets','apps','videos','shopfood'],
+    travel:['today','schedule','meals','guide','hotels','weatherDetail','route','toilets','apps','videos','shopfood'],
     operations:['location','group','check','study','photos','expenses','members'],
     safety:['news','emergency'],
     info:['more']

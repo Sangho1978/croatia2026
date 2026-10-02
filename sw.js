@@ -1,4 +1,4 @@
-const STATIC='gspa-static-v56';
+const STATIC='gspa-static-v58';
 const GUIDE='gspa-guidebook-shared-v2';
 const CORE=[
   "./index.html",
@@ -88,6 +88,9 @@ const CORE=[
   "./data/route-points.js",
   "./data/roster.js",
   "./css/flight-tickets.css",
+  "./css/meals.css",
+  "./data/meals.js",
+  "./js/meals-ui.js",
   "./js/flight-tickets-ui.js",
   "./data/flight-tickets.js",
   "./data/flight-tickets.json",

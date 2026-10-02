@@ -6,6 +6,7 @@
     route:['JOURNEY','전체 이동 흐름을 먼저 파악'],
     flights:['FLIGHT · E-TICKET','내 예약번호·항공권·좌석과 PDF 확인'],
     schedule:['ITINERARY','날짜 선택 후 동선부터 관광지까지 한 흐름'],
+    meals:['MEAL PLACES','식사 장소·지도·웹사이트·메뉴 확인'],
     guide:['GUIDE','역사와 도시 이야기를 현장에서 읽기'],
     hotels:['STAY','숙박지 위치와 기본 정보'],
     team:['TEAM','조별 구성·연락처를 한눈에'],
