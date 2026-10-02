@@ -39,6 +39,17 @@ function renderHotels(){
   const box=document.getElementById('hotelDirectory'); if(!box||!Array.isArray(window.CRO_HOTELS))return;
   box.innerHTML=window.CRO_HOTELS.map(h=>`<article class="hotel-detail-card card" id="hotel-${escHotel(h.id)}"><div class="hotel-photo-wrap"><img src="${escHotel(h.image)}?v=20260926-MIX43" alt="${escHotel(h.name)}" loading="lazy" decoding="async" fetchpriority="low" onerror="this.style.display='none';this.nextElementSibling.style.zIndex='0'"><div class="hotel-photo-fallback">${escHotel(h.name)}</div></div><div class="hotel-detail-body"><span class="hotel-stay-line">STAY · ${escHotel(h.stayEn||h.stay)}</span><h3>${escHotel(h.name)}</h3><dl class="hotel-essential"><div><dt>STAY</dt><dd>${escHotel(h.stayEn||h.stay)}</dd></div><div><dt>ADDRESS</dt><dd>${escHotel(h.address)}</dd></div><div><dt>PHONE</dt><dd><a href="tel:${escHotel(h.tel)}">${escHotel(h.phone)}</a>${h.secondaryPhone?`<br><small>RESERVATIONS · ${escHotel(h.secondaryPhone.replace(/^예약\/세일즈\s*/,'').replace(/^콜센터\s*/,''))}</small>`:''}</dd></div><div><dt>EMAIL</dt><dd>${escHotel(h.email)}</dd></div></dl><p class="hotel-blurb">${escHotel(h.blurb)}</p><div class="hotel-highlights">${(h.highlights||[]).map(x=>`<span>${escHotel(x)}</span>`).join('')}</div><div class="hotel-buttons"><a class="primary" href="tel:${escHotel(h.tel)}">☎ 전화</a><a href="${escHotel(h.map)}" target="_blank" rel="noopener">📍 지도</a><a href="${escHotel(h.website)}" target="_blank" rel="noopener">공식 사이트</a></div></div></article>`).join('');
 }
+function _scheduleEventsWithoutMealDup(d){
+  const ml=Array.isArray(window.CRO_MEALS)?window.CRO_MEALS.filter(m=>m.date===d.date):[];
+  return (d.events||[]).filter(e=>{
+    const tm=String(e?.[0]||''),tx=String(e?.[1]||'');
+    return !ml.some(m=>{
+      if(m.free&&/중식.*자유식|자유식.*중식/.test(tx))return true;
+      if(!m.free&&tm===String(m.time)&&(tx.includes(m.type)||tx.includes(m.name)))return true;
+      return false;
+    });
+  });
+}
 function renderDays(){
   let tabs=document.getElementById('dayTabs'),wrap=document.getElementById('dayPanels');tabs.innerHTML='';wrap.innerHTML='';
   days.forEach((d,i)=>{
@@ -47,7 +58,7 @@ function renderDays(){
     let flow=(d.flow||[]).map((x,j)=>`<span class="flow-stop"><span class="flow-pill"><i aria-hidden="true">${j+1}</i><span>${x}</span></span></span>`).join('');
     let moves=(d.moves||[]).map(m=>`<div class="move-row"><span class="move-mode">${m[0]}</span><span class="move-route">${m[1]}</span><span class="move-time">${m[2]}</span></div>`).join('');
     let gl=(d.guides||[]).map(g=>`<a href="${g[1]}">📖 ${g[0]} 상세가이드</a>`).join('');
-    p.innerHTML=`${dayHotelHtml(d.date)}<div class="day-summary"><h3>${d.title}</h3><p><b>이동동선</b> ${d.route}</p><div class="day-flow">${flow}</div><div class="day-guide-links">${gl}</div>${d.map?`<div class="btns"><a class="btn" target="_blank" rel="noopener" href="${d.map}">📍 Google 전체 동선</a></div>`:''}</div><div class="day-weather-box" id="dayWeather-${i}">${expectedHourlyHtml(d)}</div><div class="day-main-grid"><div class="card"><h3>일정</h3><div class="timeline">${d.events.map(e=>`<div class="event"><span class="time">${e[0]}</span>${e[1]}</div>`).join('')}</div>${d.meal?`<div class="meal"><b>식사</b><br>${d.meal}</div>`:''}</div><div class="card"><h3>구간별 이동시간</h3><div class="move-list">${moves}</div></div></div>${window.dayPhotoGuideHtml?window.dayPhotoGuideHtml(d.date):''}${dayAttractionHtml(d)}`;
+    p.innerHTML=`${dayHotelHtml(d.date)}<div class="day-summary"><h3>${d.title}</h3><p><b>이동동선</b> ${d.route}</p><div class="day-flow">${flow}</div><div class="day-guide-links">${gl}</div>${d.map?`<div class="btns"><a class="btn" target="_blank" rel="noopener" href="${d.map}">📍 Google 전체 동선</a></div>`:''}</div><div class="day-weather-box" id="dayWeather-${i}">${expectedHourlyHtml(d)}</div><div class="day-main-grid"><div class="card"><h3>일정</h3><div class="timeline">${_scheduleEventsWithoutMealDup(d).map(e=>`<div class="event"><span class="time">${e[0]}</span>${e[1]}</div>`).join('')}</div></div><div class="card"><h3>구간별 이동시간</h3><div class="move-list">${moves}</div></div></div>${window.dayPhotoGuideHtml?window.dayPhotoGuideHtml(d.date):''}${dayAttractionHtml(d)}`;
     wrap.appendChild(p)
   });
   let idx=days.findIndex(x=>x.date===localDate());selectDay(idx>=0?idx:0);

@@ -11,5 +11,5 @@ window.CRO_MEALS=[
   {date:'2026-10-17',time:'자유시간',type:'중식',name:'자유식',city:'Zagreb',address:'장소 미정 · 자그레브 자유식',phone:'',website:'',mapQuery:'',menu:[],menuKo:[],free:true,source:'KCT 일정표'},
   {date:'2026-10-17',time:'18:00',type:'석식',name:'CRO.K',city:'Zagreb',address:'Pod Zidom 4, Zagreb, Croatia',phone:'+385 91 135 7175',website:'',mapQuery:'CRO.K, Pod Zidom 4, Zagreb, Croatia',menu:['Doenjang-jjigae','Jeyuk-bokkeum','Japchae'],menuKo:['된장찌개','제육볶음','잡채'],source:'KCT 일정표'}
 ];
-window.CRO_MEAL_MENU_RELEASE_AT=Date.parse('2026-10-12T00:00:00+09:00');
-window.CRO_MEAL_EARLY_VIEWERS=['한상호','이상미'];
+window.CRO_MEAL_MENU_RELEASE_AT=0;
+window.CRO_MEAL_EARLY_VIEWERS=[];

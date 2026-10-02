@@ -11,6 +11,13 @@
   let leafletPromise=null;
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
+  function markerTone(p){
+    if(p?.kind!=='meal')return {cls:'route-normal',color:'#1769aa'};
+    if(p.mealType==='중식')return {cls:'route-meal-lunch',color:'#e58a00'};
+    if(p.mealType==='석식')return {cls:'route-meal-dinner',color:'#7b4bb7'};
+    return {cls:'route-meal-free',color:'#6d7c87'};
+  }
+
   function cleanupRecord(box,keepRetry=false){
     const rec=records.get(box);
     if(!rec)return;
@@ -47,7 +54,8 @@
     const ptsAttr=list.map(p=>`${x(p).toFixed(1)},${y(p).toFixed(1)}`).join(' ');
     const nodes=list.map((p,i)=>{
       const xx=x(p),yy=y(p),tx=Math.max(8,Math.min(W-188,xx+12)),ty=Math.max(20,Math.min(H-12,yy-(i%2?12:-24)));
-      return `<g><circle cx="${xx}" cy="${yy}" r="15" class="route-svg-dot"/><text x="${xx}" y="${yy+5}" text-anchor="middle" class="route-svg-num">${i+1}</text><rect x="${tx}" y="${ty-17}" rx="8" ry="8" width="176" height="27" class="route-svg-label-bg"/><text x="${tx+8}" y="${ty+2}" class="route-svg-label">${esc(p.n)}</text></g>`;
+      const tone=markerTone(p);
+      return `<g><circle cx="${xx}" cy="${yy}" r="15" class="route-svg-dot ${tone.cls}"/><text x="${xx}" y="${yy+5}" text-anchor="middle" class="route-svg-num">${i+1}</text><rect x="${tx}" y="${ty-17}" rx="8" ry="8" width="176" height="27" class="route-svg-label-bg"/><text x="${tx+8}" y="${ty+2}" class="route-svg-label">${esc(p.n)}</text></g>`;
     }).join('');
     const msg=note||'인터넷 연결 후 Google Maps를 다시 시도합니다.';
     box.innerHTML=`<div class="route-schematic" role="img" aria-label="${esc(label||'이동동선')} 동선도"><svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet"><defs><pattern id="grid45" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" class="route-svg-grid"/></pattern></defs><rect width="100%" height="100%" fill="url(#grid45)"/><polyline points="${ptsAttr}" class="route-svg-line"/>${nodes}</svg><div class="route-schematic-note">${esc(msg)}</div></div>`;
@@ -95,7 +103,8 @@
     const latlngs=[];
     list.forEach((p,i)=>{
       const ll=[+p.lat,+p.lng];latlngs.push(ll);
-      const icon=L.divIcon({className:'gspa-route-osm-icon',html:`<span>${i+1}</span>`,iconSize:[30,30],iconAnchor:[15,15]});
+      const tone=markerTone(p);
+      const icon=L.divIcon({className:`gspa-route-osm-icon ${tone.cls}`,html:`<span>${i+1}</span>`,iconSize:[30,30],iconAnchor:[15,15]});
       const m=L.marker(ll,{icon,title:p.n}).addTo(map).bindPopup(`<b>${esc(p.n)}</b>`);markers.push(m);
     });
     let line=null;
@@ -130,8 +139,9 @@
     const markers=[];
     list.forEach((p,i)=>{
       const pos={lat:+p.lat,lng:+p.lng};bounds.extend(pos);
-      const marker=new google.maps.Marker({position:pos,map,label:String(i+1),title:p.n});
-      const info=new google.maps.InfoWindow({content:`<b>${esc(p.n)}</b>`});
+      const tone=markerTone(p);
+      const marker=new google.maps.Marker({position:pos,map,label:{text:String(i+1),color:'#fff',fontWeight:'900',fontSize:'12px'},title:p.n,icon:{path:google.maps.SymbolPath.CIRCLE,fillColor:tone.color,fillOpacity:1,strokeColor:'#fff',strokeWeight:3,scale:15}});
+      const info=new google.maps.InfoWindow({content:`<b>${esc(p.n)}</b>${p.kind==='meal'?`<div style="margin-top:4px">🍽 ${esc(p.mealType||'식사')} · 현지시간</div>`:''}`});
       marker.addListener('click',()=>info.open({anchor:marker,map}));markers.push(marker);
     });
     let line=null;
