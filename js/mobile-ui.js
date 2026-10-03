@@ -2,7 +2,7 @@
 (function(){
   const meta={
     today:['TODAY','오늘 필요한 정보부터 빠르게'],
-    weatherDetail:['WEATHER','예보 · 모델 비교 · 공식기관 확인'],
+    weatherDetail:['WEATHER','시간대별 예보 · 공식기관 확인'],
     route:['JOURNEY','전체 이동 흐름을 먼저 파악'],
     flights:['FLIGHT · E-TICKET','내 예약번호·항공권·좌석과 PDF 확인'],
     schedule:['ITINERARY','날짜 선택 후 동선부터 관광지까지 한 흐름'],
