@@ -1,3 +1,4 @@
+/* MIX62: standalone meal directory retained; schedule meal cards are merged into the chronological agenda. */
 /* MIX59 · compact meal schedule, public menus, Google Maps links only. */
 (()=>{
   const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
@@ -36,12 +37,8 @@
     root.innerHTML=legend()+[...groups].map(([d,list])=>`<section class="meal-day"><div class="meal-day-title"><b>${dateLabel(d)}</b><span>${esc((days.find(x=>x.date===d)||{}).title||'')}</span></div>${list.map(m=>card(m)).join('')}</section>`).join('');
   }
   function renderScheduleMeals(){
+    // MIX62: 식사는 시간순 일정 안에 합쳐서 표시한다. 별도 블록은 중복이므로 제거.
     document.querySelectorAll('.schedule-meals-block').forEach(x=>x.remove());
-    document.querySelectorAll('#dayPanels .panel').forEach((panel,i)=>{
-      const d=window.days?.[i];if(!d)return;const list=meals().filter(m=>m.date===d.date);if(!list.length)return;
-      const box=document.createElement('section');box.className='schedule-meals-block';box.innerHTML=`<div class="schedule-meals-head"><div><small>MEAL · 현지시간</small><h3>식사</h3></div><button type="button" data-route="meals">전체 식사장소</button></div>${legend()}<div class="schedule-meals-grid">${list.map(m=>card(m,{schedule:true})).join('')}</div>`;
-      const main=panel.querySelector('.day-main-grid');(main||panel.querySelector('.day-summary'))?.insertAdjacentElement('afterend',box);
-    });
   }
   function refresh(){renderMealsView();renderScheduleMeals()}
   window.GSPA_Meals={refresh,menuOpen};

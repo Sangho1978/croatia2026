@@ -1,3 +1,4 @@
+/* MIX62: cleaned UI, all-trip hourly weather, Korea refresh timestamps, chronological schedule numbering. */
 
 
 // Google Maps JavaScript API key (client-side web key)
@@ -25,7 +26,7 @@ function closeInlineDetail(btn){let det=btn.closest('.inline-attraction-detail')
 function dayAttractionHtml(d){let arr=DAY_ATTRACTIONS[d.date]||[];if(!arr.length)return'';return `<h3 class="day-attraction-title">관광지 가이드</h3><div class="day-attraction-grid">${arr.map(x=>`<article class="day-attraction-card">${x.image?`<img class="spot-image" src="${x.image}" alt="${x.n}" loading="lazy" decoding="async">`:''}<h4>${x.n}</h4><p>${x.p}</p><div class="spot-meta"><span>⏱ ${x.t}</span><span>🎟 ${x.price}</span></div><div class="must-see"><b>무엇을 봐야 하나</b><br>${x.m}</div>${x.note?`<div class="tour-note">${x.note}</div>`:''}${_inlineAttractionDetail(x)}<div class="tour-source-row"><a target="_blank" rel="noopener" href="${x.book}">${x.book.includes('google.com/maps')?'📍 지도':'🎟 예매/공식'}</a>${x.official?`<a target="_blank" rel="noopener" href="${x.official}">ⓘ 공식 관광정보</a>`:''}${x.video?`<a target="_blank" rel="noopener" href="${x.video}">▶ 추천영상</a>`:''}</div></article>`).join('')}</div>`}
 function expectedHourlyHtml(d){
   let w=WEATHER_SPOTS[d.date];if(!w)return'<div class="note">해당 날짜 기상 기준점이 없습니다.</div>';
-  return `<div class="day-weather-head"><b>${w.name} · 날씨</b><small>시간대별 예보는 전체 메뉴 → 날씨에서 확인</small></div><div class="day-weather-trend"><strong>평년 참고 ${w.hi}° / ${w.lo}°</strong><span><a href="#weatherDetail">시간대별 예보 보기</a></span></div>`;
+  return `<div class="day-weather-head"><b>${w.name} · 시간별 날씨</b><small>현지시간</small></div><div class="day-weather-trend"><strong>평년 참고 ${w.hi}° / ${w.lo}°</strong><span>예보 범위에 들어오면 1시간 단위로 자동 표시</span></div>`;
 }
 function weatherTimeZone(w){return String(w?.name||'').includes('로마')?'Europe/Rome':(window.GSPA_TRIP_TIMEZONE||'Europe/Zagreb')}
 function meteoblueUrlFor(t){
@@ -47,37 +48,49 @@ function renderWeatherSources(t){
   cards.push(`<a class="weather-source-card source-compare" href="${mb}" target="_blank" rel="noopener"><span>외부 비교</span><b>Meteoblue</b><small>다른 예보와 경향 비교</small></a>`);
   box.innerHTML=cards.join('');
 }
-function renderExpectedOutlook(){let box=document.getElementById('tripWeatherOutlook');if(!box)return;box.innerHTML=Object.entries(WEATHER_SPOTS).map(([d,w])=>`<div class="outlook-item"><b>${d.slice(5).replace('-','/')} ${w.name}</b>예상 ${w.hi}° / ${w.lo}°</div>`).join('')}
-function renderHourlyWeather(w,target){
-  let box=document.getElementById('hourlyWeather');if(!box)return;
-  let times=w.hourly?.time||[],temps=w.hourly?.temperature_2m||[],feels=w.hourly?.apparent_temperature||[],rain=w.hourly?.precipitation_probability||[],codes=w.hourly?.weather_code||[],wind=w.hourly?.wind_speed_10m||[];
-  const tz=weatherTimeZone(target),nowHour=new Intl.DateTimeFormat('en-GB',{timeZone:tz,hour:'2-digit',hour12:false}).format(new Date());let keep=[];
-  for(let i=0;i<times.length;i++){
-    let h=times[i].slice(11,13);
-    if(target.date===croDate()){if(+h < Math.max(0,+nowHour-1))continue;if(keep.length>=12)break}
-    else{if(+h<7||+h>21||(+h%2))continue;if(keep.length>=8)break}
-    keep.push(i)
-  }
-  box.innerHTML=keep.map(i=>{let h=times[i].slice(11,16),isNow=target.date===croDate()&&times[i].slice(11,13)===String(nowHour).padStart(2,'0');return `<div class="hourly-item ${isNow?'now':''}"><div class="hourly-time">${h}</div><div class="hourly-icon">${weatherIcon(codes[i])}</div><div class="hourly-temp">${Math.round(temps[i])}°</div><div class="hourly-rain">비 ${rain[i]??0}% · ${Math.round(wind[i]??0)}km/h</div><div class="hourly-rain">체감 ${Math.round(feels[i]??temps[i])}°</div></div>`}).join('')
+let weatherSelectedDate='';
+function renderWeatherDayTabs(selected){
+  const box=document.getElementById('weatherDayTabs');if(!box)return;
+  const keys=Object.keys(WEATHER_SPOTS).sort();
+  box.innerHTML=keys.map(d=>`<button type="button" data-weather-date="${d}" class="${d===selected?'active':''}"><b>${d.slice(5).replace('-','/')}</b><span>${WEATHER_SPOTS[d].name}</span></button>`).join('');
 }
-async function refreshWeather(){
-  let t=weatherTarget();if(!t)return;let today=croDate(),diff=daysDiff(t.date,today),main=document.getElementById('liveWeatherMain'),upd=document.getElementById('weatherUpdated'),title=document.getElementById('weatherDetailTitle'),big=document.getElementById('weatherBigTemp'),meta=document.getElementById('weatherDetailMeta'),hourly=document.getElementById('hourlyWeather');
-  renderExpectedOutlook();renderWeatherSources(t);
-  if(diff>15||diff<0){main.textContent=`🌤️ ${t.date.slice(5).replace('-','/')} ${t.name} 예상 ${t.hi}/${t.lo}°`;upd.textContent='장기 참고값 · 상세보기';title.textContent=`${t.name} · 여행 예상날씨`;big.textContent=`${t.hi}°`;meta.textContent=`최고 ${t.hi}° · 최저 ${t.lo}° · 여행일이 예보 범위에 들어오면 시간대별 예보로 자동 전환됩니다.`;if(hourly)hourly.innerHTML='<div class="note" style="min-width:100%">현재는 장기예보 범위 밖입니다. 여행이 가까워지면 이 영역에 시간대별 기온·체감온도·강수확률·바람이 표시됩니다.</div>';return}
+function renderExpectedOutlook(selected){
+  let box=document.getElementById('tripWeatherOutlook');if(!box)return;
+  box.innerHTML=Object.entries(WEATHER_SPOTS).map(([d,w])=>`<button type="button" data-weather-date="${d}" class="outlook-item ${d===selected?'active':''}"><b>${d.slice(5).replace('-','/')} ${w.name}</b><span>기준 ${w.hi}° / ${w.lo}°</span></button>`).join('');
+}
+function renderHourlyWeather(w,target,boxId='hourlyWeather'){
+  let box=document.getElementById(boxId);if(!box)return;
+  let times=w.hourly?.time||[],temps=w.hourly?.temperature_2m||[],feels=w.hourly?.apparent_temperature||[],rain=w.hourly?.precipitation_probability||[],codes=w.hourly?.weather_code||[],wind=w.hourly?.wind_speed_10m||[];
+  const tz=weatherTimeZone(target),nowHour=new Intl.DateTimeFormat('en-GB',{timeZone:tz,hour:'2-digit',hour12:false}).format(new Date());
+  const keep=[];
+  for(let i=0;i<times.length;i++){
+    if(!String(times[i]).startsWith(target.date))continue;
+    keep.push(i);
+  }
+  if(!keep.length){box.innerHTML='<div class="note" style="min-width:100%">시간별 예보가 아직 제공되지 않습니다.</div>';return;}
+  box.innerHTML=keep.map(i=>{let h=times[i].slice(11,16),isNow=target.date===croDate()&&times[i].slice(11,13)===String(nowHour).padStart(2,'0');return `<div class="hourly-item ${isNow?'now':''}"><div class="hourly-time">${h}</div><div class="hourly-icon">${weatherIcon(codes[i])}</div><div class="hourly-temp">${Math.round(temps[i])}°</div><div class="hourly-rain">비 ${rain[i]??0}%</div><div class="hourly-rain">바람 ${Math.round(wind[i]??0)}km/h</div><div class="hourly-rain">체감 ${Math.round(feels[i]??temps[i])}°</div></div>`}).join('');
+}
+async function refreshWeather(dateOverride){
+  if(dateOverride&&WEATHER_SPOTS[dateOverride])weatherSelectedDate=dateOverride;
+  if(!weatherSelectedDate)weatherSelectedDate=weatherTarget()?.date||Object.keys(WEATHER_SPOTS).sort()[0]||'';
+  let t=weatherTarget(weatherSelectedDate);if(!t)return;let today=croDate(),diff=daysDiff(t.date,today),main=document.getElementById('liveWeatherMain'),upd=document.getElementById('weatherUpdated'),title=document.getElementById('weatherDetailTitle'),big=document.getElementById('weatherBigTemp'),meta=document.getElementById('weatherDetailMeta'),hourly=document.getElementById('hourlyWeather');
+  renderWeatherDayTabs(t.date);renderExpectedOutlook(t.date);renderWeatherSources(t);
+  if(diff>15||diff<0){main.textContent=`🌤️ ${t.date.slice(5).replace('-','/')} ${t.name} 예상 ${t.hi}/${t.lo}°`;upd.textContent='예보 범위 밖 · 상세보기';title.textContent=`${t.date.slice(5).replace('-','/')} ${t.name} 시간별 날씨`;big.textContent=`${t.hi}°`;meta.textContent=`현재 시간별 예보 범위 밖 · 범위에 들어오면 1시간 단위로 자동 표시됩니다.`;if(hourly)hourly.innerHTML='<div class="note" style="min-width:100%">시간별 예보 범위에 들어오면 00:00~23:00 예보를 표시합니다.</div>';return}
   try{
     const tz=weatherTimeZone(t),url=`https://api.open-meteo.com/v1/forecast?latitude=${t.lat}&longitude=${t.lon}&hourly=temperature_2m,apparent_temperature,precipitation_probability,weather_code,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,weather_code&timezone=${encodeURIComponent(tz)}&start_date=${t.date}&end_date=${t.date}`;
     let w=await tinyFetch(url),hi=Math.round(w.daily.temperature_2m_max[0]),lo=Math.round(w.daily.temperature_2m_min[0]),rain=w.daily.precipitation_probability_max?.[0]??0,code=w.daily.weather_code?.[0]??1,firstTemp=w.hourly?.temperature_2m?.[0];
-    main.textContent=`${weatherIcon(code)} ${t.name} ${hi}/${lo}° · 비 ${rain}%`;upd.textContent=fmtFetchTime()+' 갱신 · 상세보기';title.textContent=`${t.date.slice(5).replace('-','/')} ${t.name} 시간대별 예보`;big.textContent=(firstTemp!=null?Math.round(firstTemp):hi)+'°';meta.textContent=`최고 ${hi}° · 최저 ${lo}° · 최대 강수확률 ${rain}% · 현지시간 기준 · ${fmtFetchTime()} 갱신${diff>7?' · 장기예보 변동 가능':''}`;renderHourlyWeather(w,t);
+    main.textContent=`${weatherIcon(code)} ${t.name} ${hi}/${lo}° · 비 ${rain}%`;upd.textContent=fmtFetchTime()+' 갱신 · 상세보기';title.textContent=`${t.date.slice(5).replace('-','/')} ${t.name} 시간별 예보`;big.textContent=(firstTemp!=null?Math.round(firstTemp):hi)+'°';meta.textContent=`최고 ${hi}° · 최저 ${lo}° · 최대 강수확률 ${rain}% · 예보시각 현지시간 · ${fmtFetchTime()} 갱신${diff>7?' · 장기예보 변동 가능':''}`;renderHourlyWeather(w,t);
   }catch(e){main.textContent=`🌤️ ${t.name} 예상 ${t.hi}/${t.lo}°`;upd.textContent=(navigator.onLine===false?'오프라인 · 참고값':'예보 연결 실패 · 참고값');title.textContent=t.name+' 예상날씨';big.textContent=t.hi+'°';meta.textContent=(navigator.onLine===false?'인터넷 연결이 없어 저장·참고값을 표시합니다. · ':'')+`예상 최고 ${t.hi}° · 최저 ${t.lo}°`;if(hourly)hourly.innerHTML='<div class="note" style="min-width:100%">시간대별 예보를 불러오지 못했습니다. 아래 공식기관·비교예보를 확인해 주세요.</div>'}
 }
 async function loadDayWeather(i){
   let d=days[i],box=document.getElementById(`dayWeather-${i}`);if(!box)return;let w=WEATHER_SPOTS[d.date];if(!w){box.innerHTML='<div class="note">날씨 정보가 없습니다.</div>';return}
   let diff=daysDiff(d.date,croDate());if(diff>15||diff<0){box.innerHTML=expectedHourlyHtml(d);return}
-  box.innerHTML='<div class="small muted">일별 예보 불러오는 중…</div>';
+  box.innerHTML='<div class="small muted">시간별 예보 불러오는 중…</div>';
   try{
-    const tz=weatherTimeZone(w),url=`https://api.open-meteo.com/v1/forecast?latitude=${w.lat}&longitude=${w.lon}&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,weather_code&timezone=${encodeURIComponent(tz)}&start_date=${d.date}&end_date=${d.date}`;
+    const tz=weatherTimeZone(w),url=`https://api.open-meteo.com/v1/forecast?latitude=${w.lat}&longitude=${w.lon}&hourly=temperature_2m,apparent_temperature,precipitation_probability,weather_code,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,weather_code&timezone=${encodeURIComponent(tz)}&start_date=${d.date}&end_date=${d.date}`;
     let j=await tinyFetch(url),hi=Math.round(j.daily?.temperature_2m_max?.[0]),lo=Math.round(j.daily?.temperature_2m_min?.[0]),rain=Math.round(j.daily?.precipitation_probability_max?.[0]??0),code=j.daily?.weather_code?.[0]??1;
-    box.innerHTML=`<div class="day-weather-head"><b>${w.name} · 날씨</b><small>현지시간 기준</small></div><div class="day-weather-trend is-live"><strong>${weatherIcon(code)} ${hi}° / ${lo}° · 비 ${rain}%</strong><span><a href="#weatherDetail">전체 메뉴에서 시간대별 예보 보기</a></span></div>`;
+    box.innerHTML=`<div class="day-weather-head"><div><b>${w.name} · 시간별 날씨</b><small> ${weatherIcon(code)} 최고 ${hi}° · 최저 ${lo}° · 비 ${rain}%</small></div><small>현지시간 · 갱신 ${fmtFetchTime()}</small></div><div class="day-hourly-weather" id="dayHourly-${i}"></div>`;
+    renderHourlyWeather(j,{date:d.date,...w},`dayHourly-${i}`);
   }catch(e){box.innerHTML=expectedHourlyHtml(d)}
 }
 
@@ -106,6 +119,23 @@ function _scheduleEventsWithoutMealDup(d){
     });
   });
 }
+
+function _timeKey(v){
+  const s=String(v||'');const m=s.match(/(\d{1,2}):(\d{2})/);if(m)return +m[1]*60 + +m[2];
+  if(/조식/.test(s))return 7*60;if(/오전/.test(s))return 10*60;if(/중식|자유시간/.test(s))return 12*60+30;if(/오후/.test(s))return 15*60;if(/석식/.test(s))return 19*60;if(/밤|석식 후/.test(s))return 21*60;return 12*60;
+}
+function _mealForEvent(date,e){
+  const list=Array.isArray(window.CRO_MEALS)?window.CRO_MEALS.filter(m=>m.date===date):[];
+  const tm=String(e?.[0]||''),tx=String(e?.[1]||'');
+  return list.find(m=>(!m.free&&tm===String(m.time))||(m.free&&/자유식/.test(tx)))||null;
+}
+function _scheduleEventHtml(d,e,k){
+  const m=_mealForEvent(d.date,e),isBreakfast=/조식/.test(String(e?.[1]||'')), mealCls=m?(m.free?' meal-free':m.type==='중식'?' meal-lunch':' meal-dinner'):(isBreakfast?' meal-breakfast':'');
+  const menu=m&&!m.free?(m.menuKo?.length?m.menuKo:m.menu||[]):[];
+  const map=m?.mapQuery?`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(m.mapQuery)}`:'';
+  const extra=m?`<div class="agenda-meal-extra">${menu.length?`<span>${menu.slice(0,3).map(escHotel).join(' · ')}</span>`:(m.free?'<span>자유식</span>':m.menuNote?`<span>${escHotel(m.menuNote)}</span>`:'')}<div>${map?`<a href="${map}" target="_blank" rel="noopener">Google Maps</a>`:''}${m.website?`<a href="${escHotel(m.website)}" target="_blank" rel="noopener">웹사이트</a>`:''}</div></div>`:'';
+  return `<div class="event numbered-event${mealCls}"><span class="event-no">${k+1}</span><span class="time">${escHotel(e[0])}</span><div class="event-copy"><b>${escHotel(e[1])}</b>${m?`<small>${escHotel(m.type)} · ${escHotel(m.name)}</small>`:''}${extra}</div></div>`;
+}
 function renderDays(){
   let tabs=document.getElementById('dayTabs'),wrap=document.getElementById('dayPanels');tabs.innerHTML='';wrap.innerHTML='';
   days.forEach((d,i)=>{
@@ -114,22 +144,23 @@ function renderDays(){
     let flow=(d.flow||[]).map((x,j)=>`<span class="flow-stop"><span class="flow-pill"><i aria-hidden="true">${j+1}</i><span>${x}</span></span></span>`).join('');
     let moves=(d.moves||[]).map(m=>`<div class="move-row"><span class="move-mode">${m[0]}</span><span class="move-route">${m[1]}</span><span class="move-time">${m[2]}</span></div>`).join('');
     let gl=(d.guides||[]).map(g=>`<a href="${g[1]}">📖 ${g[0]} 상세가이드</a>`).join('');
-    p.innerHTML=`${dayHotelHtml(d.date)}<div class="day-summary"><h3>${d.title}</h3><p><b>이동동선</b> ${d.route}</p><div class="day-flow">${flow}</div><div class="day-guide-links">${gl}</div>${d.map?`<div class="btns"><a class="btn" target="_blank" rel="noopener" href="${d.map}">📍 Google 전체 동선</a></div>`:''}</div><div class="day-weather-box" id="dayWeather-${i}">${expectedHourlyHtml(d)}</div><div class="day-main-grid"><div class="card"><h3>일정</h3><div class="timeline">${_scheduleEventsWithoutMealDup(d).map(e=>`<div class="event"><span class="time">${e[0]}</span>${e[1]}</div>`).join('')}</div></div><div class="card"><h3>구간별 이동시간</h3><div class="move-list">${moves}</div></div></div>${window.dayPhotoGuideHtml?window.dayPhotoGuideHtml(d.date):''}${dayAttractionHtml(d)}`;
+    p.innerHTML=`<div class="day-summary"><h3>${d.title}</h3><div class="day-flow">${flow}</div><div class="day-guide-links">${gl}</div>${d.map?`<div class="btns"><a class="btn" target="_blank" rel="noopener" href="${d.map}">📍 Google 전체 동선</a></div>`:''}</div><div class="day-weather-box" id="dayWeather-${i}">${expectedHourlyHtml(d)}</div><div class="day-main-grid"><div class="card day-agenda-card"><h3>시간순 일정</h3><div class="timeline">${(d.events||[]).map((e,k)=>_scheduleEventHtml(d,e,k)).join('')}</div></div><div class="card"><h3>이동시간</h3><div class="move-list">${moves}</div></div></div>${dayHotelHtml(d.date)}${window.dayPhotoGuideHtml?window.dayPhotoGuideHtml(d.date):''}${dayAttractionHtml(d)}`;
     wrap.appendChild(p)
   });
   let idx=days.findIndex(x=>x.date===localDate());selectDay(idx>=0?idx:0);
 }
 function selectDay(i){document.querySelectorAll('.tab').forEach((x,j)=>x.classList.toggle('active',i===j));document.querySelectorAll('.panel').forEach((x,j)=>x.classList.toggle('active',i===j));loadDayWeather(i);let p=document.querySelectorAll('.panel')[i];if(p&&location.hash==='#schedule')setTimeout(()=>p.scrollIntoView({behavior:'smooth',block:'start'}),40)}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-weather-date]');if(!b)return;const d=b.dataset.weatherDate;if(WEATHER_SPOTS[d]){weatherSelectedDate=d;refreshWeather(d)}});
 // weather / fx lightweight
 let autoBytes=0;
 function addAuto(n){autoBytes+=n;let el=document.getElementById('liveData');if(el)el.textContent='🌐 자동데이터 '+(autoBytes/1024).toFixed(1)+' KB'}
 async function tinyFetch(url){let h=0;for(let i=0;i<url.length;i++)h=((h<<5)-h+url.charCodeAt(i))|0;let k='cro.http.'+Math.abs(h),now=Date.now(),saved=null;try{saved=JSON.parse(localStorage.getItem(k)||'null')}catch(_){}if(saved&&now-(saved.at||0)<3600000)return saved.data;if(navigator.onLine===false){if(saved?.data)return saved.data;let e=Error('오프라인 · 실시간 데이터 연결 필요');e.code='OFFLINE';throw e}try{let r=await fetch(url,{cache:'default'}),tx=await r.text();addAuto(tx.length);if(!r.ok)throw Error(r.status);let data=JSON.parse(tx);try{localStorage.setItem(k,JSON.stringify({at:now,data}))}catch(_){}return data}catch(e){if(saved?.data)return saved.data;throw e}}
 
 function croDate(){return new Intl.DateTimeFormat('en-CA',{timeZone:(window.GSPA_TRIP_TIMEZONE||'Europe/Zagreb'),year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date())}
-function weatherTarget(){let d=croDate(),keys=Object.keys(WEATHER_SPOTS).sort();if(WEATHER_SPOTS[d])return {date:d,...WEATHER_SPOTS[d]};if(!keys.length)return null;if(d<keys[0])return {date:keys[0],...WEATHER_SPOTS[keys[0]]};let k=keys[keys.length-1];return {date:k,...WEATHER_SPOTS[k]}}
+function weatherTarget(preferred=''){let d=preferred||croDate(),keys=Object.keys(WEATHER_SPOTS).sort();if(WEATHER_SPOTS[d])return {date:d,...WEATHER_SPOTS[d]};if(!keys.length)return null;if(d<keys[0])return {date:keys[0],...WEATHER_SPOTS[keys[0]]};let k=keys[keys.length-1];return {date:k,...WEATHER_SPOTS[k]}}
 function weatherIcon(code){if(code===0)return'☀️';if([1,2].includes(code))return'🌤️';if(code===3)return'☁️';if([45,48].includes(code))return'🌫️';if([51,53,55,61,63,65,80,81,82].includes(code))return'🌧️';if([71,73,75,77,85,86].includes(code))return'🌨️';if([95,96,99].includes(code))return'⛈️';return'🌤️'}
 function daysDiff(a,b){return Math.round((new Date(a+'T00:00:00Z')-new Date(b+'T00:00:00Z'))/86400000)}
-function fmtFetchTime(){return new Intl.DateTimeFormat('ko-KR',{timeZone:(window.GSPA_TRIP_TIMEZONE||'Europe/Zagreb'),month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}).format(new Date())}
+function fmtFetchTime(){return '한국 '+new Intl.DateTimeFormat('ko-KR',{timeZone:'Asia/Seoul',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(new Date())}
 renderDays();
 renderHotels();
 // FX retrieval is owned by fx-service.js; do not hide errors with a fixed rate.

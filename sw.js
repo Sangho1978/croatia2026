@@ -1,4 +1,4 @@
-const STATIC='gspa-static-v61';
+const STATIC='gspa-static-v62';
 const GUIDE='gspa-guidebook-shared-v2';
 const CORE=[
   "./index.html",
@@ -28,6 +28,7 @@ const CORE=[
   "./assets/icons/turkiye1-512.png",
   "./css/action-first.css",
   "./css/app.css",
+  "./css/mix62-clean-ui.css",
   "./css/attendance-prep.css",
   "./css/compact-header.css",
   "./css/expense-ledger.css",

@@ -1,3 +1,4 @@
+/* MIX62: distance is always based on the logged-in user current/active cached fix; location map focuses on active shared positions. */
 /* MIX50. App-wide session (not tied to any route). Based on MIX03. Per-login location session, explicit OFF, group colour and distance.
  * Uses the original member slots; does not reinterpret slot names as groups.
  * A visible web page can refresh every five minutes, not guarantee background GPS.
@@ -14,6 +15,11 @@
   const enabled=r=>valid(r)&&r.sharing!==false&&age(r)<=LEASE&&(!r.expiresAt||r.expiresAt>Date.now());
   const same=(n,u)=>n===epoch&&currentUser?.slot===u?.slot;
   function latestSelf(){return fix&&Date.now()-fix.ts<=FRESH?fix:null}
+  function referenceSelf(){
+    const live=latestSelf();if(live)return live;
+    const cached=currentUser?.slot?locCache[currentUser.slot]:null;
+    return valid(cached)&&cached.sharing!==false&&age(cached)<=LEASE?cached:null;
+  }
   function textClock(ts){return typeof ts==='number'&&window.AppTime?AppTime.label(ts):(typeof ts==='number'?new Date(ts).toLocaleString('ko-KR'):'-')}
   function locationRegion(r){
     if(!valid(r))return {label:'',zone:''};const lat=+r.lat,lng=+r.lng;
@@ -25,11 +31,12 @@
   function locationClock(r){if(!valid(r))return '-';const z=locationRegion(r);if(window.AppTime)return `${z.label} ${AppTime.short(r.ts,z.zone)}`;return `${z.label} ${new Date(r.ts).toLocaleString('ko-KR',{timeZone:z.zone,month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'})}`;}
   function distance(a,b){const r=x=>x*Math.PI/180,p=r(b.lat-a.lat),q=r(b.lng-a.lng),v=Math.sin(p/2)**2+Math.cos(r(a.lat))*Math.cos(r(b.lat))*Math.sin(q/2)**2;return 6371000*2*Math.asin(Math.sqrt(Math.min(1,Math.max(0,v))))}
   function distanceInfo(r,u){
-    if(currentUser?.slot===u?.slot)return {label:'\ub098',metres:0};
-    if(!enabled(r))return {label:valid(r)?'\uac70\ub9ac \ubcf4\ub958':'\ubbf8\uacf5\uc720',metres:null};
-    const me=latestSelf();if(!me)return {label:'\ub0b4 \uc704\uce58 \ud655\uc778 \ud544\uc694',metres:null};
+    if(currentUser?.slot===u?.slot)return {label:'나 · 기준점',metres:0};
+    if(!enabled(r))return {label:valid(r)?'OFF · 이전 위치':'미공유',metres:null};
+    const me=referenceSelf();if(!me)return {label:'내 위치 ON 필요',metres:null};
     const m=distance(me,r),near=m<Math.max(me.accuracy||0,r.accuracy||0);
-    return {label:(age(r)>FRESH?'\uc774\uc804 \uc704\uce58 \uae30\uc900 ':'')+(near?'\uc624\ucc28\ubc94\uc704 \ub0b4 ':'')+'\uc57d '+(m<1000?Math.round(m/10)*10+' m':(m/1000).toFixed(1)+' km'),metres:m};
+    const value=m<1000?Math.round(m/10)*10+' m':(m/1000).toFixed(1)+' km';
+    return {label:(near?'오차범위 · ':'')+'나와 '+value,metres:m};
   }
   function stateText(){
     if(!currentUser)return 'OFF \u00b7 \ub85c\uadf8\uc778 \uc804';
@@ -48,7 +55,7 @@
     const quick=document.getElementById('briefLocationLink');if(quick){quick.disabled=!currentUser;quick.dataset.state=want?'on':'off';quick.setAttribute('aria-checked',String(!!want));quick.setAttribute('aria-label',want?'위치공유 끄기 · 위치기록 24시간 보호':'위치공유 켜기 · 위치기록 24시간 보호');}
     const state=document.getElementById('locShareStatus');if(state)state.textContent=label+(message?' \u2014 '+message:'');
     const home=document.getElementById('todayLocationState');if(home)home.textContent=label;
-    const basis=document.getElementById('locationDistanceBasis');if(basis)basis.textContent=(currentUser?.name||'\ub85c\uadf8\uc778 \uc0ac\uc6a9\uc790')+' \uae30\uc900 \uc9c1\uc120\uac70\ub9ac'+(fix?' \u00b7 '+locationClock(fix)+' \u00b7 GPS \uc57d '+Math.round(fix.accuracy||0)+' m':' \u00b7 \uc704\uce58 \ud5c8\uc6a9 \ud6c4 \uacc4\uc0b0')+'\n\ub3c4\ubcf4\uac70\ub9ac\uac00 \uc544\ub2d9\ub2c8\ub2e4. 5\ubd84 \ucd08\uacfc \uc0c1\ub300 \uc704\uce58\ub294 \uc2dc\uac01\uc744 \ud655\uc778\ud558\uc138\uc694.';
+    const basis=document.getElementById('locationDistanceBasis');if(basis){const ref=referenceSelf();basis.textContent=(currentUser?.name||'로그인 사용자')+' 기준 직선거리'+(ref?' · '+locationClock(ref)+' · GPS 약 '+Math.round(ref.accuracy||0)+' m':' · 내 위치 ON 후 계산')+'\n지도와 명단의 거리 = 현재 로그인 사용자 기준';}
     window.dispatchEvent(new CustomEvent('cro-location-state'));
   }
   function permissionError(e){if(e.code===1){phase='permission';message='\ube0c\ub77c\uc6b0\uc800\uc758 \uc0ac\uc774\ud2b8 \uc124\uc815\uc5d0\uc11c \uc704\uce58\ub97c \ud5c8\uc6a9\ud574 \uc8fc\uc138\uc694.'}else{phase='error';message=e.message||'\uc704\uce58 \ud655\uc778\uc5d0 \uc2e4\ud328\ud588\uc2b5\ub2c8\ub2e4.'}}
@@ -240,7 +247,7 @@
       html+=`<section class="loc5-group" data-location-group="${g}" style="--group:${locGroupColor(g)}"><header><h4>${g?g+'\uc870':'\uc778\uc194 \uad50\uc218'}</h4><span><b>ON ${online}</b> \u00b7 OFF/\ubbf8\ud655\uc778 ${offline}</span></header><div class="loc5-members">`;
       for(const u of list){
         const r=locCache[u.slot],di=distanceInfo(r,u),s=visibleState(u,r),me=u.slot===currentUser?.slot;
-        const dist=di.label.replace('\uc774\uc804 \uc704\uce58 \uae30\uc900 ','').replace('\uc624\ucc28\ubc94\uc704 \ub0b4 ','');
+        const dist=di.label;
         const meta=rosterMode==='detail'?`${statusOf(r)}${valid(r)?' \u00b7 '+locationClock(r)+' ('+ago(r.ts)+') \u00b7 GPS \uc57d '+Math.round(r.accuracy||0)+'m':''}`:(valid(r)?locationClock(r):s.detail);
         html+=`<button class="loc5-person ${u.leader?'is-leader':''} ${s.on?'is-on':'is-off'}" type="button" data-location-slot="${u.slot}" onclick="locOpenPerson('${u.slot}')" aria-label="${esc(u.name)}, ${s.label}, ${esc(di.label)}, \uc0c1\uc138\ubcf4\uae30"><span class="loc5-name"><b>${esc(u.name)}</b>${u.leader?'<small>\uc870\uc7a5</small>':''}${me?'<small>\ub098</small>':''}</span><span class="loc5-status">${s.label}</span><span class="distance-value" data-metres="${di.metres??''}" title="${esc(di.label)}">${esc(dist)}</span><span class="loc5-meta">${esc(meta)}</span></button>`;
       }
@@ -261,13 +268,13 @@
     const g=e.target.closest('[data-loc-group]');if(g){const f=g.dataset.locGroup;locSetFilter(f,document.querySelector('#locFilters [data-filter="'+f+'"]'));}
   });
   window.locOpenPerson=async function(slot){const u=APP_BY_SLOT[slot],r=locCache[slot],box=document.getElementById('locPersonDetail');if(!u||!box)return;const d=distanceInfo(r,u),me=slot===currentUser?.slot;box.classList.add('show');let actions='';if(me){actions=`<button class="primary" onclick="locLoadHistory('${slot}',true)">🗺 Google 지도 · 내 24시간 이동이력</button>`}else if(valid(r)){actions=`<a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${r.lat},${r.lng}">Google 지도 · 현재 위치</a>`}box.innerHTML=`<div class="loc-simple-head"><h3>${esc(u.name)} · ${userGroupText(u)}</h3><button type="button" onclick="this.closest('#locPersonDetail').classList.remove('show')">닫기</button></div><b>${esc(d.label)}${d.metres!==null&&!Number.isNaN(d.metres)?' · 직선거리':''}</b><p>${esc(statusOf(r))}${valid(r)?'<br>'+locationClock(r)+' ('+ago(r.ts)+') · GPS 약 '+Math.round(r.accuracy||0)+'m':'<br>최근 24시간 내 공유 위치 없음'}</p>${me?'<p class="small muted">이동이력은 본인만 최근 24시간 범위로 지도에서 확인할 수 있습니다.</p>':''}${actions?`<div class="actions">${actions}</div>`:''}`;box.scrollIntoView({behavior:'smooth',block:'nearest'});};
-  function mapLabel(u,r){return esc(u.name)+' \u00b7 '+esc(distanceInfo(r,u).label)}
+  function mapLabel(u,r){const d=distanceInfo(r,u);return esc(u.name)+' · '+esc(d.label)}
   function popup(u,r){return `<b>${esc(u.name)} \u00b7 ${u.group?u.group+'\uc870':'\uad50\uc218'}</b><p>${esc(distanceInfo(r,u).label)}<br>${locationClock(r)} (${ago(r.ts)})<br>GPS \uc57d ${Math.round(r.accuracy||0)} m</p>`}
-  window.makeGoogleOverlay=function(u,r){class M extends google.maps.OverlayView{onAdd(){const d=document.createElement('div');d.className='g-overlay';d.innerHTML=`<div class="group-marker" style="--group:${locGroupColor(u.group)}"><span class="group-marker-label">${mapLabel(u,r)}</span></div>`;d.onclick=()=>{googleInfo.setContent(popup(u,r));googleInfo.setPosition({lat:r.lat,lng:r.lng});googleInfo.open(mapObj)};this.div=d;this.getPanes().overlayMouseTarget.appendChild(d)}draw(){const p=this.getProjection().fromLatLngToDivPixel(new google.maps.LatLng(r.lat,r.lng));if(this.div){this.div.style.left=p.x+'px';this.div.style.top=p.y+'px'}}onRemove(){this.div?.remove()}}const o=new M();o.setMap(mapObj);return o;};
+  window.makeGoogleOverlay=function(u,r){class M extends google.maps.OverlayView{onAdd(){const d=document.createElement('div');d.className='g-overlay';d.innerHTML=`<div class="group-marker ${u.slot===currentUser?.slot?'is-self':''}" style="--group:${locGroupColor(u.group)}"><span class="group-marker-label">${mapLabel(u,r)}</span></div>`;d.onclick=()=>{googleInfo.setContent(popup(u,r));googleInfo.setPosition({lat:r.lat,lng:r.lng});googleInfo.open(mapObj)};this.div=d;this.getPanes().overlayMouseTarget.appendChild(d)}draw(){const p=this.getProjection().fromLatLngToDivPixel(new google.maps.LatLng(r.lat,r.lng));if(this.div){this.div.style.left=p.x+'px';this.div.style.top=p.y+'px'}}onRemove(){this.div?.remove()}}const o=new M();o.setMap(mapObj);return o;};
   let fitKey='';
-  window.updateMarkers=function(){if(!mapObj)return;const users=Object.entries(locCache).filter(([k,r])=>APP_BY_SLOT[k]&&locUserMatchesFilter(APP_BY_SLOT[k])&&valid(r)&&r.sharing!==false&&age(r)<SHOWMAX);const key=locMapEngine+'|'+locFilter+'|'+users.map(([k])=>k).sort().join(',');
+  window.updateMarkers=function(){if(!mapObj)return;const users=Object.entries(locCache).filter(([k,r])=>APP_BY_SLOT[k]&&locUserMatchesFilter(APP_BY_SLOT[k])&&valid(r)&&r.sharing!==false&&(enabled(r)||k===currentUser?.slot));const key=locMapEngine+'|'+locFilter+'|'+users.map(([k])=>k).sort().join(',');
     if(locMapEngine==='google'&&window.google?.maps&&mapObj.getDiv){googleOverlays.forEach(x=>x.setMap(null));googleOverlays=[];const bounds=new google.maps.LatLngBounds();users.forEach(([k,r])=>{googleOverlays.push(makeGoogleOverlay(APP_BY_SLOT[k],r));bounds.extend({lat:r.lat,lng:r.lng})});if(users.length&&key!==fitKey){if(users.length===1){mapObj.setCenter(bounds.getCenter());mapObj.setZoom(16)}else mapObj.fitBounds(bounds,55);fitKey=key}}
-    else if(locMapEngine==='leaflet'&&window.L&&mapObj.invalidateSize){markers.forEach(m=>mapObj.removeLayer(m));markers=[];const pts=[];users.forEach(([k,r])=>{const u=APP_BY_SLOT[k],icon=L.divIcon({className:'dual-leaf',html:`<div class="group-marker" style="--group:${locGroupColor(u.group)}"><span class="group-marker-label">${mapLabel(u,r)}</span></div>`,iconSize:[24,24],iconAnchor:[12,12]});markers.push(L.marker([r.lat,r.lng],{icon}).addTo(mapObj).bindPopup(popup(u,r)));pts.push([r.lat,r.lng])});if(pts.length&&key!==fitKey){if(pts.length===1)mapObj.setView(pts[0],16);else mapObj.fitBounds(pts,{padding:[55,55],maxZoom:17});fitKey=key}}
+    else if(locMapEngine==='leaflet'&&window.L&&mapObj.invalidateSize){markers.forEach(m=>mapObj.removeLayer(m));markers=[];const pts=[];users.forEach(([k,r])=>{const u=APP_BY_SLOT[k],icon=L.divIcon({className:'dual-leaf',html:`<div class="group-marker ${u.slot===currentUser?.slot?'is-self':''}" style="--group:${locGroupColor(u.group)}"><span class="group-marker-label">${mapLabel(u,r)}</span></div>`,iconSize:[24,24],iconAnchor:[12,12]});markers.push(L.marker([r.lat,r.lng],{icon}).addTo(mapObj).bindPopup(popup(u,r)));pts.push([r.lat,r.lng])});if(pts.length&&key!==fitKey){if(pts.length===1)mapObj.setView(pts[0],16);else mapObj.fitBounds(pts,{padding:[55,55],maxZoom:17});fitKey=key}}
   };
   window.updateLeafletMarkers=()=>updateMarkers();
   function changed(){

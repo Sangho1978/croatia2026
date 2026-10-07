@@ -1,3 +1,4 @@
+/* MIX62: chronological numbering by explicit route-point order. */
 /* MIX45 route map engine.
  * Preferred engine: Google Maps.
  * Fallback while Google is unavailable: OpenStreetMap/Leaflet.
@@ -10,6 +11,7 @@
   const records=new Map(); // box -> {engine,map,markers,line,retryTimer,pts,opt}
   let leafletPromise=null;
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const ordered=pts=>window.GSPA_orderRoutePoints?window.GSPA_orderRoutePoints(pts):[...(pts||[])].sort((a,b)=>(Number(a.order)||999)-(Number(b.order)||999));
 
   function markerTone(p){
     if(p?.kind!=='meal')return {cls:'route-normal',color:'#1769aa'};
@@ -43,7 +45,7 @@
     if(!box)return 'schematic';
     cleanupRecord(box);
     box.innerHTML='';
-    const list=Array.isArray(pts)?pts.filter(p=>Number.isFinite(+p.lat)&&Number.isFinite(+p.lng)):[];
+    const list=ordered(Array.isArray(pts)?pts:[]).filter(p=>Number.isFinite(+p.lat)&&Number.isFinite(+p.lng));
     if(!list.length){box.innerHTML='<div class="route-local-empty">표시할 이동지점이 없습니다.</div>';return 'schematic';}
     const W=640,H=300,pad=42;
     let minX=Math.min(...list.map(p=>+p.lng)),maxX=Math.max(...list.map(p=>+p.lng));
@@ -90,7 +92,7 @@
   }
 
   async function drawLeaflet(box,pts,opt={}){
-    const list=(pts||[]).filter(p=>Number.isFinite(+p.lat)&&Number.isFinite(+p.lng));
+    const list=ordered(pts).filter(p=>Number.isFinite(+p.lat)&&Number.isFinite(+p.lng));
     if(!list.length)return schematic(box,list,opt.label,'표시할 이동지점이 없습니다.');
     if(navigator.onLine===false)return schematic(box,list,opt.label,'오프라인 동선도 · 지도 타일은 인터넷 연결이 필요합니다.');
     try{await ensureLeaflet()}catch(_){return schematic(box,list,opt.label,'Google Maps와 OpenStreetMap을 모두 불러오지 못했습니다.');}
@@ -128,7 +130,7 @@
   }
 
   async function drawGoogle(box,pts,opt={}){
-    const list=(pts||[]).filter(p=>Number.isFinite(+p.lat)&&Number.isFinite(+p.lng));
+    const list=ordered(pts).filter(p=>Number.isFinite(+p.lat)&&Number.isFinite(+p.lng));
     if(!list.length)return 'schematic';
     cleanupRecord(box);
     box.innerHTML='';
@@ -167,7 +169,7 @@
 
   async function render(box,pts,opt={},internal={}){
     if(!box)return 'schematic';
-    const list=(pts||[]).filter(p=>Number.isFinite(+p.lat)&&Number.isFinite(+p.lng));
+    const list=ordered(pts).filter(p=>Number.isFinite(+p.lat)&&Number.isFinite(+p.lng));
     if(!list.length)return schematic(box,list,opt.label,'표시할 이동지점이 없습니다.');
     if(navigator.onLine===false)return schematic(box,list,opt.label,'오프라인 동선도 · 인터넷 연결 후 Google Maps를 다시 시도합니다.');
 

@@ -1,0 +1,93 @@
+/* MIX62 · current UI cleanup: same features, clearer content separation. */
+:root{--m62-bg:#f4f6f8;--m62-card:#fff;--m62-line:#dfe6ec;--m62-navy:#173f67;--m62-blue:#226cc4;--m62-teal:#0c7c73;--m62-orange:#e88724;--m62-purple:#7653c7;--m62-muted:#687d89}
+body.mixed-app{background:var(--m62-bg)}
+body.mixed-app main{max-width:760px;margin:0 auto;padding-left:14px!important;padding-right:14px!important}
+body.mixed-app .card{box-shadow:0 3px 12px rgba(34,58,78,.055)!important;border-color:var(--m62-line)!important;border-radius:16px!important}
+body.mixed-app .app-view>h2{font-size:1.35rem!important;letter-spacing:-.025em;margin-bottom:12px!important}
+body.mixed-app .mix-view-heading{margin-bottom:14px!important}.mix-view-heading small{letter-spacing:.08em}.mix-view-heading p{margin-top:4px!important;font-size:.75rem!important;color:var(--m62-muted)!important}
+
+/* Today: one primary flow. Remove decorative/duplicated labels while preserving actions. */
+#today>h2{margin-bottom:10px!important}
+#today .ops-kicker{display:none!important}
+#today .ops-date{font-size:.72rem!important;color:var(--m62-muted)!important}
+#today .ops-route{margin:5px 0 8px!important}
+#today .ops-next-card{border-left:5px solid var(--m62-blue)!important;background:#fff!important}
+#today .ops-action-first{margin-top:9px!important}
+#today .ops-status-grid{gap:7px!important;margin-top:9px!important}
+#today .ops-status{min-height:58px!important;padding:9px 10px!important;background:#f9fbfc!important}
+#today .ops-status span{font-size:1.05rem!important}
+#today .ops-status b{font-size:.74rem!important}
+#today .ops-status small{font-size:.63rem!important}
+#today .ops-brief-card{margin-top:12px!important}.ops-brief-head span{display:none!important}
+#today .ops-brief-head h3{font-size:.92rem!important}.ops-note{font-size:.72rem!important;line-height:1.5!important}
+#today .today-booklet-row{font-size:.68rem!important;padding:8px 10px!important}
+
+/* Schedule: clear blocks: day > weather > route > agenda > hotel > guide */
+#schedule .schedule-time-basis{margin:-3px 0 10px!important;padding:8px 10px!important;border-radius:10px!important;background:#eef4f8!important;color:#516c7a!important;font-size:.68rem!important}
+#schedule .tabs{margin-bottom:10px!important}
+#schedule .panel{display:none!important;gap:12px!important}
+#schedule .panel.active{display:grid!important}
+#schedule .day-summary{order:1!important;border-left:5px solid var(--m62-navy)!important;background:#fff!important;padding:14px!important;border-radius:16px!important}
+#schedule .day-summary h3{font-size:1.05rem!important;margin:0 0 10px!important}
+#schedule .day-summary>p{display:none!important}
+#schedule .day-flow{display:flex!important;overflow:auto!important;gap:6px!important;padding-bottom:3px!important;scrollbar-width:none}.day-flow::-webkit-scrollbar{display:none}
+#schedule .flow-pill{white-space:nowrap!important;min-height:34px!important;padding:6px 9px!important;border-radius:999px!important;background:#f1f5f8!important;border:1px solid #e0e8ed!important}
+#schedule .flow-pill i{background:var(--m62-navy)!important}
+#schedule .day-guide-links{margin-top:8px!important}
+#schedule .day-guide-links a{font-size:.69rem!important}
+#schedule .schedule-route-panel{order:2!important;margin:0!important;border-left:5px solid var(--m62-teal)!important;background:#fff!important}
+#schedule .day-weather-box{order:3!important;margin:0!important;padding:12px!important;border-left:5px solid #3a8cc4!important;background:#fbfdff!important}
+#schedule .day-main-grid{order:4!important;margin:0!important;display:grid!important;grid-template-columns:1fr!important;gap:10px!important}
+#schedule .day-hotel-card{order:5!important;margin:0!important;border-left:5px solid var(--m62-purple)!important;background:#fcfbff!important}
+#schedule .photo-plan-day{order:6!important}
+#schedule .day-attraction-title{order:7!important;margin:2px 0 0!important}
+#schedule .day-attraction-grid{order:8!important}
+#schedule .schedule-meals-block{display:none!important}
+#schedule .day-main-grid>.card{margin:0!important}
+#schedule .day-agenda-card{border-left:5px solid #667d8c!important}
+#schedule .day-agenda-card h3,#schedule .day-main-grid>.card>h3{font-size:.9rem!important;margin:0 0 9px!important}
+#schedule .timeline{display:flex!important;flex-direction:column!important;gap:0!important}
+#schedule .numbered-event{display:grid!important;grid-template-columns:28px 58px minmax(0,1fr)!important;gap:8px!important;align-items:flex-start!important;padding:10px 8px!important;border-bottom:1px solid #e8edf1!important;border-left:3px solid transparent!important}
+#schedule .numbered-event:last-child{border-bottom:0!important}
+#schedule .event-no{display:grid!important;place-items:center!important;width:24px!important;height:24px!important;border-radius:50%!important;background:#eaf0f4!important;color:#294d61!important;font-size:.68rem!important;font-weight:900!important}
+#schedule .numbered-event .time{font-size:.69rem!important;font-weight:900!important;color:#486273!important;padding-top:3px!important}
+#schedule .event-copy{min-width:0!important}.event-copy>b{display:block!important;font-size:.78rem!important;line-height:1.45!important}.event-copy>small{display:block!important;margin-top:2px!important;color:#6d7f89!important;font-size:.63rem!important}
+#schedule .numbered-event.meal-lunch{background:#fff9ef!important;border-left-color:var(--m62-orange)!important}
+#schedule .numbered-event.meal-dinner{background:#faf7ff!important;border-left-color:var(--m62-purple)!important}
+#schedule .numbered-event.meal-free{background:#f5f7f8!important;border-left-color:#87949c!important}
+#schedule .agenda-meal-extra{margin-top:5px!important;font-size:.62rem!important;line-height:1.45!important;color:#576e79!important}.agenda-meal-extra>span{display:block!important}.agenda-meal-extra>div{display:flex!important;gap:6px!important;margin-top:5px!important;flex-wrap:wrap!important}.agenda-meal-extra a{padding:5px 7px!important;border:1px solid #d9e3e8!important;border-radius:8px!important;background:#fff!important;text-decoration:none!important;font-weight:800!important;color:#24516d!important}
+
+/* Every selected trip day can show one-hour weather cards, not only today. */
+.day-weather-head{display:flex!important;justify-content:space-between!important;gap:10px!important;align-items:flex-start!important}.day-weather-head>div>b{display:block!important;font-size:.82rem!important;color:#1e4c68!important}.day-weather-head small{font-size:.61rem!important;color:#6a7e88!important;line-height:1.35!important}
+.day-hourly-weather,#hourlyWeather{display:flex!important;gap:7px!important;overflow-x:auto!important;padding:9px 1px 4px!important;scroll-snap-type:x proximity!important;scrollbar-width:thin!important}
+.day-hourly-weather .hourly-item,#hourlyWeather .hourly-item{flex:0 0 82px!important;min-width:82px!important;padding:8px 6px!important;border:1px solid #dce7ed!important;border-radius:12px!important;background:#fff!important;scroll-snap-align:start!important;text-align:center!important;box-shadow:none!important}
+.day-hourly-weather .hourly-time,#hourlyWeather .hourly-time{font-size:.66rem!important;font-weight:900!important;color:#426273!important}.hourly-icon{font-size:1.1rem!important;margin:3px 0!important}.hourly-temp{font-size:.94rem!important;font-weight:900!important;color:#183f59!important}.hourly-rain{font-size:.57rem!important;color:#71848e!important;line-height:1.35!important}
+.hourly-item.now{outline:2px solid #2c80ba!important;background:#f2f9fe!important}
+.weather-day-tabs{display:flex;gap:7px;overflow-x:auto;margin:0 0 10px;padding-bottom:3px;scrollbar-width:none}.weather-day-tabs::-webkit-scrollbar{display:none}.weather-day-tabs button{flex:0 0 auto;border:1px solid #dbe5ea;background:#fff;border-radius:11px;padding:7px 10px;color:#486473;text-align:left}.weather-day-tabs button b{display:block;font-size:.75rem}.weather-day-tabs button span{display:block;font-size:.56rem;color:#768894;margin-top:1px}.weather-day-tabs button.active{background:#173f67;color:#fff;border-color:#173f67}.weather-day-tabs button.active span{color:#dbe9f4}
+#weatherDetail .trip-weather-outlook{display:flex!important;gap:6px!important;overflow-x:auto!important;margin-top:10px!important;padding-bottom:2px!important}.trip-weather-outlook .outlook-item{flex:0 0 auto!important;border:1px solid #e0e7eb!important;border-radius:10px!important;background:#f8fafb!important;padding:7px 9px!important;text-align:left!important;color:#365566!important}.trip-weather-outlook .outlook-item.active{border-color:#8fb7ce!important;background:#eef7fb!important}.trip-weather-outlook .outlook-item b{font-size:.64rem!important}.trip-weather-outlook .outlook-item span{font-size:.56rem!important}
+#weatherDetail .weather-source-title small{font-size:.58rem!important}
+#weatherDetail .weather-source-card{min-height:62px!important}.weather-source-card small{display:none!important}
+
+/* Route numbering is intentionally chronological. */
+.schedule-route-panel .journey-stops{display:flex!important;gap:6px!important;overflow:auto!important;scrollbar-width:none!important}.schedule-route-panel .journey-stops::-webkit-scrollbar{display:none}.journey-stop{white-space:nowrap!important}
+.schedule-route-panel .journey-heading small::after{content:' · 시간순 번호';color:#78909c}
+
+/* Location map = people only. Emphasize logged-in user as reference point and distance labels. */
+#location .location-heading p{font-size:.72rem!important;color:var(--m62-muted)!important;margin-top:3px!important}
+#location .location-map-card{border-left:5px solid var(--m62-teal)!important}
+#location .location-basis{white-space:pre-line!important;background:#eef8f6!important;border:1px solid #d2e9e4!important;border-radius:10px!important;padding:9px 10px!important;color:#2e5e5b!important;font-size:.68rem!important;font-weight:800!important}
+#location .loc5-person .distance-value{font-weight:900!important;color:#245d75!important}
+.group-marker.is-self{width:30px!important;height:30px!important;border-width:4px!important;box-shadow:0 0 0 5px rgba(24,137,118,.18),0 3px 10px #0003!important}.group-marker.is-self .group-marker-label{font-weight:950!important;background:#eefbf7!important}
+.group-marker-label{max-width:190px!important;overflow:hidden!important;text-overflow:ellipsis!important}
+#location .location-info-fold p{font-size:.68rem!important;line-height:1.5!important}
+
+/* Bottom sheet: functionality stays, explanatory copy is minimized. */
+.app-sheet-group{margin-bottom:15px!important}.app-sheet-group h3{font-size:.78rem!important;color:#607784!important;margin:0 0 7px!important}.app-sheet-grid{gap:7px!important}.app-sheet-grid button,.app-sheet-grid a{min-height:66px!important;padding:9px!important;border-radius:13px!important}.app-sheet-grid b{font-size:1.05rem!important}.app-sheet-grid span{font-size:.7rem!important;font-weight:900!important}.app-sheet-grid small{font-size:.55rem!important;line-height:1.2!important;color:#7a8b94!important}
+
+@media(max-width:420px){
+  body.mixed-app main{padding-left:10px!important;padding-right:10px!important}
+  #schedule .numbered-event{grid-template-columns:25px 52px minmax(0,1fr)!important;gap:6px!important;padding:9px 5px!important}
+  .day-hourly-weather .hourly-item,#hourlyWeather .hourly-item{flex-basis:76px!important;min-width:76px!important}
+  .weather-source-grid{grid-template-columns:1fr 1fr!important}
+}
+#schedule .numbered-event.meal-breakfast{background:#f1faf7!important;border-left-color:#3b9b82!important}
