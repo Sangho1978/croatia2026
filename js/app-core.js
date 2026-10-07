@@ -155,6 +155,22 @@ function _dayPanelHtml(d,i){
   const attractions=_safeDayBlock('관광지 가이드',d.date,()=>dayAttractionHtml(d));
   return `<div class="day-summary day-summary-clean"><small class="day-date-label">${escHotel(d.date.slice(5).replace('-','/'))} · 현지시간</small><h3>${escHotel(d.title)}</h3>${gl?`<div class="day-guide-links">${gl}</div>`:''}</div><div class="day-weather-box" id="dayWeather-${i}">${weather}</div><div class="day-main-grid"><div class="card day-agenda-card"><h3>시간순 일정</h3>${agenda}${moveFold}</div></div>${hotel}${photos}${attractions}`;
 }
+
+function _applyCompactDayTabs(tabs){
+  if(!tabs)return;
+  tabs.classList.add('date-tabs-compact');
+  const set=(k,v)=>tabs.style.setProperty(k,v,'important');
+  set('display','grid');set('grid-template-columns','none');set('grid-auto-flow','column');
+  set('grid-auto-columns','calc((100% - 12px)/3)');set('gap','6px');
+  set('width','100%');set('max-width','100%');set('overflow-x','auto');set('overflow-y','hidden');
+  set('position','static');set('padding','4px 2px 9px');set('margin','0 0 12px');set('scroll-snap-type','x proximity');
+  [...tabs.children].forEach(b=>{
+    const bs=(k,v)=>b.style.setProperty(k,v,'important');
+    bs('display','block');bs('width','100%');bs('min-width','0');bs('max-width','none');bs('flex','none');
+    bs('min-height','42px');bs('margin','0');bs('padding','8px 4px');bs('border-radius','14px');bs('font-size','.76rem');
+    bs('white-space','nowrap');bs('text-align','center');bs('box-sizing','border-box');bs('scroll-snap-align','start');
+  });
+}
 function renderDays(){
   const tabs=document.getElementById('dayTabs'),wrap=document.getElementById('dayPanels');
   if(!tabs||!wrap||!Array.isArray(days))return;
@@ -168,6 +184,7 @@ function renderDays(){
     b.addEventListener('click',()=>selectDay(i));
     tabs.appendChild(b);
   });
+  _applyCompactDayTabs(tabs);
 
   /* Render panels independently so one optional block cannot abort the whole itinerary. */
   days.forEach((d,i)=>{
@@ -189,6 +206,7 @@ function renderDays(){
   }
 }
 function selectDay(i){
+  _applyCompactDayTabs(document.getElementById('dayTabs'));
   const tabList=[...document.querySelectorAll('#dayTabs .tab')], panelList=[...document.querySelectorAll('#dayPanels .panel')];
   if(!tabList.length||!panelList.length)return;
   const idx=Math.max(0,Math.min(Number(i)||0,Math.min(tabList.length,panelList.length)-1));

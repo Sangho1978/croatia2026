@@ -1,0 +1,12 @@
+# MIX68 검증
+- 일정 날짜 탭: 모바일 3개 동시 노출 구조 (CSS + inline runtime guard)
+- 기존 전역 탭/버튼 CSS 충돌 시에도 `#dayTabs` inline `!important`로 3칸 유지
+- 10/12~10/19 날짜 데이터 렌더 로직 유지
+- Service Worker: `gspa-static-v68-robust-compact-dates`
+- SW 등록 URL: `sw.js?v=20261008-MIX68`, 등록 후 `update()` 호출
+- JavaScript 문법 검사 통과
+- JSON 파싱 통과
+- index.html 중복 ID 없음
+- index.html 로컬 참조 누락 없음
+- Service Worker CORE 참조 누락 없음
+- ZIP 무결성 통과
