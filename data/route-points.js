@@ -1,9 +1,10 @@
 /* MIX62: shared daily route points. `order` is the chronological display number used by schedule route maps. */
 window.CRO_ROUTE_POINTS={
   '2026-10-12':[
-    {order:1,n:'로마 FCO',lat:41.8003,lng:12.2389},
-    {order:2,n:'두브로브니크 공항',lat:42.5614,lng:18.2682},
-    {order:3,n:'Grand Hotel Park',lat:42.6558,lng:18.0710}
+    {order:1,n:'인천공항 T1',lat:37.4602,lng:126.4407},
+    {order:2,n:'로마 FCO',lat:41.8003,lng:12.2389},
+    {order:3,n:'두브로브니크 공항',lat:42.5614,lng:18.2682},
+    {order:4,n:'Grand Hotel Park',lat:42.6558,lng:18.0710}
   ],
   '2026-10-13':[
     {order:1,n:'두브로브니크 구시가지',lat:42.6400,lng:18.1100},

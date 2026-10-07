@@ -1,4 +1,4 @@
-const STATIC='gspa-static-v63-uihotfix';
+const STATIC='gspa-static-v64-responsive';
 const GUIDE='gspa-guidebook-shared-v2';
 const CORE=[
   "./index.html",
@@ -29,6 +29,7 @@ const CORE=[
   "./css/action-first.css",
   "./css/app.css",
   "./css/mix62-clean-ui.css",
+  "./css/mix64-responsive.css",
   "./css/attendance-prep.css",
   "./css/compact-header.css",
   "./css/expense-ledger.css",
