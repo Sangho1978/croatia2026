@@ -167,7 +167,7 @@
   window.addEventListener('DOMContentLoaded',()=>{
     paint();btn()?.addEventListener('click',install);
     autoKakaoGuide();
-    if('serviceWorker' in navigator&&window.isSecureContext)navigator.serviceWorker.register('./sw.js',{scope:'./'}).catch(()=>{});
+    if('serviceWorker' in navigator&&window.isSecureContext)navigator.serviceWorker.register('./sw.js?v=20261007-MIX63',{scope:'./'}).catch(()=>{});
   });
   window.GSPA_PWA={install,paint,maybePromptAfterLogin,showGuide,copyAddress,isKakao};
 })();

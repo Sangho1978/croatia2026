@@ -1,4 +1,4 @@
-const STATIC='gspa-static-v62';
+const STATIC='gspa-static-v63-uihotfix';
 const GUIDE='gspa-guidebook-shared-v2';
 const CORE=[
   "./index.html",
