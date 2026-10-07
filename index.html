@@ -1,4 +1,4 @@
-<!-- build: 20261007-MIX64-RESPONSIVE -->
+<!-- build: 20261007-MIX66-SCHEDULE-CLEANUP -->
 <!-- build: 20261001-MIX54-PERSONAL-FLIGHTS | multi-trip platform -->
 <!-- build: 20260913-r3 | SPA refactor: single-app routing + bottom sheet + 5-core-nav --><!DOCTYPE html>
 
@@ -9,7 +9,7 @@
 <link href="css/field-tools.css?v=20260919-MIX06" rel="stylesheet"/>
 <link href="css/integration.css?v=20260919-MIX06" rel="stylesheet"/><link href="css/attendance-prep.css?v=20261001-MIX53" rel="stylesheet"/>
 <link href="css/mix03.css?v=20260919-MIX06" rel="stylesheet"/><link rel="stylesheet" href="css/usability.css?v=20260923-MIX29"><link rel="stylesheet" href="css/compact-header.css?v=20260923-MIX27"/><link rel="stylesheet" href="css/action-first.css?v=20260919-MIX10"/>
-<link rel="stylesheet" href="css/expense-ledger.css?v=20260920-MIX18"/><link rel="stylesheet" href="css/travel-news.css?v=20260920-MIX23"/><link rel="stylesheet" href="css/shop-food.css?v=20260920-MIX24"/><link rel="stylesheet" href="css/mix30-ui.css?v=20260926-MIX30"/><link rel="stylesheet" href="css/mix31-ui.css?v=20260926-MIX31A"/><link rel="stylesheet" href="css/mix32-ui.css?v=20260926-MIX35"/><link rel="stylesheet" href="css/mix35-final.css?v=20260926-MIX35"/><link rel="stylesheet" href="css/mix36-ui.css?v=20260926-MIX36"/><link rel="stylesheet" href="css/mix37-ui.css?v=20260926-MIX37"/><link rel="stylesheet" href="css/mix38-ui.css?v=20260926-MIX38"/><link rel="stylesheet" href="css/mix40-multitrip.css?v=20260926-MIX45"/><link rel="stylesheet" href="css/mix43-fixes.css?v=20260926-MIX45"/><link rel="stylesheet" href="css/photo-plan.css?v=20260928-MIX47"/><link rel="stylesheet" href="css/pwa-install.css?v=20260928-MIX51"/><link rel="stylesheet" href="css/flight-tickets.css?v=20261001-MIX56"/><link rel="stylesheet" href="css/meals.css?v=20261002-MIX59"/><link rel="stylesheet" href="css/mix62-clean-ui.css?v=20261007-MIX64"/><link rel="stylesheet" href="css/mix64-responsive.css?v=20261007-MIX64"/>
+<link rel="stylesheet" href="css/expense-ledger.css?v=20260920-MIX18"/><link rel="stylesheet" href="css/travel-news.css?v=20260920-MIX23"/><link rel="stylesheet" href="css/shop-food.css?v=20260920-MIX24"/><link rel="stylesheet" href="css/mix30-ui.css?v=20260926-MIX30"/><link rel="stylesheet" href="css/mix31-ui.css?v=20260926-MIX31A"/><link rel="stylesheet" href="css/mix32-ui.css?v=20260926-MIX35"/><link rel="stylesheet" href="css/mix35-final.css?v=20260926-MIX35"/><link rel="stylesheet" href="css/mix36-ui.css?v=20260926-MIX36"/><link rel="stylesheet" href="css/mix37-ui.css?v=20260926-MIX37"/><link rel="stylesheet" href="css/mix38-ui.css?v=20260926-MIX38"/><link rel="stylesheet" href="css/mix40-multitrip.css?v=20260926-MIX45"/><link rel="stylesheet" href="css/mix43-fixes.css?v=20260926-MIX45"/><link rel="stylesheet" href="css/photo-plan.css?v=20260928-MIX47"/><link rel="stylesheet" href="css/pwa-install.css?v=20260928-MIX51"/><link rel="stylesheet" href="css/flight-tickets.css?v=20261001-MIX56"/><link rel="stylesheet" href="css/meals.css?v=20261002-MIX59"/><link rel="stylesheet" href="css/mix62-clean-ui.css?v=20261007-MIX64"/><link rel="stylesheet" href="css/mix64-responsive.css?v=20261007-MIX65"/><link rel="stylesheet" href="css/mix66-schedule.css?v=20261007-MIX66"/>
 <style id="embeddedAppCssV63">
 /* MIX63 HOTFIX: embedded full UI CSS so the app remains styled even if external CSS requests fail. */
 /* EMBEDDED FROM css/app.css */
@@ -2524,7 +2524,67 @@ body.mixed-app .app-sheet-grid button,body.mixed-app .app-sheet-grid a{min-width
 body.mixed-app input,body.mixed-app select,body.mixed-app textarea,body.mixed-app button{min-width:0;max-width:100%}
 
 </style>
-</head><body class="mobile-redesign mixed-app" data-build="20261007-MIX64-RESPONSIVE">
+
+<style id="mix66ScheduleFallback">
+/* MIX66 — schedule-centered cleanup. Keep every function, remove visual duplication. */
+#schedule .schedule-route-panel,
+#schedule .day-flow{display:none!important}
+
+#schedule .panel.active{display:grid!important;gap:10px!important}
+#schedule .day-summary-clean{order:1!important;margin:0!important;padding:14px 14px 13px!important;border-left:5px solid #173f67!important;background:#fff!important}
+#schedule .day-summary-clean .day-date-label{display:block!important;margin-bottom:4px!important;color:#6d818c!important;font-size:.64rem!important;font-weight:900!important;letter-spacing:.02em!important}
+#schedule .day-summary-clean h3{margin:0!important;font-size:1.05rem!important;line-height:1.35!important;color:#173b55!important}
+#schedule .day-summary-clean .day-guide-links{margin-top:9px!important;display:flex!important;gap:6px!important;flex-wrap:wrap!important}
+#schedule .day-summary-clean .day-guide-links a{min-height:38px!important;padding:7px 10px!important;font-size:.66rem!important;border-radius:10px!important}
+
+/* Weather belongs directly to the selected day and remains visible. */
+#schedule .day-weather-box{order:2!important;margin:0!important;padding:12px!important;border-left:5px solid #3a8cc4!important;background:#fbfdff!important}
+
+/* One agenda is the only visible schedule sequence. */
+#schedule .day-main-grid{order:3!important;margin:0!important;display:block!important}
+#schedule .day-main-grid>.card{margin:0!important}
+#schedule .day-agenda-card{border-left:5px solid #2d7f8a!important;padding:12px!important;overflow:hidden!important}
+#schedule .day-agenda-card>h3{margin:0 0 8px!important;font-size:.92rem!important;color:#173f59!important}
+#schedule .day-agenda-card>h3::before{content:''!important}
+#schedule .timeline{margin:0!important;padding-left:0!important;border-left:0!important}
+#schedule .numbered-event{grid-template-columns:28px 58px minmax(0,1fr)!important;padding:10px 6px!important}
+
+/* Movement times stay available but do not compete with the schedule. */
+#schedule .day-move-details{margin:10px 0 0!important;padding:0!important;border:1px solid #dce6eb!important;border-radius:12px!important;background:#f8fafb!important;box-shadow:none!important;overflow:hidden!important}
+#schedule .day-move-details>summary{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:8px!important;padding:10px 11px!important;color:#33586b!important;font-size:.72rem!important;list-style:none!important}
+#schedule .day-move-details>summary::-webkit-details-marker{display:none!important}
+#schedule .day-move-details>summary::after{content:'＋';font-size:1rem!important;font-weight:900!important;color:#5c7786!important}
+#schedule .day-move-details[open]>summary::after{content:'－'}
+#schedule .day-move-details>summary span{font-weight:950!important}
+#schedule .day-move-details>summary small{margin-left:auto!important;color:#7b8d96!important;font-size:.58rem!important;font-weight:750!important}
+#schedule .day-move-details .move-list{margin:0!important;padding:0 9px 9px!important;display:grid!important;gap:6px!important}
+#schedule .day-move-details .move-row{padding:8px 9px!important;border-radius:10px!important;background:#fff!important;grid-template-columns:58px minmax(0,1fr)!important}
+#schedule .day-move-details .move-time{grid-column:2!important;font-size:.62rem!important;white-space:normal!important}
+
+/* Flight access remains available on flight days, collapsed by default. */
+#schedule .personal-flight-day{order:4!important;margin:0!important;padding:0!important;border-radius:14px!important;background:#fff!important;border:1px solid #d9e6ec!important;box-shadow:none!important;overflow:hidden!important}
+#schedule .personal-flight-day>summary{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;padding:11px 13px!important;list-style:none!important;color:#173f59!important}
+#schedule .personal-flight-day>summary::-webkit-details-marker{display:none!important}
+#schedule .personal-flight-day>summary>span{min-width:0!important}
+#schedule .personal-flight-day>summary b{display:block!important;font-size:.78rem!important}
+#schedule .personal-flight-day>summary small{display:block!important;margin-top:1px!important;color:#738692!important;font-size:.58rem!important;font-weight:750!important;overflow-wrap:anywhere!important}
+#schedule .personal-flight-day>summary em{flex:0 0 auto!important;font-style:normal!important;background:#eef5f8!important;color:#315b71!important;border-radius:999px!important;padding:5px 8px!important;font-size:.58rem!important;font-weight:900!important}
+#schedule .personal-flight-day[open]>summary em{background:#173f67!important;color:#fff!important}
+#schedule .personal-flight-day-content{padding:0 12px 12px!important;border-top:1px solid #e7eef1!important}
+
+#schedule .day-hotel-card{order:5!important;margin:0!important}
+#schedule .photo-plan-day{order:6!important}
+#schedule .day-attraction-title{order:7!important;margin:2px 0 0!important}
+#schedule .day-attraction-grid{order:8!important}
+
+@media(max-width:420px){
+  #schedule .numbered-event{grid-template-columns:25px 50px minmax(0,1fr)!important;gap:6px!important}
+  #schedule .day-summary-clean{padding:12px!important}
+  #schedule .day-move-details>summary small{display:none!important}
+}
+
+</style>
+</head><body class="mobile-redesign mixed-app" data-build="20261007-MIX65-ALL-DATES">
 <div id="loginScreen" class="login-screen multi-country-login">
 <div class="login-panel login-panel-simple" role="dialog" aria-labelledby="loginTitle" aria-modal="true">
 <div class="login-brand">SEOUL NATIONAL UNIVERSITY GSPA · 17TH</div><h1 id="loginTitle">공공리더십 17기<br><span>하반기 국외연수</span></h1><p class="login-course">크로아티아 · 튀르키예 · 이탈리아 북부</p>
@@ -2832,11 +2892,11 @@ body.mixed-app input,body.mixed-app select,body.mixed-app textarea,body.mixed-ap
 <div class="travel-news-modal-inner"><div class="travel-news-modal-head"><div><span>TRAVEL ALERT</span><h2 id="travelNewsModalTitle">여행에 영향 줄 수 있는 최신 뉴스</h2></div><button type="button" data-news-modal-close aria-label="닫기">×</button></div><p>재난·교통통제·파업·공항 차질처럼 일정에 직접 영향을 줄 가능성이 높은 최근 기사입니다. 원문과 현지 공식 공지를 함께 확인하세요.</p><div id="travelNewsModalItems" class="travel-news-modal-items"></div><div class="travel-news-modal-actions"><button type="button" data-news-modal-close>나중에</button><button type="button" class="primary" data-news-modal-open>뉴스 확인</button></div></div>
 </dialog>
 <div id="appActionToast" class="app-action-toast" role="status" aria-live="polite" aria-atomic="true"></div><nav aria-label="주요 메뉴" class="bottom"><button class="app-nav-btn" data-route="today" type="button"><b aria-hidden="true">⌂</b><span>오늘</span></button><button class="app-nav-btn" data-route="schedule" type="button"><b aria-hidden="true">◷</b><span>일정</span></button><button class="app-nav-btn" data-route="location" type="button"><b aria-hidden="true">⌖</b><span>위치</span></button><button class="app-nav-btn" data-route="group" type="button"><b aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="9" cy="7" r="3"/><path d="M3 21v-3a6 6 0 0 1 12 0v3M16 4a3 3 0 0 1 0 6M18 13a5 5 0 0 1 3 5v3"/></svg></b><span>그룹</span></button><button class="app-nav-btn" id="moreNavBtn" type="button"><b aria-hidden="true">☰</b><span>더보기</span></button></nav>
-<script src="platform/trips.js?v=20261001-MIX53"></script><script src="platform/login-directory.js?v=20260926-MIX45"></script><script src="js/trip-context.js?v=20260928-MIX51"></script><script src="js/pwa-install.js?v=20260928-MIX51"></script><script src="js/net-meter.js?v=20260920-MIX14"></script><script src="js/config.js?v=20260926-MIX45"></script><script src="js/map-provider.js?v=20260926-MIX45"></script><script src="data/roster.js?v=20261002-MIX58"></script><script src="data/itinerary.js?v=20261002-MIX58"></script><script src="data/meals.js?v=20261002-MIX59"></script><script src="data/route-points.js?v=20261007-MIX62"></script><script src="data/hotels.js?v=20260926-MIX33"></script><script src="data/flight-plan.js?v=20261001-MIX56"></script><script src="data/flight-tickets.js?v=20261001-MIX56"></script><script src="data/checklist.js?v=20260923-MIX26"></script><script src="js/trip-data-loader.js?v=20261001-MIX53"></script><script src="js/attendance-policy.js?v=20261001-MIX53"></script><script src="js/time-dual.js?v=20260919-MIX10"></script><script src="data/photo-plan.js?v=20261001-MIX56"></script><script src="js/photo-plan.js?v=20260928-MIX47"></script><script src="js/app-core.js?v=20261007-MIX62"></script><script src="js/videos.js?v=20260919-MIX06"></script><script src="js/mobile-ui.js?v=20261001-MIX53"></script><script src="js/ops.js?v=20261001-MIX56"></script><script src="js/router.js?v=20260923-MIX27"></script>
+<script src="platform/trips.js?v=20261001-MIX53"></script><script src="platform/login-directory.js?v=20260926-MIX45"></script><script src="js/trip-context.js?v=20260928-MIX51"></script><script src="js/pwa-install.js?v=20260928-MIX51"></script><script src="js/net-meter.js?v=20260920-MIX14"></script><script src="js/config.js?v=20260926-MIX45"></script><script src="js/map-provider.js?v=20260926-MIX45"></script><script src="data/roster.js?v=20261002-MIX58"></script><script src="data/itinerary.js?v=20261002-MIX58"></script><script src="data/meals.js?v=20261002-MIX59"></script><script src="data/route-points.js?v=20261007-MIX62"></script><script src="data/hotels.js?v=20260926-MIX33"></script><script src="data/flight-plan.js?v=20261001-MIX56"></script><script src="data/flight-tickets.js?v=20261001-MIX56"></script><script src="data/checklist.js?v=20260923-MIX26"></script><script src="js/trip-data-loader.js?v=20261001-MIX53"></script><script src="js/attendance-policy.js?v=20261001-MIX53"></script><script src="js/time-dual.js?v=20260919-MIX10"></script><script src="data/photo-plan.js?v=20261001-MIX56"></script><script src="js/photo-plan.js?v=20260928-MIX47"></script><script src="js/app-core.js?v=20261007-MIX66"></script><script src="js/videos.js?v=20260919-MIX06"></script><script src="js/mobile-ui.js?v=20261001-MIX53"></script><script src="js/ops.js?v=20261001-MIX56"></script><script src="js/router.js?v=20260923-MIX27"></script>
 <script src="js/field-tools.js?v=20261001-MIX56"></script>
 <script src="js/integration.js?v=20260926-MIX35"></script><script src="js/receipt-store.js?v=20260919-MIX06"></script><script src="js/expense-fx.js?v=20260920-MIX14b"></script><script src="js/receipt-ai.js?v=20260920-MIX15"></script><script src="js/receipt-ocr.js?v=20260920-MIX16"></script><script src="js/xlsx-lite.js?v=20260920-MIX18"></script><script src="js/expenses.js?v=20260920-MIX20"></script><script src="js/photos.js?v=20260919-MIX06"></script><script src="js/attendance-notify.js?v=20260920-MIX12"></script><script src="js/attendance.js?v=20261001-MIX53"></script>
 <script src="js/preparation.js?v=20260919-MIX06"></script>
-<script src="js/location-session.js?v=20261007-MIX62"></script><script src="js/flight-tickets-ui.js?v=20261001-MIX56"></script><script src="js/meals-ui.js?v=20261007-MIX62"></script><script src="js/usability.js?v=20260923-MIX27"></script><script src="js/route-map-engine.js?v=20261007-MIX62"></script><script src="js/mix30-ui.js?v=20261002-MIX59"></script><script src="js/travel-news.js?v=20261001-MIX56"></script><script src="js/shop-food.js?v=20260920-MIX24"></script><dialog id="locationHelp" class="runtime-dialog" aria-labelledby="locationHelpTitle">
+<script src="js/location-session.js?v=20261007-MIX62"></script><script src="js/flight-tickets-ui.js?v=20261007-MIX66"></script><script src="js/meals-ui.js?v=20261007-MIX62"></script><script src="js/usability.js?v=20260923-MIX27"></script><script src="js/route-map-engine.js?v=20261007-MIX62"></script><script src="js/mix30-ui.js?v=20261002-MIX59"></script><script src="js/travel-news.js?v=20261001-MIX56"></script><script src="js/shop-food.js?v=20260920-MIX24"></script><dialog id="locationHelp" class="runtime-dialog" aria-labelledby="locationHelpTitle">
  <div class="runtime-dialog-head"><h2 id="locationHelpTitle">위치 공유 안내</h2><button type="button" data-location-help-close aria-label="닫기">×</button></div>
  <p><strong>위치 ON</strong>이면 앱이 화면에 보이는 동안 약 5분 간격으로 내 위치를 전송합니다. 화면 잠금·브라우저 종료·다른 앱 사용 중에는 계속 전송되지 않을 수 있습니다.</p>
  <p><strong>개인정보:</strong> 일행 위치와 본인 이동이력은 최근 24시간 범위만 사용합니다. 본인 24시간 초과 이력은 앱 연결 시 정리되며, 서버 정기삭제 기능을 배포하면 전체 위치데이터도 자동 정리됩니다.</p>
@@ -2845,5 +2905,5 @@ body.mixed-app input,body.mixed-app select,body.mixed-app textarea,body.mixed-ap
 </dialog>
 <script src="js/fx-service.js?v=20260926-MIX35"></script>
 <script src="js/runtime-support.js?v=20260919-MIX06"></script>
-<script src="js/compact-header.js?v=20260923-MIX27"></script><script src="js/low-data.js?v=20260926-MIX45"></script><script src="js/mix35-final.js?v=20260926-MIX35"></script><script src="js/mix36-ui.js?v=20261007-MIX64"></script><script src="js/mix37-ui.js?v=20260926-MIX37"></script><script src="js/mix34-offline.js?v=20260926-MIX35"></script><script src="js/guidebook-cache.js?v=20260926-MIX45"></script><script src="js/trip-ui.js?v=20260926-MIX45"></script><script src="js/trip-visibility.js?v=20261001-MIX53"></script>
+<script src="js/compact-header.js?v=20260923-MIX27"></script><script src="js/low-data.js?v=20260926-MIX45"></script><script src="js/mix35-final.js?v=20260926-MIX35"></script><script src="js/mix36-ui.js?v=20261007-MIX66"></script><script src="js/mix37-ui.js?v=20260926-MIX37"></script><script src="js/mix34-offline.js?v=20260926-MIX35"></script><script src="js/guidebook-cache.js?v=20260926-MIX45"></script><script src="js/trip-ui.js?v=20260926-MIX45"></script><script src="js/trip-visibility.js?v=20261001-MIX53"></script>
 </body></html>

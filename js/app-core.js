@@ -1,4 +1,5 @@
-/* MIX62: cleaned UI, all-trip hourly weather, Korea refresh timestamps, chronological schedule numbering. */
+/* MIX66: schedule-centered itinerary UI.
+   One chronological agenda is the single source of truth; route/move duplicates are folded away. */
 
 
 // Google Maps JavaScript API key (client-side web key)
@@ -136,20 +137,66 @@ function _scheduleEventHtml(d,e,k){
   const extra=m?`<div class="agenda-meal-extra">${menu.length?`<span>${menu.slice(0,3).map(escHotel).join(' · ')}</span>`:(m.free?'<span>자유식</span>':m.menuNote?`<span>${escHotel(m.menuNote)}</span>`:'')}<div>${map?`<a href="${map}" target="_blank" rel="noopener">Google Maps</a>`:''}${m.website?`<a href="${escHotel(m.website)}" target="_blank" rel="noopener">웹사이트</a>`:''}</div></div>`:'';
   return `<div class="event numbered-event${mealCls}"><span class="event-no">${k+1}</span><span class="time">${escHotel(e[0])}</span><div class="event-copy"><b>${escHotel(e[1])}</b>${m?`<small>${escHotel(m.type)} · ${escHotel(m.name)}</small>`:''}${extra}</div></div>`;
 }
-function renderDays(){
-  let tabs=document.getElementById('dayTabs'),wrap=document.getElementById('dayPanels');tabs.innerHTML='';wrap.innerHTML='';
-  days.forEach((d,i)=>{
-    let b=document.createElement('button');b.className='tab';b.textContent=d.date.slice(5).replace('-','/');b.onclick=()=>selectDay(i);tabs.appendChild(b);
-    let p=document.createElement('div');p.className='panel';
-    let flow=(d.flow||[]).map((x,j)=>`<span class="flow-stop"><span class="flow-pill"><i aria-hidden="true">${j+1}</i><span>${x}</span></span></span>`).join('');
-    let moves=(d.moves||[]).map(m=>`<div class="move-row"><span class="move-mode">${m[0]}</span><span class="move-route">${m[1]}</span><span class="move-time">${m[2]}</span></div>`).join('');
-    let gl=(d.guides||[]).map(g=>`<a href="${g[1]}">📖 ${g[0]} 상세가이드</a>`).join('');
-    p.innerHTML=`<div class="day-summary"><h3>${d.title}</h3><div class="day-flow">${flow}</div><div class="day-guide-links">${gl}</div>${d.map?`<div class="btns"><a class="btn" target="_blank" rel="noopener" href="${d.map}">📍 Google 전체 동선</a></div>`:''}</div><div class="day-weather-box" id="dayWeather-${i}">${expectedHourlyHtml(d)}</div><div class="day-main-grid"><div class="card day-agenda-card"><h3>시간순 일정</h3><div class="timeline">${(d.events||[]).map((e,k)=>_scheduleEventHtml(d,e,k)).join('')}</div></div><div class="card"><h3>이동시간</h3><div class="move-list">${moves}</div></div></div>${dayHotelHtml(d.date)}${window.dayPhotoGuideHtml?window.dayPhotoGuideHtml(d.date):''}${dayAttractionHtml(d)}`;
-    wrap.appendChild(p)
-  });
-  let idx=days.findIndex(x=>x.date===localDate());selectDay(idx>=0?idx:0);
+function _safeDayBlock(label, date, fn){
+  try{return fn()||''}
+  catch(err){
+    console.error('[schedule]', date, label, err);
+    return `<div class="note schedule-partial-note">${escHotel(label)} 정보를 표시하는 중 일부 오류가 발생했습니다.</div>`;
+  }
 }
-function selectDay(i){document.querySelectorAll('.tab').forEach((x,j)=>x.classList.toggle('active',i===j));document.querySelectorAll('.panel').forEach((x,j)=>x.classList.toggle('active',i===j));loadDayWeather(i);let p=document.querySelectorAll('.panel')[i];if(p&&location.hash==='#schedule')setTimeout(()=>p.scrollIntoView({behavior:'smooth',block:'start'}),40)}
+function _dayPanelHtml(d,i){
+  const moves=(d.moves||[]).map(m=>`<div class="move-row"><span class="move-mode">${escHotel(m[0])}</span><span class="move-route">${escHotel(m[1])}</span><span class="move-time">${escHotel(m[2])}</span></div>`).join('');
+  const gl=(d.guides||[]).map(g=>`<a href="${escHotel(g[1])}">📖 ${escHotel(g[0])} 가이드</a>`).join('');
+  const weather=_safeDayBlock('날씨',d.date,()=>expectedHourlyHtml(d));
+  const agenda=_safeDayBlock('시간순 일정',d.date,()=>`<div class="timeline">${(d.events||[]).map((e,k)=>_scheduleEventHtml(d,e,k)).join('')}</div>`);
+  const moveFold=moves?`<details class="day-move-details"><summary><span>이동시간</span><small>${(d.moves||[]).length}구간 · 필요할 때 펼쳐보기</small></summary><div class="move-list">${moves}</div></details>`:'';
+  const hotel=_safeDayBlock('호텔',d.date,()=>dayHotelHtml(d.date));
+  const photos=_safeDayBlock('촬영가이드',d.date,()=>window.dayPhotoGuideHtml?window.dayPhotoGuideHtml(d.date):'');
+  const attractions=_safeDayBlock('관광지 가이드',d.date,()=>dayAttractionHtml(d));
+  return `<div class="day-summary day-summary-clean"><small class="day-date-label">${escHotel(d.date.slice(5).replace('-','/'))} · 현지시간</small><h3>${escHotel(d.title)}</h3>${gl?`<div class="day-guide-links">${gl}</div>`:''}</div><div class="day-weather-box" id="dayWeather-${i}">${weather}</div><div class="day-main-grid"><div class="card day-agenda-card"><h3>시간순 일정</h3>${agenda}${moveFold}</div></div>${hotel}${photos}${attractions}`;
+}
+function renderDays(){
+  const tabs=document.getElementById('dayTabs'),wrap=document.getElementById('dayPanels');
+  if(!tabs||!wrap||!Array.isArray(days))return;
+  tabs.innerHTML='';wrap.innerHTML='';
+
+  /* Create every date selector first. A failure inside one day's rich content must never remove the other dates. */
+  days.forEach((d,i)=>{
+    const b=document.createElement('button');
+    b.type='button';b.className='tab';b.textContent=d.date.slice(5).replace('-','/');
+    b.dataset.dayIndex=String(i);b.setAttribute('role','tab');b.setAttribute('aria-controls',`day-panel-${i}`);
+    b.addEventListener('click',()=>selectDay(i));
+    tabs.appendChild(b);
+  });
+
+  /* Render panels independently so one optional block cannot abort the whole itinerary. */
+  days.forEach((d,i)=>{
+    const p=document.createElement('div');p.className='panel';p.id=`day-panel-${i}`;p.setAttribute('role','tabpanel');
+    try{p.innerHTML=_dayPanelHtml(d,i)}
+    catch(err){
+      console.error('[schedule]',d.date,'panel',err);
+      p.innerHTML=`<div class="card"><h3>${escHotel(d.date.slice(5).replace('-','/'))} · ${escHotel(d.title)}</h3><p>일정 정보를 다시 불러오고 있습니다.</p><div class="timeline">${(d.events||[]).map((e,k)=>`<div class="event numbered-event"><span class="event-no">${k+1}</span><span class="time">${escHotel(e[0])}</span><div class="event-copy"><b>${escHotel(e[1])}</b></div></div>`).join('')}</div></div>`;
+    }
+    wrap.appendChild(p);
+  });
+
+  const idx=days.findIndex(x=>x.date===localDate());
+  selectDay(idx>=0?idx:0);
+
+  /* Self-check for deployments/caches: itinerary must always expose every source date. */
+  if(tabs.children.length!==days.length||wrap.children.length!==days.length){
+    console.error('[schedule] render count mismatch',{days:days.length,tabs:tabs.children.length,panels:wrap.children.length});
+  }
+}
+function selectDay(i){
+  const tabList=[...document.querySelectorAll('#dayTabs .tab')], panelList=[...document.querySelectorAll('#dayPanels .panel')];
+  if(!tabList.length||!panelList.length)return;
+  const idx=Math.max(0,Math.min(Number(i)||0,Math.min(tabList.length,panelList.length)-1));
+  tabList.forEach((x,j)=>{const on=idx===j;x.classList.toggle('active',on);x.setAttribute('aria-selected',String(on));x.tabIndex=on?0:-1});
+  panelList.forEach((x,j)=>{const on=idx===j;x.classList.toggle('active',on);x.setAttribute('aria-hidden',String(!on))});
+  try{loadDayWeather(idx)}catch(err){console.warn('[schedule] weather',days[idx]?.date,err)}
+  const p=panelList[idx];if(p&&location.hash==='#schedule')setTimeout(()=>p.scrollIntoView({behavior:'smooth',block:'start'}),40);
+}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-weather-date]');if(!b)return;const d=b.dataset.weatherDate;if(WEATHER_SPOTS[d]){weatherSelectedDate=d;refreshWeather(d)}});
 // weather / fx lightweight
 let autoBytes=0;

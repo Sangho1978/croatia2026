@@ -1,0 +1,56 @@
+/* MIX66 — schedule-centered cleanup. Keep every function, remove visual duplication. */
+#schedule .schedule-route-panel,
+#schedule .day-flow{display:none!important}
+
+#schedule .panel.active{display:grid!important;gap:10px!important}
+#schedule .day-summary-clean{order:1!important;margin:0!important;padding:14px 14px 13px!important;border-left:5px solid #173f67!important;background:#fff!important}
+#schedule .day-summary-clean .day-date-label{display:block!important;margin-bottom:4px!important;color:#6d818c!important;font-size:.64rem!important;font-weight:900!important;letter-spacing:.02em!important}
+#schedule .day-summary-clean h3{margin:0!important;font-size:1.05rem!important;line-height:1.35!important;color:#173b55!important}
+#schedule .day-summary-clean .day-guide-links{margin-top:9px!important;display:flex!important;gap:6px!important;flex-wrap:wrap!important}
+#schedule .day-summary-clean .day-guide-links a{min-height:38px!important;padding:7px 10px!important;font-size:.66rem!important;border-radius:10px!important}
+
+/* Weather belongs directly to the selected day and remains visible. */
+#schedule .day-weather-box{order:2!important;margin:0!important;padding:12px!important;border-left:5px solid #3a8cc4!important;background:#fbfdff!important}
+
+/* One agenda is the only visible schedule sequence. */
+#schedule .day-main-grid{order:3!important;margin:0!important;display:block!important}
+#schedule .day-main-grid>.card{margin:0!important}
+#schedule .day-agenda-card{border-left:5px solid #2d7f8a!important;padding:12px!important;overflow:hidden!important}
+#schedule .day-agenda-card>h3{margin:0 0 8px!important;font-size:.92rem!important;color:#173f59!important}
+#schedule .day-agenda-card>h3::before{content:''!important}
+#schedule .timeline{margin:0!important;padding-left:0!important;border-left:0!important}
+#schedule .numbered-event{grid-template-columns:28px 58px minmax(0,1fr)!important;padding:10px 6px!important}
+
+/* Movement times stay available but do not compete with the schedule. */
+#schedule .day-move-details{margin:10px 0 0!important;padding:0!important;border:1px solid #dce6eb!important;border-radius:12px!important;background:#f8fafb!important;box-shadow:none!important;overflow:hidden!important}
+#schedule .day-move-details>summary{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:8px!important;padding:10px 11px!important;color:#33586b!important;font-size:.72rem!important;list-style:none!important}
+#schedule .day-move-details>summary::-webkit-details-marker{display:none!important}
+#schedule .day-move-details>summary::after{content:'＋';font-size:1rem!important;font-weight:900!important;color:#5c7786!important}
+#schedule .day-move-details[open]>summary::after{content:'－'}
+#schedule .day-move-details>summary span{font-weight:950!important}
+#schedule .day-move-details>summary small{margin-left:auto!important;color:#7b8d96!important;font-size:.58rem!important;font-weight:750!important}
+#schedule .day-move-details .move-list{margin:0!important;padding:0 9px 9px!important;display:grid!important;gap:6px!important}
+#schedule .day-move-details .move-row{padding:8px 9px!important;border-radius:10px!important;background:#fff!important;grid-template-columns:58px minmax(0,1fr)!important}
+#schedule .day-move-details .move-time{grid-column:2!important;font-size:.62rem!important;white-space:normal!important}
+
+/* Flight access remains available on flight days, collapsed by default. */
+#schedule .personal-flight-day{order:4!important;margin:0!important;padding:0!important;border-radius:14px!important;background:#fff!important;border:1px solid #d9e6ec!important;box-shadow:none!important;overflow:hidden!important}
+#schedule .personal-flight-day>summary{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;padding:11px 13px!important;list-style:none!important;color:#173f59!important}
+#schedule .personal-flight-day>summary::-webkit-details-marker{display:none!important}
+#schedule .personal-flight-day>summary>span{min-width:0!important}
+#schedule .personal-flight-day>summary b{display:block!important;font-size:.78rem!important}
+#schedule .personal-flight-day>summary small{display:block!important;margin-top:1px!important;color:#738692!important;font-size:.58rem!important;font-weight:750!important;overflow-wrap:anywhere!important}
+#schedule .personal-flight-day>summary em{flex:0 0 auto!important;font-style:normal!important;background:#eef5f8!important;color:#315b71!important;border-radius:999px!important;padding:5px 8px!important;font-size:.58rem!important;font-weight:900!important}
+#schedule .personal-flight-day[open]>summary em{background:#173f67!important;color:#fff!important}
+#schedule .personal-flight-day-content{padding:0 12px 12px!important;border-top:1px solid #e7eef1!important}
+
+#schedule .day-hotel-card{order:5!important;margin:0!important}
+#schedule .photo-plan-day{order:6!important}
+#schedule .day-attraction-title{order:7!important;margin:2px 0 0!important}
+#schedule .day-attraction-grid{order:8!important}
+
+@media(max-width:420px){
+  #schedule .numbered-event{grid-template-columns:25px 50px minmax(0,1fr)!important;gap:6px!important}
+  #schedule .day-summary-clean{padding:12px!important}
+  #schedule .day-move-details>summary small{display:none!important}
+}

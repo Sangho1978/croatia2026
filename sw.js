@@ -1,4 +1,4 @@
-const STATIC='gspa-static-v64-responsive';
+const STATIC='gspa-static-v66-schedule-cleanup';
 const GUIDE='gspa-guidebook-shared-v2';
 const CORE=[
   "./index.html",
@@ -30,6 +30,7 @@ const CORE=[
   "./css/app.css",
   "./css/mix62-clean-ui.css",
   "./css/mix64-responsive.css",
+  "./css/mix66-schedule.css",
   "./css/attendance-prep.css",
   "./css/compact-header.css",
   "./css/expense-ledger.css",

@@ -43,12 +43,12 @@
     return `<div class="personal-day-leg personal-day-${kind}"><div class="personal-day-leg-top"><b>${carrierBadge(kind)} ${esc(l.flight)}</b>${l.seat?`<span class="personal-day-seat">${esc(l.seat)}</span>`:''}</div><div class="personal-day-route">${esc(l.route)}</div><div class="personal-day-meta"><b>현지시간</b> · ${esc(l.time)}</div>${actions.length?`<div class="personal-day-actions">${actions.join('')}</div>`:''}</div>`;
   }
   function scheduleCard(m,date){
-    const tw=m.tway,ro=m.ryanair.outbound,rr=m.ryanair.return,g=DATA.ryanairGroupDocument||{};let body='';
-    if(date==='2026-10-12') body=scheduleLeg(tw.outbound,{kind:'trinity',reservation:tw.reservation,ticket:tw.ticket,eticket:tw.eticket})+scheduleLeg(ro,{kind:'ryanair',reservation:ro.reservation,groupDoc:g.path});
-    else if(date==='2026-10-17') body=reminderBox('return')+scheduleLeg(rr,{kind:'ryanair',reservation:rr.reservation,groupDoc:g.path});
-    else if(date==='2026-10-18') body=scheduleLeg(tw.return,{kind:'trinity',reservation:tw.reservation,ticket:tw.ticket,eticket:tw.eticket});
+    const tw=m.tway,ro=m.ryanair.outbound,rr=m.ryanair.return,g=DATA.ryanairGroupDocument||{};let body='',label='';
+    if(date==='2026-10-12'){body=scheduleLeg(tw.outbound,{kind:'trinity',reservation:tw.reservation,ticket:tw.ticket,eticket:tw.eticket})+scheduleLeg(ro,{kind:'ryanair',reservation:ro.reservation,groupDoc:g.path});label=`${tw.outbound.flight} · ${ro.flight}`;}
+    else if(date==='2026-10-17'){body=reminderBox('return')+scheduleLeg(rr,{kind:'ryanair',reservation:rr.reservation,groupDoc:g.path});label=rr.flight;}
+    else if(date==='2026-10-18'){body=scheduleLeg(tw.return,{kind:'trinity',reservation:tw.reservation,ticket:tw.ticket,eticket:tw.eticket});label=tw.return.flight;}
     else return'';
-    return `<section class="personal-flight-day" data-personal-flight-date="${esc(date)}"><div class="personal-flight-day-head"><div><small>내 항공 · ${esc(date.slice(5).replace('-','/'))}</small><b>${esc(m.name)}님 항공편</b></div><span>현지시간</span></div>${body}</section>`;
+    return `<details class="personal-flight-day personal-flight-day-compact" data-personal-flight-date="${esc(date)}"><summary><span><b>✈ 내 항공권</b><small>${esc(label)} · 현지시간</small></span><em>보기</em></summary><div class="personal-flight-day-content">${body}</div></details>`;
   }
   function renderSchedule(){
     document.querySelectorAll('.personal-flight-day').forEach(x=>x.remove());
