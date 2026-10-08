@@ -1,4 +1,4 @@
-/* MIX74 - Croatia rainbow T-shirt selection, shared read / leader-only controls. */
+/* MIX75 - Croatia rainbow T-shirt selection, shared read / leader+admin controls, resilient face assets. */
 #shirts{--shirt-card:#fff;--shirt-line:#d9e5ea;--shirt-muted:#6c808b;--shirt-navy:#16445b}
 .shirt-shell{display:grid;gap:11px;max-width:980px;margin:0 auto}
 .shirt-progress-card{background:linear-gradient(145deg,#0f4c6b,#117d88);color:#fff;border-radius:18px;padding:14px;box-shadow:0 8px 24px #173d5520}
@@ -24,3 +24,23 @@ body.shirt-theme-active #loginUserChip:after{content:'●';color:var(--shirt-acc
 #shirtMenuBtn .shirt-menu-badge{display:inline-flex;align-items:center;justify-content:center;min-width:37px;height:19px;margin-left:5px;padding:0 6px;border-radius:999px;background:#e9f2f5;color:#426779;font-size:.6rem;font-style:normal;font-weight:950;vertical-align:1px}#shirtMenuBtn.shirt-menu-complete .shirt-menu-badge{background:#dff4e7;color:#24704d}
 @media(max-width:520px){.shirt-people{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.shirt-character{height:165px}.shirt-head{width:84px;height:91px}.shirt-neck{top:66px}.shirt-torso{top:75px;width:59px;height:42px}.shirt-jeans{top:108px;width:54px}.shirt-group-statuses{grid-template-columns:repeat(2,minmax(0,1fr))}.shirt-action.image{margin-left:0}.shirt-color-buttons{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(min-width:720px){.shirt-character{height:184px}.shirt-head{width:96px;height:104px}.shirt-neck{top:77px}.shirt-torso{top:87px;width:70px;height:48px}.shirt-jeans{top:126px;width:63px}.shirt-name{font-size:.88rem}.shirt-color-line,.shirt-group-line{font-size:.68rem}}
+
+
+/* MIX75: make the T-shirt menu visually distinct from ordinary menu items. */
+#shirtMenuBtn{
+  position:relative!important;
+  overflow:hidden!important;
+  border:2px solid #7a4fb3!important;
+  background:linear-gradient(135deg,#fff0f1 0%,#fff7df 22%,#eef9e8 42%,#eaf6ff 62%,#eef0ff 80%,#f7ecff 100%)!important;
+  box-shadow:0 6px 16px rgba(83,62,133,.16)!important;
+}
+#shirtMenuBtn:before{content:'';position:absolute;left:0;right:0;top:0;height:5px;background:linear-gradient(90deg,#ee2d2d 0 14.2%,#ff8a00 14.2% 28.4%,#ffd323 28.4% 42.6%,#18a85b 42.6% 56.8%,#2185ea 56.8% 71%,#273d86 71% 85.2%,#8a35c9 85.2% 100%)}
+#shirtMenuBtn>b{display:inline-grid!important;place-items:center!important;min-width:35px!important;height:35px!important;border-radius:12px!important;background:#fff!important;box-shadow:0 2px 8px #503c7c1f!important}
+#shirtMenuBtn>span{color:#4f3475!important;font-weight:1000!important}
+#shirtMenuBtn>small{color:#765f89!important;font-weight:850!important}
+#shirtMenuBtn.shirt-menu-complete{border-color:#2b8a5e!important;background:linear-gradient(135deg,#eefaf2,#f7efff 48%,#edf7ff)!important;box-shadow:0 6px 16px rgba(43,138,94,.18)!important}
+#shirtMenuBtn.shirt-menu-complete:after{content:'완료';position:absolute;right:6px;top:7px;padding:2px 5px;border-radius:999px;background:#2b8a5e;color:#fff;font-size:.52rem;font-weight:950}
+.shirt-role-note.admin{background:#fff7e8;border-color:#f0c86f;color:#775018;box-shadow:inset 3px 0 0 #e2a72d}
+.shirt-admin-reset-all{width:100%;margin-top:10px;border:1px solid #ffd2cc;border-radius:11px;background:#fff5f3;color:#a63c32;padding:9px 10px;font-size:.75rem;font-weight:950}
+.shirt-admin-reset-all:disabled{opacity:.45}
+.shirt-head-fallback{filter:none!important;border-radius:22px}
