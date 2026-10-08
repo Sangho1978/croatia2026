@@ -1,4 +1,4 @@
-const STATIC='gspa-static-v73-location-group-mapfix';
+const STATIC='gspa-static-v74-shirt-draw';
 const GUIDE='gspa-guidebook-v71-20261008-final';
 const CORE=[
   "./index.html",
@@ -37,6 +37,9 @@ const CORE=[
   "./css/mix71-weather-location.css",
   "./css/mix72-location-simple.css",
   "./css/mix73-location-group.css",
+  "./css/shirts.css",
+  "./data/shirt-draw.js",
+  "./js/rainbow-shirts.js",
   "./css/attendance-prep.css",
   "./css/compact-header.css",
   "./css/expense-ledger.css",
