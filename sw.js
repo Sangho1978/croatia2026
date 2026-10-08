@@ -1,5 +1,5 @@
-const STATIC='gspa-static-v70-final-booklet-sync';
-const GUIDE='gspa-guidebook-shared-v3-20261008';
+const STATIC='gspa-static-v72-location-simple';
+const GUIDE='gspa-guidebook-v71-20261008-final';
 const CORE=[
   "./index.html",
   "./trips.html",
@@ -34,6 +34,8 @@ const CORE=[
   "./css/mix67-date-tabs.css",
   "./css/mix68-date-tabs.css",
   "./css/mix69-schedule-map.css",
+  "./css/mix71-weather-location.css",
+  "./css/mix72-location-simple.css",
   "./css/attendance-prep.css",
   "./css/compact-header.css",
   "./css/expense-ledger.css",
@@ -123,14 +125,17 @@ const CORE=[
   "./assets/images/turkiye1/hotel_sheraton.jpg"
 ];
 self.addEventListener('install',e=>e.waitUntil((async()=>{const c=await caches.open(STATIC);for(const u of CORE){try{await c.add(new Request(u,{cache:'default'}))}catch(_){}}await self.skipWaiting()})()));
-self.addEventListener('activate',e=>e.waitUntil((async()=>{const ks=await caches.keys();await Promise.all(ks.filter(k=>(((k.startsWith('croatia-static-')||k.startsWith('gspa-static-'))&&k!==STATIC)||(k.startsWith('gspa-guidebook-shared-')&&k!==GUIDE))).map(k=>caches.delete(k)));await self.clients.claim()})()));
+self.addEventListener('activate',e=>e.waitUntil((async()=>{const ks=await caches.keys();await Promise.all(ks.filter(k=>(((k.startsWith('croatia-static-')||k.startsWith('gspa-static-'))&&k!==STATIC)||(k.startsWith('gspa-guidebook-')&&k!==GUIDE))).map(k=>caches.delete(k)));await self.clients.claim()})()));
 self.addEventListener('fetch',e=>{
   const req=e.request;if(req.method!=='GET')return;
   const url=new URL(req.url);if(url.origin!==self.location.origin)return;
   const decoded=decodeURIComponent(url.pathname);
-  const isGuide=/\/docs\/(?:croatia_guidebook|turkiye1_guidebook)\.pdf$/i.test(decoded)||/\/docs\/[^/]*안내책자\.pdf$/u.test(decoded);
+  const isGuide=/\/docs\/(?:croatia_guidebook_20261008_final|turkiye1_guidebook)\.pdf$/i.test(decoded);
   e.respondWith((async()=>{
     const cache=await caches.open(isGuide?GUIDE:STATIC);
+    if(isGuide){
+      try{const res=await fetch(new Request(req,{cache:'no-store'}));if(res&&res.ok){try{await cache.put(req,res.clone())}catch(_){}}return res}catch(err){const hit=await cache.match(req);if(hit)return hit;throw err}
+    }
     const hit=await cache.match(req,{ignoreSearch:true});if(hit)return hit;
     try{const res=await fetch(req);if(res&&res.ok){try{await cache.put(req,res.clone())}catch(_){}}return res}catch(err){
       if(req.mode==='navigate'){const indexHit=await cache.match('./index.html',{ignoreSearch:true});if(indexHit)return indexHit}

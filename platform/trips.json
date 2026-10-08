@@ -1,5 +1,5 @@
 {
-  "version": "20261001-MIX53",
+  "version": "20261009-MIX72",
   "defaultTrip": "croatia",
   "trips": [
     {
@@ -14,8 +14,8 @@
       "timeZone": "Europe/Zagreb",
       "currency": "EUR",
       "dbCode": "SNU17-CRO-2026-A7K9P4",
-      "booklet": "docs/croatia_guidebook.pdf",
-      "bookletDownload": "크로아티아_안내책자.pdf",
+      "booklet": "docs/croatia_guidebook_20261008_final.pdf",
+      "bookletDownload": "크로아티아_최종_안내소책자_20261008.pdf",
       "appUrl": "index.html?trip=croatia",
       "storagePrefix": "cro",
       "description": "크로아티아 + 로마 현장 연수 앱",

@@ -16,6 +16,7 @@
   const same=(n,u)=>n===epoch&&currentUser?.slot===u?.slot;
   function latestSelf(){return fix&&Date.now()-fix.ts<=FRESH?fix:null}
   function referenceSelf(){
+    if(!want)return null;
     const live=latestSelf();if(live)return live;
     const cached=currentUser?.slot?locCache[currentUser.slot]:null;
     return valid(cached)&&cached.sharing!==false&&age(cached)<=LEASE?cached:null;
@@ -31,12 +32,12 @@
   function locationClock(r){if(!valid(r))return '-';const z=locationRegion(r);if(window.AppTime)return `${z.label} ${AppTime.short(r.ts,z.zone)}`;return `${z.label} ${new Date(r.ts).toLocaleString('ko-KR',{timeZone:z.zone,month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'})}`;}
   function distance(a,b){const r=x=>x*Math.PI/180,p=r(b.lat-a.lat),q=r(b.lng-a.lng),v=Math.sin(p/2)**2+Math.cos(r(a.lat))*Math.cos(r(b.lat))*Math.sin(q/2)**2;return 6371000*2*Math.asin(Math.sqrt(Math.min(1,Math.max(0,v))))}
   function distanceInfo(r,u){
-    if(currentUser?.slot===u?.slot)return {label:'나 · 기준점',metres:0};
-    if(!enabled(r))return {label:valid(r)?'OFF · 이전 위치':'미공유',metres:null};
-    const me=referenceSelf();if(!me)return {label:'내 위치 ON 필요',metres:null};
-    const m=distance(me,r),near=m<Math.max(me.accuracy||0,r.accuracy||0);
+    if(currentUser?.slot===u?.slot)return {label:want?'나 · 기준점':'나 · 마지막 위치',metres:want?0:null};
+    if(!valid(r)||age(r)>=RETAIN)return {label:'최근 24시간 위치 없음',metres:null};
+    const me=referenceSelf();if(!me)return {label:'내 위치를 켜면 거리 계산',metres:null};
+    const m=distance(me,r),near=m<Math.max(me.accuracy||0,r.accuracy||0),past=!enabled(r);
     const value=m<1000?Math.round(m/10)*10+' m':(m/1000).toFixed(1)+' km';
-    return {label:(near?'오차범위 · ':'')+'나와 '+value,metres:m};
+    return {label:(near?'오차범위 · ':'')+'나와 '+value+(past?' · 상대 마지막 위치':''),metres:m};
   }
   function stateText(){
     if(!currentUser)return 'OFF \u00b7 \ub85c\uadf8\uc778 \uc804';
@@ -55,7 +56,7 @@
     const quick=document.getElementById('briefLocationLink');if(quick){quick.disabled=!currentUser;quick.dataset.state=want?'on':'off';quick.setAttribute('aria-checked',String(!!want));quick.setAttribute('aria-label',want?'위치공유 끄기 · 위치기록 24시간 보호':'위치공유 켜기 · 위치기록 24시간 보호');}
     const state=document.getElementById('locShareStatus');if(state)state.textContent=label+(message?' \u2014 '+message:'');
     const home=document.getElementById('todayLocationState');if(home)home.textContent=label;
-    const basis=document.getElementById('locationDistanceBasis');if(basis){const ref=referenceSelf();basis.textContent=(currentUser?.name||'로그인 사용자')+' 기준 직선거리'+(ref?' · '+locationClock(ref)+' · GPS 약 '+Math.round(ref.accuracy||0)+' m':' · 내 위치 ON 후 계산')+'\n지도와 명단의 거리 = 현재 로그인 사용자 기준';}
+    const basis=document.getElementById('locationDistanceBasis');if(basis){const ref=referenceSelf();basis.textContent=ref?('거리: 내 위치 기준 · 마지막 위치는 24시간까지만 표시'):('다른 일행 위치는 계속 볼 수 있습니다 · 거리는 상단 위치를 켜면 표시됩니다');}
     window.dispatchEvent(new CustomEvent('cro-location-state'));
   }
   function permissionError(e){if(e.code===1){phase='permission';message='\ube0c\ub77c\uc6b0\uc800\uc758 \uc0ac\uc774\ud2b8 \uc124\uc815\uc5d0\uc11c \uc704\uce58\ub97c \ud5c8\uc6a9\ud574 \uc8fc\uc138\uc694.'}else{phase='error';message=e.message||'\uc704\uce58 \ud655\uc778\uc5d0 \uc2e4\ud328\ud588\uc2b5\ub2c8\ub2e4.'}}
@@ -165,7 +166,7 @@
         phase='locating';message='';paint();const p=await getFix(high);
         if(!same(n,u)||!want)return;if(document.hidden){phase='paused';message='화면 복귀 후 다시 갱신합니다.';return;}fix=p;locLastPos={coords:{latitude:p.lat,longitude:p.lng,accuracy:p.accuracy},timestamp:p.ts};renderRoster();
         await token();if(!same(n,u)||!want)return;
-        const now=Date.now(),clock=window.AppTime?AppTime.stored(now):null,data={uid:localStorage.getItem('fb_uid'),slot:u.slot,group:u.group,name:u.name,lat:p.lat,lng:p.lng,accuracy:p.accuracy,ts:now,pageState:'foreground',...(clock?{timeCroatia:clock.croatia,timeKorea:clock.korea}: {})};
+        const now=Date.now(),clock=window.AppTime?AppTime.stored(now):null,data={uid:localStorage.getItem('fb_uid'),slot:u.slot,group:u.group,name:u.name,lat:p.lat,lng:p.lng,accuracy:p.accuracy,ts:now,sharing:true,pageState:'foreground',...(clock?{timeCroatia:clock.croatia,timeKorea:clock.korea}: {})};
         phase='sending';paint();
         // MIX50 Rules allow the same named member to reclaim this fixed slot when a browser/PWA creates a new anonymous Firebase UID.
         await request('locations/'+TRIP_CODE+'/'+u.slot,{method:'PUT',body:JSON.stringify(data)});
@@ -178,7 +179,7 @@
       finally{writeJob=null;if(same(n,u)){paint();renderRoster();}}
     })();return writeJob;
   }
-  async function clearRemote(u){if(!u)return;retryStop=u;localStorage.setItem(stopKey,JSON.stringify({slot:u.slot,name:u.name}));try{await request('locations/'+TRIP_CODE+'/'+u.slot,{method:'DELETE'});retryStop=null;localStorage.removeItem(stopKey);delete locCache[u.slot]}catch(e){message='\uc774 \uae30\uae30\uc758 \uc804\uc1a1\uc740 \uc911\uc9c0\ub428. \uc11c\ubc84 \uc911\uc9c0 \uc54c\ub9bc\uc740 \uc5f0\uacb0 \ud6c4 \uc7ac\uc2dc\ub3c4.'}paint();renderRoster()}
+  async function clearRemote(u){if(!u)return;retryStop=u;localStorage.setItem(stopKey,JSON.stringify({slot:u.slot,name:u.name}));try{let prev=locCache[u.slot];if(!valid(prev)){try{prev=await request('locations/'+TRIP_CODE+'/'+u.slot)}catch(_){prev=null}}if(valid(prev)&&age(prev)<RETAIN){const member=APP_BY_SLOT[u.slot]||u,stopped={...prev,uid:localStorage.getItem('fb_uid')||prev.uid,slot:u.slot,group:Number.isFinite(member.group)?member.group:(prev.group||0),name:member.name||prev.name,sharing:false,stoppedAt:Date.now()};await request('locations/'+TRIP_CODE+'/'+u.slot,{method:'PUT',body:JSON.stringify(stopped)});locCache[u.slot]=stopped}else{try{await request('locations/'+TRIP_CODE+'/'+u.slot,{method:'DELETE'})}catch(_){}}retryStop=null;localStorage.removeItem(stopKey)}catch(e){message='이 기기의 전송은 중지됨. 마지막 위치 OFF 표시는 연결 후 재시도.'}paint();renderRoster()}
   window.locStopSharing=async function(){
     const u=owner?{...owner}:currentUser?{...currentUser}:null;
     want=false;phase='off';epoch++;message='';fix=null;ack=0;locLastWrite=0;
@@ -220,14 +221,15 @@
   window.appLogout=async function(){loggingOut=true;try{return await previousLogout.apply(this,arguments)}finally{loggingOut=false}};
   window.updateLiveLocChip=paint;
   // Age is text only. Marker colours never encode elapsed time.
-  function statusOf(r){if(!valid(r))return '\uacf5\uc720 \uc5c6\uc74c';if(r.sharing===false)return 'OFF';if(!enabled(r))return '\uac31\uc2e0 \uc9c0\uc5f0 \u00b7 ON \uc5ec\ubd80 \ud655\uc778 \ud544\uc694';return age(r)<=FRESH?'\ucd5c\uadfc \uc704\uce58':'\uc774\uc804 \uc704\uce58 \uae30\uc900'}
-  let rosterMode=localStorage.getItem('cro.location.view.v5')==='detail'?'detail':'compact';
-  let readError=false;
+  function statusOf(r){if(!valid(r)||age(r)>=RETAIN)return '최근 24시간 위치 없음';if(r.sharing===false)return 'OFF · 마지막 위치';if(enabled(r))return age(r)<=FRESH?'ON · 최근 위치':'ON · 이전 위치';return '이전 위치 · 현재 ON/OFF 미확인'}
+    let readError=false;
   function visibleState(u,r){
-    if(u.slot===currentUser?.slot && !want)return {label:'OFF',on:false,detail:'\uacf5\uc720 \uc548 \ud568'};
-    if(enabled(r))return {label:'ON',on:true,detail:ago(r.ts)};
-    if(valid(r)&&r.sharing!==false)return {label:'\uc9c0\uc5f0',on:false,detail:'\uc774\uc804 \uc704\uce58'};
-    return {label:readAt?'OFF':'\ubbf8\ud655\uc778',on:false,detail:readAt?'\ubbf8\uacf5\uc720':'\uc870\ud68c \ub300\uae30'};
+    if(valid(r)&&age(r)<RETAIN){
+      if(u.slot===currentUser?.slot&&!want)return {label:'OFF',on:false,detail:'마지막 위치 · '+ago(r.ts)};
+      if(enabled(r))return {label:'ON',on:true,detail:ago(r.ts)};
+      return {label:r.sharing===false?'OFF':'이전',on:false,detail:'마지막 위치 · '+ago(r.ts)};
+    }
+    return {label:readAt?'OFF':'미확인',on:false,detail:readAt?'24시간 내 위치 없음':'조회 대기'};
   }
   window.renderRoster=function(){
     const box=document.getElementById('locRoster');if(!box)return;
@@ -235,44 +237,36 @@
     const summary=[1,2,3,4,0].map(g=>{
       const list=APP_USERS.filter(u=>u.group===g).sort((a,b)=>a.groupOrder-b.groupOrder);
       const online=list.filter(u=>visibleState(u,locCache[u.slot]).on).length;
-      return {g,list,online,offline:list.length-online};
+      const located=list.filter(u=>valid(locCache[u.slot])&&age(locCache[u.slot])<RETAIN).length;
+      return {g,list,online,located};
     });
-    const online=summary.reduce((n,g)=>n+g.online,0);
-    const totals=document.getElementById('locGroupTotals');
-    if(totals)totals.innerHTML=summary.map(({g,list,online,offline})=>`<button type="button" data-loc-group="${g||'prof'}" style="--group:${locGroupColor(g)}" aria-label="${g?g+'\uc870':'\uad50\uc218'} ON ${online}\uba85, OFF \ubbf8\ud655\uc778 ${offline}\uba85"><span>${g?g+'\uc870':'\uad50\uc218'}</span><b>ON ${online}<small>/${list.length}</small></b></button>`).join('');
-    box.className='roster loc5-board '+(rosterMode==='detail'?'is-detail':'is-compact');
+    const online=summary.reduce((n,g)=>n+g.online,0),located=summary.reduce((n,g)=>n+g.located,0);
+    box.className='roster loc5-board is-unified';
     let html='';
     for(const item of summary){
-      const {g,online,offline}=item,list=item.list.filter(locUserMatchesFilter);if(!list.length)continue;
-      html+=`<section class="loc5-group" data-location-group="${g}" style="--group:${locGroupColor(g)}"><header><h4>${g?g+'\uc870':'\uc778\uc194 \uad50\uc218'}</h4><span><b>ON ${online}</b> \u00b7 OFF/\ubbf8\ud655\uc778 ${offline}</span></header><div class="loc5-members">`;
+      const {g,located:groupLocated}=item,list=item.list.filter(locUserMatchesFilter);if(!list.length)continue;
+      html+=`<section class="loc5-group" data-location-group="${g}" style="--group:${locGroupColor(g)}"><header><h4>${g?g+'조':'인솔 교수'}</h4><span>위치 ${groupLocated}/${item.list.length}</span></header><div class="loc5-members">`;
       for(const u of list){
         const r=locCache[u.slot],di=distanceInfo(r,u),s=visibleState(u,r),me=u.slot===currentUser?.slot;
-        const dist=di.label;
-        const meta=rosterMode==='detail'?`${statusOf(r)}${valid(r)?' \u00b7 '+locationClock(r)+' ('+ago(r.ts)+') \u00b7 GPS \uc57d '+Math.round(r.accuracy||0)+'m':''}`:(valid(r)?locationClock(r):s.detail);
-        html+=`<button class="loc5-person ${u.leader?'is-leader':''} ${s.on?'is-on':'is-off'}" type="button" data-location-slot="${u.slot}" onclick="locOpenPerson('${u.slot}')" aria-label="${esc(u.name)}, ${s.label}, ${esc(di.label)}, \uc0c1\uc138\ubcf4\uae30"><span class="loc5-name"><b>${esc(u.name)}</b>${u.leader?'<small>\uc870\uc7a5</small>':''}${me?'<small>\ub098</small>':''}</span><span class="loc5-status">${s.label}</span><span class="distance-value" data-metres="${di.metres??''}" title="${esc(di.label)}">${esc(dist)}</span><span class="loc5-meta">${esc(meta)}</span></button>`;
+        const meta=valid(r)&&age(r)<RETAIN?locationClock(r)+' · '+ago(r.ts):s.detail;
+        html+=`<button class="loc5-person ${u.leader?'is-leader':''} ${s.on?'is-on':'is-off'}" type="button" data-location-slot="${u.slot}" onclick="locOpenPerson('${u.slot}')" aria-label="${esc(u.name)}, ${s.label}, ${esc(di.label)}"><span class="loc5-name"><b>${esc(u.name)}</b>${u.leader?'<small>조장</small>':''}${me?'<small>나</small>':''}</span><span class="loc5-status">${s.label}</span><span class="distance-value" data-metres="${di.metres??''}">${esc(di.label)}</span><span class="loc5-meta">${esc(meta)}</span></button>`;
       }
       html+='</div></section>';
     }
     box.innerHTML=html;
     if(focusSlot)box.querySelector(`[data-location-slot="${focusSlot}"]`)?.focus({preventScroll:true});
-    document.getElementById('locLiveCount').textContent=online;
-    document.getElementById('locStaleCount').textContent=APP_USERS.filter(u=>enabled(locCache[u.slot])&&age(locCache[u.slot])>FRESH).length;
-    document.getElementById('locOffCount').textContent=APP_USERS.length-online;
-    document.getElementById('locLastRefresh').textContent=readAt?textClock(readAt):'-';
-    const note=document.getElementById('locStateNote');if(note)note.textContent=readError?'\uc870\ud68c \uc2e4\ud328 \u00b7 \uc800\uc7a5\ub41c \ucd5c\uadfc \uc0c1\ud0dc\uc785\ub2c8\ub2e4. ON\ub3c4 \ub2f9\uc0ac\uc790\uc5d0\uac8c \ud655\uc778\ud574 \uc8fc\uc138\uc694.':readAt?'ON = 최근 수신 · 이름을 누르면 상세':'\uc11c\ubc84 \uc870\ud68c \uc804 \u00b7 \uc704\uce58 \uc0c1\ud0dc\ub97c \ud655\uc778\ud558\uace0 \uc788\uc2b5\ub2c8\ub2e4.';
-    document.querySelectorAll('[data-loc-view]').forEach(e=>e.setAttribute('aria-pressed',String(e.dataset.locView===rosterMode)));
+    const liveEl=document.getElementById('locLiveCount'),offEl=document.getElementById('locOffCount'),staleEl=document.getElementById('locStaleCount'),refreshEl=document.getElementById('locLastRefresh');
+    if(liveEl)liveEl.textContent=located;if(offEl)offEl.textContent=APP_USERS.length-located;if(staleEl)staleEl.textContent=APP_USERS.filter(u=>enabled(locCache[u.slot])&&age(locCache[u.slot])>FRESH).length;if(refreshEl)refreshEl.textContent=readAt?textClock(readAt):'-';
+    const note=document.getElementById('locStateNote');if(note)note.textContent=readError?'조회 실패 · 마지막 위치의 시각을 확인해 주세요.':readAt?'이름을 누르면 마지막 위치와 시간을 확인할 수 있습니다.':'위치 정보를 불러오는 중입니다.';
     paint();updateMarkers();
   };
-  document.addEventListener('click',e=>{
-    const view=e.target.closest('[data-loc-view]');if(view){rosterMode=view.dataset.locView==='detail'?'detail':'compact';localStorage.setItem('cro.location.view.v5',rosterMode);renderRoster();}
-    const g=e.target.closest('[data-loc-group]');if(g){const f=g.dataset.locGroup;locSetFilter(f,document.querySelector('#locFilters [data-filter="'+f+'"]'));}
-  });
-  window.locOpenPerson=async function(slot){const u=APP_BY_SLOT[slot],r=locCache[slot],box=document.getElementById('locPersonDetail');if(!u||!box)return;const d=distanceInfo(r,u),me=slot===currentUser?.slot;box.classList.add('show');let actions='';if(me){actions=`<button class="primary" onclick="locLoadHistory('${slot}',true)">🗺 Google 지도 · 내 24시간 이동이력</button>`}else if(valid(r)){actions=`<a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${r.lat},${r.lng}">Google 지도 · 현재 위치</a>`}box.innerHTML=`<div class="loc-simple-head"><h3>${esc(u.name)} · ${userGroupText(u)}</h3><button type="button" onclick="this.closest('#locPersonDetail').classList.remove('show')">닫기</button></div><b>${esc(d.label)}${d.metres!==null&&!Number.isNaN(d.metres)?' · 직선거리':''}</b><p>${esc(statusOf(r))}${valid(r)?'<br>'+locationClock(r)+' ('+ago(r.ts)+') · GPS 약 '+Math.round(r.accuracy||0)+'m':'<br>최근 24시간 내 공유 위치 없음'}</p>${me?'<p class="small muted">이동이력은 본인만 최근 24시간 범위로 지도에서 확인할 수 있습니다.</p>':''}${actions?`<div class="actions">${actions}</div>`:''}`;box.scrollIntoView({behavior:'smooth',block:'nearest'});};
-  function mapLabel(u,r){const d=distanceInfo(r,u);return esc(u.name)+' · '+esc(d.label)}
-  function popup(u,r){return `<b>${esc(u.name)} \u00b7 ${u.group?u.group+'\uc870':'\uad50\uc218'}</b><p>${esc(distanceInfo(r,u).label)}<br>${locationClock(r)} (${ago(r.ts)})<br>GPS \uc57d ${Math.round(r.accuracy||0)} m</p>`}
+  document.addEventListener('click',e=>{const g=e.target.closest('[data-loc-group]');if(g){const f=g.dataset.locGroup;locSetFilter(f,document.querySelector('#locFilters [data-filter="'+f+'"]'));}});
+  window.locOpenPerson=async function(slot){const u=APP_BY_SLOT[slot],r=locCache[slot],box=document.getElementById('locPersonDetail');if(!u||!box)return;const d=distanceInfo(r,u),me=slot===currentUser?.slot,isAdmin=currentUser?.name===(window.GSPA_TRIP?.locationAdmin||window.GSPA_TRIP?.attendanceOperator||'한상호');box.classList.add('show');let actions='';if(me){actions=`<button class="primary" onclick="locLoadHistory('${slot}',true)">내 24시간 이동이력</button>`}else if(valid(r)){actions=`<a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${r.lat},${r.lng}">Google 지도에서 보기</a>`}const precision=isAdmin&&valid(r)?` · GPS 약 ${Math.round(r.accuracy||0)}m`:'';box.innerHTML=`<div class="loc-simple-head"><h3>${esc(u.name)}</h3><button type="button" onclick="this.closest('#locPersonDetail').classList.remove('show')">닫기</button></div><b>${esc(d.label)}</b><p>${esc(statusOf(r))}${valid(r)?'<br>'+locationClock(r)+' · '+ago(r.ts)+precision:'<br>최근 24시간 내 위치 없음'}</p>${actions?`<div class="actions">${actions}</div>`:''}`;box.scrollIntoView({behavior:'smooth',block:'nearest'});};
+  function mapLabel(u,r){const d=distanceInfo(r,u),st=visibleState(u,r),core=d.metres!==null?d.label:st.label;return esc(u.name)+' · '+esc(core)+' · '+esc(ago(r.ts))}
+  function popup(u,r){return `<b>${esc(u.name)} · ${u.group?u.group+'조':'교수'}</b><p>${esc(statusOf(r))}<br>${esc(distanceInfo(r,u).label)}<br>${locationClock(r)} · ${ago(r.ts)}</p>`}
   window.makeGoogleOverlay=function(u,r){class M extends google.maps.OverlayView{onAdd(){const d=document.createElement('div');d.className='g-overlay';d.innerHTML=`<div class="group-marker ${u.slot===currentUser?.slot?'is-self':''}" style="--group:${locGroupColor(u.group)}"><span class="group-marker-label">${mapLabel(u,r)}</span></div>`;d.onclick=()=>{googleInfo.setContent(popup(u,r));googleInfo.setPosition({lat:r.lat,lng:r.lng});googleInfo.open(mapObj)};this.div=d;this.getPanes().overlayMouseTarget.appendChild(d)}draw(){const p=this.getProjection().fromLatLngToDivPixel(new google.maps.LatLng(r.lat,r.lng));if(this.div){this.div.style.left=p.x+'px';this.div.style.top=p.y+'px'}}onRemove(){this.div?.remove()}}const o=new M();o.setMap(mapObj);return o;};
   let fitKey='';
-  window.updateMarkers=function(){if(!mapObj)return;const users=Object.entries(locCache).filter(([k,r])=>APP_BY_SLOT[k]&&locUserMatchesFilter(APP_BY_SLOT[k])&&valid(r)&&r.sharing!==false&&(enabled(r)||k===currentUser?.slot));const key=locMapEngine+'|'+locFilter+'|'+users.map(([k])=>k).sort().join(',');
+  window.updateMarkers=function(){if(!mapObj)return;const users=Object.entries(locCache).filter(([k,r])=>APP_BY_SLOT[k]&&locUserMatchesFilter(APP_BY_SLOT[k])&&valid(r)&&age(r)<RETAIN);const key=locMapEngine+'|'+locFilter+'|'+users.map(([k])=>k).sort().join(',');
     if(locMapEngine==='google'&&window.google?.maps&&mapObj.getDiv){googleOverlays.forEach(x=>x.setMap(null));googleOverlays=[];const bounds=new google.maps.LatLngBounds();users.forEach(([k,r])=>{googleOverlays.push(makeGoogleOverlay(APP_BY_SLOT[k],r));bounds.extend({lat:r.lat,lng:r.lng})});if(users.length&&key!==fitKey){if(users.length===1){mapObj.setCenter(bounds.getCenter());mapObj.setZoom(16)}else mapObj.fitBounds(bounds,55);fitKey=key}}
     else if(locMapEngine==='leaflet'&&window.L&&mapObj.invalidateSize){markers.forEach(m=>mapObj.removeLayer(m));markers=[];const pts=[];users.forEach(([k,r])=>{const u=APP_BY_SLOT[k],icon=L.divIcon({className:'dual-leaf',html:`<div class="group-marker ${u.slot===currentUser?.slot?'is-self':''}" style="--group:${locGroupColor(u.group)}"><span class="group-marker-label">${mapLabel(u,r)}</span></div>`,iconSize:[24,24],iconAnchor:[12,12]});markers.push(L.marker([r.lat,r.lng],{icon}).addTo(mapObj).bindPopup(popup(u,r)));pts.push([r.lat,r.lng])});if(pts.length&&key!==fitKey){if(pts.length===1)mapObj.setView(pts[0],16);else mapObj.fitBounds(pts,{padding:[55,55],maxZoom:17});fitKey=key}}
   };

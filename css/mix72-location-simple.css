@@ -1,0 +1,66 @@
+/* MIX72 - simplified location UI for general users; advanced controls stay admin-only. */
+#location .location-heading{margin-bottom:10px!important}
+#location .location-heading p{margin-top:4px!important}
+#location .location-simple-note{display:flex;align-items:flex-start;gap:9px;margin:8px 0 10px;padding:10px 12px;border:1px solid #d7e4e9;border-radius:13px;background:#f8fbfc;color:#526d79;font-size:.72rem;line-height:1.45}
+#location .location-note-mark{flex:0 0 9px;width:9px;height:9px;margin-top:4px;border-radius:50%;background:#1e7d72;box-shadow:0 0 0 4px #e4f3ef}
+#location .location-main-card{margin:0;padding:12px;border:1px solid #d6e3e8;border-radius:18px;background:#fff;box-shadow:0 4px 16px rgba(28,67,86,.045)}
+#location .location-tool-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+#location .location-tool-row button{border:1px solid #cbdde4;border-radius:12px;font-weight:900;min-height:42px}
+#location .location-map-btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;flex:1;background:#0f5878;color:#fff;border-color:#0f5878!important;padding:9px 14px;font-size:.82rem}
+#location .location-map-icon{width:18px;height:18px;fill:currentColor;flex:0 0 18px}
+#location .location-refresh-btn{flex:0 0 auto;min-height:38px!important;padding:7px 10px!important;background:#f7fafb;color:#315b70;font-size:.68rem!important;white-space:nowrap}
+#location .location-action-feedback{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+#location .location-summary-line{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:2px 0 8px;color:#6b7f89;font-size:.67rem}
+#location .location-summary-line span{display:inline-flex;align-items:baseline;gap:4px;padding:5px 8px;border-radius:999px;background:#f4f8f9;border:1px solid #e0e9ed}
+#location .location-summary-line b{color:#214f66;font-size:.73rem}
+#location .loc-filter{padding:2px 0 8px!important;margin:0!important;gap:6px!important}
+#location .loc-filter button{min-height:34px!important;padding:6px 11px!important;font-size:.68rem!important}
+#location .map-workspace{margin-top:2px}
+#location .mapbox{margin:8px 0 10px!important;border-radius:14px!important;min-height:310px}
+#location .location-roster-card{border-top:1px solid #e4ecef;padding-top:10px}
+#location .location-roster-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px}
+#location .location-roster-head h3{margin:0;font-size:.98rem;color:#184a64}
+#location .location-roster-head small{font-size:.65rem;color:#7a8c95;font-weight:800}
+#location #locStateNote{margin:3px 0 8px!important;font-size:.65rem!important;color:#768993!important;line-height:1.4}
+#location #locRoster.loc5-board{display:block!important}
+#location .loc5-group{margin:0 0 10px!important;border:0!important;background:transparent!important}
+#location .loc5-group>header{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:8px!important;padding:5px 2px 6px!important;border-bottom:1px solid #e6edef!important;margin-bottom:5px!important}
+#location .loc5-group>header h4{margin:0!important;font-size:.76rem!important;color:#355f73!important}
+#location .loc5-group>header span{font-size:.62rem!important;color:#81919a!important;font-weight:800!important}
+#location .loc5-members{display:grid!important;grid-template-columns:1fr!important;gap:5px!important}
+body.mixed-app #location .loc5-person{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;grid-template-areas:"name status" "distance meta"!important;gap:3px 7px!important;min-height:0!important;padding:8px 10px!important;border:1px solid #dfe8ec!important;border-left:3px solid var(--group)!important;border-radius:11px!important;background:#fbfcfd!important;box-shadow:none!important}
+body.mixed-app #location .loc5-person.is-on{background:#fff!important;border-color:#c9dce4!important}
+body.mixed-app #location .loc5-person.is-leader{grid-column:auto!important;background:#f6f9fa!important}
+#location .loc5-name{grid-area:name!important;display:flex!important;align-items:center!important;gap:5px!important;min-width:0}
+#location .loc5-name>b{font-size:.84rem!important;color:#1f465a!important;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#location .loc5-name small{font-size:.55rem!important;padding:2px 5px!important;border-radius:999px!important;background:#eef3f5!important;color:#607985!important;white-space:nowrap}
+#location .loc5-status{grid-area:status!important;align-self:center!important;font-size:.62rem!important;white-space:nowrap!important}
+body.mixed-app #location #locRoster .loc5-person .distance-value{grid-area:distance!important;margin:0!important;font-size:.67rem!important;line-height:1.35!important;color:#315f75!important;font-weight:850!important;min-width:0!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+#location .loc5-meta{grid-area:meta!important;display:block!important;font-size:.6rem!important;line-height:1.35!important;color:#7c8f98!important;text-align:right!important;white-space:nowrap!important}
+#location .loc-person-detail{margin-top:8px!important;border-radius:13px!important;box-shadow:none!important}
+#location .loc-person-detail.show{padding:11px!important}
+#location .loc-person-detail h3{font-size:.9rem!important;margin:0!important}
+#location .loc-person-detail p{font-size:.7rem!important;line-height:1.5!important;margin:6px 0!important}
+#location .loc-person-detail .actions{margin-top:7px!important}
+#location .loc-person-detail .actions .btn,#location .loc-person-detail .actions button{min-height:36px!important;padding:7px 10px!important;font-size:.68rem!important}
+#location .location-admin-tools{margin-top:10px!important;border:1px dashed #b9ccd5!important;background:#f9fbfc!important;box-shadow:none!important}
+#location .location-admin-tools>summary{font-size:.75rem!important;font-weight:900!important;color:#546f7c!important;cursor:pointer}
+#location .location-admin-tools[hidden]{display:none!important}
+#location .location-admin-tools .loc-simple-head{margin-top:10px}
+#location .location-admin-tools .compact-runtime-tools{margin:8px 0!important;padding:7px 0!important;border:0!important;background:transparent!important}
+#location .location-admin-tools .loc-map-engine-wrap{margin-top:8px}
+#location .location-admin-tools #locBackendState{margin-top:7px;font-size:.66rem}
+#location .map-fs-close{font-size:.72rem!important}
+@media(max-width:430px){
+  #location .location-main-card{padding:10px}
+  #location .location-map-btn{font-size:.78rem;padding:8px 12px}
+  #location .location-summary-line{gap:5px}
+  #location .location-summary-line span{padding:4px 6px}
+  body.mixed-app #location .loc5-person{padding:8px!important}
+  body.mixed-app #location #locRoster .loc5-person .distance-value{font-size:.64rem!important}
+  #location .loc5-meta{font-size:.57rem!important}
+}
+@media(min-width:840px){
+  #location .location-tool-row{max-width:540px}
+  #location .location-simple-note{max-width:720px}
+}

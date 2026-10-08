@@ -2,7 +2,7 @@
 (function(){
   try{localStorage.setItem('cro.data.saver','1')}catch(_){}
   document.documentElement.dataset.dataSaver='on';
-  if('serviceWorker'in navigator && window.isSecureContext){navigator.serviceWorker.register('./sw.js?v=20261008-MIX70',{scope:'./'}).catch(()=>{});}
+  if('serviceWorker'in navigator && window.isSecureContext){navigator.serviceWorker.register('./sw.js?v=20261009-MIX72',{scope:'./'}).catch(()=>{});}
   const c=navigator.connection||navigator.mozConnection||navigator.webkitConnection;
   if(c?.saveData)document.documentElement.dataset.networkSaveData='on';
 })();
