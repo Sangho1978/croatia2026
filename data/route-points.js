@@ -32,17 +32,17 @@ window.CRO_ROUTE_POINTS={
     {order:5,n:'Aminess Kadoor Hotel · 석식',lat:45.491699,lng:15.549174,kind:'meal',mealType:'석식'}
   ],
   '2026-10-17':[
-    {order:1,n:'카를로바크',lat:45.4929,lng:15.5553},
-    {order:2,n:'자그레브',lat:45.8150,lng:15.9819},
-    {order:3,n:'CRO.K · 석식',lat:45.81370,lng:15.97705,kind:'meal',mealType:'석식'},
-    {order:4,n:'자그레브 공항',lat:45.7429,lng:16.0688},
-    {order:5,n:'로마 FCO',lat:41.8003,lng:12.2389},
-    {order:6,n:'Ergife Palace',lat:41.8910,lng:12.4145}
+    {order:1,n:'Aminess Kadoor Hotel',lat:45.491699,lng:15.549174},
+    {order:2,n:'카를로바크 구시가지',lat:45.4929,lng:15.5553},
+    {order:3,n:'자그레브',lat:45.8150,lng:15.9819},
+    {order:4,n:'CRO.K · 석식',lat:45.81370,lng:15.97705,kind:'meal',mealType:'석식'},
+    {order:5,n:'자그레브 공항',lat:45.7429,lng:16.0688},
+    {order:6,n:'로마 FCO',lat:41.8003,lng:12.2389},
+    {order:7,n:'Ergife Palace',lat:41.8910,lng:12.4145}
   ],
   '2026-10-18':[
     {order:1,n:'Ergife Palace',lat:41.8910,lng:12.4145},
-    {order:2,n:'로마 중심부',lat:41.9028,lng:12.4964},
-    {order:3,n:'로마 FCO',lat:41.8003,lng:12.2389}
+    {order:2,n:'로마 FCO',lat:41.8003,lng:12.2389}
   ],
   '2026-10-19':[
     {order:1,n:'인천국제공항',lat:37.4602,lng:126.4407}

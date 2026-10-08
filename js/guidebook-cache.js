@@ -6,9 +6,10 @@
   const trip=window.GSPA_TRIP||{};
   const PDF=trip.booklet||'docs/croatia_guidebook.pdf';
   const NAME=trip.bookletDownload||'안내책자.pdf';
+  const GUIDE_CACHE='gspa-guidebook-shared-v3-20261008';
   const abs=()=>new URL(PDF,location.href).href;
   function state(t,err=false){const e=document.getElementById('guidebookCacheState');if(e){e.textContent=t;e.classList.toggle('guidebook-error',!!err)}}
-  async function cached(){if(!('caches'in window))return null;try{return await caches.match(abs(),{ignoreSearch:true})}catch(_){return null}}
+  async function cached(){if(!('caches'in window))return null;try{const c=await caches.open(GUIDE_CACHE);return await c.match(abs(),{ignoreSearch:true})}catch(_){return null}}
   async function paint(){state(await cached()?'✓ 이 기기에 저장됨 · 오프라인 사용 가능':'처음 열 때 저장 · 이후 저장본 우선')}
   async function offlineOpen(a,action){
     const r=await cached();

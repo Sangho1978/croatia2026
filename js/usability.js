@@ -46,7 +46,7 @@
       </div>
 
       <section class="emergency6-section" aria-labelledby="emergencyCoreTitle">
-        <div class="emergency6-section-head"><div><span>QUICK CONTACT</span><h3 id="emergencyCoreTitle">가장 먼저 필요한 연락처</h3></div><small>2026.09.20 확인</small></div>
+        <div class="emergency6-section-head"><div><span>QUICK CONTACT</span><h3 id="emergencyCoreTitle">가장 먼저 필요한 연락처</h3></div><small>10/08 최종 소책자 반영</small></div>
         <div class="emergency6-contact-grid">
           <article class="emergency6-contact is-primary"><div><span>유럽 공통 · 24시간</span><h4>긴급신고 112</h4><p>경찰 · 소방 · 응급의료. 크로아티아는 영어 신고도 지원합니다.</p></div><a href="tel:112">☎ 112</a></article>
           <article class="emergency6-contact"><div><span>대한민국 외교부 · 24시간</span><h4>영사안전콜센터</h4><p>사건·사고, 긴급 의료, 경찰 신고 등 초기 통역과 영사상담</p></div><div class="emergency6-actions"><a href="tel:+82232100404">☎ +82 2 3210 0404</a><a class="is-link" href="https://www.0404.go.kr/bbs/contsPst/MST0000000000105/5/detail" target="_blank" rel="noopener noreferrer">공식 안내 ↗</a></div></article>
@@ -58,6 +58,19 @@
           <p><span>3</span><q>There are [숫자] injured people. One person is unconscious / bleeding.</q></p>
           <p><span>4</span><q>My name is [이름]. My phone number is [번호].</q></p>
           <small>통화가 끊기지 않도록 먼저 <strong>무슨 일인지 → 정확한 위치 → 부상자 수·상태 → 신고자 연락처</strong> 순서로 짧게 전달하세요.</small>
+        </div>
+      </section>
+
+
+      <section class="emergency6-section" aria-labelledby="emergencyFieldTitle">
+        <div class="emergency6-section-head"><div><span>TRIP CONTACT</span><h3 id="emergencyFieldTitle">인솔 · 현지가이드 · 현지사무소</h3></div><small>10/08 최종 소책자 p.61</small></div>
+        <div class="emergency6-contact-grid">
+          <article class="emergency6-contact is-primary"><div><span>인솔자</span><h4>지민정</h4><p>공항 미팅·전체 연수 인솔</p></div><a href="tel:+821094161883">☎ +82 10 9416 1883</a></article>
+          <article class="emergency6-contact"><div><span>크로아티아 현지 가이드</span><h4>이명주</h4><p>크로아티아 현지 관광 안내</p></div><a href="tel:+420775059369">☎ +420 775 059 369</a></article>
+          <article class="emergency6-contact"><div><span>로마 현지 가이드</span><h4>최대진</h4><p>로마 현지 관광 안내</p></div><a href="tel:+393489009804">☎ +39 348 9009804</a></article>
+          <article class="emergency6-contact"><div><span>이탈리아 현지 사무소</span><h4>박지예</h4><p>로마 현지 담당자</p></div><a href="tel:+393662034455">☎ +39 366 203 4455</a></article>
+          <article class="emergency6-contact"><div><span>크로아티아 현지 사무소</span><h4>이혜영</h4><p>크로아티아 현지 담당자</p></div><a href="tel:+420608880369">☎ +420 608 880 369</a></article>
+          <article class="emergency6-contact"><div><span>여행사 서울 사무실</span><h4>바네스투어</h4><p>서울 사무실</p></div><a href="tel:+8227567373">☎ +82 2 756 7373</a></article>
         </div>
       </section>
 

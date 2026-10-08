@@ -1,5 +1,5 @@
-const STATIC='gspa-static-v69-schedule-route-map';
-const GUIDE='gspa-guidebook-shared-v2';
+const STATIC='gspa-static-v70-final-booklet-sync';
+const GUIDE='gspa-guidebook-shared-v3-20261008';
 const CORE=[
   "./index.html",
   "./trips.html",
@@ -123,7 +123,7 @@ const CORE=[
   "./assets/images/turkiye1/hotel_sheraton.jpg"
 ];
 self.addEventListener('install',e=>e.waitUntil((async()=>{const c=await caches.open(STATIC);for(const u of CORE){try{await c.add(new Request(u,{cache:'default'}))}catch(_){}}await self.skipWaiting()})()));
-self.addEventListener('activate',e=>e.waitUntil((async()=>{const ks=await caches.keys();await Promise.all(ks.filter(k=>(k.startsWith('croatia-static-')||k.startsWith('gspa-static-'))&&k!==STATIC).map(k=>caches.delete(k)));await self.clients.claim()})()));
+self.addEventListener('activate',e=>e.waitUntil((async()=>{const ks=await caches.keys();await Promise.all(ks.filter(k=>(((k.startsWith('croatia-static-')||k.startsWith('gspa-static-'))&&k!==STATIC)||(k.startsWith('gspa-guidebook-shared-')&&k!==GUIDE))).map(k=>caches.delete(k)));await self.clients.claim()})()));
 self.addEventListener('fetch',e=>{
   const req=e.request;if(req.method!=='GET')return;
   const url=new URL(req.url);if(url.origin!==self.location.origin)return;
