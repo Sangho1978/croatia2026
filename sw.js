@@ -1,4 +1,4 @@
-const STATIC='gspa-static-v68-robust-compact-dates';
+const STATIC='gspa-static-v69-schedule-route-map';
 const GUIDE='gspa-guidebook-shared-v2';
 const CORE=[
   "./index.html",
@@ -33,6 +33,7 @@ const CORE=[
   "./css/mix66-schedule.css",
   "./css/mix67-date-tabs.css",
   "./css/mix68-date-tabs.css",
+  "./css/mix69-schedule-map.css",
   "./css/attendance-prep.css",
   "./css/compact-header.css",
   "./css/expense-ledger.css",

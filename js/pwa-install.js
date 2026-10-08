@@ -167,7 +167,7 @@
   window.addEventListener('DOMContentLoaded',()=>{
     paint();btn()?.addEventListener('click',install);
     autoKakaoGuide();
-    if('serviceWorker' in navigator&&window.isSecureContext)navigator.serviceWorker.register('./sw.js?v=20261008-MIX68',{scope:'./'}).then(r=>r.update().catch(()=>{})).catch(()=>{});
+    if('serviceWorker' in navigator&&window.isSecureContext)navigator.serviceWorker.register('./sw.js?v=20261008-MIX69',{scope:'./'}).then(r=>r.update().catch(()=>{})).catch(()=>{});
   });
   window.GSPA_PWA={install,paint,maybePromptAfterLogin,showGuide,copyAddress,isKakao};
 })();
