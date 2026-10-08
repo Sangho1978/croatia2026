@@ -1,0 +1,140 @@
+/* MIX73 - restore location/group separation, compact group roster, clearer ON state and larger menu labels. */
+
+/* Full menu: names were too small after MIX62 compact override. */
+body.mixed-app .app-sheet-grid button span,
+body.mixed-app .app-sheet-grid a span{
+  font-size:.9rem!important;
+  line-height:1.2!important;
+  font-weight:900!important;
+}
+body.mixed-app .app-sheet-grid button small,
+body.mixed-app .app-sheet-grid a small{
+  font-size:.67rem!important;
+  line-height:1.25!important;
+}
+@media(max-width:360px){
+  body.mixed-app .app-sheet-grid button span,
+  body.mixed-app .app-sheet-grid a span{font-size:.84rem!important}
+}
+
+/* Location: preserve the simple toolbar; restore the useful compact 2-column group roster. */
+#location .location-map-btn{font-size:.84rem!important}
+#location .location-roster-card{padding-top:9px!important}
+#location #locRoster.loc5-board{display:grid!important;grid-template-columns:1fr!important;gap:10px!important}
+#location .loc5-group{
+  margin:0!important;
+  border:1px solid #d8e4e9!important;
+  border-radius:15px!important;
+  overflow:hidden!important;
+  background:#fff!important;
+}
+#location .loc5-group>header{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:8px!important;
+  padding:8px 10px!important;
+  margin:0!important;
+  border:0!important;
+  border-left:5px solid var(--group)!important;
+  border-bottom:1px solid #e3ebef!important;
+  background:#f2f6f8!important;
+}
+#location .loc5-group>header h4{font-size:.86rem!important;color:#254e62!important}
+#location .loc5-group>header span{font-size:.64rem!important;color:#6f838d!important;font-weight:850!important}
+#location .loc5-group>header span b{font-weight:950!important;color:#1f5d76!important}
+#location .loc5-members{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:6px!important;
+  padding:7px!important;
+}
+body.mixed-app #location .loc5-person{
+  position:relative!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  grid-template-areas:"name status" "distance distance" "meta meta"!important;
+  gap:3px 6px!important;
+  min-height:76px!important;
+  padding:9px 8px!important;
+  border:1px solid #dce6ea!important;
+  border-left:3px solid var(--group)!important;
+  border-radius:11px!important;
+  background:#f8fafb!important;
+  box-shadow:none!important;
+  text-align:left!important;
+}
+body.mixed-app #location .loc5-person.is-leader{grid-column:auto!important;background:#f6f9fa!important}
+body.mixed-app #location .loc5-person.is-on{
+  background:#eaf7f1!important;
+  border-color:#7fc4a8!important;
+  border-left-color:var(--group)!important;
+  box-shadow:inset 0 0 0 1px rgba(27,126,91,.12)!important;
+}
+body.mixed-app #location .loc5-person.is-on::after{
+  content:"";
+  position:absolute;
+  inset:0 0 auto 0;
+  height:3px;
+  background:#19805e;
+  opacity:.9;
+}
+#location .loc5-name{grid-area:name!important;display:flex!important;gap:4px!important;align-items:center!important;min-width:0!important;flex-wrap:wrap!important}
+#location .loc5-name>b{font-size:.9rem!important;color:#1f465a!important;white-space:nowrap!important}
+#location .loc5-name small{font-size:.54rem!important;padding:1px 4px!important;border-radius:5px!important;background:#eef3f5!important;border:1px solid #d4e0e5!important;color:#627985!important}
+#location .loc5-status{
+  grid-area:status!important;
+  align-self:start!important;
+  justify-self:end!important;
+  margin-top:-1px!important;
+  border-radius:999px!important;
+  padding:3px 6px!important;
+  font-size:.58rem!important;
+  font-weight:950!important;
+  color:#71858f!important;
+  background:#eef2f4!important;
+  white-space:nowrap!important;
+}
+body.mixed-app #location .loc5-person.is-on .loc5-status{
+  color:#fff!important;
+  background:#19805e!important;
+}
+body.mixed-app #location .loc5-person.is-on .loc5-status::before{content:"●"!important;margin-right:3px!important;font-size:.68em!important}
+body.mixed-app #location .loc5-person.is-off .loc5-status::before{content:""!important;margin:0!important}
+body.mixed-app #location #locRoster .loc5-person .distance-value{
+  grid-area:distance!important;
+  margin:0!important;
+  font-size:.68rem!important;
+  line-height:1.35!important;
+  color:#315f75!important;
+  font-weight:850!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+}
+#location .loc5-meta{
+  grid-area:meta!important;
+  display:block!important;
+  margin:0!important;
+  font-size:.6rem!important;
+  line-height:1.35!important;
+  color:#7a8d96!important;
+  text-align:left!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+}
+#location .loc5-person.is-on .loc5-meta{color:#52776a!important}
+@media(max-width:360px){
+  #location .loc5-members{grid-template-columns:1fr!important}
+  body.mixed-app #location .loc5-person{min-height:68px!important}
+}
+@media(min-width:760px){
+  #location #locRoster.loc5-board{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+
+/* Keep the group view as a separate screen even if older cached CSS is present. */
+#group.app-view{width:100%;min-width:0}
+#group .group-tabs{z-index:90}
+
+/* Map visibility / gray-map resilience. */
+#location #locMap.show{min-height:320px!important;background:#eef3f5!important;overflow:hidden!important}
+#location #locMap .leaflet-container,#location #locMap .gm-style{width:100%!important;height:100%!important;min-height:320px!important}

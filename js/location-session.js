@@ -241,11 +241,11 @@
       return {g,list,online,located};
     });
     const online=summary.reduce((n,g)=>n+g.online,0),located=summary.reduce((n,g)=>n+g.located,0);
-    box.className='roster loc5-board is-unified';
+    box.className='roster loc5-board is-compact-v73';
     let html='';
     for(const item of summary){
       const {g,located:groupLocated}=item,list=item.list.filter(locUserMatchesFilter);if(!list.length)continue;
-      html+=`<section class="loc5-group" data-location-group="${g}" style="--group:${locGroupColor(g)}"><header><h4>${g?g+'조':'인솔 교수'}</h4><span>위치 ${groupLocated}/${item.list.length}</span></header><div class="loc5-members">`;
+      html+=`<section class="loc5-group" data-location-group="${g}" style="--group:${locGroupColor(g)}"><header><h4>${g?g+'조':'인솔 교수'}</h4><span>ON <b>${item.online}</b> · 위치 ${groupLocated}/${item.list.length}</span></header><div class="loc5-members">`;
       for(const u of list){
         const r=locCache[u.slot],di=distanceInfo(r,u),s=visibleState(u,r),me=u.slot===currentUser?.slot;
         const meta=valid(r)&&age(r)<RETAIN?locationClock(r)+' · '+ago(r.ts):s.detail;

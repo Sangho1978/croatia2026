@@ -22,11 +22,12 @@
     return parent?[parent.id,el.id]:['today',''];
   }
   function adjustMap(){
+    if(typeof window.locRefreshMapViewport==='function'){window.locRefreshMapViewport();return;}
     if(typeof mapObj==='undefined'||!mapObj)return;
-    setTimeout(()=>{
+    [120,420,900].forEach(ms=>setTimeout(()=>{
       if(mapObj.invalidateSize)mapObj.invalidateSize();
       else if(window.google?.maps)google.maps.event.trigger(mapObj,'resize');
-    },180);
+    },ms));
   }
   function activateGroup(tab){
     document.querySelectorAll('[data-group-pane]').forEach(e=>{

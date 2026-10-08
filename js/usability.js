@@ -162,7 +162,7 @@
     };
     if(typeof map0==='function')window.locToggleMap=function(force=false){
       const before=document.getElementById('locMap')?.classList.contains('show');const r=map0(force);const after=document.getElementById('locMap')?.classList.contains('show');
-      const b=document.getElementById('locMapToggleBtn');if(b){b.setAttribute('aria-expanded',String(after));b.innerHTML=after?'<svg class="location-map-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.7 5.3 12 10.6l5.3-5.3 1.4 1.4-5.3 5.3 5.3 5.3-1.4 1.4-5.3-5.3-5.3 5.3-1.4-1.4 5.3-5.3-5.3-5.3z"/></svg><span>지도 닫기</span>':'<svg class="location-map-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5Z"/></svg><span>실시간 지도</span>'; }
+      const b=document.getElementById('locMapToggleBtn');if(b){b.setAttribute('aria-expanded',String(after));b.innerHTML=after?'<svg class="location-map-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.7 5.3 12 10.6l5.3-5.3 1.4 1.4-5.3 5.3 5.3 5.3-1.4 1.4-5.3-5.3-5.3 5.3-1.4-1.4 5.3-5.3-5.3-5.3z"/></svg><span>지도 닫기</span>':'<svg class="location-map-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5Z"/></svg><span>위치 지도 조회</span>'; }
       inlineLocationFeedback(after?'✓ 지도를 열었습니다. 아래 지도 영역을 확인하세요.':'지도를 닫았습니다.',after?'success':'');actionToast(after?'✓ 지도 열림':'지도 닫힘',after?'success':'');markDone(b);return r;
     };
   }
