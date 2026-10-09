@@ -1,4 +1,4 @@
-<!-- build: 20261009-MIX77-SCHEDULE-MEAL-ALIGN -->
+<!-- build: 20261009-MIX78-MENU-ROUTES-RESTORED -->
 <!-- build: 20261009-MIX71-WEATHER-LOCATION-BOOKLET -->
 <!-- build: 20261001-MIX54-PERSONAL-FLIGHTS | multi-trip platform -->
 <!-- build: 20260913-r3 | SPA refactor: single-app routing + bottom sheet + 5-core-nav --><!DOCTYPE html>
@@ -2625,7 +2625,7 @@ html[data-trip="croatia"] .login-screen.multi-country-login .login-panel{positio
 .rooming-summary{display:flex;align-items:baseline;gap:9px;margin:2px 2px 14px;padding:13px 15px;border-radius:16px;background:#eaf4f7;color:#214d62}.rooming-summary b{font-size:1.6rem}.rooming-summary span{font-weight:800}.rooming-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.rooming-card{border:1px solid #dbe7ec;background:#fff;border-radius:16px;padding:12px;box-shadow:0 5px 16px rgba(12,61,85,.07)}.rooming-no{font-size:.75rem;font-weight:950;color:#0b698c;margin-bottom:7px}.rooming-person{position:relative;display:grid;grid-template-columns:1fr auto;gap:1px 8px;padding:7px 25px 7px 0;border-top:1px solid #edf2f4}.rooming-person:first-of-type{border-top:0}.rooming-person b{font-size:.96rem}.rooming-person span{grid-column:1/3;font-size:.72rem;color:#657c88;line-height:1.35}.rooming-person em{position:absolute;right:0;top:8px;font-style:normal;font-size:.65rem;font-weight:850;color:#73838c}.rooming-note{font-size:.72rem;color:#6a7d87;margin:12px 2px 0}.group-tabs{display:none!important}#group>.mix-view-heading p{display:none}#attendance.group-pane{display:block!important}.bottom .app-nav-btn[data-route="group"] span{font-weight:900}.location-map-btn span{letter-spacing:-.02em}
 @media(max-width:380px){.rooming-grid{grid-template-columns:1fr}}
 </style>
-</head><body class="mobile-redesign mixed-app" data-build="20261009-MIX77-SCHEDULE-MEAL-ALIGN">
+</head><body class="mobile-redesign mixed-app" data-build="20261009-MIX78-MENU-ROUTES-RESTORED">
 <div id="loginScreen" class="login-screen multi-country-login">
 <div class="login-panel login-panel-simple" role="dialog" aria-labelledby="loginTitle" aria-modal="true">
 <div class="login-brand">SEOUL NATIONAL UNIVERSITY GSPA · 17TH</div><h1 id="loginTitle">공공리더십 17기<br><span>하반기 국외연수</span></h1><p class="login-course">크로아티아 · 튀르키예 · 이탈리아 북부</p>
@@ -2800,6 +2800,92 @@ html[data-trip="croatia"] .login-screen.multi-country-login .login-panel{positio
 <a href="https://www.youtube.com/results?search_query=%EB%A1%9C%EB%A7%88+%EC%98%A4%EB%A5%B4%EB%B9%84%EC%97%90%ED%86%A0+%EC%95%84%EC%8B%9C%EC%8B%9C+%EC%B9%98%EB%B9%84%ED%83%80+%EC%97%AC%ED%96%89+%ED%95%9C%EA%B5%AD%EC%96%B4" rel="noopener noreferrer" target="_blank">로마·근교 한국어</a>
 </div>
 </section>
+<section class="app-view" data-view="check" id="check"><div class="app-subbar"><button class="app-subbar-menu" type="button">☰ 전체 메뉴</button><button class="app-subbar-home" data-route="today" type="button">⌂ 오늘</button></div><h2>출발 전 준비물</h2><p class="prep2-intro">준비한 것만 체크하세요. 체크 상태는 이 기기에 저장됩니다.</p><div class="prep2-progress-panel"><div class="prep2-progress-title"><b>준비 현황</b><span aria-live="polite" id="progText">0 / 0 완료</span></div><div aria-label="준비 완료율" aria-valuemax="100" aria-valuemin="0" aria-valuenow="0" class="progress" role="progressbar"><span id="prog"></span></div><div class="prep2-tools"><label><input id="prepMissingOnly" type="checkbox"> 미준비만 보기</input></label><button id="prepResetBtn" onclick="resetPreparation()" type="button">체크 초기화</button></div></div><div id="checks"></div><p class="prep2-save-note" id="prepStorageNotice">다른 기기와 공유하지 않는 개인 준비 목록입니다.</p></section>
+<section class="app-view" data-view="study" id="study"><div class="app-subbar"><button class="app-subbar-menu" type="button">☰ 전체 메뉴</button><button class="app-subbar-home" data-route="today" type="button">⌂ 오늘</button></div><h2>국외연수 관찰노트</h2>
+<div class="card study-intro"><b>하나의 동선, 네 개의 관점</b><p>4개 조는 같은 장소를 보되 서로 다른 질문으로 현장을 기록합니다. <b>1조 이동성 → 2조 운영기술 → 3조 기반시설 → 4조 가치창출</b>로 이어지며, 사진은 단순 풍경이 아니라 결과보고서의 현장 증거로 활용합니다.</p><div class="btns" style="margin-top:10px"><button class="btn" data-route="fieldphotos" type="button">📷 조별 촬영가이드</button></div></div>
+<div class="study-day-grid">
+<article><b>10/13–14 · 두브로브니크</b><span>공항·구시가 보행·디지털 안내·관광버스 접근·프리미엄 상권을 각 조 관점으로 기록합니다.</span></article>
+<article><b>10/15 · 스플리트·트로기르</b><span>항만·버스터미널·구시가지가 연결되는 이동·운영·SOC·상권 구조를 봅니다.</span></article>
+<article><b>10/16 · 자다르·플리트비체</b><span>자다르는 보강사례, 플리트비체는 입장·셔틀·안전·수용력·자연관광 상품을 핵심 자료로 확보합니다.</span></article>
+<article><b>10/17 · 자그레브</b><span>트램·도시서비스·생활SOC·시장과 로컬소비를 핵심으로 봅니다.</span></article>
+</div>
+<div class="study-groups">
+<details><summary>1조 · 이동성 — 교통·철도·공항·항만</summary><div>관광객은 어떻게 도착하고 환승하고 걷는가를 봅니다. 공항·버스·항만·보행·트램의 연결, 대기시간, 안내표지, 마지막 1km를 중심으로 기록합니다.</div></details>
+<details><summary>2조 · 운영기술 — 에너지·ICT·디지털</summary><div>관광도시는 어떻게 운영되는가를 봅니다. QR·예약·결제·전광판·공공안내·EV충전·조명·앱 화면처럼 눈에 보이는 디지털 운영 장면을 확보합니다.</div></details>
+<details><summary>3조 · 기반시설 — 도로·국토SOC·안전</summary><div>무엇이 이동과 관광을 지탱하는가를 봅니다. 하차장·주차·셔틀·보행분리·난간·안내·대기열 등 ‘잘 운영되는 길’과 문제장면을 함께 기록합니다.</div></details>
+<details><summary>4조 · 가치창출 — 관광경제·로컬브랜드·유통</summary><div>관광수요가 어떻게 지역소득으로 바뀌는가를 봅니다. 상품·가격표·포장·원산지·스토리·결제·상권동선을 통해 방문지별 소비모델을 비교합니다.</div></details>
+</div>
+<div class="card field-memo"><h3>내 현장 메모</h3><textarea id="fieldMemo" placeholder="현장에서 본 점, 한국과 다른 점, 보고서에 쓸 문장·사진 위치 등을 자유롭게 기록하세요."></textarea><small>이 휴대폰에만 자동 저장됩니다.</small></div>
+</section>
+<section class="app-view" data-view="fieldphotos" id="fieldphotos"><div class="app-subbar"><button class="app-subbar-menu" type="button">☰ 전체 메뉴</button><button class="app-subbar-home" data-route="today" type="button">⌂ 오늘</button></div><div id="fieldPhotoGuide"></div></section>
+<section class="app-view" data-view="news" id="news">
+<div class="app-subbar"><button class="app-subbar-menu" type="button">☰ 전체 메뉴</button><button class="app-subbar-home" data-route="today" type="button">⌂ 오늘</button></div>
+<div class="news-head"><div><small class="city-kicker">LIVE · TRAVEL WATCH</small><h2>여행 뉴스 · 재난 알림</h2></div><button id="travelNewsRefresh" type="button">↻ 지금 갱신</button></div>
+<div class="travel-news-state is-loading" id="travelNewsState"><div class="news-state-icon">↻</div><div><b>최신 연수 관련 뉴스를 확인하는 중입니다.</b><p>방문도시·공항·이동경로와 재난·교통·파업 키워드를 함께 대조합니다.</p><small>자동 갱신 1시간</small></div></div>
+<div class="news-scope-box"><b>이번 연수 일정 기준으로 선별</b><div class="news-scope-chips" id="travelNewsScope"></div><small>단순 관광 소개·맛집·호텔 홍보 기사는 제외하고, 방문지·공항·도로·항공·파업·재난처럼 일정에 영향을 줄 수 있는 기사만 표시합니다.</small></div>
+<div class="news-live-note"><b>최근 7일 주요 언론·통신사 기사 자동 확인</b><span id="travelNewsStatus">최신 뉴스를 준비 중입니다.</span><span>앱을 열어 둔 동안 1시간마다 갱신하고, 다시 열었을 때 1시간 이상 지났으면 즉시 새로 확인합니다.</span></div>
+<div aria-label="뉴스 필터" class="travel-news-toolbar"><button class="active" data-news-filter="important" type="button">⚠ 중요</button><button data-news-filter="croatia" type="button">🇭🇷 크로아티아</button><button data-news-filter="italy" type="button">🇮🇹 로마·이탈리아</button><button data-news-filter="transport" type="button">✈ 교통·파업</button><button data-news-filter="disaster" type="button">🔥 재난·재해</button><button data-news-filter="all" type="button">전체 <span id="travelNewsCount"></span></button></div>
+<div class="travel-news-list" id="travelNewsList"></div>
+<section class="official-news-tools"><div class="official-news-title"><div><span>REFERENCE · OFFICIAL</span><h3>공식기관 참조 링크</h3></div><p>아래는 뉴스 기사가 아니라 공식기관의 최신 경보·운항·통제 정보를 직접 확인하는 고정 링크입니다.</p></div><div class="official-news-grid" id="officialTravelSources"></div></section>
+<p class="news-source-policy">기사 목록은 HINA·HRT·Jutarnji·Večernji·ANSA·Rai News·Reuters·AP·BBC·Euronews 등 현지 주요언론과 국제통신사를 우선 대상으로 검색합니다. GDELT가 응답하지 않으면 Google News RSS 보조 검색을 시도합니다. 기사 제목을 한국어로 자동 번역하되 원문도 함께 표시하며, 실제 대피·운항·도로통제 여부는 위 공식기관 공지를 최종 기준으로 확인하세요.</p>
+</section>
+<section class="app-view" data-view="shopfood" id="shopfood">
+<div class="app-subbar"><button class="app-subbar-menu" type="button">☰ 전체 메뉴</button><button class="app-subbar-home" data-route="today" type="button">⌂ 오늘</button></div>
+<div class="shop24-head"><div><small>TASTE · SEASON · SHOP</small><h2>먹거리 · 쇼핑</h2></div><b>10월 일정맞춤</b></div>
+<div class="shop24-intro"><h3>한국인 취향 + 실제 연수 동선으로 골랐습니다</h3><p>무조건 많이 사는 목록이 아니라 <b>현지성이 분명하고, 먹어볼 가치가 있으며, 선물하기 편한 것</b>을 우선했습니다. 생과일·육가공품은 한국 입국 검역을 고려해 현지에서 즐기는 쪽으로 분리했습니다.</p></div>
+<div class="shop24-key"><div><b>🍽️</b><span>꼭 먹기</span></div><div><b>🎁</b><span>사기 좋은 것</span></div><div><b>🍊</b><span>10월 제철</span></div></div>
+<div class="shop24-section-title"><h3>먼저 보면 좋은 6가지</h3><small>＋를 눌러 쇼핑 체크</small></div>
+<div class="shop24-top" id="shopTopPicks"></div>
+<div class="shop24-section-title"><h3>날짜 · 도시별 보기</h3><small>여행 중에는 해당 날짜가 자동 선택됩니다</small></div>
+<div aria-label="먹거리 쇼핑 도시 필터" class="shop24-tabs" role="tablist">
+<button data-shop-filter="all" role="tab" type="button">전체</button><button data-shop-filter="dubrovnik" role="tab" type="button">10/13–14 두브로브니크</button><button data-shop-filter="split" role="tab" type="button">10/15 스플리트</button><button data-shop-filter="zadar" role="tab" type="button">10/16 자다르</button><button data-shop-filter="zagreb" role="tab" type="button">10/17 자그레브</button><button data-shop-filter="rome" role="tab" type="button">10/18 로마</button>
+</div>
+<div id="shopFoodContent"></div>
+<details class="shop24-booklet-note"><summary>💶 결제 · 팁 · Tax Refund · 10/08 최종 소책자</summary><div><ul><li>이탈리아와 크로아티아 모두 <b>유로(EUR)</b>를 사용합니다. 소책자는 카드·트래블카드 중심 사용과 1인 <b>50~100€ 정도의 비상 현금</b>을 권장합니다.</li><li>객실 청소 팁은 의무가 아니며, 소책자 예시는 <b>1~2€ 안팎</b>입니다. 식당에서는 영수증의 Service/Usluga/Coperto 표기를 먼저 확인하세요.</li><li><b>이탈리아 Tax Refund</b>: 소책자 기준 동일 상점·동일 날짜 합계 <b>70.01€ 이상</b>.</li><li><b>크로아티아 Tax Refund</b>: 소책자 기준 동일 매장·동일 날짜 <b>100€ 이상</b>.</li><li>EU 최종 출국 시 세관 확인이 필요한 경우가 있으므로 <b>영수증·환급서류·구매품</b>을 바로 꺼낼 수 있게 보관하세요.</li></ul><p class="source-policy">자료 기준: 10/08 최종 확정 안내소책자. 실제 환급 조건·수수료·세관 절차는 구매처 및 EU 최종 출국 시점 안내를 우선합니다.</p></div></details><section class="shop24-return"><h3>🇰🇷 한국 귀국 전 꼭 확인</h3><ul><li><b>생과일·채소</b>는 검역대상입니다. 만다린·석류·감·포도는 여행 중 먹는 용도로 생각하고 한국 반입용 구매는 피하는 편이 안전합니다.</li><li><b>소시지·프로슈토 등 육가공품</b>도 검역대상입니다. 현지에서 맛보고 귀국 선물로는 포장 과자·소금·커피·오일 등으로 바꾸는 것을 권장합니다.</li><li><b>치즈·유제품</b>은 제품·원산지에 따라 검역 여부를 확인하세요. 애매하면 농림축산검역본부 또는 입국장 검역에 신고하는 것이 안전합니다.</li><li><b>주류 면세</b>는 별도 면세범위 기준 전체 2L 이하이면서 총 US$400 이하입니다. Maraschino·와인을 살 경우 총량을 합산하세요.</li><li>시내에서 산 <b>올리브오일·리큐어 등 100mL 초과 액체</b>는 위탁수하물에 넣는 방식이 가장 단순합니다. 유리병은 옷과 지퍼백으로 이중 포장하세요.</li></ul><p><a href="https://www.customs.go.kr/call/ad/crmcc/selectFaqViewPage.do?cnslKnwlSrno=427&amp;mi=6822" rel="noopener noreferrer" target="_blank">관세청 식품 휴대반입 안내 ↗</a> · <a href="https://customs.go.kr/gimhae/cm/cntnts/cntntsView.do?cntntsId=829&amp;mi=6516" rel="noopener noreferrer" target="_blank">여행자 면세범위 ↗</a></p></section>
+<p class="shop24-note">정보 확인 9/20. 시장·상점 영업시간과 재고는 계절·요일에 따라 바뀔 수 있어 지도 링크에서 당일 다시 확인하세요. ‘한국인 추천’ 표시는 통계 순위가 아니라 한국어 여행 후기에서 반복적으로 언급되고 휴대·선물 만족도가 높은 품목을 중심으로 한 실용 추천입니다.</p>
+</section>
+<section class="app-view" data-view="emergency" id="emergency"><div class="app-subbar"><button class="app-subbar-menu" type="button">☰ 전체 메뉴</button><button class="app-subbar-home" data-route="today" type="button">⌂ 오늘</button></div><div class="emergency5-heading"><h2>긴급 · 비상</h2><a href="tel:112">긴급전화 112</a></div><div class="emergency5-grid" id="emergencyContacts"></div></section>
+<section class="app-view" data-view="toilets" id="toilets">
+<div class="app-subbar"><button class="app-subbar-menu" type="button">☰ 전체 메뉴</button><button class="app-subbar-home" data-route="today" type="button">⌂ 오늘</button></div>
+<h2>🚻 일정별 화장실</h2>
+<div class="field-tools-intro">
+<h3>관광 동선에서 벗어나지 않는 화장실 계획</h3>
+<p>10/13~10/17 크로아티아 실제 방문 순서에 맞춰 <b>공식 공중화장실·최근 현장후기·무료/유료 여부·운영시간·결제수단</b>을 정리했습니다. 가격이 공식적으로 확인되지 않은 곳은 억지로 추정하지 않고 <b>‘현장 확인’</b>으로 표시합니다.</p>
+<span class="info-checked">✓ 정보 확인 9/15</span>
+</div>
+<div class="toilet-alert" id="plitviceStatusAlert"><b>⚠ 플리트비체 최신 운영상태</b>9/15 확인 시 공식 홈페이지 상단에 ‘Park is closed until further notice’ 임시 경보가 표시되고 있습니다. <strong>10/16 일정의 폐쇄를 의미하는 것은 아니며</strong>, 출발 전날과 당일 공식 홈페이지에서 반드시 재확인하세요. <a href="https://np-plitvicka-jezera.hr/en/home-page-v2-0/" rel="noopener noreferrer" target="_blank">공식 상태 확인 ↗</a></div>
+<div class="field-live-link">
+<a href="https://www.google.com/maps/search/?api=1&amp;query=public+toilet+near+me" rel="noopener noreferrer" target="_blank">📍 Google Maps · 내 주변 화장실</a>
+<a href="https://www.google.com/maps/search/?api=1&amp;query=public+toilet+Croatia" rel="noopener noreferrer" target="_blank">🗺️ 크로아티아 화장실 검색</a>
+</div>
+<div class="toilet-toolbar" id="toiletDateTabs"></div>
+<div class="toilet-summary" id="toiletSummary"></div>
+<div class="toilet-grid" id="toiletGrid"></div>
+<div class="toilet-ops-tip"><b>28명 단체 운영 팁</b><br/>① 두브로브니크 성벽·플리트비체처럼 중간 이탈이 어려운 코스는 <b>입장 직전 10~1시간 화장실 시간</b>을 따로 잡는 것이 안전합니다. ② 1유로·50센트 동전을 개인별로 준비하세요. ③ 자다르는 최근 후기상 동전 전용 사례가 있어 카드만 믿지 않는 편이 좋습니다. ④ 식당·호텔은 이용객 화장실을 출발 전에 적극 이용하세요.</div>
+<div class="source-policy">가격·운영시간은 공식 기관 정보를 우선하고, 공식 요금표가 없는 경우 최근 현장후기를 보조자료로 사용했습니다. 현장 운영은 행사·공사·비수기 일정에 따라 바뀔 수 있으므로 카드의 ‘Google 지도’와 ‘근거’ 버튼으로 당일 재확인하는 방식으로 설계했습니다.</div>
+</section>
+<section class="app-view" data-view="apps" id="apps">
+<div class="app-subbar"><button class="app-subbar-menu" type="button">☰ 전체 메뉴</button><button class="app-subbar-home" data-route="today" type="button">⌂ 오늘</button></div>
+<h2>📱 이번 연수 추천앱</h2>
+<div class="field-tools-intro"><h3>추천앱</h3><span class="info-checked">Google Maps · Translate · 현지 특화앱</span></div>
+<div class="app-reco-tabs" id="appRecoTabs"></div>
+<div class="travel-app-grid" id="travelAppGrid"></div>
+<div class="source-policy">앱은 스토어 정책·버전·평점이 수시로 바뀝니다. 이 페이지는 ‘무조건 설치 목록’이 아니라 이번 일정에서의 활용도를 기준으로 표시합니다. 교통권 구매가 꼭 필요하지 않은 도시에서는 앱 설치보다 Google Maps와 현장 안내를 우선해도 됩니다.</div>
+</section>
+<section class="app-view" data-view="more" id="more"><div class="app-subbar"><button class="app-subbar-menu" type="button">☰ 전체 메뉴</button><button class="app-subbar-home" data-route="today" type="button">⌂ 오늘</button></div><h2>여행 정보</h2>
+<div aria-label="크로아티아 안내소책자 PDF" class="booklet-download-card"><div aria-hidden="true" class="booklet-download-icon">PDF</div><div class="booklet-download-copy"><b>10/08 최종 안내소책자</b><small>PDF · 61쪽 · 약 11MB</small></div><div class="booklet-download-actions"><a class="booklet-action-button" data-guidebook-action="view" href="docs/croatia_guidebook_20261008_final.pdf" rel="noopener" target="_blank"><span aria-hidden="true">📖</span><b>바로보기</b><small>PDF 열기</small></a><a class="booklet-action-button is-primary" data-guidebook-action="download" download="크로아티아_최종_안내소책자_20261008.pdf" href="docs/croatia_guidebook_20261008_final.pdf"><span aria-hidden="true">⇩</span><b>다운로드</b><small>휴대폰에 저장</small></a></div><div class="booklet-cache-state" id="guidebookCacheState">소책자는 첫 사용 후 이 기기에 저장됩니다.</div></div>
+<div aria-label="소책자 통합 여행정보" class="travel-basics">
+<details open=""><summary>🛂 입출국 · EES/ETIAS · 시차</summary><div><ul><li>10/08 최종 소책자는 대한민국 여권 소지자의 크로아티아·이탈리아 단기 방문을 <b>쉥겐 권역 합산 90일</b> 기준으로 안내합니다.</li><li>여권은 소책자 기준 <b>출발일 기준 유효기간 6개월 이상</b>과 서명 여부를 확인합니다.</li><li>소책자는 <b>EES</b>에서 여권 스캔과 최초 입국 시 지문·얼굴사진 등록 절차를 안내하고, <b>ETIAS</b>는 2026년 하반기 시행 계획으로 소개합니다.</li><li>두 제도 모두 소책자에 <b>EU 정책에 따라 현지 도입 시기가 유동적일 수 있음</b>이라고 명시되어 있으므로 출발 직전에 공식 안내를 다시 확인합니다.</li><li>10월 일정은 소책자 기준 한국과 이탈리아·크로아티아의 시차가 <b>7시간</b>입니다.</li></ul></div></details>
+<details><summary>🔌 전압 · 단체 수신기</summary><div><ul><li>소책자 표기 전압은 <b>220~230V · 50Hz</b>입니다. 호텔 콘센트 상황에 대비해 멀티어댑터를 준비합니다.</li><li>단체 수신기는 개인 위생을 위해 <b>개인 이어폰</b>을 준비하고 3.5mm 잭을 확인합니다.</li><li>수신기 분실·파손 시 소책자 표기 금액은 <b>200,000원</b>입니다.</li><li>충전 단자는 최종 소책자 p.29·p.30 모두 <b>5핀</b>으로 안내되어 있습니다.</li></ul></div></details>
+<details><summary>🚌 단체버스 · 현장 운영</summary><div><ul><li>소책자는 유럽 버스의 타코그래프 운영과 <b>하루 최대 운전 9시간</b>, <b>연속 최대 4시간 30분 후 최소 45분 휴식</b>을 안내합니다.</li><li>장거리 이동일에는 일정이 지연되더라도 운전자 휴식 규정을 우선하며, 실제 집결·출발시각은 인솔자·현지 가이드 안내를 따릅니다.</li><li>숙소 욕실 물 넘침·카펫 손상은 고액 패널티가 발생할 수 있다는 소책자 주의사항을 함께 확인합니다.</li></ul></div></details>
+</div>
+<details class="privacy-note"><summary>개인정보 · 위치정보 이용 안내</summary><div>이 웹앱은 단체연수 운영을 위해 성명·기관·전화번호와 선택적으로 위치정보를 사용합니다. 위치공유는 본인이 시작한 경우에만 새 위치를 전송합니다. 공유를 OFF로 바꾸면 새 전송은 중지되며, 마지막 위치는 최대 24시간 동안 시각과 함께 표시됩니다. 다른 사람의 위치도 ON/OFF와 관계없이 최근 24시간 안의 마지막 위치만 표시하고, 이동이력은 본인만 최근 24시간 범위로 확인할 수 있습니다. 관리자는 필요 시 전체 위치·이동이력 데이터를 초기화할 수 있습니다. 공개 GitHub Pages에 배포할 경우 HTML에 포함된 명부정보는 소스에서 확인할 수 있으므로 최종 배포 전 접근통제 방식을 별도로 검토하는 것이 좋습니다.</div></details>
+<details class="trip-cover-details"><summary>연수 소개</summary><header class="hero"><div><div class="small">SEOUL NATIONAL UNIVERSITY GSPA · GLOBAL LEADERSHIP JOURNEY</div><h1>아드리아의 길<br/><span style="font-size:.72em;font-weight:650;letter-spacing:.04em">CROATIA</span></h1><p>10.12–10.19 · 크로아티아와 로마를 잇는 글로벌 리더십 여정</p></div><div aria-label="빠른 메뉴" class="hero-actions">
+<a href="#schedule"><b>◷</b><span>오늘 일정</span></a>
+<a href="#location"><b>◎</b><span>일행 위치</span></a>
+<a href="#attendance"><b>✓</b><span>출석 확인</span></a>
+<a href="#emergency"><b>!</b><span>긴급·비상</span></a>
+</div></header></details><p class="source-policy">여행 기본정보는 10/08 최종 확정 안내소책자의 표현과 수치를 기준으로 통합했습니다. 실제 출입국·항공·세관·현장 운영은 당일 공식 안내를 우선합니다.</p></section>
 <section class="app-view" data-view="location" id="location">
 <div class="location-heading"><div><small>LIVE LOCATION</small><h2>우리 일행 위치</h2><p>최근 24시간 위치 · ON 상태와 마지막 위치</p></div></div>
 <div class="location-simple-note" role="note"><span class="location-note-mark" aria-hidden="true"></span><div id="locationDistanceBasis">다른 일행의 최근 위치를 불러오는 중입니다.</div></div>
@@ -2937,7 +3023,7 @@ html[data-trip="croatia"] .login-screen.multi-country-login .login-panel{positio
 @media(max-width:330px){#schedule #dayTabs.date-tabs-compact{grid-auto-columns:calc((100% - 10px)/3)!important;gap:5px!important}#schedule #dayTabs.date-tabs-compact>button.tab{font-size:.70rem!important;padding-inline:2px!important}}
 @media(min-width:700px){#schedule #dayTabs.date-tabs-compact{grid-auto-columns:96px!important}}
 </style>
-<script src="platform/trips.js?v=20261009-MIX76"></script><script src="platform/login-directory.js?v=20260926-MIX45"></script><script src="js/trip-context.js?v=20260928-MIX51"></script><script src="js/pwa-install.js?v=20261009-MIX76"></script><script src="js/net-meter.js?v=20260920-MIX14"></script><script src="js/config.js?v=20260926-MIX45"></script><script src="js/map-provider.js?v=20260926-MIX45"></script><script src="data/roster.js?v=20261002-MIX58"></script><script src="data/rooming.js?v=20261009-MIX76"></script><script src="data/shirt-draw.js?v=20261009-MIX76"></script><script src="data/itinerary.js?v=20261009-MIX77"></script><script src="data/meals.js?v=20261009-MIX77"></script><script src="data/route-points.js?v=20261008-MIX70"></script><script src="data/hotels.js?v=20260926-MIX33"></script><script src="data/flight-plan.js?v=20261009-MIX76"></script><script src="data/flight-tickets.js?v=20261001-MIX56"></script><script src="data/checklist.js?v=20260923-MIX26"></script><script src="js/trip-data-loader.js?v=20261001-MIX53"></script><script src="js/attendance-policy.js?v=20261001-MIX53"></script><script src="js/time-dual.js?v=20260919-MIX10"></script><script src="data/photo-plan.js?v=20261001-MIX56"></script><script src="js/photo-plan.js?v=20260928-MIX47"></script><script src="js/app-core.js?v=20261009-MIX77"></script><script src="js/videos.js?v=20260919-MIX06"></script><script src="js/mobile-ui.js?v=20261001-MIX53"></script><script src="js/ops.js?v=20261009-MIX76"></script><script src="js/router.js?v=20260923-MIX27"></script>
+<script src="platform/trips.js?v=20261009-MIX76"></script><script src="platform/login-directory.js?v=20260926-MIX45"></script><script src="js/trip-context.js?v=20260928-MIX51"></script><script src="js/pwa-install.js?v=20261009-MIX78"></script><script src="js/net-meter.js?v=20260920-MIX14"></script><script src="js/config.js?v=20260926-MIX45"></script><script src="js/map-provider.js?v=20260926-MIX45"></script><script src="data/roster.js?v=20261002-MIX58"></script><script src="data/rooming.js?v=20261009-MIX76"></script><script src="data/shirt-draw.js?v=20261009-MIX76"></script><script src="data/itinerary.js?v=20261009-MIX77"></script><script src="data/meals.js?v=20261009-MIX77"></script><script src="data/route-points.js?v=20261008-MIX70"></script><script src="data/hotels.js?v=20260926-MIX33"></script><script src="data/flight-plan.js?v=20261009-MIX76"></script><script src="data/flight-tickets.js?v=20261001-MIX56"></script><script src="data/checklist.js?v=20260923-MIX26"></script><script src="js/trip-data-loader.js?v=20261001-MIX53"></script><script src="js/attendance-policy.js?v=20261001-MIX53"></script><script src="js/time-dual.js?v=20260919-MIX10"></script><script src="data/photo-plan.js?v=20261001-MIX56"></script><script src="js/photo-plan.js?v=20260928-MIX47"></script><script src="js/app-core.js?v=20261009-MIX77"></script><script src="js/videos.js?v=20260919-MIX06"></script><script src="js/mobile-ui.js?v=20261001-MIX53"></script><script src="js/ops.js?v=20261009-MIX76"></script><script src="js/router.js?v=20260923-MIX27"></script>
 <script src="js/field-tools.js?v=20261001-MIX56"></script>
 <script src="js/integration.js?v=20260926-MIX35"></script><script src="js/receipt-store.js?v=20260919-MIX06"></script><script src="js/expense-fx.js?v=20260920-MIX14b"></script><script src="js/receipt-ai.js?v=20260920-MIX15"></script><script src="js/receipt-ocr.js?v=20260920-MIX16"></script><script src="js/xlsx-lite.js?v=20260920-MIX18"></script><script src="js/expenses.js?v=20260920-MIX20"></script><script src="js/photos.js?v=20260919-MIX06"></script><script src="js/attendance-notify.js?v=20261009-MIX73"></script><script src="js/attendance.js?v=20261001-MIX53"></script>
 <script src="js/preparation.js?v=20260919-MIX06"></script>
