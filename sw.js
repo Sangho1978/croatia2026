@@ -1,4 +1,4 @@
-const STATIC='gspa-static-v75-shirt-admin-faces';
+const STATIC='gspa-static-v75-shirt-roulette';
 const GUIDE='gspa-guidebook-v71-20261008-final';
 const CORE=[
   "./index.html",

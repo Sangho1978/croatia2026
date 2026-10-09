@@ -1,15 +1,13 @@
-# MIX75 검증
+# MIX75 validation
 
-- JavaScript syntax: PASS
-- JSON files: 23 parsed
-- index local refs: 106, missing 0
-- Service Worker refs: 155, missing 0
-- duplicate HTML ids: 0
-- 티셔츠 데이터: 28명, 4개 조 × 7명
-- 얼굴 파일: 28/28 존재, ASCII 파일명 사용
-- 사용자 제공 v11 원본 얼굴 이미지 SHA-256 집합과 현재 28개 이미지: 완전 일치
-- 티셔츠 얼굴 28개 + jeans: Service Worker CORE 사전 캐시
-- Firebase attendance Croatia read rule: `auth != null` — 인증된 모든 크로아티아 접속자 공용 조회
-- 각 조장: 자기 조 선택/확정/리셋 유지
-- 한상호: 1~4조 선택/확정/리셋 + 4개 조 전체 초기화
-- 티셔츠 메뉴: 크로아티아 전용 + 무지개 강조 스타일
+- JS syntax: all app/data/platform JS pass `node --check`.
+- JSON: 23 JSON files parse successfully.
+- Shirt participants: 28 primary ASCII face images exist and are valid PNG files.
+- Legacy fallback: 28 Korean-name face image paths retained and exist.
+- Jeans asset exists and is valid PNG.
+- Service Worker core cache: 155 local refs, none missing; includes m1.png ... m28.png + jeans.png.
+- HTML local file refs: none missing; duplicate IDs: 0.
+- Shared state path remains `attendance/<TRIP_CODE>/shirtSelection2026`; Firebase Croatia attendance branch has `.read: auth != null`, so authenticated Croatia users can read all group records.
+- Group write controls remain leader-only in UI, with Han Sangho (`한상호`) super-admin override for all 4 groups.
+- Admin-only reset-all action writes a newer reset record for groups 1-4.
+- Draw animation timing: 5.6 sec seven-color roulette + sequential 0.78 sec/member reveal with dance / shirt pop / head bob / confetti / result tag.
