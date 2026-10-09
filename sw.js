@@ -1,4 +1,4 @@
-const STATIC='gspa-static-v76-rooming-attendance';
+const STATIC='gspa-static-v77-schedule-meal-align';
 const GUIDE='gspa-guidebook-v71-20261008-final';
 const CORE=[
   "./index.html",
