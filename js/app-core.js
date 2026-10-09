@@ -144,6 +144,9 @@ function _safeDayBlock(label, date, fn){
     return `<div class="note schedule-partial-note">${escHotel(label)} 정보를 표시하는 중 일부 오류가 발생했습니다.</div>`;
   }
 }
+function _dayWeekday(date){
+  try{return ['일','월','화','수','목','금','토'][new Date(String(date)+'T12:00:00').getDay()]||''}catch(_){return ''}
+}
 function _dayPanelHtml(d,i){
   const moves=(d.moves||[]).map(m=>`<div class="move-row"><span class="move-mode">${escHotel(m[0])}</span><span class="move-route">${escHotel(m[1])}</span><span class="move-time">${escHotel(m[2])}</span></div>`).join('');
   const gl=(d.guides||[]).map(g=>`<a href="${escHotel(g[1])}">📖 ${escHotel(g[0])} 가이드</a>`).join('');
@@ -153,7 +156,7 @@ function _dayPanelHtml(d,i){
   const hotel=_safeDayBlock('호텔',d.date,()=>dayHotelHtml(d.date));
   const photos=_safeDayBlock('촬영가이드',d.date,()=>window.dayPhotoGuideHtml?window.dayPhotoGuideHtml(d.date):'');
   const attractions=_safeDayBlock('관광지 가이드',d.date,()=>dayAttractionHtml(d));
-  return `<div class="day-summary day-summary-clean"><small class="day-date-label">${escHotel(d.date.slice(5).replace('-','/'))} · 현지시간</small><h3>${escHotel(d.title)}</h3>${gl?`<div class="day-guide-links">${gl}</div>`:''}</div><div class="day-weather-box" id="dayWeather-${i}">${weather}</div><div class="day-main-grid"><div class="card day-agenda-card"><h3>시간순 일정</h3>${agenda}${moveFold}</div></div>${hotel}${photos}${attractions}`;
+  return `<div class="day-summary day-summary-clean"><small class="day-date-label">${escHotel(d.date.slice(5).replace('-','/'))} (${_dayWeekday(d.date)}) · 현지시간</small><h3>${escHotel(d.title)}</h3>${gl?`<div class="day-guide-links">${gl}</div>`:''}</div><div class="day-weather-box" id="dayWeather-${i}">${weather}</div><div class="day-main-grid"><div class="card day-agenda-card"><h3>시간순 일정</h3>${agenda}${moveFold}</div></div>${hotel}${photos}${attractions}`;
 }
 
 function _applyCompactDayTabs(tabs){
@@ -179,7 +182,7 @@ function renderDays(){
   /* Create every date selector first. A failure inside one day's rich content must never remove the other dates. */
   days.forEach((d,i)=>{
     const b=document.createElement('button');
-    b.type='button';b.className='tab';b.textContent=d.date.slice(5).replace('-','/');
+    b.type='button';b.className='tab';b.textContent=`${d.date.slice(5).replace('-','/')} (${_dayWeekday(d.date)})`;
     b.dataset.dayIndex=String(i);b.setAttribute('role','tab');b.setAttribute('aria-controls',`day-panel-${i}`);
     b.addEventListener('click',()=>selectDay(i));
     tabs.appendChild(b);
@@ -192,7 +195,7 @@ function renderDays(){
     try{p.innerHTML=_dayPanelHtml(d,i)}
     catch(err){
       console.error('[schedule]',d.date,'panel',err);
-      p.innerHTML=`<div class="card"><h3>${escHotel(d.date.slice(5).replace('-','/'))} · ${escHotel(d.title)}</h3><p>일정 정보를 다시 불러오고 있습니다.</p><div class="timeline">${(d.events||[]).map((e,k)=>`<div class="event numbered-event"><span class="event-no">${k+1}</span><span class="time">${escHotel(e[0])}</span><div class="event-copy"><b>${escHotel(e[1])}</b></div></div>`).join('')}</div></div>`;
+      p.innerHTML=`<div class="card"><h3>${escHotel(d.date.slice(5).replace('-','/'))} (${_dayWeekday(d.date)}) · ${escHotel(d.title)}</h3><p>일정 정보를 다시 불러오고 있습니다.</p><div class="timeline">${(d.events||[]).map((e,k)=>`<div class="event numbered-event"><span class="event-no">${k+1}</span><span class="time">${escHotel(e[0])}</span><div class="event-copy"><b>${escHotel(e[1])}</b></div></div>`).join('')}</div></div>`;
     }
     wrap.appendChild(p);
   });

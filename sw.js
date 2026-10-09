@@ -1,4 +1,4 @@
-const STATIC='gspa-static-v75-shirt-roulette';
+const STATIC='gspa-static-v76-rooming-attendance';
 const GUIDE='gspa-guidebook-v71-20261008-final';
 const CORE=[
   "./index.html",
@@ -26,6 +26,7 @@ const CORE=[
   "./assets/icons/gspa-512.png",
   "./assets/icons/turkiye1-192.png",
   "./assets/icons/turkiye1-512.png",
+  "./assets/images/css_14_b800704dc5.jpg",
   "./css/action-first.css",
   "./css/app.css",
   "./css/mix62-clean-ui.css",
@@ -40,6 +41,7 @@ const CORE=[
   "./css/shirts.css",
   "./data/shirt-draw.js",
   "./js/rainbow-shirts.js",
+  "./js/rooming-ui.js",
   "./assets/shirts/m1.png",
   "./assets/shirts/m2.png",
   "./assets/shirts/m3.png",
@@ -128,6 +130,7 @@ const CORE=[
   "./data/itinerary.js",
   "./data/route-points.js",
   "./data/roster.js",
+  "./data/rooming.js",
   "./css/flight-tickets.css",
   "./css/meals.css",
   "./data/meals.js",
