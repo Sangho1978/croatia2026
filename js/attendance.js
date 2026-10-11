@@ -7,6 +7,7 @@
 (function(){
   'use strict';
   const POLICY=window.GSPA_AttendancePolicy||{admins:[window.GSPA_TRIP?.attendanceOperator||'한상호'],label:window.GSPA_TRIP?.attendanceOperator||'한상호',isAdmin:u=>!!u&&u.name===(window.GSPA_TRIP?.attendanceOperator||'한상호')}, ADMINS=POLICY.admins, ADMIN_LABEL=POLICY.label, order=[...new Set(APP_USERS.map(u=>u.group))].filter(g=>g!==0).sort((a,b)=>a-b).concat(APP_USERS.some(u=>u.group===0)?[0]:[]), encoder=new TextEncoder();
+  const SELF_WORDS={unchecked:"○ 내 출석 체크하기",checked:"✓ 출석 체크됨 · 다시 누르면 해제",busy:"저장 중…",completed:"해당 회차가 완료되어 변경할 수 없습니다.",hint:"체크 및 해제는 이 버튼 하나로 · 출석 완료 전까지 변경 가능",checkSaved:"✓ 내 출석체크를 완료했습니다.",uncheckSaved:"↺ 내 출석체크를 해제했습니다.",conflict:"다른 기기에서 먼저 출석 상태가 변경되었습니다. 다시 확인해 주세요.",otherDevice:"이 출석은 다른 기기에서 체크되었습니다. 처음 체크한 기기에서 해제하거나 관리자에게 문의해 주세요.",changedRound:"출석 회차가 변경되어 다시 체크해 주세요.",completedInfo:"회차가 종료된 후에는 체크나 해제를 변경할 수 없습니다.",pending:"시작을 기다리고 있습니다",locked:"완료된 출석 · 변경할 수 없습니다",external:"인솔팀장 · 출석현황 조회 전용",allDone:"전원 체크됨 · 관리자 완료 대기",syncing:"최신 출석 현황 확인 중",ownOnly:"본인만 출석 체크를 변경할 수 있습니다.",rulesNotUpdated:"출석 해제 권한이 서버에 적용되지 않았습니다. Firebase Rules v82를 확인해 주세요."};
   const people=()=>APP_USERS;
   const canSelfCheck=()=>!!currentUser&&people().some(u=>u.memberId===currentUser.memberId&&u.slot===currentUser.slot);
   const isAdmin=()=>POLICY.isAdmin(currentUser);
@@ -70,10 +71,14 @@
     const typ=document.getElementById('attType'),titleInput=document.getElementById('attCustomTitle');
     if(exists&&document.activeElement!==typ&&typ&&[...typ.options].some(o=>o.value===attCurrent.type))typ.value=attCurrent.type;
     if(exists&&document.activeElement!==titleInput&&titleInput)titleInput.value=attCurrent.title||'';
-    const mine=currentUser&&checked(currentUser),btn=document.getElementById('attMyBtn');
-    btn.disabled=!canSelfCheck()||!canWrite||!accepting||!!mine||selfBusy;
-    btn.classList.toggle('checked',!!mine&&exists);
-    btn.textContent=!canSelfCheck()&&currentUser?'인솔팀장 · 출석현황 조회 전용':selfBusy?'저장 중…':!exists?'시작을 기다리고 있습니다':complete?(mine?'✓ 내 체크완료 · 회차 종료':'✓ 이번 출석 회차 완료'):mine?'✓ 내 체크완료 · '+shortTime(attChecks[currentUser.slot]?.ts):allChecked?'관리자 최종 완료 대기':'✓ 내 출석 체크';
+    const mine=!!currentUser&&checked(currentUser),btn=document.getElementById('attMyBtn');
+    // One button for both check and undo, available to every rostered member.
+    btn.disabled=!canSelfCheck()||!canWrite||!accepting||selfBusy;
+    btn.classList.toggle('checked',mine&&exists);
+    btn.setAttribute('aria-pressed',String(mine&&exists));
+    const selfText=!canSelfCheck()&&currentUser?SELF_WORDS.external:selfBusy?SELF_WORDS.busy:!ready?SELF_WORDS.syncing:!exists?SELF_WORDS.pending:complete?SELF_WORDS.locked:mine?SELF_WORDS.checked:SELF_WORDS.unchecked;
+    btn.textContent=selfText;
+    btn.setAttribute('aria-label',selfText);
     const notice=document.getElementById('attMissingNotice');
     notice.classList.toggle('all-done',complete||allChecked);
     notice.textContent=!ready?'최신 출석을 불러오는 중입니다.':!exists?'출석 시작을 기다리고 있습니다.':complete?(missing?'✓ 회차 완료 · '+done+'/'+total+'명 체크 · 미체크 '+missing+'명 (터치해 명단 확인)':'✓ 회차 완료 · '+total+'명 전원 체크'):allChecked?'✓ '+total+'명 전원 체크 · 관리자가 [출석 완료]를 누르면 이번 회차가 마감됩니다.':missing<=10?'미체크 '+missing+'명 · '+people().filter(u=>!checked(u)).map(u=>u.name).join(' · '):'미체크 '+missing+'명 · 아래 조별 회색 이름을 확인하세요.';
@@ -308,31 +313,61 @@
     finally{adminBusy=false;render();}
   }
   async function checkSelf(){
-    if(!canSelfCheck()||!roundAccepting()||selfBusy||checked(currentUser))return;
-    const user=currentUser,id=attCurrent.id,epoch=authEpoch;selfBusy=true;feedback();render();
+    // A tap means the action visible when tapped; never flip unexpectedly if
+    // a parallel SSE/poll refreshed the slot while this request is in flight.
+    if(!canSelfCheck()||!roundAccepting()||selfBusy)return;
+    const user=currentUser,id=attCurrent.id,epoch=authEpoch;
+    const remove=checked(user);
+    selfBusy=true;feedback();render();
     try{
-      if(!navigator.onLine)throw Error('인터넷 연결이 없습니다. 연결 후 다시 체크해 주세요.');
+      if(!navigator.onLine)throw Error('\uc778\ud130\ub137 \uc5f0\uacb0 \ud6c4 \ub2e4\uc2dc \uc2dc\ub3c4\ud574 \uc8fc\uc138\uc694.');
       const latest=await request(currentPath());
       if(!sameSession(epoch)||currentUser?.slot!==user.slot)return;
-      if(latest.data?.id!==id||isFinalized(latest.data)){revision++;setMeta(latest.data);throw Error('해당 회차는 이미 완료되었거나 다른 회차로 변경되었습니다.');}
+      if(latest.data?.id!==id){revision++;setMeta(latest.data);throw Error(SELF_WORDS.changedRound);}
+      if(isFinalized(latest.data)){revision++;setMeta(latest.data);throw Error(SELF_WORDS.completed);}
       const path=roundPath(id)+'/'+user.slot;
       const previous=await request(path,{headers:{'X-Firebase-ETag':'true'}});
+      if(!sameSession(epoch)||currentUser?.slot!==user.slot)return;
+      const uid=localStorage.getItem('fb_uid')||'';
+      if(!uid)throw Error('Firebase UID unavailable');
+      if(!previous.etag)throw Error('\ucd9c\uc11d \uc800\uc7a5 \uc0c1\ud0dc\ub97c \ud655\uc778\ud558\uc9c0 \ubabb\ud588\uc2b5\ub2c8\ub2e4.');
       let saved=previous.data;
-      if(!saved?.checked){
-        if(!previous.etag)throw Error('체크 상태를 확인하지 못했습니다. 다시 눌러 주세요.');
-        const checkedAt=Date.now(),ct=window.AppTime?AppTime.stored(checkedAt):null;const value={uid:localStorage.getItem('fb_uid')||'',slot:user.slot,name:user.name,group:user.group,checked:true,ts:{'.sv':'timestamp'},...(ct?{timeCroatia:ct.croatia,timeKorea:ct.korea}: {})};
+      if(remove){
+        if(saved?.checked===true){
+          // Undo only the authenticated device owner's own record.
+          if(saved.uid!==uid)throw Error(SELF_WORDS.otherDevice);
+          await request(path,{method:'DELETE',headers:{'if-match':previous.etag}});
+        }
+        saved=null;
+      }else if(!saved?.checked){
+        const checkedAt=Date.now(),ct=window.AppTime?AppTime.stored(checkedAt):null;
+        const value={uid,slot:user.slot,name:user.name,group:user.group,checked:true,ts:{'.sv':'timestamp'},...(ct?{timeCroatia:ct.croatia,timeKorea:ct.korea}: {})};
         saved=(await request(path,{method:'PUT',headers:{'if-match':previous.etag},body:JSON.stringify(value)})).data;
       }
-      const confirmRound=await request(currentPath());if(!sameSession(epoch))return;
-      if(confirmRound.data?.id!==id||isFinalized(confirmRound.data)){revision++;setMeta(confirmRound.data);throw Error('확인 중 관리자에 의해 회차가 완료되거나 변경되었습니다.');}
-      if(attCurrent?.id===id){revision++;attChecks[user.slot]=saved;checksKnown=true;try{const allChecks=await request(roundPath(id));if(attCurrent?.id===id)attChecks=cleanChecks(allChecks.data)}catch(_){}markGood();feedback(people().filter(checked).length===people().length?'✓ 전원 체크되었습니다. 관리자의 출석 완료 처리를 기다립니다.':'✓ 출석 체크를 완료했습니다.');}
+      const confirmation=await request(currentPath());
+      if(!sameSession(epoch)||currentUser?.slot!==user.slot)return;
+      if(confirmation.data?.id!==id){revision++;setMeta(confirmation.data);throw Error(SELF_WORDS.changedRound);}
+      if(isFinalized(confirmation.data)){revision++;setMeta(confirmation.data);throw Error(SELF_WORDS.completedInfo);}
+      if(attCurrent?.id===id){
+        revision++;
+        if(saved?.checked===true)attChecks[user.slot]=saved;
+        else delete attChecks[user.slot];
+        checksKnown=true;
+        try{
+          const allChecks=await request(roundPath(id));
+          if(attCurrent?.id===id)attChecks=cleanChecks(allChecks.data);
+        }catch(_){}
+        markGood();feedback(remove?SELF_WORDS.uncheckSaved:SELF_WORDS.checkSaved);
+      }
     }catch(e){
-      if(e.status===412){await refresh(false);feedback(checked(user)?'이미 체크되었습니다.':'현황이 바뀌었습니다. 다시 확인해 주세요.',!checked(user));}
-      else{feedback(e.message,true);await refresh(false);}
+      await refresh(false);
+      if(e.status===412)feedback(SELF_WORDS.conflict,true);
+      else if(e.status===403&&remove)feedback(isFinalized(attCurrent)?SELF_WORDS.completedInfo:SELF_WORDS.rulesNotUpdated,true);
+      else feedback(e.message,true);
     }finally{selfBusy=false;render();}
   }
   window.attRefresh=refresh;window.attRender=render;window.attCreateEvent=create;window.attCompleteCurrent=completeCurrent;window.attEditCurrent=editCurrent;window.attResetCurrent=reset;window.attToggleSelf=checkSelf;window.attStartPolling=begin;window.attShowStatusList=openStatusList;window.attCloseStatusList=closeStatusList;wireStatusList();
-  window.AttendanceBoard={get status(){return {mode:connectMode,known,checksKnown,round:attCurrent?.id||null,completed:isFinalized(attCurrent),completedBy:attCurrent?.completedBy||'',lastSync}},refresh};
+  window.AttendanceBoard={version:'v82',get status(){return {mode:connectMode,known,checksKnown,round:attCurrent?.id||null,completed:isFinalized(attCurrent),completedBy:attCurrent?.completedBy||'',lastSync}},refresh};
   window.addEventListener('cro-auth-change',()=>{authEpoch++;revision++;closeStreams();attCurrent=null;attChecks={};known=false;checksKnown=false;lastSync=0;failure='';selfBusy=false;feedback();begin();});
   window.addEventListener('cro-route',e=>{if(e.detail?.view==='group'&&e.detail?.sub!=='people'&&currentUser){render();refresh(false);openStreams();}});
   window.addEventListener('offline',()=>{closeStreams();render()});

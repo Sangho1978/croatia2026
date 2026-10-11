@@ -60,7 +60,7 @@
         ".read": "auth != null",
         "$event": {
           "$slot": {
-            ".write": "(auth != null && newData.exists() && newData.child('uid').val() === auth.uid && newData.child('slot').val() === $slot && (!data.exists() || data.child('uid').val() === auth.uid)) && (root.child('attendanceCurrent').child('SNU17-CRO-2026-A7K9P4').child('id').val() === $event && !root.child('attendanceCurrent').child('SNU17-CRO-2026-A7K9P4').child('completedAt').exists())",
+            ".write": "auth != null && ((newData.exists() && newData.child('uid').val() === auth.uid && newData.child('slot').val() === $slot && (!data.exists() || data.child('uid').val() === auth.uid)) || (!newData.exists() && data.exists() && data.child('uid').val() === auth.uid)) && (root.child('attendanceCurrent').child('SNU17-CRO-2026-A7K9P4').child('id').val() === $event && !root.child('attendanceCurrent').child('SNU17-CRO-2026-A7K9P4').child('completedAt').exists())",
             ".validate": "newData.hasChildren(['uid','slot','name','group','checked','ts']) && newData.child('uid').isString() && newData.child('uid').val() === auth.uid && newData.child('slot').isString() && newData.child('slot').val() === $slot && newData.child('name').isString() && newData.child('name').val().length >= 1 && newData.child('name').val().length <= 40 && newData.child('group').isNumber() && newData.child('group').val() >= 0 && newData.child('group').val() <= 4 && newData.child('checked').val() === true && newData.child('ts').isNumber() && newData.child('ts').val() > 0 && newData.child('ts').val() <= now + 60000",
             "timeCroatia": {
               ".validate": "newData.isString() && newData.val().length <= 32"

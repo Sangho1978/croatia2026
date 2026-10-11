@@ -1,4 +1,4 @@
-<!-- build: 20261011-MIX81-ATTENDANCE-ADMINS-VERSION -->
+<!-- build: 20261011-MIX82-ATTENDANCE-TOGGLE -->
 <!-- build: 20261011-MIX80-ATTENDANCE-FINALIZE -->
 <!-- build: 20261009-MIX71-WEATHER-LOCATION-BOOKLET -->
 <!-- build: 20261001-MIX54-PERSONAL-FLIGHTS | multi-trip platform -->
@@ -2639,15 +2639,26 @@ html[data-trip="croatia"] .login-screen.multi-country-login .login-panel{positio
 #attendance .att2-state.is-complete{font-weight:900}
 @media(max-width:380px){#attendance .att2-admin button{font-size:.77rem;padding:9px 3px}#attendance .att-manager-label{font-size:.69rem}}
 </style>
-<style id="gspa-build-version-v81">
-/* MIX81: Visible build tag so users can identify the installed/cached version. */
+<style id="gspa-build-version-v82">
+/* MIX82: Visible build tag so users can identify the installed/cached version. */
 .gspa-build-warning{color:#a83a27!important;font-weight:900!important}
 .gspa-build-login{margin:12px 0 1px;text-align:center;font-size:13px;font-weight:650;color:#466271;letter-spacing:.025em}
 .gspa-build-login b,.gspa-build-home b,.gspa-build-account b{font-weight:900}
 .gspa-build-account{font-size:13px;color:#4c6876;margin:0 0 8px;font-weight:650}
 #today .gspa-build-home{display:block;margin:0 3px 5px;text-align:right;font-size:12px;color:#637b89;letter-spacing:.015em;font-weight:650}
 </style>
-</head><body class="mobile-redesign mixed-app" data-build="20261011-MIX81-ATTENDANCE-ADMINS-VERSION">
+<style id="mix82-attendance-toggle-login-updates">
+#attendance #attMyBtn.checked:not(:disabled){background:#dff3e6;color:#14673c;border:2px solid #58a97b}
+#attendance #attMyBtn.checked:focus-visible,#attendance #attMyBtn:not(:disabled):focus-visible{outline:3px solid #159cb0;outline-offset:2px}
+#attendance .att-toggle-hint{display:block;margin:3px 3px 8px;color:#516d79;font-size:.76rem;line-height:1.4;font-weight:650}
+.gspa-login-updates{margin-top:9px;padding:8px 10px;border-radius:12px;background:rgba(242,247,250,.94);border:1px solid #dce7eb;color:#37566a;font-size:11px;line-height:1.35}
+.gspa-login-updates .updates-heading{display:block;font-weight:900;margin-bottom:4px;font-size:11px}
+.gspa-login-updates .update-row{display:grid;grid-template-columns:30px minmax(0,1fr);gap:5px;align-items:start;padding:1px 0}
+.gspa-login-updates .update-row strong{font-size:11px;color:#126080}
+.gspa-login-updates .update-row span{overflow-wrap:anywhere}
+@media(max-width:360px){.gspa-login-updates{padding:7px;font-size:10.5px}.gspa-login-updates .update-row strong{font-size:10.5px}}
+</style>
+</head><body class="mobile-redesign mixed-app" data-build="20261011-MIX82-ATTENDANCE-TOGGLE">
 <div id="loginScreen" class="login-screen multi-country-login">
 <div class="login-panel login-panel-simple" role="dialog" aria-labelledby="loginTitle" aria-modal="true">
 <div class="login-brand">SEOUL NATIONAL UNIVERSITY GSPA · 17TH</div><h1 id="loginTitle">공공리더십 17기<br><span>하반기 국외연수</span></h1><p class="login-course">크로아티아 · 튀르키예 · 이탈리아 북부</p>
@@ -2656,8 +2667,8 @@ html[data-trip="croatia"] .login-screen.multi-country-login .login-panel{positio
 <div class="login-field"><label for="loginPass">비밀번호 4자리</label><input id="loginPass" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="current-password" enterkeyhint="go" placeholder="숫자 4자리"></div>
 <button id="loginSubmit" class="login-btn" onclick="appLogin()" type="button">로그인</button><button id="loginSwitch" type="button" class="login-switch" onclick="appUseAnotherAccount()" hidden>다른 사용자로 로그인</button>
 <div id="loginInstallWrap" class="login-install-wrap" hidden><button id="loginInstallBtn" type="button">📲 홈 화면에 추가</button><small>국외연수 바로가기</small></div>
-<div id="loginError" class="login-error" role="alert" aria-live="polite"></div><div class="gspa-build-login" data-gspa-build="v81">앱 버전 <b>v81</b> · 2026.10.11</div></div></div>
-<div class="account-pop" id="accountPop"><div class="gspa-build-account" data-gspa-build="v81">앱 버전 <b>v81</b> · 2026.10.11</div><b id="accountName">-</b><div class="small muted" id="accountMeta"></div><button onclick="appLogout()">로그아웃</button><p class="quiet" id="tripRoleText"></p><button type="button" data-route="flights" data-croatia-only class="account-flight-btn">✈ 내 항공권 · E-ticket</button><button onclick="Integration.showIdentity()" type="button">내 Firebase 기기 ID 확인</button><div class="uid-box" hidden="" id="myFirebaseUid"></div></div>
+<div id="loginError" class="login-error" role="alert" aria-live="polite"></div><div class="gspa-build-login" data-gspa-build="v82">앱 버전 <b>v82</b> · 2026.10.11</div><section class="gspa-login-updates" aria-label="최근 업데이트"><b class="updates-heading">최근 업데이트</b><div class="update-row"><strong>v82</strong><span>출석 체크·해제를 버튼 하나로</span></div><div class="update-row"><strong>v81</strong><span>출석관리자 이상미·위재복 추가</span></div><div class="update-row"><strong>v80</strong><span>관리자 출석 완료(회차 마감)</span></div><div class="update-row"><strong>v79</strong><span>지민정 팀장 로그인·연락처 변경</span></div></section></div></div>
+<div class="account-pop" id="accountPop"><div class="gspa-build-account" data-gspa-build="v82">앱 버전 <b>v82</b> · 2026.10.11</div><b id="accountName">-</b><div class="small muted" id="accountMeta"></div><button onclick="appLogout()">로그아웃</button><p class="quiet" id="tripRoleText"></p><button type="button" data-route="flights" data-croatia-only class="account-flight-btn">✈ 내 항공권 · E-ticket</button><button onclick="Integration.showIdentity()" type="button">내 Firebase 기기 ID 확인</button><div class="uid-box" hidden="" id="myFirebaseUid"></div></div>
 <div class="live mix-top compact-top" role="banner" data-expanded="false"><div class="top-brief" aria-label="여행 요약 정보">
   <a class="brief-cell brief-weather" href="#weatherDetail" aria-label="날씨 상세"><strong id="briefWeather">날씨</strong><small id="briefWeatherNote">확인 중</small></a>
   <button class="brief-cell brief-clocks" type="button" data-header-open aria-label="현지·한국 시간 상세"><span>현지 <b id="briefLocal">--:--</b></span><span>한국 <b id="briefKorea">--:--</b></span></button>
@@ -2682,7 +2693,7 @@ html[data-trip="croatia"] .login-screen.multi-country-login .login-panel{positio
  <span id="liveData" hidden></span>
 </div>
 <main>
-<section class="app-view" data-view="today" id="today"><h2>오늘</h2><div class="gspa-build-home" data-gspa-build="v81" aria-label="앱 버전 v81, 2026년 10월 11일">APP <b>v81</b> · 2026.10.11</div>
+<section class="app-view" data-view="today" id="today"><h2>오늘</h2><div class="gspa-build-home" data-gspa-build="v82" aria-label="앱 버전 v82, 2026년 10월 11일">APP <b>v82</b> · 2026.10.11</div>
 <div class="today-booklet-row" aria-label="안내소책자"><a href="docs/croatia_guidebook_20261008_final.pdf" data-guidebook-action="view" target="_blank" rel="noopener">📖 안내소책자 보기</a><span aria-hidden="true">·</span><a href="docs/croatia_guidebook_20261008_final.pdf" data-guidebook-action="download" download="크로아티아_최종_안내소책자_20261008.pdf">⇩ 다운로드</a></div>
 <div id="todayNewsAlert" class="today-news-alert" hidden></div>
 <div class="ops-today-hero">
@@ -2936,7 +2947,7 @@ html[data-trip="croatia"] .login-screen.multi-country-login .login-panel{positio
  <button id="attEditBtn" type="button" onclick="attEditCurrent()">✎ 진행 중 제목 수정</button>
 </div>
 <div aria-atomic="true" aria-live="polite" class="att2-totals"><div><span>전체</span><b id="attTotalCount">–</b></div><button type="button" class="is-done" data-att-list="done" aria-label="체크완료 명단 보기"><span>체크완료<small>명단 보기</small></span><b id="attCheckedCount">0</b></button><button type="button" class="is-missing" data-att-list="missing" aria-label="미체크 명단 보기"><span>미체크<small>명단 보기</small></span><b id="attMissingCount">–</b></button></div>
-<div class="att2-actions"><button disabled="" id="attMyBtn" onclick="attToggleSelf()" type="button">시작을 기다리고 있습니다</button><div class="att-admin att2-admin" id="attAdmin"><button id="attStartBtn" onclick="attCreateEvent()" type="button">▶ 출석 시작</button><button id="attCompleteBtn" disabled onclick="attCompleteCurrent()" type="button">✓ 출석 완료</button><button disabled="" id="attResetBtn" onclick="attResetCurrent()" type="button">↺ 리셋</button></div></div><small id="attAdminRights" class="att-manager-label"></small><div id="attFinishBanner" class="att-finish-banner" role="status" aria-live="polite" hidden></div>
+<div class="att2-actions"><button disabled="" id="attMyBtn" aria-pressed="false" onclick="attToggleSelf()" type="button">시작을 기다리고 있습니다</button><div class="att-admin att2-admin" id="attAdmin"><button id="attStartBtn" onclick="attCreateEvent()" type="button">▶ 출석 시작</button><button id="attCompleteBtn" disabled onclick="attCompleteCurrent()" type="button">✓ 출석 완료</button><button disabled="" id="attResetBtn" onclick="attResetCurrent()" type="button">↺ 리셋</button></div></div><small class="att-toggle-hint">체크 및 해제는 이 버튼 하나로 · 출석 완료 전까지 변경 가능</small><small id="attAdminRights" class="att-manager-label"></small><div id="attFinishBanner" class="att-finish-banner" role="status" aria-live="polite" hidden></div>
 <div class="att-notify-row"><button id="attNotifyBtn" type="button" onclick="AttendanceNotify.enable()">🔔 알림 켜기</button><small id="attNotifyHelp">앱 실행 중 출석 시작·완료 알림</small></div>
 <div class="att2-live"><span id="attMeta">시작 대기</span><span id="attSyncStatus" role="status">연결 대기</span></div>
 <p aria-live="polite" class="att2-feedback" hidden="" id="attFeedback" role="status"></p>
@@ -2949,7 +2960,7 @@ html[data-trip="croatia"] .login-screen.multi-country-login .login-panel{positio
 <div aria-hidden="true" class="app-sheet-backdrop" id="appMoreBackdrop">
 <div aria-labelledby="appMoreTitle" aria-modal="true" class="app-sheet" id="appMoreSheet" role="dialog">
 <div aria-hidden="true" class="app-sheet-grab"></div>
-<div class="app-sheet-head"><div><small>ALL MENU · APP v81</small><h2 id="appMoreTitle">전체 메뉴</h2></div><button aria-label="메뉴 닫기" class="app-sheet-close" type="button">✕ 닫기</button></div>
+<div class="app-sheet-head"><div><small>ALL MENU · APP v82</small><h2 id="appMoreTitle">전체 메뉴</h2></div><button aria-label="메뉴 닫기" class="app-sheet-close" type="button">✕ 닫기</button></div>
 <div class="app-sheet-group"><h3>현장 · 여행</h3><div class="app-sheet-grid"><button data-route="toilets" type="button"><b>🚻</b><span>화장실</span><small>위치</small></button><button data-route="guide" type="button"><b>▤</b><span>관광가이드</span><small>관광정보</small></button><button data-route="hotels" type="button"><b>▣</b><span>호텔</span><small>숙소</small></button><button data-route="rooming" data-croatia-only type="button"><b>🛏</b><span>루밍리스트</span><small>객실 배정</small></button><button data-route="weatherDetail" type="button"><b>☀</b><span>날씨</span><small>시간별 예보</small></button><button data-route="flights" data-croatia-only type="button"><b class="flight-menu-icon">✈</b><span>내 항공·E-ticket</span><small>항공 · E-ticket</small></button><button data-route="meals" data-croatia-only type="button"><b>🍽</b><span>식사 장소</span><small>식당 · 메뉴</small></button><button data-route="route" type="button"><b>↗</b><span>전체동선</span><small>전체 여정</small></button><button data-route="apps" type="button"><b>▧</b><span>추천앱</span><small>추천 도구</small></button><button data-route="videos" type="button"><b>▶</b><span>추천영상</span><small>여행 영상</small></button><button data-route="shopfood" type="button"><b>🍊</b><span>먹거리·쇼핑</span><small>쇼핑 · 먹거리</small></button></div></div><div class="app-sheet-group"><h3>연수 · 기록</h3><div class="app-sheet-grid"><button type="button" data-route="members"><b><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="9" cy="7" r="3"/><path d="M3 21v-3a6 6 0 0 1 12 0v3M16 4a3 3 0 0 1 0 6M18 13a5 5 0 0 1 3 5v3"/></svg></b><span>팀원 명부</span><small>연락처</small></button><button data-route="check" type="button"><b>✓</b><span>여행준비</span><small>체크리스트</small></button><button data-route="study" type="button"><b>✎</b><span>연수노트</span><small>현장 기록</small></button><button data-route="fieldphotos" type="button"><b>📷</b><span>촬영가이드</span><small>촬영 포인트</small></button><button data-route="expenses" type="button"><b>€</b><span>공동경비</span><small>경비 장부</small></button><button id="shirtMenuBtn" data-route="shirts" data-croatia-only type="button"><b>👕</b><span>티셔츠 선정</span><small>티셔츠 · <em class="shirt-menu-badge">0/4</em></small></button></div></div><div class="app-sheet-group"><h3>안전 · 안내</h3><div class="app-sheet-grid"><button data-route="news" type="button"><b>◉</b><span>실시간 뉴스</span><small>여행 영향</small></button><button data-route="emergency" type="button"><b>!</b><span>긴급·비상</span><small>긴급 연락</small></button><button data-route="more" type="button"><b>ⓘ</b><span>여행 정보</span><small>기본 정보</small></button><a class="booklet-menu-link" href="docs/croatia_guidebook_20261008_final.pdf" data-guidebook-action="download" download="크로아티아_최종_안내소책자_20261008.pdf"><b>⇩</b><span>안내소책자</span><small>PDF 저장</small><em>저장</em></a></div></div></div>
 </div>
 <dialog id="travelNewsModal" class="travel-news-modal" aria-labelledby="travelNewsModalTitle">
@@ -3045,9 +3056,9 @@ html[data-trip="croatia"] .login-screen.multi-country-login .login-panel{positio
 @media(max-width:330px){#schedule #dayTabs.date-tabs-compact{grid-auto-columns:calc((100% - 10px)/3)!important;gap:5px!important}#schedule #dayTabs.date-tabs-compact>button.tab{font-size:.70rem!important;padding-inline:2px!important}}
 @media(min-width:700px){#schedule #dayTabs.date-tabs-compact{grid-auto-columns:96px!important}}
 </style>
-<script src="platform/trips.js?v=20261011-MIX81"></script><script src="platform/login-directory.js?v=20261011-MIX79"></script><script src="js/trip-context.js?v=20260928-MIX51"></script><script src="js/pwa-install.js?v=20261011-MIX81"></script><script src="js/net-meter.js?v=20260920-MIX14"></script><script src="js/config.js?v=20260926-MIX45"></script><script src="js/map-provider.js?v=20260926-MIX45"></script><script src="data/roster.js?v=20261011-MIX79"></script><script src="data/rooming.js?v=20261009-MIX76"></script><script src="data/shirt-draw.js?v=20261009-MIX76"></script><script src="data/itinerary.js?v=20261009-MIX77"></script><script src="data/meals.js?v=20261009-MIX77"></script><script src="data/route-points.js?v=20261008-MIX70"></script><script src="data/hotels.js?v=20260926-MIX33"></script><script src="data/flight-plan.js?v=20261009-MIX76"></script><script src="data/flight-tickets.js?v=20261001-MIX56"></script><script src="data/checklist.js?v=20260923-MIX26"></script><script src="js/trip-data-loader.js?v=20261001-MIX53"></script><script src="js/attendance-policy.js?v=20261011-MIX81"></script><script src="js/time-dual.js?v=20260919-MIX10"></script><script src="data/photo-plan.js?v=20261001-MIX56"></script><script src="js/photo-plan.js?v=20261011-MIX79"></script><script src="js/app-core.js?v=20261011-MIX79"></script><script src="js/videos.js?v=20260919-MIX06"></script><script src="js/mobile-ui.js?v=20261001-MIX53"></script><script src="js/ops.js?v=20261011-MIX80"></script><script src="js/router.js?v=20261011-MIX79"></script>
+<script src="platform/trips.js?v=20261011-MIX82"></script><script src="platform/login-directory.js?v=20261011-MIX79"></script><script src="js/trip-context.js?v=20260928-MIX51"></script><script src="js/pwa-install.js?v=20261011-MIX82"></script><script src="js/net-meter.js?v=20260920-MIX14"></script><script src="js/config.js?v=20260926-MIX45"></script><script src="js/map-provider.js?v=20260926-MIX45"></script><script src="data/roster.js?v=20261011-MIX79"></script><script src="data/rooming.js?v=20261009-MIX76"></script><script src="data/shirt-draw.js?v=20261009-MIX76"></script><script src="data/itinerary.js?v=20261009-MIX77"></script><script src="data/meals.js?v=20261009-MIX77"></script><script src="data/route-points.js?v=20261008-MIX70"></script><script src="data/hotels.js?v=20260926-MIX33"></script><script src="data/flight-plan.js?v=20261009-MIX76"></script><script src="data/flight-tickets.js?v=20261001-MIX56"></script><script src="data/checklist.js?v=20260923-MIX26"></script><script src="js/trip-data-loader.js?v=20261001-MIX53"></script><script src="js/attendance-policy.js?v=20261011-MIX82"></script><script src="js/time-dual.js?v=20260919-MIX10"></script><script src="data/photo-plan.js?v=20261001-MIX56"></script><script src="js/photo-plan.js?v=20261011-MIX79"></script><script src="js/app-core.js?v=20261011-MIX79"></script><script src="js/videos.js?v=20260919-MIX06"></script><script src="js/mobile-ui.js?v=20261001-MIX53"></script><script src="js/ops.js?v=20261011-MIX80"></script><script src="js/router.js?v=20261011-MIX79"></script>
 <script src="js/field-tools.js?v=20261001-MIX56"></script>
-<script src="js/integration.js?v=20261011-MIX79"></script><script src="js/receipt-store.js?v=20260919-MIX06"></script><script src="js/expense-fx.js?v=20260920-MIX14b"></script><script src="js/receipt-ai.js?v=20260920-MIX15"></script><script src="js/receipt-ocr.js?v=20260920-MIX16"></script><script src="js/xlsx-lite.js?v=20260920-MIX18"></script><script src="js/expenses.js?v=20260920-MIX20"></script><script src="js/photos.js?v=20260919-MIX06"></script><script src="js/attendance-notify.js?v=20261011-MIX80"></script><script src="js/attendance.js?v=20261011-MIX80"></script>
+<script src="js/integration.js?v=20261011-MIX79"></script><script src="js/receipt-store.js?v=20260919-MIX06"></script><script src="js/expense-fx.js?v=20260920-MIX14b"></script><script src="js/receipt-ai.js?v=20260920-MIX15"></script><script src="js/receipt-ocr.js?v=20260920-MIX16"></script><script src="js/xlsx-lite.js?v=20260920-MIX18"></script><script src="js/expenses.js?v=20260920-MIX20"></script><script src="js/photos.js?v=20260919-MIX06"></script><script src="js/attendance-notify.js?v=20261011-MIX80"></script><script src="js/attendance.js?v=20261011-MIX82"></script>
 <script src="js/preparation.js?v=20260919-MIX06"></script>
 <script src="js/location-session.js?v=20261011-MIX79"></script><script src="js/flight-tickets-ui.js?v=20261007-MIX66"></script><script src="js/meals-ui.js?v=20261007-MIX62"></script><script src="js/usability.js?v=20261011-MIX80"></script><script src="js/route-map-engine.js?v=20261007-MIX62"></script><script src="js/mix30-ui.js?v=20261002-MIX59"></script><script src="js/travel-news.js?v=20261001-MIX56"></script><script src="js/shop-food.js?v=20260920-MIX24"></script><dialog id="locationHelp" class="runtime-dialog" aria-labelledby="locationHelpTitle">
  <div class="runtime-dialog-head"><h2 id="locationHelpTitle">위치 공유 안내</h2><button type="button" data-location-help-close aria-label="닫기">×</button></div>
@@ -3058,18 +3069,18 @@ html[data-trip="croatia"] .login-screen.multi-country-login .login-panel{positio
 </dialog>
 <script src="js/fx-service.js?v=20260926-MIX35"></script>
 <script src="js/runtime-support.js?v=20260919-MIX06"></script>
-<script src="js/compact-header.js?v=20260923-MIX27"></script><script src="js/low-data.js?v=20261011-MIX81"></script><script src="js/mix35-final.js?v=20260926-MIX35"></script><script src="js/mix36-ui.js?v=20261008-MIX69"></script><script src="js/mix37-ui.js?v=20260926-MIX37"></script><script src="js/mix34-offline.js?v=20260926-MIX35"></script><script src="js/guidebook-cache.js?v=20261009-MIX71"></script><script src="js/trip-ui.js?v=20260926-MIX45"></script><script src="js/trip-visibility.js?v=20261009-MIX74"></script><script src="js/rainbow-shirts.js?v=20261009-MIX76"></script>
+<script src="js/compact-header.js?v=20260923-MIX27"></script><script src="js/low-data.js?v=20261011-MIX82"></script><script src="js/mix35-final.js?v=20260926-MIX35"></script><script src="js/mix36-ui.js?v=20261008-MIX69"></script><script src="js/mix37-ui.js?v=20260926-MIX37"></script><script src="js/mix34-offline.js?v=20260926-MIX35"></script><script src="js/guidebook-cache.js?v=20261009-MIX71"></script><script src="js/trip-ui.js?v=20260926-MIX45"></script><script src="js/trip-visibility.js?v=20261009-MIX74"></script><script src="js/rainbow-shirts.js?v=20261009-MIX76"></script>
 <script src="js/rooming-ui.js?v=20261009-MIX76"></script><script id="gspa-build-integrity-check">
-/* MIX81: Compare the displayed build label against the actually loaded trip/admin JS.
-   A cached old JS file must not appear to be a fully updated v81 installation. */
+/* MIX82: Compare the displayed build label against the actually loaded trip/admin JS.
+   A cached old JS file must not appear to be a fully updated v82 installation. */
 (function(){
   const catalog=window.GSPA_TRIP_CATALOG;
   const cro=(catalog?.trips||[]).find(t=>t.id==='croatia');
   const names=['한상호','이상미','위재복'];
   const configured=Array.isArray(cro?.attendanceAdmins)&&names.every(x=>cro.attendanceAdmins.includes(x));
   const policyOK=window.GSPA_TRIP_ID!=='croatia'||(Array.isArray(window.GSPA_AttendancePolicy?.admins)&&names.every(x=>window.GSPA_AttendancePolicy.admins.includes(x)));
-  const verified=catalog?.version==='20261011-MIX81'&&configured&&policyOK;
-  window.GSPA_BUILD_INFO={version:'v81',build:'20261011-MIX81',loadedPolicyVerified:!!verified};
+  const verified=catalog?.version==='20261011-MIX82'&&configured&&policyOK&&window.AttendanceBoard?.version==='v82';
+  window.GSPA_BUILD_INFO={version:'v82',build:'20261011-MIX82',loadedPolicyVerified:!!verified};
   if(!verified){
     document.querySelectorAll('[data-gspa-build]').forEach(el=>{
       el.textContent='⚠ 업데이트 확인 필요 · 새로고침';

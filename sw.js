@@ -1,4 +1,4 @@
-const STATIC='gspa-static-v81-admins-version';
+const STATIC='gspa-static-v82-attendance-toggle';
 const GUIDE='gspa-guidebook-v71-20261008-final';
 const CORE=[
   "./index.html",

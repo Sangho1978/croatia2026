@@ -1,3 +1,13 @@
+## MIX82 - 2026-10-11: One-button attendance check/uncheck + build history
+
+- Unzip: `Croatia2026/index.html` and `Croatia2026/js/`, `Croatia2026/css/`, `Croatia2026/assets/` at the first directory level.
+- For a deployed GitHub Pages site, publish the CONTENTS of `Croatia2026/` to the site root. Do not deploy another nested directory unintentionally.
+- Every rostered member can check and undo their own attendance by tapping the SAME button until an administrator completes the round.
+- Firebase rules update is REQUIRED for undo: see `Firebase_Rules_v82.txt` or `Firebase_Rules_현재_전체복사용.txt`.
+- The sign-in screen and unified login show a short changelog for v79-82; visible version tag: v82.
+- The admins (Croatia Han Sangho, Lee Sangmi, Wi Jaebok) still start/finalize/reset; roster count is unchanged.
+- Detailed notes: MIX82_CHANGES.md.
+
 ## MIX81 — 2026-10-11: 출석관리자 이상미·위재복 추가, 앱 버전 v81 표시
 
 - 크로아티아 출석 관리자: **한상호·이상미·위재복**. 관리자 모두 출석 시작·완료·리셋·제목 변경 가능.
