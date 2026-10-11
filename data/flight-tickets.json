@@ -1,5 +1,5 @@
 {
-  "version": "20261001-MIX56",
+  "version": "20261011-MIX84",
   "scope": "croatia-personal-trinity-ryanair",
   "memberCount": 27,
   "sourceNote": "트리니티항공 개인 E-ticket 영문명과 Ryanair 단체 예약 확인서 영문명을 대조해 연결",
@@ -1431,5 +1431,16 @@
     "label": "Ryanair 단체 예약 확인서",
     "downloadName": "Ryanair_Croatia_Group_Reservation.pdf",
     "note": "FR5975·FR8836 팀 전체 탑승객과 좌석이 포함된 단체 발행 자료"
+  },
+  "flightBoarding": {
+    "TW405": {
+      "date": "2026-10-12",
+      "time": "12:05",
+      "timeZone": "Asia/Seoul",
+      "flight": "TW405",
+      "departure": "12:35",
+      "gate": "미정(공항 안내 확인)",
+      "basis": "2026-10-12 모바일 탑승권 표기"
+    }
   }
 }

@@ -79,7 +79,8 @@
     document.querySelectorAll('[data-staff-only]').forEach(el=>el.hidden=!isStaff());
     document.querySelectorAll('[data-finance-only]').forEach(el=>el.hidden=!financeManager);
     const e=document.getElementById('tripRoleText');if(e)e.textContent=currentUser?.externalStaff?'여행사 인솔팀장':currentUser?[(currentUser.group?currentUser.group+'조':'인솔 교수'),currentUser.leader?'조장':'',currentUser.presenter?'발표':'',currentUser.tripRole?'연수 '+currentUser.tripRole:''].filter(Boolean).join(' · '):'';
-    document.querySelectorAll('[data-route="expenses"]').forEach(el=>el.hidden=!!currentUser?.externalStaff);
+    // The menu stays visible to external staff, but opens an in-page unavailable notice.
+    document.querySelectorAll('[data-route="expenses"]').forEach(el=>el.hidden=false);
     const box=document.getElementById('myFirebaseUid');if(box){box.hidden=true;box.textContent=''}
     window.dispatchEvent(new CustomEvent('cro-role-ready'));
   }

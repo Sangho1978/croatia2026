@@ -141,7 +141,7 @@
     try{requireStaff();status('최근 출석명단 확인 중…');const cur=await Integration.api('attendanceCurrent/'+TRIP_CODE);const id=cur.data?.id;if(!id)throw Error('현재 또는 최근 출석 회차가 없습니다.');const rr=await Integration.api('attendance/'+TRIP_CODE+'/'+id),checks=rr.data||{};const ids=[];for(const u of TEAM_MEMBERS){if(checks[u.slot]?.checked===true)ids.push(u.memberId)}if(!ids.length)throw Error('체크된 출석자가 없습니다.');selected=new Set(ids);mode='selected';renderSelection();status('✓ '+(cur.data?.title||'최근 출석')+' 명단 '+ids.length+'명을 참여자로 불러왔습니다.','success');saveDraft(false)}catch(e){status(e.message,'error')}
   }
   async function load(){
-    if(!currentUser||!document.getElementById('expenseRecords'))return;const epoch=++fetchEpoch,name=currentUser.name;storageReady=false;const save=document.getElementById('expenseSave');if(save)save.disabled=true;
+    if(!currentUser||!Integration.canViewFinance()||!document.getElementById('expenseRecords'))return;const epoch=++fetchEpoch,name=currentUser.name;storageReady=false;const save=document.getElementById('expenseSave');if(save)save.disabled=true;
     try{const r=await Integration.api('expenses/'+TRIP_CODE,{headers:{'X-Firebase-ETag':'true'}});if(epoch!==fetchEpoch||currentUser?.name!==name)return;records=r.data||{};storageReady=true;renderRecords();accessMessage(Integration.canManageFinance()?'등록·수정 가능 · 장부 연결됨':APP_USERS.length+'명 공용 장부 · 조회 전용',true)}
     catch(e){if(epoch!==fetchEpoch||currentUser?.name!==name)return;storageReady=false;records={};renderRecords();const msg=(e.status===401||e.status===403)?'Firebase 공동경비 Rules를 확인해 주세요.':e.message;accessMessage(msg,false)}
   }
@@ -278,7 +278,18 @@
     const box=[...document.querySelectorAll('[data-receipt-gallery]')].find(e=>e.dataset.receiptGallery===id);if(!box)return;if(!box.hidden){box.hidden=true;return}box.hidden=false;box.textContent='영수증 불러오는 중...';const name=currentUser?.name;try{const items=await ReceiptStore.read(id,records[id]?.receiptSummary);if(currentUser?.name!==name)return;box.innerHTML=ReceiptStore.gallery(items)||'<p>사진을 찾지 못했습니다.</p>'}catch(e){box.textContent=e.message}
   }
   function onAuth(){fetchEpoch++;receiptEpoch++;receiptItems=[];receiptChanged=false;receiptBatch=null;receiptBusy=false;ocrBusy=false;ocrResult=null;storageReady=false;owner='';records={};selected.clear();editId=null;editEtag=null;original=null;const box=document.getElementById('expensesApp');if(box)box.replaceChildren()}
-  function onRoute(){if(AppRouter.current!=='expenses'||!currentUser)return;if(owner!==currentUser.name){owner=currentUser.name;renderBase();renderRecords()}load()}
+  function onRoute(){
+    if(AppRouter.current!=='expenses'||!currentUser)return;
+    if(!Integration.canViewFinance()){
+      // No sensitive records or Firebase requests for an account without viewing permission.
+      fetchEpoch++;storageReady=false;records={};owner=currentUser.name;
+      const box=document.getElementById('expensesApp');
+      if(box)box.innerHTML=window.GSPA_DataAvailability.html('현재 계정은 공동경비 장부 조회 대상이 아닙니다.');
+      return;
+    }
+    if(owner!==currentUser.name){owner=currentUser.name;renderBase();renderRecords()}
+    load();
+  }
   document.addEventListener('click',e=>{
     const tab=e.target.closest('[data-expense-tab]');if(tab){setExpenseTab(tab.dataset.expenseTab);return}
     const day=e.target.closest('[data-ledger-day]');if(day){ledgerDay=day.dataset.ledgerDay;renderRecords();return}
@@ -295,5 +306,5 @@
   window.addEventListener('pagehide',()=>{if(formHasValues())saveDraft(false)});
   document.addEventListener('visibilitychange',()=>{if(document.hidden&&formHasValues())saveDraft(false);else if(!document.hidden&&AppRouter.current==='expenses')load()});
   setInterval(()=>{if(!document.hidden&&AppRouter.current==='expenses'&&!saveBusy)load()},60000);
-  window.Expenses={reload:load,open:()=>AppRouter.go('expenses'),tab:setExpenseTab};
+  window.Expenses={version:'v83',reload:load,open:()=>AppRouter.go('expenses'),tab:setExpenseTab};
 })();

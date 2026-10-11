@@ -19,3 +19,10 @@
 .schedule-time-basis{margin:6px 0 12px;padding:9px 11px;border-radius:12px;background:#eef6f8;border:1px solid #d7e8ed;color:#47636f;font-size:.84rem}.schedule-time-basis b{color:#0b5f7d}
 
 .today-time-basis{display:inline-flex;align-items:center;gap:4px;margin:8px 0 10px;padding:6px 9px;border-radius:999px;background:#eef6f8;color:#55717d;font-size:.78rem}.today-time-basis b{color:#0b5f7d}
+
+/* MIX84: boarding-start time is distinct from departure time; show in day and ticket panels. */
+.flight-boarding-time{margin-top:8px;padding:9px 10px;border-radius:11px;background:#e9f6ed;border:1px solid #9dd1ae;display:flex;flex-wrap:wrap;align-items:center;gap:5px 9px;color:#155d38;font-size:.83rem;line-height:1.4}
+.flight-boarding-time>span:first-child{font-weight:800}
+.flight-boarding-time strong{font-size:1.14rem;white-space:nowrap;color:#135d35}
+.flight-boarding-time strong small{font-size:.72rem;font-weight:700}
+.flight-boarding-context{flex-basis:100%;font-size:.74rem;color:#45645a}

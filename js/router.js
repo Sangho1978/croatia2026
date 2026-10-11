@@ -39,7 +39,6 @@
   }
   function showView(view,detail='',options={}){
     [view,detail]=canonical(view,detail);
-    if(view==='expenses'&&typeof currentUser!=='undefined'&&currentUser?.externalStaff)view='today';
     if(!views().some(e=>e.id===view))view='today';
     const before=current+'/'+sub;
     positions.set(before,window.scrollY);
@@ -49,6 +48,7 @@
     document.querySelectorAll('.bottom [data-route]').forEach(e=>{const on=e.dataset.route===view;e.classList.toggle('is-active',on);if(on)e.setAttribute('aria-current','page');else e.removeAttribute('aria-current')});
     document.getElementById('moreNavBtn')?.classList.toggle('is-active',!['today','schedule','location','group'].includes(view));
     closeMore(false);
+    document.getElementById('accountPop')?.classList.remove('show');
     if(view==='group')activateGroup(detail==='people'?'people':'attendance');
     if(view==='schedule'&&/^\d{4}-\d{2}-\d{2}$/.test(detail)&&typeof days!=='undefined'){
       const i=days.findIndex(d=>d.date===detail);if(i>=0)selectDay(i);

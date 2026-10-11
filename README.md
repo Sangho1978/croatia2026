@@ -1,3 +1,28 @@
+# MIX84 - 2026-10-11: TW405 boarding begins 12:05 KST
+
+- Based on the newly supplied mobile boarding pass for TW405 on 12 October 2026.
+- 12 October itinerary: 09:35 ICN Terminal 1 B-counter group meeting → **12:05 boarding start** (Asia/Seoul) → **12:35 departure** → 19:15 Rome local arrival, followed by Ryanair transfer.
+- Today's next-event countdown now includes TW405 boarding start at 12:05 KST, properly distinguished from the 12:35 departure. Exact timezone offset (+09:00) preserved.
+- Personal flight screen and 12 October schedule flight card: green boarding-time label showing 12:05 KST and reminding travelers to verify the gate on the day. Individual ticket, seat and booking information are unchanged.
+- Login/Today/Account/full-menu/portal version now **v84** with one-line update history. App cache (service worker) reset to v84; important itinerary and ticket data is online-first with offline fallback.
+- Attendance, location, group members, escort/professor no-data behavior, other teams, and Firebase rules remain unchanged.
+- Package unpacks directly into `Croatia2026/` (index.html directly beneath it). Deployment uses the contents of this folder at your existing web root.
+- **Gate** displayed as unassigned in the sample pass and must be checked at the airport. Boarding time can also change; airline and airport day-of-operation announcements take precedence.
+- Only information about the TW405 boarding start is inferred for the group; the screenshot is one passenger's boarding pass, not verification of every passenger's seat or issuance.
+
+# MIX83 · 2026-10-11: personal-data unavailable notice
+
+# Croatia2026 v83 changes · 2026-10-11
+
+- Personal flight E-ticket menu: signed-in accounts without a matching ticket (e.g., tour escort Ji Minjeong and supervising professor) see the notice **이용 가능한 정보가 없습니다** inside the current screen, never a prompt to re-login.
+- Account menu: tapping My E-ticket closes the account popover and keeps the authenticated identity and selected route.
+- Expenses menu: an external guide account stays on the expenses screen, sees an unavailable notice, and makes no expenses Firebase read. The menu is not hidden from that account; the existing Firebase/API access gate remains enforced.
+- Report photography guide: accounts not included in a photo group see an unavailable notice with no group-specific cards, instead of an empty or confusing guide; teacher/regular group permissions unchanged.
+- Public shared rooming list, timetable, flights for matched participants, attendance, group finance access, all other menus stay unchanged.
+- Mobile-safe notice card and updated v83 labels on Login/Today/Account/Menu/Portal; service worker cache version bumped.
+- Firebase Rules unchanged from v82 (no new database permissions required).
+- This ZIP unpacks into `Croatia2026/` with `index.html` immediately inside.
+
 ## MIX82 - 2026-10-11: One-button attendance check/uncheck + build history
 
 - Unzip: `Croatia2026/index.html` and `Croatia2026/js/`, `Croatia2026/css/`, `Croatia2026/assets/` at the first directory level.

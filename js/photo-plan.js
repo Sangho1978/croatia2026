@@ -67,7 +67,7 @@
   }
   function renderMaster(){
     const root=document.getElementById('fieldPhotoGuide');if(!root||!P())return;
-    root.innerHTML=`<div class="photo-master-intro"><div><small>FIELD EVIDENCE</small><h2>결과보고서 촬영가이드</h2><p id="photoViewerNote">로그인한 조에 맞춰 필요한 촬영만 보여줍니다.</p></div><div class="photo-master-rule"><b>촬영 원칙</b><span>예쁜 풍경 1장 + 운영 방식이 보이는 증거사진을 우선 확보</span><small>사진과 함께 시간·가격·대기·불편/장점 중 하나는 꼭 메모하세요.</small></div></div><div class="photo-place-grid">${corePlaceCards()}</div><div class="photo-filter" role="group" aria-label="조별 촬영가이드 필터"><button class="active" data-photo-filter="all">전체</button>${[1,2,3,4].map(g=>`<button data-photo-filter="${g}">${g}조</button>`).join('')}</div><div class="photo-group-master-grid">${groupCards()}</div><div class="photo-file-tip">${esc(P().common.filename)}</div>`;
+    root.innerHTML=`<div class="photo-master-intro"><div><small>FIELD EVIDENCE</small><h2>결과보고서 촬영가이드</h2><p id="photoViewerNote">로그인한 조에 맞춰 필요한 촬영만 보여줍니다.</p></div><div class="photo-master-rule"><b>촬영 원칙</b><span>예쁜 풍경 1장 + 운영 방식이 보이는 증거사진을 우선 확보</span><small>사진과 함께 시간·가격·대기·불편/장점 중 하나는 꼭 메모하세요.</small></div></div><div id="photoUnavailable" hidden></div><div class="photo-place-grid">${corePlaceCards()}</div><div class="photo-filter" role="group" aria-label="조별 촬영가이드 필터"><button class="active" data-photo-filter="all">전체</button>${[1,2,3,4].map(g=>`<button data-photo-filter="${g}">${g}조</button>`).join('')}</div><div class="photo-group-master-grid">${groupCards()}</div><div class="photo-file-tip">${esc(P().common.filename)}</div>`;
   }
   function applyFilter(v){
     document.querySelectorAll('[data-photo-group-card]').forEach(el=>{el.hidden=(v!=='all'&&el.dataset.photoGroupCard!==String(v))});
@@ -77,17 +77,24 @@
     if(!isCroatia())return;
     const {u,all,groups}=access(),allowed=new Set(groups.map(String));
     document.querySelectorAll('.day-photo-guide').forEach(guide=>{
-      guide.hidden=!u;
+      guide.hidden=!u||groups.length===0;
       guide.querySelectorAll('[data-photo-day-group]').forEach(card=>card.hidden=!allowed.has(card.dataset.photoDayGroup));
       const lab=guide.querySelector('.photo-access-label');if(lab)lab.textContent=all?'전체 4개 조 · 핵심 촬영':groups.length?`${groups[0]}조 · 핵심 촬영`:'촬영가이드';
       const btn=guide.querySelector('.photo-full-guide-btn');if(btn)btn.textContent=all?'전체 조 촬영가이드 보기':groups.length?`${groups[0]}조 촬영가이드 전체보기`:'촬영가이드 보기';
     });
     const note=document.getElementById('photoViewerNote');
-    if(note)note.textContent=!u?'로그인 후 내 조 촬영가이드를 확인할 수 있습니다.':all?'한상호·나종민 교수 화면 · 1~4조 전체 확인 가능':groups.length?`${u.name} · ${groups[0]}조 촬영만 표시`:'인솔팀장 계정은 조별 촬영가이드 조회 대상이 아닙니다.';
+    if(note)note.textContent=!u?'촬영자료 준비 중':all?'한상호·나종민 교수 화면 · 1~4조 전체 확인 가능':groups.length?`${u.name} · ${groups[0]}조 촬영만 표시`:'현재 계정에 배정된 촬영자료가 없습니다.';
+    const noData=!!u&&groups.length===0;
+    const empty=document.getElementById('photoUnavailable');
+    if(empty){empty.hidden=!noData;empty.innerHTML=noData?window.GSPA_DataAvailability.html('현재 계정은 조별 결과보고서 촬영 대상에 포함되지 않습니다.'):'';}
+    const main=document.getElementById('fieldPhotoGuide');
+    main?.querySelectorAll('.photo-place-grid,.photo-group-master-grid,.photo-file-tip,.photo-master-rule').forEach(el=>el.hidden=noData);
+
     const filter=document.querySelector('.photo-filter');if(filter)filter.hidden=!all;
     document.querySelectorAll('[data-photo-count-group]').forEach(el=>{el.hidden=!allowed.has(el.dataset.photoCountGroup)});
     document.querySelectorAll('[data-photo-group-card]').forEach(el=>{el.hidden=!allowed.has(el.dataset.photoGroupCard)});
     if(all)applyFilter('all');
+    if(noData&&filter)filter.hidden=true;
   }
   document.addEventListener('change',e=>{const cb=e.target.closest('[data-photo-check]');if(!cb)return;saved[cb.dataset.photoCheck]=cb.checked;save()});
   document.addEventListener('click',e=>{
@@ -95,6 +102,7 @@
     const j=e.target.closest('[data-photo-jump]');if(j){window.AppRouter?.go('schedule',j.dataset.photoJump);return}
   });
   function init(){if(!isCroatia())return;renderMaster();applyAccess()}
+  window.GSPA_PhotoGuide={version:'v83',applyAccess};
   window.addEventListener('cro-auth-change',()=>setTimeout(applyAccess,0));
   window.addEventListener('cro-route',e=>{if(e.detail?.view==='fieldphotos')setTimeout(applyAccess,0)});
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();

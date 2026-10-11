@@ -1,10 +1,10 @@
-/* MIX56 Croatia flight UI - concise airline separation, all times local */
+/* MIX84: TW405 boarding-start time, retaining MIX56 personal ticket privacy. */
 (function(){
   'use strict';
   const DATA=window.CRO_FLIGHT_TICKETS||{members:[]};
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const user=()=>{try{return typeof currentUser!=='undefined'?currentUser:null}catch(_){return null}};
-  const own=()=>{const u=user();return u&&DATA.members.find(x=>x.memberId===u.memberId&&x.name===u.name)};
+  const own=()=>{const u=user();return u&&Array.isArray(DATA.members)?DATA.members.find(x=>x.memberId===u.memberId&&x.name===u.name):null};
   async function copyValue(value,btn){
     value=String(value||'');if(!value)return;
     try{if(navigator.clipboard&&window.isSecureContext)await navigator.clipboard.writeText(value);else{const t=document.createElement('textarea');t.value=value;t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);t.select();document.execCommand('copy');t.remove()}}catch(_){return}
@@ -14,8 +14,13 @@
   const copyBtn=(label,value)=>value?`<button type="button" class="flight-copy" data-flight-copy="${esc(value)}">${esc(label)} 복사</button>`:'';
   const carrierBadge=kind=>kind==='trinity'?'<span class="carrier-badge carrier-trinity">TRINITY</span>':'<span class="carrier-badge carrier-ryanair">RYANAIR</span>';
   function copyLine(label,value){return `<div class="copy-line"><span><b>${esc(label)}</b><strong>${esc(value)}</strong></span><button type="button" class="flight-copy" data-flight-copy="${esc(value)}">복사</button></div>`}
+  function boardingBadge(l){
+    const entry=DATA.flightBoarding?.[String(l?.flight||'')];
+    if(!entry||entry.date!==l.date)return '';
+    return `<div class="flight-boarding-time" role="note"><span>⏰ 탑승 시작</span><strong>${esc(entry.time)} <small>한국시간</small></strong><span class="flight-boarding-context">탑승권 기준 · 탑승구 당일 확인</span></div>`;
+  }
   function leg(l,kind){
-    return `<div class="flight-leg flight-leg-${kind}"><div class="flight-leg-top"><b>${esc(l.flight)}</b>${l.seat?`<span>${esc(l.seat)}</span>`:''}</div><div class="route">${esc(l.route)}</div><div class="meta"><b>현지시간</b> · ${esc(l.date)} · ${esc(l.time)}${l.checkedBag?' · 위탁 '+esc(l.checkedBag):''}</div>${l.reservation?copyLine('예약번호',l.reservation):''}</div>`;
+    return `<div class="flight-leg flight-leg-${kind}"><div class="flight-leg-top"><b>${esc(l.flight)}</b>${l.seat?`<span>${esc(l.seat)}</span>`:''}</div><div class="route">${esc(l.route)}</div><div class="meta"><b>현지시간</b> · ${esc(l.date)} · ${esc(l.time)}${l.checkedBag?' · 위탁 '+esc(l.checkedBag):''}</div>${boardingBadge(l)}${l.reservation?copyLine('예약번호',l.reservation):''}</div>`;
   }
   function reminderBox(which){
     const r=DATA.twaySeatReminder?.[which];if(!r)return'';
@@ -40,7 +45,7 @@
     if(opts.ticket)actions.push(copyBtn('항공권번호',opts.ticket));
     if(opts.eticket)actions.push(`<a href="${esc(opts.eticket)}" target="_blank" rel="noopener">E-ticket 보기</a>`);
     if(opts.groupDoc)actions.push(`<a href="${esc(opts.groupDoc)}" target="_blank" rel="noopener">Ryanair 단체 확인서</a>`);
-    return `<div class="personal-day-leg personal-day-${kind}"><div class="personal-day-leg-top"><b>${carrierBadge(kind)} ${esc(l.flight)}</b>${l.seat?`<span class="personal-day-seat">${esc(l.seat)}</span>`:''}</div><div class="personal-day-route">${esc(l.route)}</div><div class="personal-day-meta"><b>현지시간</b> · ${esc(l.time)}</div>${actions.length?`<div class="personal-day-actions">${actions.join('')}</div>`:''}</div>`;
+    return `<div class="personal-day-leg personal-day-${kind}"><div class="personal-day-leg-top"><b>${carrierBadge(kind)} ${esc(l.flight)}</b>${l.seat?`<span class="personal-day-seat">${esc(l.seat)}</span>`:''}</div><div class="personal-day-route">${esc(l.route)}</div><div class="personal-day-meta"><b>현지시간</b> · ${esc(l.time)}</div>${boardingBadge(l)}${actions.length?`<div class="personal-day-actions">${actions.join('')}</div>`:''}</div>`;
   }
   function scheduleCard(m,date){
     const tw=m.tway,ro=m.ryanair.outbound,rr=m.ryanair.return,g=DATA.ryanairGroupDocument||{};let body='',label='';
@@ -59,7 +64,7 @@
   function render(){
     if((window.GSPA_TRIP_ID||'croatia')!=='croatia')return;
     const box=document.getElementById('flightTicketsApp');if(!box)return;const m=own();
-    box.innerHTML=`<div class="flight-shell"><div class="flight-source-note"><b>시간 표기</b><span>모든 출발·도착 시각은 해당 장소 <strong>현지시간</strong> 기준입니다.</span></div>${m?personalCard(m):'<div class="flight-login-note"><b>로그인 후 내 항공권을 확인하세요.</b><br><small>크로아티아팀 전용</small></div>'}</div>`;
+    box.innerHTML=`<div class="flight-shell"><div class="flight-source-note"><b>시간 표기</b><span>모든 출발·도착 시각은 해당 장소 <strong>현지시간</strong> 기준입니다.</span></div>${m?personalCard(m):window.GSPA_DataAvailability.html('현재 계정에 등록된 개인 E-ticket이 없습니다. 공통 항공 일정은 날짜별 일정에서 확인할 수 있습니다.')}</div>`;
     renderSchedule();paintQuick();
   }
   function activeReminder(){for(const k of ['outbound','return']){const r=DATA.twaySeatReminder?.[k];if(r&&Date.now()>=Date.parse(r.availableFrom)&&Date.now()<Date.parse(r.depart))return r}return null}
@@ -67,6 +72,7 @@
     const b=document.getElementById('myFlightQuick');if(!b)return;const m=own();if(!m){b.hidden=true;return}b.hidden=false;const r=activeReminder();
     b.innerHTML=`<span class="ico">✈</span><span><b>${r?'좌석지정 확인':'내 항공권'}</b><small>${r?`${esc(r.flight)} · ${esc(r.display)}`:'트리니티 개인 E-ticket · Ryanair 예약/좌석'}</small></span><span class="arr">›</span>`;
   }
+  window.FlightTicketsApp={version:'v84',render};
   document.addEventListener('click',e=>{const b=e.target.closest('[data-flight-copy]');if(b){e.preventDefault();copyValue(b.dataset.flightCopy,b)}});
   window.addEventListener('cro-auth-change',()=>{render();renderSchedule();paintQuick()});
   window.addEventListener('cro-route',e=>{if(e.detail?.view==='flights')render();if(e.detail?.view==='schedule')renderSchedule()});

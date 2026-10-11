@@ -1,0 +1,7 @@
+/* MIX83: quiet in-page notice for a signed-in user with no individual data. */
+.gspa-no-data{margin:14px 0 18px;border:1px solid #d6e3e9;border-radius:18px;background:#f7fafc;padding:27px 18px;text-align:center;line-height:1.55;color:#375465;max-width:100%;box-sizing:border-box}
+.gspa-no-data-icon{display:inline-flex;width:42px;height:42px;border-radius:50%;align-items:center;justify-content:center;background:#e8f1f6;color:#346d89;font-size:23px;margin-bottom:10px;font-weight:750}
+.gspa-no-data h3{font-size:1.04rem;line-height:1.35;font-weight:900;margin:0 0 7px;color:#233e50}
+.gspa-no-data p{font-size:.87rem;margin:0;word-break:keep-all;overflow-wrap:anywhere;color:#5b7381}
+.gspa-no-data[hidden],#fieldPhotoGuide [hidden]{display:none!important}
+@media(max-width:380px){.gspa-no-data{padding:22px 14px}.gspa-no-data p{font-size:.83rem}}
