@@ -1,4 +1,4 @@
-const STATIC='gspa-static-v78-menu-routes-restored';
+const STATIC='gspa-static-v81-admins-version';
 const GUIDE='gspa-guidebook-v71-20261008-final';
 const CORE=[
   "./index.html",
@@ -167,10 +167,13 @@ self.addEventListener('fetch',e=>{
   const url=new URL(req.url);if(url.origin!==self.location.origin)return;
   const decoded=decodeURIComponent(url.pathname);
   const isGuide=/\/docs\/(?:croatia_guidebook_20261008_final|turkiye1_guidebook)\.pdf$/i.test(decoded);
+  // MIX79: online-first for login/contact/auth code so a corrected emergency number is not left stale.
+  const isCritical=/\/(?:index|trips)\.html$|\/(?:platform\/(?:login-directory|trips)|data\/roster|js\/attendance-policy|js\/(?:app-core|usability|attendance|location-session|integration|router|photo-plan|pwa-install))\.js$/i.test(decoded);
   e.respondWith((async()=>{
     const cache=await caches.open(isGuide?GUIDE:STATIC);
-    if(isGuide){
-      try{const res=await fetch(new Request(req,{cache:'no-store'}));if(res&&res.ok){try{await cache.put(req,res.clone())}catch(_){}}return res}catch(err){const hit=await cache.match(req);if(hit)return hit;throw err}
+    if(isGuide||isCritical){
+      try{const res=await fetch(new Request(req,{cache:'no-store'}));if(res&&res.ok){try{await cache.put(req,res.clone())}catch(_){}}return res}
+      catch(err){const hit=await cache.match(req,{ignoreSearch:!isGuide});if(hit)return hit;throw err}
     }
     const hit=await cache.match(req,{ignoreSearch:true});if(hit)return hit;
     try{const res=await fetch(req);if(res&&res.ok){try{await cache.put(req,res.clone())}catch(_){}}return res}catch(err){

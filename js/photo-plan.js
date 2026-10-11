@@ -83,7 +83,7 @@
       const btn=guide.querySelector('.photo-full-guide-btn');if(btn)btn.textContent=all?'전체 조 촬영가이드 보기':groups.length?`${groups[0]}조 촬영가이드 전체보기`:'촬영가이드 보기';
     });
     const note=document.getElementById('photoViewerNote');
-    if(note)note.textContent=!u?'로그인 후 내 조 촬영가이드를 확인할 수 있습니다.':all?'한상호·나종민 교수 화면 · 1~4조 전체 확인 가능':`${u.name} · ${groups[0]}조 촬영만 표시`;
+    if(note)note.textContent=!u?'로그인 후 내 조 촬영가이드를 확인할 수 있습니다.':all?'한상호·나종민 교수 화면 · 1~4조 전체 확인 가능':groups.length?`${u.name} · ${groups[0]}조 촬영만 표시`:'인솔팀장 계정은 조별 촬영가이드 조회 대상이 아닙니다.';
     const filter=document.querySelector('.photo-filter');if(filter)filter.hidden=!all;
     document.querySelectorAll('[data-photo-count-group]').forEach(el=>{el.hidden=!allowed.has(el.dataset.photoCountGroup)});
     document.querySelectorAll('[data-photo-group-card]').forEach(el=>{el.hidden=!allowed.has(el.dataset.photoGroupCard)});

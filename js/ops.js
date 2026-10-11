@@ -122,7 +122,7 @@
     const flow=document.getElementById('todayFlow'); if(flow)flow.innerHTML=(d.flow||[]).map((x,i)=>`${i?'<i>›</i>':''}<span>${x}</span>`).join('');
     const nx=nextEventFor(d); document.getElementById('todayNextTime').textContent=nx.time; document.getElementById('todayNextLabel').textContent=nx.label; document.getElementById('todayCountdown').innerHTML=`${nx.count}${nx.approx?' <span class="ops-next-live">예상</span>':''}`; paintTodayStay(d);
     const w=WEATHER_SPOTS[d.date]; const ws=document.getElementById('todayWeatherState'); if(ws)ws.textContent=document.getElementById('liveWeatherMain')?.textContent||(w?`${w.name} ${w.hi}/${w.lo}° 참고`:'도착일');
-    const as=document.getElementById('todayAttendanceState'); if(as){const cnt=Object.values(attChecks||{}).filter(x=>x&&x.checked).length; as.textContent=attCurrent?`${cnt}/${APP_USERS.length} · ${attCurrent.title||attCurrent.type}`:'진행 없음';}
+    const as=document.getElementById('todayAttendanceState'); if(as){const cnt=Object.values(attChecks||{}).filter(x=>x&&x.checked).length; as.textContent=attCurrent?`${attCurrent.completedAt?'✓ 회차 완료':'진행 중'} · ${cnt}/${APP_USERS.length} · ${attCurrent.title||attCurrent.type}`:'진행 없음';}
     const ls=document.getElementById('todayLocationState'); if(ls){const sharing=localStorage.getItem('loc_sharing')==='1'; ls.textContent=sharing?(locLastWrite?`${ago(locLastWrite)} 전송`:'공유 ON'):'공유 OFF';}
     const mealBrief=String(d.meal||'항공·도착 일정에 맞춰 운영').split(/[.!?]/)[0]; const weatherBrief=String(TRIP_WEATHER_ACTION[d.date]||'').split(/[.!?]/)[0]; document.getElementById('todayOpsNote').innerHTML=`<b>식사</b> ${mealBrief}<br><b>오늘 준비</b> ${weatherBrief}`;
     if(window.LocationSession)LocationSession.paint();

@@ -39,6 +39,7 @@
   }
   function showView(view,detail='',options={}){
     [view,detail]=canonical(view,detail);
+    if(view==='expenses'&&typeof currentUser!=='undefined'&&currentUser?.externalStaff)view='today';
     if(!views().some(e=>e.id===view))view='today';
     const before=current+'/'+sub;
     positions.set(before,window.scrollY);

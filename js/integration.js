@@ -7,7 +7,7 @@
   // Finance UI gate, not server-verified identity. Staff titles are unchanged.
   const financeNames=new Set(window.GSPA_TRIP?.financeManagers||['한상호','이상미']);
   const canManageFinance=()=>!!currentUser&&financeNames.has(currentUser.name);
-  const canViewFinance=()=>!!currentUser;
+  const canViewFinance=()=>!!currentUser&&!currentUser.externalStaff;
   const idOf=u=>u.memberId;
   function escape(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
   function uidFromToken(t){try{return JSON.parse(atob(t.split('.')[1].replace(/-/g,'+').replace(/_/g,'/'))).sub||''}catch(_){return ''}}
@@ -41,6 +41,7 @@
   async function api(path,options={}){
     if(navigator.onLine===false)throw Error('오프라인 · 공유 데이터 조회·저장은 인터넷 연결이 필요합니다.');
     const financePath=/^(expenses|expenseReceipts)\//.test(path),method=String(options.method||'GET').toUpperCase();
+    if(financePath&&!canViewFinance())throw Error('인솔팀장 계정은 공동경비 조회 대상이 아닙니다.');
     if(financePath&&method!=='GET'&&!canManageFinance())throw Error('공동경비 등록·수정은 '+[...financeNames].join('·')+'만 가능합니다.');
     const tk=await token();
     const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),16000);
@@ -77,7 +78,8 @@
     document.body.dataset.financeManager=financeManager?'true':'false';
     document.querySelectorAll('[data-staff-only]').forEach(el=>el.hidden=!isStaff());
     document.querySelectorAll('[data-finance-only]').forEach(el=>el.hidden=!financeManager);
-    const e=document.getElementById('tripRoleText');if(e)e.textContent=currentUser?[(currentUser.group?currentUser.group+'조':'인솔 교수'),currentUser.leader?'조장':'',currentUser.presenter?'발표':'',currentUser.tripRole?'연수 '+currentUser.tripRole:''].filter(Boolean).join(' · '):'';
+    const e=document.getElementById('tripRoleText');if(e)e.textContent=currentUser?.externalStaff?'여행사 인솔팀장':currentUser?[(currentUser.group?currentUser.group+'조':'인솔 교수'),currentUser.leader?'조장':'',currentUser.presenter?'발표':'',currentUser.tripRole?'연수 '+currentUser.tripRole:''].filter(Boolean).join(' · '):'';
+    document.querySelectorAll('[data-route="expenses"]').forEach(el=>el.hidden=!!currentUser?.externalStaff);
     const box=document.getElementById('myFirebaseUid');if(box){box.hidden=true;box.textContent=''}
     window.dispatchEvent(new CustomEvent('cro-role-ready'));
   }

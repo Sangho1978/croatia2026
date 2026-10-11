@@ -63,9 +63,9 @@
 
 
       <section class="emergency6-section" aria-labelledby="emergencyFieldTitle">
-        <div class="emergency6-section-head"><div><span>TRIP CONTACT</span><h3 id="emergencyFieldTitle">인솔 · 현지가이드 · 현지사무소</h3></div><small>10/08 최종 소책자 p.61</small></div>
+        <div class="emergency6-section-head"><div><span>TRIP CONTACT</span><h3 id="emergencyFieldTitle">인솔 · 현지가이드 · 현지사무소</h3></div><small>10/11 인솔팀장 연락처 정정 · 소책자 p.61의 옛 번호 주의</small></div>
         <div class="emergency6-contact-grid">
-          <article class="emergency6-contact is-primary"><div><span>인솔자</span><h4>지민정</h4><p>공항 미팅·전체 연수 인솔</p></div><a href="tel:+821094161883">☎ +82 10 9416 1883</a></article>
+          <article class="emergency6-contact is-primary"><div><span>인솔팀장 · 연락처 정정</span><h4>지민정</h4><p>공항 미팅·전체 연수 인솔 · 국내 010-5205-7004</p></div><a href="tel:+821052057004">☎ +82 10 5205 7004</a></article>
           <article class="emergency6-contact"><div><span>크로아티아 현지 가이드</span><h4>이명주</h4><p>크로아티아 현지 관광 안내</p></div><a href="tel:+420775059369">☎ +420 775 059 369</a></article>
           <article class="emergency6-contact"><div><span>로마 현지 가이드</span><h4>최대진</h4><p>로마 현지 관광 안내</p></div><a href="tel:+393489009804">☎ +39 348 9009804</a></article>
           <article class="emergency6-contact"><div><span>이탈리아 현지 사무소</span><h4>박지예</h4><p>로마 현지 담당자</p></div><a href="tel:+393662034455">☎ +39 366 203 4455</a></article>
@@ -180,6 +180,7 @@
     if(hit.matches('.app-nav-btn'))return;
     if(hit.closest('.app-sheet-grid'))actionToast((hit.querySelector('span')?.textContent||'메뉴')+' 열기');
     else if(hit.id==='attStartBtn')actionToast('출석 시작 요청을 보냈습니다.','working');
+    else if(hit.id==='attCompleteBtn')actionToast('출석 완료 처리 여부를 확인합니다.','working');
     else if(hit.id==='attResetBtn')actionToast('출석 리셋을 처리합니다.','working');
     else if(hit.id==='attMyBtn'&&!hit.disabled)actionToast('내 출석을 확인합니다.','working');
     else if(hit.matches('[data-header-toggle]'))actionToast(document.body.classList.contains('header-expanded')?'상단 정보를 접습니다.':'상단 상세정보를 펼칩니다.');

@@ -8,6 +8,7 @@
   'use strict';
   const POLICY=window.GSPA_AttendancePolicy||{admins:[window.GSPA_TRIP?.attendanceOperator||'한상호'],label:window.GSPA_TRIP?.attendanceOperator||'한상호',isAdmin:u=>!!u&&u.name===(window.GSPA_TRIP?.attendanceOperator||'한상호')}, ADMINS=POLICY.admins, ADMIN_LABEL=POLICY.label, order=[...new Set(APP_USERS.map(u=>u.group))].filter(g=>g!==0).sort((a,b)=>a-b).concat(APP_USERS.some(u=>u.group===0)?[0]:[]), encoder=new TextEncoder();
   const people=()=>APP_USERS;
+  const canSelfCheck=()=>!!currentUser&&people().some(u=>u.memberId===currentUser.memberId&&u.slot===currentUser.slot);
   const isAdmin=()=>POLICY.isAdmin(currentUser);
   const sameSession=e=>e===authEpoch&&!!currentUser;
   let authEpoch=0,revision=0,refreshTask=null,adminBusy=false,selfBusy=false;
@@ -16,7 +17,8 @@
   let currentStreamOK=false,checksStreamOK=false,connectMode='waiting',failure='';
   const sorted=g=>people().filter(u=>u.group===g).sort((a,b)=>Number(b.leader)-Number(a.leader)||a.groupOrder-b.groupOrder);
   const checked=u=>attChecks?.[u.slot]?.checked===true;
-  const roundDone=()=>!!attCurrent&&checksKnown&&people().filter(checked).length===people().length;
+  const isFinalized=meta=>!!meta&&Number.isFinite(Number(meta.completedAt))&&Number(meta.completedAt)>0;
+  const roundDone=()=>isFinalized(attCurrent);
   const roundAccepting=()=>!!attCurrent&&!roundDone();
   const editorValues=()=>{const type=document.getElementById('attType')?.value||'장소집결',custom=(document.getElementById('attCustomTitle')?.value||'').trim();return {type,title:custom||type+' 출석체크'}};
   function announceStart(meta){if(meta?.id)window.AttendanceNotify?.announceStart(meta)}
@@ -46,32 +48,35 @@
   function render(){
     const box=document.getElementById('attRoster');if(!box)return;
     const exists=!!attCurrent,ready=known&&(!exists||checksKnown);
-    const done=exists&&ready?people().filter(checked).length:0,total=people().length,missing=total-done,complete=exists&&ready&&done===total,accepting=exists&&!complete;
+    const done=exists&&ready?people().filter(checked).length:0,total=people().length,missing=total-done,allChecked=exists&&ready&&done===total,complete=isFinalized(attCurrent),accepting=exists&&!complete;
     document.getElementById('attTotalCount').textContent=total;
     document.getElementById('attCheckedCount').textContent=ready?done:'–';
     document.getElementById('attMissingCount').textContent=ready?missing:'–';
     const state=document.getElementById('attStateLabel');
-    state.textContent=!known?'연결 중':!exists?'대기':!checksKnown?'확인 중':complete?'완료':'진행 중';
+    state.textContent=!known?'연결 중':!exists?'대기':complete?'✓ 회차 완료':!checksKnown?'확인 중':allChecked?'전원 체크 · 완료 대기':'진행 중';
     state.classList.toggle('is-open',accepting);state.classList.toggle('is-complete',complete);
     document.getElementById('attTitle').textContent=exists?(attCurrent.title||APP_USERS.length+'명 출석 확인'):APP_USERS.length+'명 출석 확인';
     const typeLabel=document.getElementById('attRoundType');if(typeLabel)typeLabel.textContent=exists?(attCurrent.type||'출석 확인'):'출석 준비';
-    document.getElementById('attMeta').textContent=exists?(shortTime(attCurrent.createdAt)+' 시작'+(complete?' · '+APP_USERS.length+'/'+APP_USERS.length+' 자동 완료':'')):'시작 대기';
+    document.getElementById('attMeta').textContent=exists?(shortTime(attCurrent.createdAt)+' 시작'+(complete?' · '+shortTime(attCurrent.completedAt)+' 최종 완료':'')):'시작 대기';
+    const finish=document.getElementById('attFinishBanner');if(finish){finish.hidden=!complete;if(complete)finish.textContent='✓ 이 출석 회차는 '+(attCurrent.completedBy||'관리자')+'님이 '+shortTime(attCurrent.completedAt)+'에 완료 처리했습니다. · 체크 '+(ready?done:attCurrent.completedCount??'–')+'/'+(ready?total:attCurrent.completedTotal??total)+'명'+(ready&&missing?' · 미체크 '+missing+'명':'')+' · 추가 체크 불가';}
+    const manager=document.getElementById('attAdminRights');if(manager)manager.textContent='출석 관리자: '+ADMIN_LABEL+' · 시작·완료·리셋 권한';
     const sync=document.getElementById('attSyncStatus');sync.textContent=syncLabel();sync.dataset.mode=connectMode;
     const admin=document.getElementById('attAdmin'),editor=document.getElementById('attRoundEditor');admin.classList.toggle('show',isAdmin());admin.hidden=!isAdmin();if(editor)editor.hidden=!isAdmin();
     const canWrite=currentUser&&navigator.onLine&&ready&&!adminBusy;
-    document.getElementById('attStartBtn').disabled=!canWrite||accepting;
-    document.getElementById('attResetBtn').disabled=!canWrite||!exists;
-    const edit=document.getElementById('attEditBtn');if(edit)edit.disabled=!canWrite||!accepting;
+    document.getElementById('attStartBtn').disabled=!isAdmin()||!canWrite||accepting;
+    const finishButton=document.getElementById('attCompleteBtn');if(finishButton)finishButton.disabled=!isAdmin()||!canWrite||!exists||complete;
+    document.getElementById('attResetBtn').disabled=!isAdmin()||!canWrite||!exists;
+    const edit=document.getElementById('attEditBtn');if(edit)edit.disabled=!isAdmin()||!canWrite||!accepting;
     const typ=document.getElementById('attType'),titleInput=document.getElementById('attCustomTitle');
     if(exists&&document.activeElement!==typ&&typ&&[...typ.options].some(o=>o.value===attCurrent.type))typ.value=attCurrent.type;
     if(exists&&document.activeElement!==titleInput&&titleInput)titleInput.value=attCurrent.title||'';
     const mine=currentUser&&checked(currentUser),btn=document.getElementById('attMyBtn');
-    btn.disabled=!canWrite||!accepting||!!mine||selfBusy;
+    btn.disabled=!canSelfCheck()||!canWrite||!accepting||!!mine||selfBusy;
     btn.classList.toggle('checked',!!mine&&exists);
-    btn.textContent=selfBusy?'저장 중…':!exists?'시작을 기다리고 있습니다':complete?'✓ '+APP_USERS.length+'명 모두 완료':mine?'✓ 내 체크완료 · '+shortTime(attChecks[currentUser.slot]?.ts):'✓ 내 출석 체크';
+    btn.textContent=!canSelfCheck()&&currentUser?'인솔팀장 · 출석현황 조회 전용':selfBusy?'저장 중…':!exists?'시작을 기다리고 있습니다':complete?(mine?'✓ 내 체크완료 · 회차 종료':'✓ 이번 출석 회차 완료'):mine?'✓ 내 체크완료 · '+shortTime(attChecks[currentUser.slot]?.ts):allChecked?'관리자 최종 완료 대기':'✓ 내 출석 체크';
     const notice=document.getElementById('attMissingNotice');
-    notice.classList.toggle('all-done',complete);
-    notice.textContent=!ready?'최신 출석을 불러오는 중입니다.':!exists?'출석 시작을 기다리고 있습니다.':complete?'✓ '+APP_USERS.length+'명 모두 출석 체크 완료 · 자동 종결되었습니다.':missing<=10?'미체크 '+missing+'명 · '+people().filter(u=>!checked(u)).map(u=>u.name).join(' · '):'미체크 '+missing+'명 · 아래 조별 회색 이름을 확인하세요.';
+    notice.classList.toggle('all-done',complete||allChecked);
+    notice.textContent=!ready?'최신 출석을 불러오는 중입니다.':!exists?'출석 시작을 기다리고 있습니다.':complete?(missing?'✓ 회차 완료 · '+done+'/'+total+'명 체크 · 미체크 '+missing+'명 (터치해 명단 확인)':'✓ 회차 완료 · '+total+'명 전원 체크'):allChecked?'✓ '+total+'명 전원 체크 · 관리자가 [출석 완료]를 누르면 이번 회차가 마감됩니다.':missing<=10?'미체크 '+missing+'명 · '+people().filter(u=>!checked(u)).map(u=>u.name).join(' · '):'미체크 '+missing+'명 · 아래 조별 회색 이름을 확인하세요.';
     const mini=document.getElementById('att2GroupTotals');
     if(mini)mini.innerHTML=order.map(g=>{const mem=sorted(g),n=exists&&ready?mem.filter(checked).length:0;return '<div class="'+(exists&&ready&&n===mem.length?'done':'')+'"><span>'+(g?g+'조':'교수')+'</span><b>'+(ready?n:'–')+'<small>/'+mem.length+'</small></b></div>'}).join('');
     notice.hidden=ready&&missing>10&&!complete;
@@ -230,10 +235,7 @@
       const res=await request(currentPath(),{headers:{'X-Firebase-ETag':'true'}});
       if(!sameSession(epoch)||!isAdmin())return;
       const old=activeMeta(res.data);
-      if(old){
-        const oldChecks=cleanChecks((await request(roundPath(old.id))).data);
-        if(Object.values(oldChecks).filter(x=>x?.checked).length<people().length){setMeta(old);throw Error('이미 진행 중인 출석이 있습니다. 리셋하거나 '+APP_USERS.length+'명 완료 후 새로 시작해 주세요.');}
-      }
+      if(old&&!isFinalized(old)){setMeta(old);throw Error('아직 완료 처리되지 않은 출석이 있습니다. 관리자가 [출석 완료]를 누르거나 리셋한 후 새로 시작해 주세요.');}
       if(!res.etag)throw Error('서버 상태를 확인하지 못했습니다. 다시 시도해 주세요.');
       const random=new Uint32Array(1);crypto.getRandomValues(random);const id=String(Date.now())+'-'+random[0].toString(36);
       const {type,title}=editorValues(),started=Date.now(),st=window.AppTime?AppTime.stored(started):null;
@@ -242,6 +244,36 @@
       if(!sameSession(epoch))return;
       revision++;setMeta(saved.data);attChecks={};checksKnown=true;markGood();openCheckStream();feedback('✓ '+title+' 시작 · '+APP_USERS.length+'명이 체크할 수 있습니다.');announceStart(saved.data);
     }catch(e){feedback(e.status===412?'다른 기기에서 먼저 시작했습니다. 새 현황을 불러옵니다.':e.message,true);await refresh(false);}
+    finally{adminBusy=false;render();}
+  }
+  // Complete one attendance round even if a few members have not checked.
+  // The round remains visible to everyone with its finalizer and completion time.
+  async function completeCurrent(){
+    if(!isAdmin()){feedback('출석 완료는 관리자('+ADMIN_LABEL+')만 처리할 수 있습니다.',true);return}
+    if(adminBusy||!attCurrent||roundDone())return;
+    if(!navigator.onLine){feedback('인터넷 연결 후 회차를 완료해 주세요.',true);return}
+    const id=attCurrent.id,epoch=authEpoch;
+    adminBusy=true;feedback();render();
+    try{
+      const latest=await request(currentPath(),{headers:{'X-Firebase-ETag':'true'}});
+      if(!sameSession(epoch)||!isAdmin())return;
+      if(latest.data?.id!==id)throw Error('출석 회차가 변경되었습니다. 새 현황을 확인해 주세요.');
+      if(isFinalized(latest.data)){setMeta(latest.data);throw Error('이미 관리자가 이 회차를 완료했습니다.');}
+      if(!latest.etag)throw Error('서버 버전을 확인하지 못했습니다. 잠시 후 다시 시도해 주세요.');
+      const snap=cleanChecks((await request(roundPath(id))).data);
+      if(!sameSession(epoch)||attCurrent?.id!==id)return;
+      const count=people().filter(u=>snap[u.slot]?.checked).length,total=people().length;
+      const msg=count===total?'출석자 '+total+'명 전원이 체크했습니다.':'출석자 '+total+'명 중 '+count+'명 체크, '+(total-count)+'명 미체크입니다.\n미체크자는 체크한 것으로 처리하지 않습니다.';
+      if(!confirm(msg+'\n\n이 회차를 출석 완료로 마감하시겠습니까?\n완료하면 추가 체크가 차단되고 다음 출석을 시작할 수 있습니다.')){
+        feedback('출석 완료 처리를 취소했습니다.');return;
+      }
+      if(!sameSession(epoch)||!isAdmin())return;
+      const value={...latest.data,completedAt:{'.sv':'timestamp'},completedBy:currentUser.name,completedCount:count,completedTotal:total};
+      const saved=await request(currentPath(),{method:'PUT',headers:{'if-match':latest.etag},body:JSON.stringify(value)});
+      if(!sameSession(epoch))return;
+      revision++;setMeta(saved.data);attChecks=snap;checksKnown=true;markGood();
+      feedback('✓ 출석 회차 완료 · '+count+'/'+total+'명 체크 · '+currentUser.name+' 관리자 확정');
+    }catch(e){feedback(e.status===412?'다른 관리자가 출석 현황을 변경했습니다. 최신 상태로 다시 확인해 주세요.':e.message,true);await refresh(false);}
     finally{adminBusy=false;render();}
   }
   async function editCurrent(){
@@ -260,7 +292,7 @@
   async function reset(){
     if(!isAdmin()){feedback('출석 시작·리셋은 '+ADMIN_LABEL+'만 사용할 수 있습니다.',true);return}
     if(adminBusy||!attCurrent)return;
-    if(!confirm('현재 출석을 리셋할까요?\n'+APP_USERS.length+'명이 미체크 대기 상태로 돌아갑니다.\n다시 확인하려면 시작을 누르세요. 이전 기록은 보존됩니다.'))return;
+    if(!confirm('현재 출석 회차를 화면에서 제거할까요?\n이 회차는 더 이상 현재 출석으로 표시되지 않습니다.\n개별 출석체크 기록은 서버에 남지만 회차 제목·완료 상태는 별도 기록되지 않습니다.'))return;
     adminBusy=true;feedback();render();const id=attCurrent.id,epoch=authEpoch;
     try{
       if(!navigator.onLine)throw Error('인터넷 연결 후 리셋해 주세요.');
@@ -276,13 +308,13 @@
     finally{adminBusy=false;render();}
   }
   async function checkSelf(){
-    if(!currentUser||!roundAccepting()||selfBusy||checked(currentUser))return;
+    if(!canSelfCheck()||!roundAccepting()||selfBusy||checked(currentUser))return;
     const user=currentUser,id=attCurrent.id,epoch=authEpoch;selfBusy=true;feedback();render();
     try{
       if(!navigator.onLine)throw Error('인터넷 연결이 없습니다. 연결 후 다시 체크해 주세요.');
       const latest=await request(currentPath());
       if(!sameSession(epoch)||currentUser?.slot!==user.slot)return;
-      if(latest.data?.id!==id){revision++;setMeta(latest.data);throw Error('출석이 리셋되거나 바뀌었습니다. 새 출석에서 다시 체크해 주세요.');}
+      if(latest.data?.id!==id||isFinalized(latest.data)){revision++;setMeta(latest.data);throw Error('해당 회차는 이미 완료되었거나 다른 회차로 변경되었습니다.');}
       const path=roundPath(id)+'/'+user.slot;
       const previous=await request(path,{headers:{'X-Firebase-ETag':'true'}});
       let saved=previous.data;
@@ -292,15 +324,15 @@
         saved=(await request(path,{method:'PUT',headers:{'if-match':previous.etag},body:JSON.stringify(value)})).data;
       }
       const confirmRound=await request(currentPath());if(!sameSession(epoch))return;
-      if(confirmRound.data?.id!==id){revision++;setMeta(confirmRound.data);throw Error('확인 중 리셋되었습니다. 새 출석에서 다시 눌러 주세요.');}
-      if(attCurrent?.id===id){revision++;attChecks[user.slot]=saved;checksKnown=true;try{const allChecks=await request(roundPath(id));if(attCurrent?.id===id)attChecks=cleanChecks(allChecks.data)}catch(_){}markGood();feedback(people().filter(checked).length===people().length?'✓ '+APP_USERS.length+'명 모두 출석 체크 완료 · 자동 종결되었습니다.':'✓ 출석 체크를 완료했습니다.');}
+      if(confirmRound.data?.id!==id||isFinalized(confirmRound.data)){revision++;setMeta(confirmRound.data);throw Error('확인 중 관리자에 의해 회차가 완료되거나 변경되었습니다.');}
+      if(attCurrent?.id===id){revision++;attChecks[user.slot]=saved;checksKnown=true;try{const allChecks=await request(roundPath(id));if(attCurrent?.id===id)attChecks=cleanChecks(allChecks.data)}catch(_){}markGood();feedback(people().filter(checked).length===people().length?'✓ 전원 체크되었습니다. 관리자의 출석 완료 처리를 기다립니다.':'✓ 출석 체크를 완료했습니다.');}
     }catch(e){
       if(e.status===412){await refresh(false);feedback(checked(user)?'이미 체크되었습니다.':'현황이 바뀌었습니다. 다시 확인해 주세요.',!checked(user));}
       else{feedback(e.message,true);await refresh(false);}
     }finally{selfBusy=false;render();}
   }
-  window.attRefresh=refresh;window.attRender=render;window.attCreateEvent=create;window.attEditCurrent=editCurrent;window.attResetCurrent=reset;window.attToggleSelf=checkSelf;window.attStartPolling=begin;window.attShowStatusList=openStatusList;window.attCloseStatusList=closeStatusList;wireStatusList();
-  window.AttendanceBoard={get status(){return {mode:connectMode,known,checksKnown,round:attCurrent?.id||null,lastSync}},refresh};
+  window.attRefresh=refresh;window.attRender=render;window.attCreateEvent=create;window.attCompleteCurrent=completeCurrent;window.attEditCurrent=editCurrent;window.attResetCurrent=reset;window.attToggleSelf=checkSelf;window.attStartPolling=begin;window.attShowStatusList=openStatusList;window.attCloseStatusList=closeStatusList;wireStatusList();
+  window.AttendanceBoard={get status(){return {mode:connectMode,known,checksKnown,round:attCurrent?.id||null,completed:isFinalized(attCurrent),completedBy:attCurrent?.completedBy||'',lastSync}},refresh};
   window.addEventListener('cro-auth-change',()=>{authEpoch++;revision++;closeStreams();attCurrent=null;attChecks={};known=false;checksKnown=false;lastSync=0;failure='';selfBusy=false;feedback();begin();});
   window.addEventListener('cro-route',e=>{if(e.detail?.view==='group'&&e.detail?.sub!=='people'&&currentUser){render();refresh(false);openStreams();}});
   window.addEventListener('offline',()=>{closeStreams();render()});

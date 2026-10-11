@@ -13,7 +13,7 @@
     const local=document.getElementById('attAnnouncement');if(local){local.hidden=false;local.className='att-announcement '+kind;local.textContent=text;}
     if(navigator.vibrate)try{navigator.vibrate(kind==='done'?[100,60,100]:[80])}catch(_){}
   }
-  async function ensureSW(){if(!('serviceWorker'in navigator)||!window.isSecureContext)return null;try{reg=reg||await navigator.serviceWorker.register('./sw.js?v=20261009-MIX73',{scope:'./'});return reg}catch(_){return null}}
+  async function ensureSW(){if(!('serviceWorker'in navigator)||!window.isSecureContext)return null;try{reg=reg||await navigator.serviceWorker.register('./sw.js?v=20261011-MIX81',{scope:'./'});return reg}catch(_){return null}}
   async function system(title,body,tag){if(!('Notification'in window)||Notification.permission!=='granted')return false;const r=await ensureSW();if(!r)return false;try{await r.showNotification(title,{body,tag,renotify:true,data:{url:'./#group'},badge:'',silent:false});return true}catch(_){return false}}
   async function enable(){
     const help=document.getElementById('attNotifyHelp');
@@ -23,7 +23,7 @@
   }
   function paint(){const b=document.getElementById('attNotifyBtn'),h=document.getElementById('attNotifyHelp');if(!b)return;if(isIOS()&&!standalone()){b.textContent='🔔 알림 사용 방법';return}if(!('Notification'in window)){b.textContent='🔔 앱 안 알림';return}if(Notification.permission==='granted'){b.textContent='🔔 알림 ON';b.classList.add('is-on');if(h)h.textContent='앱 실행 중 출석 시작·완료 알림'}else{b.textContent='🔔 알림 켜기';b.classList.remove('is-on')}}
   function announceStart(meta){if(!meta?.id)return;const last=localStorage.getItem(START_KEY);if(last===meta.id)return;localStorage.setItem(START_KEY,meta.id);const name=meta.title||'출석체크',text=`${name}가 시작되었습니다. 출석체크 해주세요.`;toast(text,'start');system('출석체크 시작',text,'attendance-'+meta.id+'-start')}
-  function announceComplete(meta){if(!meta?.id)return;const last=localStorage.getItem(DONE_KEY);if(last===meta.id)return;localStorage.setItem(DONE_KEY,meta.id);const text=`${meta.title||'출석체크'} — 28명 모두 출석 체크가 완료되었습니다.`;toast(text,'done');system('출석체크 완료',text,'attendance-'+meta.id+'-done')}
+  function announceComplete(meta){if(!meta?.id)return;const last=localStorage.getItem(DONE_KEY);if(last===meta.id)return;localStorage.setItem(DONE_KEY,meta.id);const count=Number.isFinite(+meta.completedCount)?+meta.completedCount:'–',total=Number.isFinite(+meta.completedTotal)?+meta.completedTotal:28;const text=`${meta.title||'출석체크'} — ${meta.completedBy||'관리자'}님이 회차를 완료했습니다. 체크 ${count}/${total}명.`;toast(text,'done');system('출석체크 완료',text,'attendance-'+meta.id+'-done')}
   document.addEventListener('DOMContentLoaded',()=>{paint();ensureSW()});
   window.AttendanceNotify={enable,announceStart,announceComplete,paint,get supported(){return 'Notification'in window&&'serviceWorker'in navigator},get truePush(){return false}};
 })();

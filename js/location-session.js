@@ -253,6 +253,14 @@
       }
       html+='</div></section>';
     }
+    // External escort has an independent slot and is excluded from the 28-person counter.
+    if(typeof APP_STAFF_USERS!=='undefined'&&(locFilter==='all'||locFilter==='prof')){
+      for(const u of APP_STAFF_USERS){
+        const r=locCache[u.slot],di=distanceInfo(r,u),s=visibleState(u,r);
+        const meta=valid(r)&&age(r)<RETAIN?locationClock(r)+' · '+ago(r.ts):s.detail;
+        html+=`<section class="loc5-group loc5-staff" data-location-group="staff" style="--group:${locGroupColor(0)}"><header><h4>여행사 인솔팀장 · 출석인원 별도</h4><span>위치 ${valid(r)&&age(r)<RETAIN?'확인':'미공유'}</span></header><div class="loc5-members"><button class="loc5-person ${s.on?'is-on':'is-off'}" type="button" data-location-slot="${u.slot}" onclick="locOpenPerson('${u.slot}')"><span class="loc5-name"><b>${esc(u.name)}</b><small>인솔팀장</small></span><span class="loc5-status">${s.label}</span><span class="distance-value" data-metres="${di.metres??''}">${esc(di.label)}</span><span class="loc5-meta">${esc(meta)}</span></button></div></section>`;
+      }
+    }
     box.innerHTML=html;
     if(focusSlot)box.querySelector(`[data-location-slot="${focusSlot}"]`)?.focus({preventScroll:true});
     const liveEl=document.getElementById('locLiveCount'),offEl=document.getElementById('locOffCount'),staleEl=document.getElementById('locStaleCount'),refreshEl=document.getElementById('locLastRefresh');
@@ -263,7 +271,7 @@
   document.addEventListener('click',e=>{const g=e.target.closest('[data-loc-group]');if(g){const f=g.dataset.locGroup;locSetFilter(f,document.querySelector('#locFilters [data-filter="'+f+'"]'));}});
   window.locOpenPerson=async function(slot){const u=APP_BY_SLOT[slot],r=locCache[slot],box=document.getElementById('locPersonDetail');if(!u||!box)return;const d=distanceInfo(r,u),me=slot===currentUser?.slot,isAdmin=currentUser?.name===(window.GSPA_TRIP?.locationAdmin||window.GSPA_TRIP?.attendanceOperator||'한상호');box.classList.add('show');let actions='';if(me){actions=`<button class="primary" onclick="locLoadHistory('${slot}',true)">내 24시간 이동이력</button>`}else if(valid(r)){actions=`<a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${r.lat},${r.lng}">Google 지도에서 보기</a>`}const precision=isAdmin&&valid(r)?` · GPS 약 ${Math.round(r.accuracy||0)}m`:'';box.innerHTML=`<div class="loc-simple-head"><h3>${esc(u.name)}</h3><button type="button" onclick="this.closest('#locPersonDetail').classList.remove('show')">닫기</button></div><b>${esc(d.label)}</b><p>${esc(statusOf(r))}${valid(r)?'<br>'+locationClock(r)+' · '+ago(r.ts)+precision:'<br>최근 24시간 내 위치 없음'}</p>${actions?`<div class="actions">${actions}</div>`:''}`;box.scrollIntoView({behavior:'smooth',block:'nearest'});};
   function mapLabel(u,r){const d=distanceInfo(r,u),st=visibleState(u,r),core=d.metres!==null?d.label:st.label;return esc(u.name)+' · '+esc(core)+' · '+esc(ago(r.ts))}
-  function popup(u,r){return `<b>${esc(u.name)} · ${u.group?u.group+'조':'교수'}</b><p>${esc(statusOf(r))}<br>${esc(distanceInfo(r,u).label)}<br>${locationClock(r)} · ${ago(r.ts)}</p>`}
+  function popup(u,r){return `<b>${esc(u.name)} · ${u.externalStaff?'인솔팀장':u.group?u.group+'조':'교수'}</b><p>${esc(statusOf(r))}<br>${esc(distanceInfo(r,u).label)}<br>${locationClock(r)} · ${ago(r.ts)}</p>`}
   window.makeGoogleOverlay=function(u,r){class M extends google.maps.OverlayView{onAdd(){const d=document.createElement('div');d.className='g-overlay';d.innerHTML=`<div class="group-marker ${u.slot===currentUser?.slot?'is-self':''}" style="--group:${locGroupColor(u.group)}"><span class="group-marker-label">${mapLabel(u,r)}</span></div>`;d.onclick=()=>{googleInfo.setContent(popup(u,r));googleInfo.setPosition({lat:r.lat,lng:r.lng});googleInfo.open(mapObj)};this.div=d;this.getPanes().overlayMouseTarget.appendChild(d)}draw(){const p=this.getProjection().fromLatLngToDivPixel(new google.maps.LatLng(r.lat,r.lng));if(this.div){this.div.style.left=p.x+'px';this.div.style.top=p.y+'px'}}onRemove(){this.div?.remove()}}const o=new M();o.setMap(mapObj);return o;};
   let fitKey='';
   window.updateMarkers=function(){if(!mapObj)return;const users=Object.entries(locCache).filter(([k,r])=>APP_BY_SLOT[k]&&locUserMatchesFilter(APP_BY_SLOT[k])&&valid(r)&&age(r)<RETAIN);const key=locMapEngine+'|'+locFilter+'|'+users.map(([k])=>k).sort().join(',');
@@ -278,7 +286,7 @@
     try{retryStop=JSON.parse(localStorage.getItem(stopKey)||'null')}catch(_){}
     if(retryStop)clearRemote(retryStop);
     const preference=localStorage.getItem('cro.loc.auto.'+currentUser.slot);
-    if(preference!=='0')setTimeout(()=>{if(currentUser&&owner?.slot===currentUser.slot)locStartSharing()},50);
+    if(preference!=='0'&&(!currentUser.externalStaff||preference==='1'))setTimeout(()=>{if(currentUser&&owner?.slot===currentUser.slot)locStartSharing()},50);
     locRefreshAll(false);void pruneOwnHistory(true);ensureSessionLoops();
   }
   window.addEventListener('cro-auth-change',changed);

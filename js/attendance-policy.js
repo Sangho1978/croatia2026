@@ -2,7 +2,7 @@
 (function(){
   'use strict';
   const tripId=window.GSPA_TRIP_ID||window.GSPA_TRIP?.id||'croatia';
-  const fallback={croatia:['한상호'],turkiye1:['남상모','김수정','김수연']};
+  const fallback={croatia:['한상호','이상미','위재복'],turkiye1:['남상모','김수정','김수연']};
   const configured=Array.isArray(window.GSPA_TRIP?.attendanceAdmins)?window.GSPA_TRIP.attendanceAdmins:[];
   const base=configured.length?configured:(fallback[tripId]||[window.GSPA_TRIP?.attendanceOperator||'한상호']);
   const admins=[...new Set(base.map(x=>String(x||'').trim()).filter(Boolean))];

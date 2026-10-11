@@ -251,12 +251,13 @@ setInterval(()=>{if(!document.hidden)refreshWeather()},3600000);
 // ===== login + location + attendance =====
 const LIVE5=5*60*1000, RECENT15=15*60*1000, RECENT30=30*60*1000, HOUR1=60*60*1000, HOUR3=3*60*60*1000, HOUR6=6*60*60*1000, SHOWMAX=24*60*60*1000;
 const APP_USERS=TEAM_MEMBERS.map(u=>{let lm=LOC_MEMBERS.find(x=>x.name===u.name);return {...u,slot:u.group===0?'prof1':(lm?.slot||''),groupLabel:u.group===0?'교수님':`${u.group}조`}});
-const APP_BY_SLOT=Object.fromEntries(APP_USERS.map(u=>[u.slot,u]));
+const APP_STAFF_USERS=(window.GSPA_TRIP_ID||'croatia')==='croatia'&&typeof GUIDE_ACCOUNTS!=='undefined'?GUIDE_ACCOUNTS:[];
+const APP_BY_SLOT=Object.fromEntries([...APP_USERS,...APP_STAFF_USERS].map(u=>[u.slot,u]));
 let currentUser=null,locCache={},locTimer=null,pollTimer=null,mapObj=null,markers=[],historyLayer=null,locBytes=0,locLastPos=null,locLastWrite=+(localStorage.getItem('loc_lastwrite')||0),locFilter='all';
 let attCurrent=null,attChecks={},attTimer=null,attFilter='all';
 function esc(x){return String(x||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function userByName(n){return APP_USERS.find(u=>u.name===String(n||'').trim())}
-function userGroupText(u){return u?.group===0?'교수님':`${u?.group||'-'}조${u?.leader?' · 조장':''}${u?.tripRole?' · '+u.tripRole:''}`}
+function userByName(n){const key=String(n||'').trim();return APP_USERS.find(u=>u.name===key)||APP_STAFF_USERS.find(u=>u.name===key)}
+function userGroupText(u){return u?.externalStaff?'여행사 인솔팀장':u?.group===0?'교수님':`${u?.group||'-'}조${u?.leader?' · 조장':''}${u?.tripRole?' · '+u.tripRole:''}`}
 // MIX05: remember only a successful local identity; enter after an explicit tap.
 const TRIP_ID=(window.GSPA_TRIP_ID||'croatia');
 const LOGIN_NAME_KEY=TRIP_ID==='croatia'?'cro_login_name':('gspa.'+TRIP_ID+'.login.name');
