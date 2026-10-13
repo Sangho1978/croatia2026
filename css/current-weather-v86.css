@@ -1,0 +1,9 @@
+/* MIX86: current local temperature in the fixed top-left weather tile */
+body.mixed-app .compact-top .brief-weather strong#briefWeather{
+  font-variant-numeric:tabular-nums;font-weight:950;letter-spacing:-.02em!important;
+  font-size:clamp(.86rem,2.65vw,1.04rem);white-space:nowrap;
+}
+body.mixed-app .compact-top .brief-weather small#briefWeatherNote{font-size:.6rem!important;white-space:nowrap;}
+.early-arrival-note{margin:12px 0 0;padding:8px 10px;border:1px solid #d5e6ef;border-radius:12px;background:#f3f9fc;}
+.early-arrival-note summary{cursor:pointer;color:#365e73;font-weight:800;font-size:.8rem;line-height:1.5;min-height:32px;}
+.early-arrival-note .timeline{margin-top:8px;}

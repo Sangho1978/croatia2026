@@ -1,4 +1,4 @@
-const STATIC='gspa-static-v84-tw405-boarding';
+const STATIC='gspa-static-v86-current-weather-20261013';
 const GUIDE='gspa-guidebook-v71-20261008-final';
 const CORE=[
   "./index.html",
@@ -88,6 +88,8 @@ const CORE=[
   "./css/travel-news.css",
   "./css/usability.css",
   "./js/app-core.js",
+  "./js/current-weather.js",
+  "./css/current-weather-v86.css",
   "./js/attendance-notify.js",
   "./js/attendance.js",
   "./js/compact-header.js",
@@ -170,7 +172,7 @@ self.addEventListener('fetch',e=>{
   const decoded=decodeURIComponent(url.pathname);
   const isGuide=/\/docs\/(?:croatia_guidebook_20261008_final|turkiye1_guidebook)\.pdf$/i.test(decoded);
   // MIX79: online-first for login/contact/auth code so a corrected emergency number is not left stale.
-  const isCritical=/\/(?:index|trips)\.html$|\/(?:platform\/(?:login-directory|trips)|data\/(?:roster|itinerary|flight-plan|flight-tickets)|js\/attendance-policy|js\/(?:app-core|usability|attendance|location-session|integration|router|photo-plan|pwa-install|flight-tickets-ui|expenses|data-availability))\.js$/i.test(decoded);
+  const isCritical=/\/(?:index|trips)\.html$|\/(?:platform\/(?:login-directory|trips)|data\/(?:roster|itinerary|flight-plan|flight-tickets)|js\/attendance-policy|js\/(?:current-weather|app-core|usability|attendance|location-session|integration|router|photo-plan|pwa-install|flight-tickets-ui|expenses|data-availability))\.js$/i.test(decoded);
   e.respondWith((async()=>{
     const cache=await caches.open(isGuide?GUIDE:STATIC);
     if(isGuide||isCritical){

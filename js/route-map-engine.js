@@ -119,9 +119,10 @@
     return 'osm';
   }
 
-  function scheduleGoogleRecovery(box,delay=60000){
+  function scheduleGoogleRecovery(box,delay=30000){
     const rec=records.get(box);
     if(!rec||rec.engine!=='osm'||rec.retryTimer||navigator.onLine===false)return;
+    if(window.GSPA_MapProvider?.getStatus?.().authFailed)delay=Math.max(delay,120000);
     rec.retryTimer=setTimeout(async()=>{
       rec.retryTimer=null;
       if(!box.isConnected||records.get(box)?.engine!=='osm')return;
@@ -156,13 +157,13 @@
     return await new Promise(resolve=>{
       let settled=false;
       const finish=ok=>{if(settled)return;settled=true;window.removeEventListener('gspa-google-map-status',onStatus);clearTimeout(timer);resolve(ok?'google':'google-failed')};
-      const onStatus=e=>{if(e?.detail?.status==='failed')finish(false)};
+      const onStatus=e=>{if(e?.detail?.status==='failed' && e?.detail?.reason==='auth')finish(false)};
       window.addEventListener('gspa-google-map-status',onStatus);
       try{google.maps.event.addListenerOnce(map,'tilesloaded',()=>{window.GSPA_MapProvider?.markHealthy?.();finish(true)})}catch(_){ }
       const timer=setTimeout(()=>{
         if(window.GSPA_MapProvider?.isFailed?.())finish(false);
-        else finish(false);
-      },9000);
+        else finish(false); // Slow tiles still get 22 s before a temporary OSM fallback.
+      },22000);
       setTimeout(()=>{try{google.maps.event.trigger(map,'resize')}catch(_){ }},120);
     });
   }
@@ -180,11 +181,12 @@
       await provider.ensureGoogle({force:!!internal.forceGoogle});
       if(!box.isConnected)return 'schematic';
       const result=await drawGoogle(box,list,opt);
-      if(result==='google')return 'google';
+      if(result==='google'){window.dispatchEvent(new CustomEvent('gspa-route-engine',{detail:{id:box.id,engine:'google'}}));return 'google';}
       provider.markFailure?.('map-render');
     }catch(_){ }
 
     const fallback=await drawLeaflet(box,list,opt);
+    window.dispatchEvent(new CustomEvent('gspa-route-engine',{detail:{id:box.id,engine:fallback}}));
     return fallback;
   }
 

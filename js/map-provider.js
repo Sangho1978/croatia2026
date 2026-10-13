@@ -21,7 +21,7 @@
   function setStatus(next,why=''){
     status=next;
     reason=why||'';
-    if(next==='failed')authFailed=true;
+    if(next==='failed' && why==='auth')authFailed=true;
     if(next==='healthy'){
       authFailed=false;
       lastHealthyAt=Date.now();
@@ -55,7 +55,7 @@
     const t=setInterval(()=>{
       n++;
       if(window.google?.maps){clearInterval(t);setStatus('loaded');resolve(window.google.maps)}
-      else if(n>=60){clearInterval(t);googlePromise=null;setStatus('failed','timeout');reject(new Error('Google Maps load timeout'))}
+      else if(n>=120){clearInterval(t);document.querySelector('script[data-gspa-google-loader="1"]')?.remove();googlePromise=null;setStatus('failed','timeout');reject(new Error('Google Maps load timeout'))}
     },250);
   }
 
@@ -67,9 +67,8 @@
     // A retry means: allow a fresh map instance to test whether Cloud settings or
     // the network have recovered. The script itself does not need to be reloaded.
     if(force && window.google?.maps){
-      authFailed=false;
-      status='loaded';
-      reason='';
+      status=authFailed?'retrying':'loaded';
+      reason=authFailed?'auth-retry':'';
       emit();
       return Promise.resolve(window.google.maps);
     }
@@ -85,18 +84,23 @@
 
       const cb='__gspaGoogleMapsReady45';
       let done=false;
+      let timeoutId=null;
       const finishOk=()=>{
         if(done)return;
         done=true;
+        if(timeoutId)clearTimeout(timeoutId);
         try{delete window[cb]}catch(_){ }
-        if(window.google?.maps){setStatus('loaded');resolve(window.google.maps)}
+        if(authFailed){googlePromise=null;reject(new Error('Google Maps authentication denied'));}
+        else if(window.google?.maps){setStatus('loaded');resolve(window.google.maps)}
         else{googlePromise=null;setStatus('failed','callback-without-maps');reject(new Error('Google Maps callback without maps'))}
       };
       const finishErr=(why)=>{
         if(done)return;
         done=true;
+        if(timeoutId)clearTimeout(timeoutId);
         try{delete window[cb]}catch(_){ }
         googlePromise=null;
+        try{s.remove()}catch(_){ } // Allow a new script tag on retry.
         setStatus('failed',why||'network');
         reject(new Error('Google Maps '+(why||'load failed')));
       };
@@ -110,11 +114,11 @@
       s.onerror=()=>finishErr('network');
       setStatus('loading');
       document.head.appendChild(s);
-      setTimeout(()=>{
+      timeoutId=setTimeout(()=>{
         if(done)return;
         if(window.google?.maps)finishOk();
         else finishErr('timeout');
-      },15000);
+      },30000);
     }).finally(()=>{
       // Keep a resolved/failed library reusable through window.google.maps, but do
       // not permanently pin a rejected promise.
@@ -124,8 +128,8 @@
   }
 
   function markHealthy(){setStatus('healthy')}
-  function markFailure(why='map-render'){setStatus('failed',why)}
-  function isFailed(){return status==='failed'||authFailed}
+  function markFailure(why='map-render'){setStatus(why==='auth'?'failed':'degraded',why)}
+  function isFailed(){return authFailed} // Do not permanently blacklist Google after a mobile-network timeout.
   function isHealthy(){return status==='healthy'&&!authFailed}
   function getStatus(){return{status,reason,authFailed,lastHealthyAt,lastAttemptAt,origin:location.origin,href:location.href}}
 

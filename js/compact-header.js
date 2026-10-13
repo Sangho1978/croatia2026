@@ -21,11 +21,21 @@
   }
   function mirror(){
     queued=false;
-    const weather=$('liveWeatherMain')?.textContent||'',digits=weather.match(/(-?\d+(?:\.\d+)?)(?:\/(-?\d+(?:\.\d+)?))?\u00b0/);
-    const symbol=weather.match(/[\u2600\u2601\u26c8\u{1f324}\u{1f327}\u{1f328}\u{1f32b}]/u)?.[0]||'\u2601';
-    set('briefWeather',digits?symbol+digits[1]+'\u00b0':'\u2601 \ub0a0\uc528');
-    set('briefWeatherNote',/\ucc38\uace0|\uc608\uc0c1|\ud3c9\ub144|\uacbd\ud5a5/.test(weather)?'\uc7a5\uae30 \uacbd\ud5a5':digits?'\ub0a0\uc528 \uc0c1\uc138':'\ud655\uc778 \uc911');
-    const w=document.querySelector('.brief-weather');if(w){w.title=weather;w.setAttribute('aria-label',weather+' \u00b7 \ub0a0\uc528 \uc0c1\uc138')}
+    // MIX86: independent current observations; never present the day's maximum as "current".
+    const obs=window.GSPA_CurrentWeather;
+    const temp=Number(obs?.temperature);
+    const available=obs&&['ok','cached'].includes(obs.status)&&obs.temperature!==null&&Number.isFinite(temp);
+    const weatherCell=document.querySelector('.brief-weather');
+    if(available){
+      set('briefWeather',(obs.icon||'🌤️')+' '+Math.round(temp)+'°');
+      set('briefWeatherNote',(obs.status==='cached'?'저장 ':'현지 ')+(obs.observedTime||'--:--'));
+      const info=(obs.place||'현지')+' '+(obs.status==='cached'?'최근 저장 기온 ':'현재 기온 ')+Math.round(temp)+'° · 현지 '+(obs.observedTime||'--:--')+' 기준';
+      if(weatherCell){weatherCell.title=info;weatherCell.setAttribute('aria-label',info+' · 날씨 상세');}
+    }else{
+      set('briefWeather','🌤 --°');
+      set('briefWeatherNote',obs?.status==='error'?'기온 연결 실패':'현재 기온 조회 중');
+      if(weatherCell){weatherCell.title='현재 기온을 조회하는 중입니다.';weatherCell.setAttribute('aria-label','현재 기온 조회 중 · 날씨 상세');}
+    }
     set('briefLocal',$('clockLocal')?.textContent||'--:--');set('briefKorea',$('clockKorea')?.textContent||'--:--');
     const fx=window.FxService?.state,v=fx?.value;
     set('briefFx',v?'\u20a9'+Math.round(v.rate).toLocaleString('ko-KR'):'\u20ac1 \u2014');
@@ -64,7 +74,7 @@
   });
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('headerDetails')?.hidden&&document.querySelector('.compact-top')?.contains(document.activeElement)){display(false,true)}});
   window.addEventListener('cro-route',()=>display(false));
-  for(const name of ['cro-fx','cro-traffic','cro-location-state','cro-auth-change'])window.addEventListener(name,schedule);
+  for(const name of ['cro-current-weather','cro-fx','cro-traffic','cro-location-state','cro-auth-change'])window.addEventListener(name,schedule);
   document.addEventListener('DOMContentLoaded',init);
   window.CompactHeader={open:()=>display(true),close:()=>display(false),refresh:mirror};
 })();
